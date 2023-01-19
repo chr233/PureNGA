@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="净化设置">
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="block_splash_ad"
+        android:enabled="false"
+        android:title="@string/block_splash_ad" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="about"
+        android:title="@string/about">
+
+        <Preference
+            android:key="running_status"
+            android:title="@string/running_status"/>
+
+        <Preference
+            android:key="version"
+            android:title="@string/version" />
+
+        <Preference
+            android:key="author"
+            android:summary="chr233"
+            android:title="@string/author">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/chr233" />
+        </Preference>
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:key="other"
+        android:title="@string/other">
+
+        <Preference
+            android:key="reopen_nga"
+            android:title="@string/reopen_nga" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

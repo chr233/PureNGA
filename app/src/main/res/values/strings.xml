@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">NGA净化</string>
+    <string name="app_desc">干掉NGA开屏广告</string>
+    <string name="block_splash_ad">屏蔽开屏广告</string>
+    <string name="running_status">运行状态</string>
+    <string name="about">关于</string>
+    <string name="version">版本</string>
+    <string name="author">作者</string>
+    <string name="other">其他</string>
+    <string name="reopen_nga">打开NGA</string>
+    <string name="module_enabled">模块已启用</string>
+    <string name="module_disabled">模块未启用</string>
+</resources>

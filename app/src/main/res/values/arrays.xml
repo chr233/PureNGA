@@ -1,0 +1,6 @@
+<resources>
+    <string-array name="xposed_scope">
+        <item>gov.pianzong.androidnga</item>
+    </string-array>
+
+</resources>
