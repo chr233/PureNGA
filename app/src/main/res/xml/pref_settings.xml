@@ -28,15 +28,13 @@
 
         <Preference
             android:key="version"
-            android:title="@string/version" />
+            android:title="@string/version" >
+        </Preference>
 
         <Preference
             android:key="author"
-            android:summary="chr233"
+            android:summary="@string/author_list"
             android:title="@string/author">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://github.com/chr233" />
         </Preference>
 
     </PreferenceCategory>

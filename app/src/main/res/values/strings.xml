@@ -11,4 +11,7 @@
     <string name="reopen_nga">打开NGA</string>
     <string name="module_enabled">模块已启用</string>
     <string name="module_disabled">模块未启用</string>
+    <string name="github_url">https://github.com/chr233/PureNGA</string>
+    <string name="author_url">https://github.com/chr233</string>
+    <string name="author_list">chr233</string>
 </resources>

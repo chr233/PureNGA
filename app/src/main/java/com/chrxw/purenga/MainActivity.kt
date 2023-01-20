@@ -1,5 +1,6 @@
 package com.chrxw.purenga
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -34,15 +35,37 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onPreferenceTreeClick(preference: Preference): Boolean {
+
+            val intent: Intent?
+
             when (preference.key) {
+                "version" -> {
+                    intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(getString(R.string.github_url))
+                    )
+                }
+                "author" -> {
+                    intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(getString(R.string.author_url))
+                    )
+                }
                 "reopen_nga" -> {
-                    activity?.packageManager?.getLaunchIntentForPackage(Constant.NGA_PACKAGE_NAME)
-                        ?.run {
-                            addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-                            startActivity(this)
-                        }
+                    intent = Intent(Intent.ACTION_MAIN)
+                    intent.component =
+                        ComponentName(Constant.NGA_PACKAGE_NAME, Constant.NGA_MAIN_ACTIVITY_NAME)
+                    intent.flags = Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                }
+                else -> {
+                    intent = null
                 }
             }
+
+            if (intent != null) {
+                startActivity(intent)
+            }
+
             return true
         }
 
