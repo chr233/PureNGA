@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.content.res.XModuleResources
 import com.chrxw.purenga.hook.BaseHook
+import com.chrxw.purenga.hook.RewardHook
 import com.chrxw.purenga.hook.SplashHook
 import com.chrxw.purenga.utils.Log
 import com.chrxw.purenga.utils.replaceMethod
@@ -17,27 +18,32 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
         modulePath = startupParam.modulePath
         moduleRes = getModuleRes(modulePath)
-        Log.i("模块路径" + startupParam.modulePath)
     }
 
     @Throws(Throwable::class)
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
         if (BuildConfig.APPLICATION_ID == lpparam.packageName) {
-            MainActivity.Companion::class.java.name.replaceMethod(
+            XposedHelpers.findAndHookMethod(
+                MainActivity.Companion::class.java.name,
                 lpparam.classLoader,
-                "isModuleActive"
-            ) { true }
+                "isModuleActive",
+                object : XC_MethodReplacement() {
+                    override fun replaceHookedMethod(param: MethodHookParam?): Any {
+                        return true
+                    }
+                }
+            )
         }
 
         if (Constant.NGA_PACKAGE_NAME == lpparam.packageName) {
-            Log.i("模块运行" + lpparam.packageName)
+            Log.d("NGA内运行" + lpparam.packageName)
             startHook(SplashHook(lpparam.classLoader))
+            startHook(RewardHook(lpparam.classLoader))
         }
     }
 
     private fun startHook(hooker: BaseHook) {
         try {
-            hookers.add(hooker)
             hooker.startHook()
         } catch (e: Throwable) {
             Log.e(e)
@@ -45,7 +51,6 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     }
 
     companion object {
-        private val hookers = ArrayList<BaseHook>()
 
         lateinit var modulePath: String
         lateinit var moduleRes: Resources

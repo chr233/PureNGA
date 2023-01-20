@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory android:title="净化设置">
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="block_splash_ad"
-        android:enabled="false"
-        android:title="@string/block_splash_ad" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:enabled="false"
+            android:key="block_splash_ad"
+            android:title="@string/block_splash_ad" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:enabled="false"
+            android:key="block_pool_ad"
+            android:title="@string/block_pool_ad" />
 
     </PreferenceCategory>
 
@@ -18,7 +24,7 @@
 
         <Preference
             android:key="running_status"
-            android:title="@string/running_status"/>
+            android:title="@string/running_status" />
 
         <Preference
             android:key="version"
@@ -34,7 +40,6 @@
         </Preference>
 
     </PreferenceCategory>
-
 
     <PreferenceCategory
         android:key="other"

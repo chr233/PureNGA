@@ -2,6 +2,7 @@
     <string name="app_name">NGA净化</string>
     <string name="app_desc">干掉NGA开屏广告</string>
     <string name="block_splash_ad">屏蔽开屏广告</string>
+    <string name="block_pool_ad">屏蔽信息流广告</string>
     <string name="running_status">运行状态</string>
     <string name="about">关于</string>
     <string name="version">版本</string>
