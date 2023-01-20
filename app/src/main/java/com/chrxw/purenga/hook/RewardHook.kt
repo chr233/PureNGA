@@ -8,6 +8,7 @@ import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
+import java.util.Objects
 
 
 class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
@@ -25,6 +26,7 @@ class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                 object : XC_MethodReplacement() {
                     @Throws(Throwable::class)
                     override fun replaceHookedMethod(param: MethodHookParam?) {
+                        Log.i(("b.onAdShow"))
                         val obj = param?.thisObject
 
                         val webView = XposedHelpers.getObjectField(obj, "a")
@@ -46,16 +48,19 @@ class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                 object : XC_MethodReplacement() {
                     @Throws(Throwable::class)
                     override fun replaceHookedMethod(param: MethodHookParam?) {
+                        Log.i(("a.onAdShow"))
                         val obj = param?.thisObject
 
                         val webView = XposedHelpers.getObjectField(obj, "a")
-                        XposedHelpers.setBooleanField(webView, "mFreeRewardVerify", true)
-                        XposedHelpers.callMethod(obj, "onAdClose")
+                        onAdClose(webView)
+
+//                        XposedHelpers.setBooleanField(webView, "mFreeRewardVerify", true)
+//                        XposedHelpers.callMethod(obj, "onAdClose")
                         return
                     }
                 })
 
-            if(BuildConfig.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 // Hook startActivityForResult 方法
                 XposedHelpers.findAndHookMethod(
                     Activity::class.java,
@@ -103,5 +108,21 @@ class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
         Log.i(intent)
         Log.i(requestCode)
         Log.i(options)
+    }
+
+    private fun onAdClose(webView: Any) {
+        val mWebView = XposedHelpers.getObjectField(webView, "mWebView")
+        XposedHelpers.callMethod(
+            mWebView,
+            "evaluateJavascript",
+            "javascript:__doAction\\(\\'domissionComplete\\',{\\'action\\':\\'app_ad_video\\'}\\)",
+            null
+        )
+        XposedHelpers.callMethod(
+            mWebView,
+            "evaluateJavascript",
+            "javascript:__doAction\\(\\'windowFocus\\'\\)",
+            null
+        )
     }
 }
