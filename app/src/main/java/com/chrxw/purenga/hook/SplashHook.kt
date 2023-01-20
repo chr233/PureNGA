@@ -3,8 +3,6 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XC_MethodReplacement
-import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
 
 

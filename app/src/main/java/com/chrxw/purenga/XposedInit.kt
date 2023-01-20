@@ -1,18 +1,13 @@
 package com.chrxw.purenga
 
-import android.annotation.SuppressLint
-import android.app.AndroidAppHelper
-import android.content.Context
 import android.content.res.Resources
 import android.content.res.XModuleResources
 import com.chrxw.purenga.hook.BaseHook
 import com.chrxw.purenga.hook.RewardHook
 import com.chrxw.purenga.hook.SplashHook
 import com.chrxw.purenga.utils.Log
-import com.chrxw.purenga.utils.replaceMethod
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import java.util.concurrent.CompletableFuture
 
 class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {

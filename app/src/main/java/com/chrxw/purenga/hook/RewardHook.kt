@@ -8,7 +8,6 @@ import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
-import java.util.Objects
 
 
 class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
