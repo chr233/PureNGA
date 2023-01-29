@@ -34,30 +34,30 @@ class MainActivity : AppCompatActivity() {
 
         override fun onPreferenceTreeClick(preference: Preference): Boolean {
 
-            val intent: Intent?
-
-            when (preference.key) {
+            val intent = when (preference.key) {
                 "version" -> {
-                    intent = Intent(
+                    Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse(getString(R.string.github_url))
                     )
                 }
                 "author" -> {
-                    intent = Intent(
+                    Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse(getString(R.string.author_url))
                     )
                 }
                 "reopen_nga" -> {
-                    intent = Intent(Intent.ACTION_MAIN)
-                    intent.component =
-                        ComponentName(Constant.NGA_PACKAGE_NAME, Constant.NGA_MAIN_ACTIVITY_NAME)
-                    intent.flags = Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                    Intent(Intent.ACTION_MAIN)
+                        .setComponent(
+                            ComponentName(
+                                Constant.NGA_PACKAGE_NAME,
+                                Constant.NGA_MAIN_ACTIVITY_NAME
+                            )
+                        )
+                        .setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
                 }
-                else -> {
-                    intent = null
-                }
+                else -> null
             }
 
             if (intent != null) {
