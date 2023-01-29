@@ -39,6 +39,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     private fun startHook(hooker: BaseHook) {
         try {
+            Log.i(hooker::class.java.name + " start")
             hooker.startHook()
         } catch (e: Throwable) {
             Log.e(e)
