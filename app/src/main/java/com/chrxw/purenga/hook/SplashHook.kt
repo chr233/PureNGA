@@ -5,7 +5,9 @@ import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
-
+/**
+ * 开屏广告钩子
+ */
 class SplashHook(classLoader: ClassLoader) : BaseHook(classLoader) {
 
     override fun startHook() {

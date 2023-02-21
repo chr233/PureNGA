@@ -6,6 +6,9 @@ import com.chrxw.purenga.Constant.TAG
 import de.robv.android.xposed.XposedBridge
 import android.util.Log as ALog
 
+/**
+ * 日志
+ */
 object Log {
     @JvmStatic
     private fun doLog(f: (String, String) -> Int, obj: Any?, toXposed: Boolean = true) {

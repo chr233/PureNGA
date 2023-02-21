@@ -9,6 +9,9 @@ import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
+/**
+ * 初始化Xposed
+ */
 class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
         modulePath = startupParam.modulePath

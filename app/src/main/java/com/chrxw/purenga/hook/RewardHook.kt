@@ -9,7 +9,9 @@ import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 
-
+/**
+ * 浏览广告钩子
+ */
 class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
     override fun startHook() {
         try {
