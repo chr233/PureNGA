@@ -11,6 +11,9 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/chr233/PureNGA?logo=github)
 [![GitHub Download](https://img.shields.io/github/downloads/chr233/PureNGA/total?logo=github)](https://img.shields.io/github/v/release/chr233/PureNGA)
 
+![GitHub Repo stars](https://img.shields.io/github/stars/Xposed-Modules-Repo/com.chrxw.purenga?logo=github)
+[![GitHub Download](https://img.shields.io/github/downloads/Xposed-Modules-Repo/com.chrxw.purenga/total?logo=github)](https://img.shields.io/github/v/release/Xposed-Modules-Repo/com.chrxw.purenga)
+
 [![Bilibili](https://img.shields.io/badge/bilibili-Chr__-00A2D8.svg?logo=bilibili)](https://space.bilibili.com/5805394)
 [![Steam](https://img.shields.io/badge/steam-Chr__-1B2838.svg?logo=steam)](https://steamcommunity.com/id/Chr_)
 
