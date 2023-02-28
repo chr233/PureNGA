@@ -8,13 +8,15 @@
             android:defaultValue="true"
             android:enabled="false"
             android:key="block_splash_ad"
+            android:summary="@string/block_splash_ad_summary"
             android:title="@string/block_splash_ad" />
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:enabled="false"
             android:key="block_pool_ad"
-            android:title="@string/block_pool_ad" />
+            android:summary="@string/crack_ad_task_summary"
+            android:title="@string/crack_ad_task" />
 
     </PreferenceCategory>
 
@@ -28,14 +30,17 @@
 
         <Preference
             android:key="version"
-            android:title="@string/version" >
-        </Preference>
+            android:title="@string/version"></Preference>
 
         <Preference
             android:key="author"
-            android:summary="@string/author_list"
-            android:title="@string/author">
-        </Preference>
+            android:summary="@string/author_summary"
+            android:title="@string/author"></Preference>
+
+        <Preference
+            android:key="donate"
+            android:summary="@string/donate_summary"
+            android:title="@string/donate"></Preference>
 
     </PreferenceCategory>
 
