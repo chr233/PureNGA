@@ -2,16 +2,21 @@
     <string name="app_name">NGA净化</string>
     <string name="app_desc">干掉NGA开屏广告</string>
     <string name="block_splash_ad">屏蔽开屏广告</string>
-    <string name="block_pool_ad">屏蔽信息流广告</string>
+    <string name="block_splash_ad_summary">去你妈的开屏广告</string>
+    <string name="crack_ad_task">去广告任务破解</string>
+    <string name="crack_ad_task_summary">秒关广告不影响结算</string>
     <string name="running_status">运行状态</string>
     <string name="about">关于</string>
     <string name="version">版本</string>
     <string name="author">作者</string>
+    <string name="donate">捐赠</string>
     <string name="other">其他</string>
     <string name="reopen_nga">打开NGA</string>
     <string name="module_enabled">模块已启用</string>
     <string name="module_disabled">模块未启用</string>
     <string name="github_url">https://github.com/chr233/PureNGA</string>
     <string name="author_url">https://github.com/chr233</string>
-    <string name="author_list">chr233</string>
+    <string name="donate_url">https://afdian.net/a/chr233</string>
+    <string name="author_summary">chr233</string>
+    <string name="donate_summary">爱发电</string>
 </resources>
