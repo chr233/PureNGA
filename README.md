@@ -20,6 +20,10 @@
 [![Steam](https://img.shields.io/badge/steam-donate-1B2838.svg?logo=steam)](https://steamcommunity.com/tradeoffer/new/?partner=221260487&token=xgqMgL-i)
 [![爱发电](https://img.shields.io/badge/爱发电-chr__-ea4aaa.svg?logo=github-sponsors)](https://afdian.net/@chr233)
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/de4c75db7487426285bf38f90ad94e6c)](https://www.codacy.com/gh/chr233/PureNGA/dashboard)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/chr233/PureNGA/android.yml?logo=github)
+[![License](https://img.shields.io/github/license/chr233/PureNGA?logo=apache)](https://github.com/chr233/PureNGA/blob/master/license)
+
 一个旨在去除 NGA 开屏广告的模块
 
 信息流广告屏蔽开发中
