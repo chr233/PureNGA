@@ -7,12 +7,16 @@ android {
     namespace 'com.chrxw.purenga'
     compileSdk 33
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId "com.chrxw.purenga"
         minSdk 24
         targetSdk 33
-        versionCode 4
-        versionName "1.2.0"
+        versionCode 5
+        versionName "1.3.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles
@@ -29,7 +33,7 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
     buildToolsVersion '31.0.0'
 }

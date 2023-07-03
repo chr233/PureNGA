@@ -1,6 +1,7 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
@@ -12,11 +13,6 @@ class SplashHook(classLoader: ClassLoader) : BaseHook(classLoader) {
 
     override fun startHook() {
         try {
-            // 获取ActivityLifecycleImpl类
-            val clsLifeCycle = XposedHelpers.findClass(
-                "com.donews.nga.interfaces.ActivityLifecycleImpl",
-                mClassLoader
-            )
             // 获取LoadingActivity类
             val clsLoadingActivity = XposedHelpers.findClass(
                 "gov.pianzong.androidnga.activity.LoadingActivity",
@@ -24,7 +20,8 @@ class SplashHook(classLoader: ClassLoader) : BaseHook(classLoader) {
             )
             // Hook toForeGround 方法
             XposedHelpers.findAndHookMethod(
-                clsLifeCycle,
+                "com.donews.nga.interfaces.ActivityLifecycleImpl",
+                mClassLoader,
                 "toForeGround",
                 Activity::class.java,
                 object : XC_MethodHook() {
@@ -39,15 +36,14 @@ class SplashHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                             XposedHelpers.setBooleanField(activity, "isADShow", true)
                             XposedHelpers.callMethod(activity, "goHome")
                         }
-                        Log.d(activity.toString())
+                        //Log.d(activity.toString())
                     }
                 })
-            // 获取SPUtil类
-            val clsSPUtil =
-                XposedHelpers.findClass("com.donews.nga.common.utils.SPUtil", mClassLoader)
+
             // 修改时间戳实现切屏无广告
             XposedHelpers.findAndHookMethod(
-                clsSPUtil,
+                "com.donews.nga.common.utils.SPUtil",
+                mClassLoader,
                 "getInt",
                 String::class.java,
                 Int::class.java,
@@ -62,9 +58,6 @@ class SplashHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                             "AD_BACKGROUND_TIME" -> {
                                 Log.d("BG " + param.result.toString())
                                 param.result = 0
-                            }
-                            else -> {
-//                                Log.d(param.args[0].toString() + " " + param.result.toString())
                             }
                         }
                     }

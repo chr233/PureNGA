@@ -2,12 +2,14 @@ package com.chrxw.purenga
 
 import android.content.res.Resources
 import android.content.res.XModuleResources
+import com.chrxw.purenga.hook.VipHook
 import com.chrxw.purenga.hook.BaseHook
 import com.chrxw.purenga.hook.RewardHook
 import com.chrxw.purenga.hook.SplashHook
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage
+import java.text.MessageFormat
 
 /**
  * 初始化Xposed
@@ -37,12 +39,13 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
             Log.d("NGA内运行" + lpparam.packageName)
             startHook(SplashHook(lpparam.classLoader))
             startHook(RewardHook(lpparam.classLoader))
+            startHook(VipHook(lpparam.classLoader))
         }
     }
 
     private fun startHook(hooker: BaseHook) {
         try {
-            Log.i(hooker::class.java.name + " start")
+            Log.i(MessageFormat.format("Hook {0} Start", hooker::class.java.name))
             hooker.startHook()
         } catch (e: Throwable) {
             Log.e(e)

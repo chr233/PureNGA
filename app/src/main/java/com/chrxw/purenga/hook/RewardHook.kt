@@ -15,14 +15,10 @@ import de.robv.android.xposed.XposedHelpers
 class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
     override fun startHook() {
         try {
-            // 获取LoginWebView.b类实例
-            val clsNamelessB = XposedHelpers.findClass(
-                "gov.pianzong.androidnga.activity.user.LoginWebView.b",
-                mClassLoader
-            )
             // Hook onRewardVerify 方法
             XposedHelpers.findAndHookMethod(
-                clsNamelessB,
+                "gov.pianzong.androidnga.activity.user.LoginWebView.b",
+                mClassLoader,
                 "onAdShow",
                 object : XC_MethodReplacement() {
                     @Throws(Throwable::class)
@@ -37,14 +33,10 @@ class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                     }
                 })
 
-            // 获取LoginWebView.a类实例
-            val clsNamelessA = XposedHelpers.findClass(
-                "gov.pianzong.androidnga.activity.user.LoginWebView.a",
-                mClassLoader
-            )
             // Hook onRewardVerify 方法
             XposedHelpers.findAndHookMethod(
-                clsNamelessA,
+                "gov.pianzong.androidnga.activity.user.LoginWebView.a",
+                mClassLoader,
                 "onAdShow",
                 object : XC_MethodReplacement() {
                     @Throws(Throwable::class)
@@ -53,7 +45,8 @@ class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                         val obj = param?.thisObject
 
                         val webView = XposedHelpers.getObjectField(obj, "a")
-                        onAdClose(webView)
+                        XposedHelpers.setBooleanField(webView, "mFreeRewardVerify", true)
+                        XposedHelpers.callMethod(obj, "onAdClose")
 
 //                        XposedHelpers.setBooleanField(webView, "mFreeRewardVerify", true)
 //                        XposedHelpers.callMethod(obj, "onAdClose")
