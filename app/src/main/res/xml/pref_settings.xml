@@ -14,9 +14,21 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:enabled="false"
-            android:key="block_pool_ad"
+            android:key="block_post_ad"
+            android:summary="@string/block_post_ad_summary"
+            android:title="@string/block_post_ad" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:enabled="false"
+            android:key="crack_ad_task"
             android:summary="@string/crack_ad_task_summary"
             android:title="@string/crack_ad_task" />
+
+        <Preference
+            android:key="hide_icon"
+            android:summary="@string/hide_icon_summary"
+            android:title="@string/hide_icon" />
 
     </PreferenceCategory>
 
@@ -30,17 +42,17 @@
 
         <Preference
             android:key="version"
-            android:title="@string/version"></Preference>
+            android:title="@string/version" />
 
         <Preference
             android:key="author"
             android:summary="@string/author_summary"
-            android:title="@string/author"></Preference>
+            android:title="@string/author" />
 
         <Preference
             android:key="donate"
             android:summary="@string/donate_summary"
-            android:title="@string/donate"></Preference>
+            android:title="@string/donate" />
 
     </PreferenceCategory>
 

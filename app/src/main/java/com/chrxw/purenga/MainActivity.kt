@@ -1,12 +1,15 @@
 package com.chrxw.purenga
 
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+
 
 /**
  * 主界面
@@ -34,6 +37,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onPreferenceTreeClick(preference: Preference): Boolean {
+            if (preference.key == "hide_icon") {
+                val ctx = context
+                if (ctx != null) {
+                    hideAppIcon(ctx)
+                }
+                return true
+            }
 
             val intent = when (preference.key) {
                 "version" -> {
@@ -78,6 +88,21 @@ class MainActivity : AppCompatActivity() {
             super.onResume()
             runningStatusPref?.setSummary(if (isModuleActive()) R.string.module_enabled else R.string.module_disabled)
         }
+
+        private fun hideAppIcon(context: Context) {
+            val componentName = ComponentName(context, "com.chrxw.purenga.MainActivity")
+            val packageManager = context.packageManager
+            val state = packageManager.getComponentEnabledSetting(componentName)
+            if (state != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                packageManager.setComponentEnabledSetting(
+                    componentName,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            }
+        }
+
+
     }
 
     companion object {

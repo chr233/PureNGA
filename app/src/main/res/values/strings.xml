@@ -19,4 +19,8 @@
     <string name="donate_url">https://afdian.net/a/chr233</string>
     <string name="author_summary">chr233</string>
     <string name="donate_summary">爱发电</string>
+    <string name="block_post_ad">屏蔽帖子列表广告</string>
+    <string name="block_post_ad_summary">屏蔽列表中插入的广告</string>
+    <string name="hide_icon">隐藏桌面图标</string>
+    <string name="hide_icon_summary">反正也没有什么设置项</string>
 </resources>
