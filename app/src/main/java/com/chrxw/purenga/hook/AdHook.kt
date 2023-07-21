@@ -1,7 +1,8 @@
 package com.chrxw.purenga.hook
 
-import android.widget.Toast
+import android.R.attr.classLoader
 import com.chrxw.purenga.utils.Log
+import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 
@@ -24,5 +25,18 @@ class AdHook(classLoader: ClassLoader) : BaseHook(classLoader) {
         } catch (e: Exception) {
             Log.e(e)
         }
+
+        val AdSizeCls = XposedHelpers.findClass("com.qq.e.ads.nativ.ADSize", mClassLoader)
+
+        XposedHelpers.findAndHookMethod(
+            "com.qq.e.ads.nativ.NativeExpressAD", mClassLoader,
+            "a",
+            AdSizeCls,
+            object : XC_MethodReplacement() {
+                override fun replaceHookedMethod(param: MethodHookParam?) {
+                    Log.i("NativeExpressAD.a")
+                    param?.result = true
+                }
+            })
     }
 }

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">NGA净化</string>
-    <string name="app_desc">干掉NGA开屏广告</string>
+    <string name="app_desc">过滤NGA烦人的广告</string>
     <string name="block_splash_ad">屏蔽开屏广告</string>
-    <string name="block_splash_ad_summary">去你妈的开屏广告</string>
+    <string name="block_splash_ad_summary">过滤NGA烦人的广告</string>
     <string name="crack_ad_task">去广告任务破解</string>
     <string name="crack_ad_task_summary">秒关广告不影响结算</string>
     <string name="running_status">运行状态</string>
