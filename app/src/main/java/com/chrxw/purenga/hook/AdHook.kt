@@ -1,6 +1,7 @@
 package com.chrxw.purenga.hook
 
 import android.R.attr.classLoader
+import android.webkit.WebView
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
@@ -29,12 +30,25 @@ class AdHook(classLoader: ClassLoader) : BaseHook(classLoader) {
         val AdSizeCls = XposedHelpers.findClass("com.qq.e.ads.nativ.ADSize", mClassLoader)
 
         XposedHelpers.findAndHookMethod(
-            "com.qq.e.ads.nativ.NativeExpressAD", mClassLoader,
+            "com.qq.e.ads.nativ.NativeExpressAD",
+            mClassLoader,
             "a",
             AdSizeCls,
             object : XC_MethodReplacement() {
                 override fun replaceHookedMethod(param: MethodHookParam?) {
                     Log.i("NativeExpressAD.a")
+                    param?.result = true
+                }
+            })
+
+        XposedHelpers.findAndHookMethod(
+            "com.kwad.sdk.utils.bp",
+            mClassLoader,
+            "runOnUiThread",
+            Runnable::class.java,
+            object : XC_MethodReplacement() {
+                override fun replaceHookedMethod(param: MethodHookParam?) {
+                    Log.i("utils.bp.runOnUiThread")
                     param?.result = true
                 }
             })
