@@ -22,8 +22,9 @@
 
 ## 集成模块的NGA下载 [Release](https://github.com/chr233/PureNGA/releases/tag/NGA)
 
-一个旨在去除 NGA 开屏广告的模块
-
-信息流广告屏蔽开发中
+完美去除屎黄色论坛安卓APP的广告
+- [x] 开屏广告跳过
+- [x] 信息流广告过滤
+- [x] 去广告任务破解
 
 兼容 Lsposed 与 Lspatch
