@@ -2,6 +2,7 @@ package com.chrxw.purenga
 
 import android.content.res.Resources
 import android.content.res.XModuleResources
+import com.chrxw.purenga.hook.AboutHook
 import com.chrxw.purenga.hook.AdHook
 import com.chrxw.purenga.hook.VipHook
 import com.chrxw.purenga.hook.BaseHook
@@ -42,6 +43,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
             startHook(RewardHook(lpparam.classLoader))
             startHook(VipHook(lpparam.classLoader))
             startHook(AdHook(lpparam.classLoader))
+            startHook(AboutHook(lpparam.classLoader))
         }
     }
 

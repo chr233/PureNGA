@@ -6,7 +6,6 @@
       <GradleProjectSettings>
         <option name="testRunner" value="GRADLE" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="Android Studio default JDK" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
