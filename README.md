@@ -24,7 +24,7 @@
 
 | 类型       | 特性                                           | 下载链接                                                                                                                                                                          |
 | ---------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 整合版 NGA | 无需 Xposed 框架, 模块整合进官方 App, 体积较大 | [![GitHub Release](https://img.shields.io/github/v/release/chr233/PureNGA?logo=github)](https://github.com/chr233/PureNGA/releases)                                               |
+| 整合版 NGA | 无需 Xposed 框架, 模块整合进官方 App, 体积较大 | [![GitHub Release](https://img.shields.io/github/v/release/chr233/PureNGA?logo=github)](https://github.com/chr233/PureNGA/releases/tag/NGA)                                               |
 | 独立插件版 | 依赖 Xposed 框架, 独立更新, 体积小             | [![GitHub Release](https://img.shields.io/github/v/release/Xposed-Modules-Repo/com.chrxw.purenga?logo=github)](https://github.com/Xposed-Modules-Repo/com.chrxw.purenga/releases) |
 
 ## 主要功能
