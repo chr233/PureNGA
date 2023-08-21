@@ -68,41 +68,41 @@ class RewardHook : IHook{
                     }
                 })
 
-            if (BuildConfig.DEBUG) {
-                // Hook startActivityForResult 方法
-                XposedHelpers.findAndHookMethod(
-                    Activity::class.java,
-                    "startActivityForResult",
-                    Intent::class.java,
-                    Int::class.javaPrimitiveType,
-                    Bundle::class.java,
-                    object : XC_MethodHook() {
-                        @Throws(Throwable::class)
-                        override fun beforeHookedMethod(param: MethodHookParam?) {
-                            Log.i("1")
-                            val intent = param?.args?.get(0) as Intent
-                            val code = param.args?.get(1) as Int
-                            val options = param.args?.get(2) as Bundle?
-                            newStartActivityForResult(intent, code, options)
-                            super.beforeHookedMethod(param)
-                        }
-                    })
-                XposedHelpers.findAndHookMethod(
-                    Activity::class.java,
-                    "startActivityForResult",
-                    Intent::class.java,
-                    Int::class.java,
-                    object : XC_MethodHook() {
-                        @Throws(Throwable::class)
-                        override fun beforeHookedMethod(param: MethodHookParam?) {
-                            Log.i("2")
-                            val intent = param?.args?.get(0) as Intent
-                            val code = param.args?.get(1) as Int
-                            newStartActivityForResult(intent, code)
-                            super.beforeHookedMethod(param)
-                        }
-                    })
-            }
+//            if (BuildConfig.DEBUG) {
+//                // Hook startActivityForResult 方法
+//                XposedHelpers.findAndHookMethod(
+//                    Activity::class.java,
+//                    "startActivityForResult",
+//                    Intent::class.java,
+//                    Int::class.javaPrimitiveType,
+//                    Bundle::class.java,
+//                    object : XC_MethodHook() {
+//                        @Throws(Throwable::class)
+//                        override fun beforeHookedMethod(param: MethodHookParam?) {
+//                            Log.i("1")
+//                            val intent = param?.args?.get(0) as Intent
+//                            val code = param.args?.get(1) as Int
+//                            val options = param.args?.get(2) as Bundle?
+//                            newStartActivityForResult(intent, code, options)
+//                            super.beforeHookedMethod(param)
+//                        }
+//                    })
+//                XposedHelpers.findAndHookMethod(
+//                    Activity::class.java,
+//                    "startActivityForResult",
+//                    Intent::class.java,
+//                    Int::class.java,
+//                    object : XC_MethodHook() {
+//                        @Throws(Throwable::class)
+//                        override fun beforeHookedMethod(param: MethodHookParam?) {
+//                            Log.i("2")
+//                            val intent = param?.args?.get(0) as Intent
+//                            val code = param.args?.get(1) as Int
+//                            newStartActivityForResult(intent, code)
+//                            super.beforeHookedMethod(param)
+//                        }
+//                    })
+//            }
         } catch (e: Exception) {
             Log.e(e)
         }

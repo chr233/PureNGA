@@ -1,43 +1,44 @@
 package com.chrxw.purenga.utils
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.widget.Toast
-import com.chrxw.purenga.hook.IHook
-import de.robv.android.xposed.XposedHelpers
+import com.chrxw.purenga.Constant
+import de.robv.android.xposed.XposedBridge
 
 
 /**
  * 功能性钩子
  */
-class Helper : IHook {
-
+class Helper {
     companion object {
-        var clsNGAApplication: Class<*>? = null
-        var AppContext: Context? = null
+        var context: Context? = null
 
-        fun showToast(text: String) {
-            if (AppContext != null) {
-                Toast.makeText(AppContext, text, Toast.LENGTH_SHORT)
+        var prefs: SharedPreferences? = null
+        var packageInfo: PackageInfo? = null
+
+        fun showToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
+            if (context != null) {
+                Toast.makeText(context, text, duration).show()
             } else {
-                Log.e("AppContext 为 NULL")
+                Log.d("AppContext 为 NULL")
             }
         }
+
+        fun init(): Boolean {
+            return try {
+                prefs = context?.getSharedPreferences("zhiliao_preferences", Context.MODE_PRIVATE)
+                packageInfo = context?.packageManager?.getPackageInfo(Constant.NGA_PACKAGE_NAME, 0)
+
+                true
+            } catch (e: Exception) {
+                Log.e(e)
+                false
+            }
+        }
+
     }
-
-    override fun hookName(): String {
-        return "工具类"
-    }
-
-    override fun init(classLoader: ClassLoader) {
-        clsNGAApplication = XposedHelpers.findClass(
-            "gov.pianzong.androidnga.activity.NGAApplication",
-            classLoader
-        )
-    }
-
-    override fun hook() {
-        AppContext = XposedHelpers.callMethod(clsNGAApplication, "getInstance") as Context
-    }
-
-
 }

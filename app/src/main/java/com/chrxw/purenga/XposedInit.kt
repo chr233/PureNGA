@@ -6,6 +6,8 @@ import android.widget.Toast
 import com.chrxw.purenga.hook.AboutHook
 import com.chrxw.purenga.hook.AdHook
 import com.chrxw.purenga.hook.IHook
+import com.chrxw.purenga.hook.MainHook
+import com.chrxw.purenga.hook.PreferencesHook
 import com.chrxw.purenga.hook.RewardHook
 import com.chrxw.purenga.hook.SplashHook
 import com.chrxw.purenga.hook.VipHook
@@ -27,7 +29,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     @Throws(Throwable::class)
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
         if (lpparam.packageName == BuildConfig.APPLICATION_ID) {
-            Log.d("模块内运行" + lpparam.packageName)
+            Log.d("模块内运行")
 
             XposedHelpers.findAndHookMethod(
                 MainActivity.Companion::class.java.name,
@@ -40,46 +42,19 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                 }
             )
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
-            Log.d("NGA内运行" + lpparam.packageName)
+            Log.d("NGA内运行")
 
             initHooks(
                 lpparam.classLoader,
-                Helper(),
+                MainHook(),
                 SplashHook(),
                 RewardHook(),
-//                VipHook(),
                 AdHook(),
-                AboutHook()
+                PreferencesHook(),
+                AboutHook(),
             )
         }
     }
-
-    private fun initHooks(classLoader: ClassLoader, vararg hooks: IHook) {
-        for (hook in hooks) {
-            try {
-                Log.i(MessageFormat.format("Hook {0} Start", hook.hookName()))
-                hook.init(classLoader)
-                hook.hook()
-            } catch (e: NoSuchMethodError) {
-                Helper.showToast(
-                    MessageFormat.format(
-                        "Hook {0} 加载失败, 可能不支持当前版本的NGA",
-                        hook.hookName()
-                    )
-                )
-                Log.e(e)
-            } catch (e: Exception) {
-                Helper.showToast(
-                    MessageFormat.format(
-                        "Hook {0} 遇到未知错误",
-                        hook.hookName()
-                    )
-                )
-                Log.e(e)
-            }
-        }
-    }
-
 
     companion object {
         lateinit var modulePath: String
@@ -88,6 +63,32 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         @JvmStatic
         fun getModuleRes(path: String): Resources {
             return XModuleResources.createInstance(path, null)
+        }
+
+        fun initHooks(classLoader: ClassLoader, vararg hooks: IHook) {
+            for (hook in hooks) {
+                try {
+                    Log.i(MessageFormat.format("Hook {0} 加载", hook.hookName()))
+                    hook.init(classLoader)
+                    hook.hook()
+                } catch (e: NoSuchMethodError) {
+                    Helper.showToast(
+                        MessageFormat.format(
+                            "Hook {0} 加载失败, 可能不支持当前版本的NGA",
+                            hook.hookName()
+                        )
+                    )
+                    Log.e(e)
+                } catch (e: Exception) {
+                    Helper.showToast(
+                        MessageFormat.format(
+                            "Hook {0} 遇到未知错误",
+                            hook.hookName()
+                        )
+                    )
+                    Log.e(e)
+                }
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ class SplashHook : IHook {
 
     companion object {
         var clsLoadingActivity: Class<*>? = null
+        var clsActivityLifecycleImpl: Class<*>? = null
         var clsSPUtil: Class<*>? = null
     }
 
@@ -23,18 +24,20 @@ class SplashHook : IHook {
     override fun init(classLoader: ClassLoader) {
         clsLoadingActivity =
             XposedHelpers.findClass("gov.pianzong.androidnga.activity.LoadingActivity", classLoader)
-
+        clsActivityLifecycleImpl =
+            XposedHelpers.findClass("com.donews.nga.interfaces.ActivityLifecycleImpl", classLoader)
         clsSPUtil =
-            XposedHelpers.findClass("com.donews.nga.common.utils.SPUti", classLoader)
+            XposedHelpers.findClass("com.donews.nga.common.utils.SPUtil", classLoader)
     }
 
     override fun hook() {
-        // 模拟点击跳过按钮, 立即进入主界面
+        // Hook toForeGround 方法
         XposedHelpers.findAndHookMethod(
-            Companion.clsLoadingActivity,
+            clsActivityLifecycleImpl,
             "toForeGround",
             Activity::class.java,
             object : XC_MethodHook() {
+
                 @Throws(Throwable::class)
                 override fun beforeHookedMethod(param: MethodHookParam?) {
                     super.beforeHookedMethod(param)

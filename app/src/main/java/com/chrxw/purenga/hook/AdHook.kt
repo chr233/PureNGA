@@ -46,6 +46,7 @@ class AdHook : IHook {
                 })
         } catch (e: NoSuchMethodException) {
             Log.e("Donews 广告过滤失败")
+            Log.e(e)
         }
 
         try {
@@ -77,6 +78,7 @@ class AdHook : IHook {
                 })
         } catch (e: NoSuchMethodException) {
             Log.e("kwad 广告过滤失败")
+            Log.e(e)
         }
     }
 }
