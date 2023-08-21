@@ -47,6 +47,10 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
             initHooks(
                 lpparam.classLoader,
                 MainHook(),
+            )
+
+            initHooks(
+                lpparam.classLoader,
                 SplashHook(),
                 RewardHook(),
                 AdHook(),
