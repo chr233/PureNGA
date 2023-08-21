@@ -12,13 +12,28 @@ import de.robv.android.xposed.XposedHelpers
 /**
  * 浏览广告钩子
  */
-class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
-    override fun startHook() {
+class RewardHook : IHook{
+    companion object {
+        var clsLoginWebView_a: Class<*>? = null
+        var clsLoginWebView_b: Class<*>? = null
+    }
+
+    override fun hookName(): String {
+        return "去广告任务破解"
+    }
+
+    override fun init(classLoader: ClassLoader) {
+        clsLoginWebView_a =
+            XposedHelpers.findClass("gov.pianzong.androidnga.activity.user.LoginWebView.a", classLoader)
+        clsLoginWebView_b =
+            XposedHelpers.findClass("gov.pianzong.androidnga.activity.user.LoginWebView.b", classLoader)
+    }
+
+    override fun hook() {
         try {
             // Hook onRewardVerify 方法
             XposedHelpers.findAndHookMethod(
-                "gov.pianzong.androidnga.activity.user.LoginWebView.b",
-                mClassLoader,
+                clsLoginWebView_b,
                 "onAdShow",
                 object : XC_MethodReplacement() {
                     @Throws(Throwable::class)
@@ -35,8 +50,7 @@ class RewardHook(classLoader: ClassLoader) : BaseHook(classLoader) {
 
             // Hook onRewardVerify 方法
             XposedHelpers.findAndHookMethod(
-                "gov.pianzong.androidnga.activity.user.LoginWebView.a",
-                mClassLoader,
+                clsLoginWebView_a,
                 "onAdShow",
                 object : XC_MethodReplacement() {
                     @Throws(Throwable::class)

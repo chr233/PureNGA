@@ -52,18 +52,21 @@ class MainActivity : AppCompatActivity() {
                         Uri.parse(getString(R.string.github_url))
                     )
                 }
+
                 "author" -> {
                     Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse(getString(R.string.author_url))
                     )
                 }
+
                 "donate" -> {
                     Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse(getString(R.string.donate_url))
                     )
                 }
+
                 "reopen_nga" -> {
                     Intent(Intent.ACTION_MAIN)
                         .setComponent(
@@ -74,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                         )
                         .setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
                 }
+
                 else -> null
             }
 
@@ -86,7 +90,8 @@ class MainActivity : AppCompatActivity() {
 
         override fun onResume() {
             super.onResume()
-            runningStatusPref?.setSummary(if (isModuleActive()) R.string.module_enabled else R.string.module_disabled)
+            val resId = if (isModuleActive()) R.string.module_enabled else R.string.module_disabled
+            runningStatusPref?.summary = resources.getString(resId)
         }
 
         private fun hideAppIcon(context: Context) {
