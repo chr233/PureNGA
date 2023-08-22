@@ -3,11 +3,9 @@ package com.chrxw.purenga.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.widget.Toast
 import com.chrxw.purenga.Constant
-import de.robv.android.xposed.XposedBridge
+import de.robv.android.xposed.XposedHelpers
 
 
 /**
@@ -20,14 +18,20 @@ class Helper {
         var prefs: SharedPreferences? = null
         var packageInfo: PackageInfo? = null
 
-        fun showToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
-            if (context != null) {
-                Toast.makeText(context, text, duration).show()
-            } else {
-                Log.d("AppContext 为 NULL")
-            }
-        }
+        var clsR: Class<*>? = null
+        var clsRId: Class<*>? = null
+        var clsRColor: Class<*>? = null
+        var clsRDimen: Class<*>? = null
+        var clsRDrawable: Class<*>? = null
+        var clsRLayout: Class<*>? = null
 
+        var scale = 1f
+
+        var darkMode = false
+
+        /**
+         * 初始化
+         */
         fun init(): Boolean {
             return try {
                 prefs = context?.getSharedPreferences("zhiliao_preferences", Context.MODE_PRIVATE)
@@ -38,6 +42,48 @@ class Helper {
                 Log.e(e)
                 false
             }
+        }
+
+        /**
+         * 显示Toast
+         */
+        fun toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
+            if (context != null) {
+                Toast.makeText(context, text, duration).show()
+            } else {
+                Log.d("AppContext 为 NULL")
+            }
+        }
+
+        private inline fun getRes(cls: Class<*>?, key: String): Int {
+            return try {
+                XposedHelpers.getStaticIntField(cls, key)
+            } catch (e: Throwable) {
+                Log.e("加载资源 $key 失败")
+                Log.e(e)
+                -1
+            }
+        }
+
+        fun getRId(key: String): Int {
+            return getRes(clsRId, key)
+        }
+
+        fun getRColor(key: String): Int {
+            return getRes(clsRColor, key)
+        }
+
+        fun getRDimen(key: String): Int {
+            return getRes(clsRDimen, key)
+
+        }
+
+        fun getRDrawable(key: String): Int {
+            return getRes(clsRDrawable, key)
+        }
+
+        fun getRLayout(key: String): Int {
+            return getRes(clsRLayout, key)
         }
 
     }

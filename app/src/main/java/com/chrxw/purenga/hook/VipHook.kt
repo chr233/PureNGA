@@ -19,10 +19,8 @@ class VipHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsVipStatus =
-            XposedHelpers.findClass("com.donews.nga.vip.entitys.VipStatus", classLoader)
-        clsUserInfoDataBean =
-            XposedHelpers.findClass("com.donews.nga.vip.entitys.VipStatus", classLoader)
+        clsVipStatus = XposedHelpers.findClass("com.donews.nga.vip.entitys.VipStatus", classLoader)
+        clsUserInfoDataBean = XposedHelpers.findClass("com.donews.nga.vip.entitys.VipStatus", classLoader)
     }
 
     override fun hook() {

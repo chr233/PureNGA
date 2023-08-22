@@ -1,7 +1,6 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
-import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
@@ -13,7 +12,7 @@ class SplashHook : IHook {
 
     companion object {
         var clsLoadingActivity: Class<*>? = null
-        var clsActivityLifecycleImpl: Class<*>? = null
+        var clsActivityLifecycle: Class<*>? = null
         var clsSPUtil: Class<*>? = null
     }
 
@@ -22,18 +21,15 @@ class SplashHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsLoadingActivity =
-            XposedHelpers.findClass("gov.pianzong.androidnga.activity.LoadingActivity", classLoader)
-        clsActivityLifecycleImpl =
-            XposedHelpers.findClass("com.donews.nga.interfaces.ActivityLifecycleImpl", classLoader)
-        clsSPUtil =
-            XposedHelpers.findClass("com.donews.nga.common.utils.SPUtil", classLoader)
+        clsLoadingActivity = XposedHelpers.findClass("gov.pianzong.androidnga.activity.LoadingActivity", classLoader)
+        clsActivityLifecycle = XposedHelpers.findClass("com.donews.nga.interfaces.ActivityLifecycleImpl", classLoader)
+        clsSPUtil = XposedHelpers.findClass("com.donews.nga.common.utils.SPUtil", classLoader)
     }
 
     override fun hook() {
         // Hook toForeGround 方法
         XposedHelpers.findAndHookMethod(
-            clsActivityLifecycleImpl,
+            clsActivityLifecycle,
             "toForeGround",
             Activity::class.java,
             object : XC_MethodHook() {

@@ -1,13 +1,18 @@
 package com.chrxw.purenga.hook
 
-import android.app.Application
-import android.app.Instrumentation
-import android.widget.Toast
+import android.graphics.Color
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
+import androidx.core.view.children
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
-import java.lang.reflect.Field
-import java.lang.reflect.Method
 
 
 /**
@@ -15,47 +20,11 @@ import java.lang.reflect.Method
  */
 class PreferencesHook : IHook {
 
-    companion object{
-        var SettingsFragment: Class<*>? = null
-        var DebugFragment: Class<*>? = null
-        var Preference: Class<*>? = null
-        var SwitchPreference: Class<*>? = null
-        var OnPreferenceChangeListener: Class<*>? = null
-        var OnPreferenceClickListener: Class<*>? = null
-        var PreferenceFragmentCompat: Class<*>? = null
-        var PreferenceManager: Class<*>? = null
-        var PreferenceInflater: Class<*>? = null
-        var PageInfoType: Class<*>? = null
-        var ZHIntent: Class<*>? = null
-        var MainActivity: Class<*>? = null
-        var BasePreferenceFragment: Class<*>? = null
-        var PreferenceGroup: Class<*>? = null
-        var EditTextPreference: Class<*>? = null
-        var SeekBarPreference: Class<*>? = null
-        var OnSeekBarChangeListener: Class<*>? = null
-        var ListPreference: Class<*>? = null
-        var TooltipCompat: Class<*>? = null
-
-        var findPreference: Method? = null
-        var setSummary: Method? = null
-        var setIcon: Method? = null
-        var setVisible: Method? = null
-        var getKey: Method? = null
-        var setChecked: Method? = null
-        var setOnPreferenceChangeListener: Method? = null
-        var setOnPreferenceClickListener: Method? = null
-        var setSharedPreferencesName: Method? = null
-        var getContext: Method? = null
-        var getText: Method? = null
-        var addPreferencesFromResource: Method? = null
-        var inflate: Method? = null
-        var setTooltipText: Method? = null
-
-        var SeekBarPreference_mMin: Field? = null
-        var SeekBarPreference_mSeekBarValueTextView: Field? = null
-        var OnSeekBarChangeListener_seekBarPreferenceInstance: Field? = null
-        var ListPreference_mEntries: Field? = null
-        var ListPreference_mEntryValues: Field? = null
+    companion object {
+        var clsPreference: Class<*>? = null
+        var clsMainActivity: Class<*>? = null
+        var clsHomeDrawerLayout: Class<*>? = null
+        var clsSettingActivity: Class<*>? = null
     }
 
     override fun hookName(): String {
@@ -63,52 +32,164 @@ class PreferencesHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-//       SettingsFragment =
-//            classLoader.loadClass("com.zhihu.android.app.ui.fragment.preference.SettingsFragment")
-//       DebugFragment =
-//            classLoader.loadClass("com.zhihu.android.app.ui.fragment.DebugFragment")
-       Preference =
-            classLoader.loadClass("androidx.preference.Preference")
-//       SwitchPreference =
-//            classLoader.loadClass("com.zhihu.android.app.ui.widget.SwitchPreference")
-       OnPreferenceChangeListener =
-            classLoader.loadClass("androidx.preference.Preference\$c")
-       OnPreferenceClickListener =
-            classLoader.loadClass("androidx.preference.Preference\$d")
-       PreferenceFragmentCompat =
-            classLoader.loadClass("androidx.preference.g")
-       PreferenceManager =
-            classLoader.loadClass("androidx.preference.j")
-       PreferenceInflater =
-            classLoader.loadClass("androidx.preference.i")
-//       PageInfoType =
-//            classLoader.loadClass("com.zhihu.android.data.analytics.PageInfoType")
-//       ZHIntent =
-//            classLoader.loadClass("com.zhihu.android.answer.entrance.AnswerPagerEntance").getMethod(
-//                "buildIntent",
-//                Long::class.javaPrimitiveType
-//            ).returnType
-//       MainActivity =
-//            classLoader.loadClass("com.zhihu.android.app.ui.activity.MainActivity")
-//       BasePreferenceFragment =
-//            classLoader.loadClass("com.zhihu.android.app.ui.fragment.BasePreferenceFragment")
-       PreferenceGroup =
-            classLoader.loadClass("androidx.preference.PreferenceGroup")
-       EditTextPreference =
-            classLoader.loadClass("androidx.preference.EditTextPreference")
-       SeekBarPreference =
-            classLoader.loadClass("androidx.preference.SeekBarPreference")
-       OnSeekBarChangeListener =
-            classLoader.loadClass("androidx.preference.SeekBarPreference$1")
-       ListPreference =
-            classLoader.loadClass("androidx.preference.ListPreference")
-       TooltipCompat =
-            classLoader.loadClass("androidx.appcompat.widget.TooltipCompat")
-        
+        clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
+        clsHomeDrawerLayout = classLoader.loadClass("com.donews.nga.widget.HomeDrawerLayout")
+        clsSettingActivity = classLoader.loadClass("com.donews.nga.setting.SettingActivity")
     }
 
     override fun hook() {
+//        XposedHelpers.findAndHookMethod(
+//            clsHomeDrawerLayout,
+//            "initLayout",
+//            object : XC_MethodHook() {
+//                @Throws(Throwable::class)
+//                override fun afterHookedMethod(param: MethodHookParam) {
+//                    val viewBinding = XposedHelpers.getObjectField(param.thisObject, "binding")
+//                    val root = XposedHelpers.callMethod(viewBinding, "getRoot") as View
+//                    val layoutDrawSetting = Helper.getRId("layout_drawer_setting")
+//                    val linearLayout = root.findViewById<RelativeLayout>(layoutDrawSetting).parent as LinearLayout
+//
+//                    val context = root.context
+//
+//                    val relativeLayout = RelativeLayout(context)
+////                    relativeLayout.setBackgroundResource(Helper.getRColor("nga_theme_page_color"))
+//
+////                    relativeLayout.setPadding( Helper.getRDimen("dp_15"))
+//
+//                    val imageView = ImageView(context)
+//                    imageView.setImageResource(Helper.getRDrawable("drawer_setting_icon"))
+//
+//                    val textView = TextView(context)
+//                    textView.text = "PureNGA 设置"
+//                    textView.setTextColor(Color.CYAN)
+//
+//                    relativeLayout.addView(imageView)
+//                    relativeLayout.addView(textView)
+//
+//                    linearLayout.addView(relativeLayout)
+//                }
+//            })
 
+
+//        XposedHelpers.findAndHookMethod(
+//            clsSettingActivity,
+//            "initLayout",
+//            object : XC_MethodHook() {
+//                @Throws(Throwable::class)
+//                override fun afterHookedMethod(param: MethodHookParam) {
+//                    val viewBinding = XposedHelpers.getObjectField(param.thisObject, "viewBinding")
+//
+//                    val root = XposedHelpers.callMethod(viewBinding, "getRoot") as View
+//
+//                    val layoutDrawSetting = Helper.getRId("about_us_title")
+//
+//                    val linearLayout = root.findViewById<TextView>(layoutDrawSetting).parent as LinearLayout
+//
+//                    val context = root.context
+//
+//
+//                    val textView = TextView(context)
+//                    textView.text = "PureNGA 设置"
+//                    textView.setTextColor(Color.CYAN)
+//
+//                    linearLayout.addView(textView)
+////                    linearLayout.inser
+//                }
+//            })
+
+
+        val settingXmlId = Helper.getRLayout("activity_setting")
+
+        XposedHelpers.findAndHookMethod(
+            LayoutInflater::class.java, "inflate",
+            Int::class.javaPrimitiveType,
+            ViewGroup::class.java,
+            Boolean::class.javaPrimitiveType, object : XC_MethodHook() {
+                override fun afterHookedMethod(param: MethodHookParam) {
+                    val id = param.args[0] as Int
+                    val vg = param.args[1] as ViewGroup?
+                    val attachToRoot = param.args[2] as Boolean
+
+                    if (id == settingXmlId) {
+
+                        Log.i(id)
+                        Log.i(vg)
+                        Log.i(attachToRoot)
+
+                        val viewGroup = param.result as ViewGroup
+
+                        val childViewGroup = viewGroup.getChildAt(1) as ScrollView
+
+                        Log.i(childViewGroup.javaClass)
+
+//                        for (x: View in childViewGroup.children) {
+//                            Log.i("id:" + x.id)
+//                        }
+
+
+//                        val title = childViewGroup.getChildAt(0) as TextView
+//
+//                        title.setTextColor(if (Helper.darkMode) -0x2c2c2d else -0xbbbbbc)
+//
+//                        val summary = childViewGroup.getChildAt(1) as TextView
+//                        summary.setTextColor(if (Helper.darkMode) -0x666667 else -0xededee)
+//                        summary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+//                        val seekbarValue = (childViewGroup.getChildAt(2) as ViewGroup).getChildAt(1) as TextView
+//                        seekbarValue.setTextColor(if (Helper.darkMode) -0x2c2c2d else -0xbbbbbc)
+//
+//                        val root = LinearLayout(Helper.context)
+//                        run {
+//                            val layoutParams =
+//                                ViewGroup.LayoutParams(
+//                                    ViewGroup.LayoutParams.MATCH_PARENT,
+//                                    ViewGroup.LayoutParams.WRAP_CONTENT
+//                                )
+//                            root.orientation = LinearLayout.VERTICAL
+//                            root.layoutParams = layoutParams
+//                            root.addView(viewGroup)
+//                        }
+//                        param.result = root
+                    }
+                }
+            })
+
+
+        //        XposedHelpers.findAndHookMethod(
+//            clsMainActivity,
+//            "initLayout",
+//            object : XC_MethodHook() {
+//                @Throws(Throwable::class)
+//                override fun afterHookedMethod(param: MethodHookParam) {
+//
+//                    val viewBinding = XposedHelpers.getObjectField(param.thisObject, "viewBinding")
+//
+////                    val drawerLayout = XposedHelpers.getObjectField(viewBinding,"b" ) as DrawerLayout
+//
+////                    val context = drawerLayout.context
+//
+////                    Helper.toast(drawerLayout.toString())
+//
+//                    val linearLayout = XposedHelpers.getObjectField(viewBinding, "h") as LinearLayout
+//
+//                    val context = linearLayout.context
+//
+//                    val tv1 = XposedHelpers.getObjectField(viewBinding, "k") as TextView
+//                    val tv2 = XposedHelpers.getObjectField(viewBinding, "l") as TextView
+//                    val tv3 = XposedHelpers.getObjectField(viewBinding, "m") as TextView
+//
+//                    Log.i(tv1.text)
+//                    Log.i(tv2.text)
+//                    Log.i(tv3.text)
+//
+//                    tv1.text = "2333"
+//                    tv2.text = "444"
+//                    tv3.text = "555"
+//
+//                    Log.i(tv1.text)
+//                    Log.i(tv2.text)
+//                    Log.i(tv3.text)
+//                }
+//            })
     }
 
 }

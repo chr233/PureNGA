@@ -2,6 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory
+        android:key="other"
+        android:title="@string/other">
+
+        <Preference
+            android:key="reopen_nga"
+            android:title="@string/reopen_nga" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="净化设置">
 
         <CheckBoxPreference
@@ -53,16 +63,6 @@
             android:key="donate"
             android:summary="@string/donate_summary"
             android:title="@string/donate" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="other"
-        android:title="@string/other">
-
-        <Preference
-            android:key="reopen_nga"
-            android:title="@string/reopen_nga" />
 
     </PreferenceCategory>
 

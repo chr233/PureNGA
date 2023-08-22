@@ -2,7 +2,6 @@ package com.chrxw.purenga
 
 import android.content.res.Resources
 import android.content.res.XModuleResources
-import android.widget.Toast
 import com.chrxw.purenga.hook.AboutHook
 import com.chrxw.purenga.hook.AdHook
 import com.chrxw.purenga.hook.IHook
@@ -10,12 +9,10 @@ import com.chrxw.purenga.hook.MainHook
 import com.chrxw.purenga.hook.PreferencesHook
 import com.chrxw.purenga.hook.RewardHook
 import com.chrxw.purenga.hook.SplashHook
-import com.chrxw.purenga.hook.VipHook
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import java.text.MessageFormat
 
 /**
  * 初始化Xposed
@@ -71,25 +68,16 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
         fun initHooks(classLoader: ClassLoader, vararg hooks: IHook) {
             for (hook in hooks) {
+                val name = hook.hookName()
                 try {
-                    Log.i(MessageFormat.format("Hook {0} 加载", hook.hookName()))
+                    Log.i("加载 $name 模块")
                     hook.init(classLoader)
                     hook.hook()
                 } catch (e: NoSuchMethodError) {
-                    Helper.showToast(
-                        MessageFormat.format(
-                            "Hook {0} 加载失败, 可能不支持当前版本的NGA",
-                            hook.hookName()
-                        )
-                    )
+                    Helper.toast("模块 $name 加载失败, 可能不支持当前版本的NGA")
                     Log.e(e)
                 } catch (e: Exception) {
-                    Helper.showToast(
-                        MessageFormat.format(
-                            "Hook {0} 遇到未知错误",
-                            hook.hookName()
-                        )
-                    )
+                    Helper.toast("模块 $name 加载遇到未知错误")
                     Log.e(e)
                 }
             }

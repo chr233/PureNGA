@@ -24,14 +24,10 @@ class AdHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsDnFeedAd =
-            XposedHelpers.findClass("com.donews.admediation.adimpl.feed.DnFeedAd", classLoader)
-        clsNativeExpressAD =
-            XposedHelpers.findClass("com.qq.e.ads.nativ.NativeExpressAD", classLoader)
-        clsUtils_bp =
-            XposedHelpers.findClass("com.kwad.sdk.utils.bp", classLoader)
-        clsAdSize =
-            XposedHelpers.findClass("com.qq.e.ads.nativ.ADSize", classLoader)
+        clsDnFeedAd = XposedHelpers.findClass("com.donews.admediation.adimpl.feed.DnFeedAd", classLoader)
+        clsNativeExpressAD = XposedHelpers.findClass("com.qq.e.ads.nativ.NativeExpressAD", classLoader)
+        clsUtils_bp = XposedHelpers.findClass("com.kwad.sdk.utils.bp", classLoader)
+        clsAdSize = XposedHelpers.findClass("com.qq.e.ads.nativ.ADSize", classLoader)
     }
 
     override fun hook() {

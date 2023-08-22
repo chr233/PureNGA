@@ -12,7 +12,7 @@ import de.robv.android.xposed.XposedHelpers
 /**
  * 浏览广告钩子
  */
-class RewardHook : IHook{
+class RewardHook : IHook {
     companion object {
         var clsLoginWebView_a: Class<*>? = null
         var clsLoginWebView_b: Class<*>? = null
@@ -23,10 +23,8 @@ class RewardHook : IHook{
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsLoginWebView_a =
-            XposedHelpers.findClass("gov.pianzong.androidnga.activity.user.LoginWebView.a", classLoader)
-        clsLoginWebView_b =
-            XposedHelpers.findClass("gov.pianzong.androidnga.activity.user.LoginWebView.b", classLoader)
+        clsLoginWebView_a = XposedHelpers.findClass("gov.pianzong.androidnga.activity.user.LoginWebView.a", classLoader)
+        clsLoginWebView_b = XposedHelpers.findClass("gov.pianzong.androidnga.activity.user.LoginWebView.b", classLoader)
     }
 
     override fun hook() {

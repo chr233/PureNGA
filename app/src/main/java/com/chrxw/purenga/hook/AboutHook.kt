@@ -25,30 +25,25 @@ class AboutHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsAboutUsActivity =
-            XposedHelpers.findClass("com.donews.nga.setting.AboutUsActivity", classLoader)
+        clsAboutUsActivity = XposedHelpers.findClass("com.donews.nga.setting.AboutUsActivity", classLoader)
     }
 
     override fun hook() {
-        try {
-            XposedHelpers.findAndHookMethod(
-                clsAboutUsActivity,
-                "initLayout",
-                object : XC_MethodHook() {
-                    @Throws(Throwable::class)
-                    override fun afterHookedMethod(param: MethodHookParam) {
-                        val viewBinding =
-                            XposedHelpers.callMethod(param.thisObject, "getViewBinding")
-                        val textView = XposedHelpers.getObjectField(viewBinding, "h") as TextView
-                        val newText =
-                            textView.text.toString() + " + PureNGA:" + BuildConfig.VERSION_NAME + " (点此检查插件更新)"
-                        textView.text = newText
-                        textView.setOnClickListener(MyButton())
-                    }
-                })
-        } catch (e: Exception) {
-            Log.e(e)
-        }
+        XposedHelpers.findAndHookMethod(
+            clsAboutUsActivity,
+            "initLayout",
+            object : XC_MethodHook() {
+                @Throws(Throwable::class)
+                override fun afterHookedMethod(param: MethodHookParam) {
+                    val viewBinding =
+                        XposedHelpers.callMethod(param.thisObject, "getViewBinding")
+                    val textView = XposedHelpers.getObjectField(viewBinding, "h") as TextView
+                    val newText =
+                        textView.text.toString() + " + PureNGA:" + BuildConfig.VERSION_NAME + " (点此检查插件更新)"
+                    textView.text = newText
+                    textView.setOnClickListener(MyButton())
+                }
+            })
     }
 
     private class MyButton : View.OnClickListener {

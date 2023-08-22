@@ -12,22 +12,31 @@ import android.util.Log as ALog
 object Log {
     @JvmStatic
     private fun doLog(f: (String, String) -> Int, obj: Any?, toXposed: Boolean = true) {
-        val str = if (obj is Throwable) ALog.getStackTraceString(obj) else obj.toString()
+        if (obj is Throwable) {
+            val str = ALog.getStackTraceString(obj)
 
-        if (str.length > maxLength) {
-            val chunkCount: Int = str.length / maxLength
-            for (i in 0..chunkCount) {
-                val max: Int = maxLength * (i + 1)
-                if (max >= str.length) {
-                    doLog(f, str.substring(maxLength * i))
-                } else {
-                    doLog(f, str.substring(maxLength * i, max))
-                }
-            }
-        } else {
             f(TAG, str)
             if (toXposed)
-                XposedBridge.log("$TAG : $str")
+                XposedBridge.log(obj)
+
+        } else {
+            val str = obj.toString()
+
+            if (str.length > maxLength) {
+                val chunkCount: Int = str.length / maxLength
+                for (i in 0..chunkCount) {
+                    val max: Int = maxLength * (i + 1)
+                    if (max >= str.length) {
+                        doLog(f, str.substring(maxLength * i))
+                    } else {
+                        doLog(f, str.substring(maxLength * i, max))
+                    }
+                }
+            } else {
+                f(TAG, str)
+                if (toXposed)
+                    XposedBridge.log("$TAG : $str")
+            }
         }
     }
 

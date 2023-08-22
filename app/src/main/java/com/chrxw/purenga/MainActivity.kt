@@ -16,6 +16,12 @@ import androidx.preference.PreferenceFragmentCompat
  */
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        fun isModuleActive(): Boolean {
+            return false
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
@@ -105,14 +111,6 @@ class MainActivity : AppCompatActivity() {
                     PackageManager.DONT_KILL_APP
                 )
             }
-        }
-
-
-    }
-
-    companion object {
-        fun isModuleActive(): Boolean {
-            return false
         }
     }
 }
