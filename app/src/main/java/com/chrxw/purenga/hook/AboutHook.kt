@@ -46,7 +46,7 @@ class AboutHook : IHook {
                             Intent.ACTION_VIEW,
                             Uri.parse("https://github.com/chr233/PureNGA")
                         )
-                        Helper.context.startActivity(intent)
+                        Helper.context?.startActivity(intent)
                     }
                 }
             })

@@ -1,10 +1,12 @@
 package com.chrxw.purenga.hook
 
 import android.R.attr
+import android.app.AndroidAppHelper
 import android.app.Application
 import android.app.Instrumentation
 import android.widget.Toast
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -15,7 +17,6 @@ import de.robv.android.xposed.XposedHelpers
 class MainHook : IHook {
 
     companion object {
-        lateinit var clsAppConfig: Class<*>
     }
 
     override fun hookName(): String {
@@ -29,18 +30,21 @@ class MainHook : IHook {
         Helper.clsRDimen = classLoader.loadClass("gov.pianzong.androidnga.R\$dimen")
         Helper.clsRDrawable = classLoader.loadClass("gov.pianzong.androidnga.R\$drawable")
         Helper.clsRLayout = classLoader.loadClass("gov.pianzong.androidnga.R\$layout")
-
-        clsAppConfig = classLoader.loadClass("com.donews.nga.common.utils.AppConfig")
     }
 
 
     override fun hook() {
         XposedHelpers.findAndHookMethod(
-            Instrumentation::class.java, "callApplicationOnCreate",
-            Application::class.java, object : XC_MethodHook() {
+            Instrumentation::class.java,
+            "callApplicationOnCreate",
+            Application::class.java,
+            object : XC_MethodHook() {
                 override fun afterHookedMethod(param: MethodHookParam) {
+                    Log.i(param.args[0].toString())
+
                     if (param.args[0] is Application) {
-                        Helper.context = (param.args[0] as Application).applicationContext
+                        Helper.context =
+                            AndroidAppHelper.currentApplication().applicationContext // (param.args[0] as Application).applicationContext
 
                         if (Helper.init()) {
                             Helper.toast("PureNGA 加载成功, 请到设置页面开启功能")
@@ -51,30 +55,6 @@ class MainHook : IHook {
                 }
             })
 
-        XposedHelpers.findAndHookMethod(
-            clsAppConfig,
-            "isDarkModel",
-            object : XC_MethodHook() {
-                @Throws(Throwable::class)
-                override fun afterHookedMethod(param: MethodHookParam) {
-                    Helper.darkMode = param.result as Boolean
-                }
-            })
 
-        XposedHelpers.findAndHookMethod(
-            clsAppConfig,
-            "setDarkModel",
-            Boolean::class.java,
-            object : XC_MethodHook() {
-                @Throws(Throwable::class)
-                override fun afterHookedMethod(param: MethodHookParam) {
-                    var result = param.result as Boolean?
-                    if (result != null) {
-                        Helper.darkMode = result
-                    } else {
-                        Helper.darkMode = false
-                    }
-                }
-            })
     }
 }

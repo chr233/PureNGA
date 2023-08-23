@@ -38,6 +38,32 @@ class OptimizeHook : IHook {
                     }
                 })
         }
+
+        XposedHelpers.findAndHookMethod(
+            clsAppConfig,
+            "isDarkModel",
+            object : XC_MethodHook() {
+                @Throws(Throwable::class)
+                override fun afterHookedMethod(param: MethodHookParam) {
+                    Helper.darkMode = param.result as Boolean
+                }
+            })
+
+        XposedHelpers.findAndHookMethod(
+            clsAppConfig,
+            "setDarkModel",
+            Boolean::class.java,
+            object : XC_MethodHook() {
+                @Throws(Throwable::class)
+                override fun afterHookedMethod(param: MethodHookParam) {
+                    var result = param.result as Boolean?
+                    if (result != null) {
+                        Helper.darkMode = result
+                    } else {
+                        Helper.darkMode = false
+                    }
+                }
+            })
     }
 }
 

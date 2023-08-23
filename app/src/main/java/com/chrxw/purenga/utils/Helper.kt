@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.widget.Toast
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import de.robv.android.xposed.XposedHelpers
 
@@ -34,7 +35,10 @@ class Helper {
             return try {
                 prefs = context.getSharedPreferences(Constant.PLUGIN_PREFERENCE, Context.MODE_PRIVATE)
                 packageInfo = context.packageManager.getPackageInfo(Constant.NGA_PACKAGE_NAME, 0)
+                Log.i(packageInfo)
 
+
+                packageInfo = context.packageManager.getPackageInfo(BuildConfig.APPLICATION_ID, 0)
                 Log.i(packageInfo)
 
                 true

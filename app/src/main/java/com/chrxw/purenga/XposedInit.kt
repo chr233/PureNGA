@@ -9,6 +9,7 @@ import com.chrxw.purenga.hook.MainHook
 import com.chrxw.purenga.hook.PreferencesHook
 import com.chrxw.purenga.hook.RewardHook
 import com.chrxw.purenga.hook.SplashHook
+import com.chrxw.purenga.hook.WebViewHook
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.*
@@ -55,6 +56,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                 AdHook(),
                 PreferencesHook(),
                 AboutHook(),
+                WebViewHook(),
             )
         }
     }
