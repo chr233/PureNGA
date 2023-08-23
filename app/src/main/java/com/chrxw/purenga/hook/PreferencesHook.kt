@@ -1,5 +1,6 @@
 package com.chrxw.purenga.hook
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.TextView
 import androidx.core.view.children
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.R
@@ -100,24 +102,12 @@ class PreferencesHook : IHook {
     }
 
     fun generateView(context: Context): View {
-        var layout = LinearLayout(context)
-//        var btn = Button(context)
-//        btn.text = "ette"
-//        var textView = TextView(context)
-//        textView.text = "1234"
-//        layout.addView(textView)
-//        layout.addView(btn)
-//
-//        return layout
-
         val ctx = context.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
         val inflater = LayoutInflater.from(ctx)
-
         val view = inflater.inflate(R.layout.inapp_setting_activity, null)
 
-        Log.i(view.toString())
-
-//        view.
+//        val text = view.findViewById<TextView>(R.id.switch1)
+//        text.text = "114514"
 
         return view
     }

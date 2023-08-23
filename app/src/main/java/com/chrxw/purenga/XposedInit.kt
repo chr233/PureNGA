@@ -1,7 +1,11 @@
 package com.chrxw.purenga
 
+import android.app.AndroidAppHelper
+import android.app.Application
+import android.app.Instrumentation
 import android.content.res.Resources
 import android.content.res.XModuleResources
+import android.widget.Toast
 import com.chrxw.purenga.hook.AboutHook
 import com.chrxw.purenga.hook.AdHook
 import com.chrxw.purenga.hook.IHook
@@ -44,26 +48,33 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             Log.d("NGA内运行")
 
-            initHooks(
-                lpparam.classLoader,
-                MainHook(),
-            )
+            XposedHelpers.findAndHookMethod(
+                Instrumentation::class.java,
+                "callApplicationOnCreate",
+                Application::class.java,
+                object : XC_MethodHook() {
+                    override fun afterHookedMethod(param: MethodHookParam) {
+                        Log.i(param.args[0].toString())
 
-            initHooks(
-                lpparam.classLoader,
-                SplashHook(),
-                RewardHook(),
-                AdHook(),
-                PreferencesHook(),
-                AboutHook(),
-                WebViewHook(),
-            )
+                        if (param.args[0] is Application) {
+                            Helper.context = AndroidAppHelper.currentApplication().applicationContext
+
+                            if (Helper.init()) {
+                                Hooks.initHooks(lpparam.classLoader)
+                                Helper.toast("PureNGA 加载成功, 请到设置页面开启功能")
+                            } else {
+                                Helper.toast("PureNGA 初始化失败，可能不支持当前版本 NGA: " + Helper.packageInfo.versionName)
+                            }
+                        }
+                    }
+                })
         }
     }
 
     companion object {
         lateinit var modulePath: String
         lateinit var moduleRes: Resources
+
 
         @JvmStatic
         fun getModuleRes(path: String): Resources {
@@ -88,3 +99,5 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         }
     }
 }
+
+

@@ -34,27 +34,5 @@ class MainHook : IHook {
 
 
     override fun hook() {
-        XposedHelpers.findAndHookMethod(
-            Instrumentation::class.java,
-            "callApplicationOnCreate",
-            Application::class.java,
-            object : XC_MethodHook() {
-                override fun afterHookedMethod(param: MethodHookParam) {
-                    Log.i(param.args[0].toString())
-
-                    if (param.args[0] is Application) {
-                        Helper.context =
-                            AndroidAppHelper.currentApplication().applicationContext // (param.args[0] as Application).applicationContext
-
-                        if (Helper.init()) {
-                            Helper.toast("PureNGA 加载成功, 请到设置页面开启功能")
-                        } else {
-                            Helper.toast("PureNGA 初始化失败，可能不支持当前版本 NGA: " + Helper.packageInfo?.versionName)
-                        }
-                    }
-                }
-            })
-
-
     }
 }
