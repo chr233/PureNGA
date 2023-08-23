@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import com.chrxw.purenga.BuildConfig
+import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
@@ -17,7 +18,7 @@ import de.robv.android.xposed.XposedHelpers
 class AboutHook : IHook {
 
     companion object {
-        var clsAboutUsActivity: Class<*>? = null
+        lateinit var clsAboutUsActivity: Class<*>
     }
 
     override fun hookName(): String {
@@ -25,7 +26,7 @@ class AboutHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsAboutUsActivity = XposedHelpers.findClass("com.donews.nga.setting.AboutUsActivity", classLoader)
+        clsAboutUsActivity = classLoader.loadClass("com.donews.nga.setting.AboutUsActivity")
     }
 
     override fun hook() {
@@ -35,24 +36,19 @@ class AboutHook : IHook {
             object : XC_MethodHook() {
                 @Throws(Throwable::class)
                 override fun afterHookedMethod(param: MethodHookParam) {
-                    val viewBinding =
-                        XposedHelpers.callMethod(param.thisObject, "getViewBinding")
+                    val viewBinding = XposedHelpers.callMethod(param.thisObject, "getViewBinding")
                     val textView = XposedHelpers.getObjectField(viewBinding, "h") as TextView
                     val newText =
                         textView.text.toString() + " + PureNGA:" + BuildConfig.VERSION_NAME + " (点此检查插件更新)"
                     textView.text = newText
-                    textView.setOnClickListener(MyButton())
+                    textView.setOnClickListener {
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://github.com/chr233/PureNGA")
+                        )
+                        Helper.context.startActivity(intent)
+                    }
                 }
             })
-    }
-
-    private class MyButton : View.OnClickListener {
-        override fun onClick(v: View?) {
-            val intent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://github.com/chr233/PureNGA")
-            )
-            v?.context?.let { startActivity(it, intent, null) }
-        }
     }
 }

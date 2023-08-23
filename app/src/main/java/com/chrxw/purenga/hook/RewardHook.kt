@@ -14,8 +14,8 @@ import de.robv.android.xposed.XposedHelpers
  */
 class RewardHook : IHook {
     companion object {
-        var clsLoginWebView_a: Class<*>? = null
-        var clsLoginWebView_b: Class<*>? = null
+        lateinit  var clsLoginWebView_a: Class<*>
+        lateinit  var clsLoginWebView_b: Class<*>
     }
 
     override fun hookName(): String {

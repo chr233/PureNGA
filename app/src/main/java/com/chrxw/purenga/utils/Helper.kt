@@ -13,19 +13,17 @@ import de.robv.android.xposed.XposedHelpers
  */
 class Helper {
     companion object {
-        var context: Context? = null
+        lateinit var context: Context
 
-        var prefs: SharedPreferences? = null
-        var packageInfo: PackageInfo? = null
+        lateinit var prefs: SharedPreferences
+        lateinit var packageInfo: PackageInfo
 
-        var clsR: Class<*>? = null
-        var clsRId: Class<*>? = null
-        var clsRColor: Class<*>? = null
-        var clsRDimen: Class<*>? = null
-        var clsRDrawable: Class<*>? = null
-        var clsRLayout: Class<*>? = null
-
-        var scale = 1f
+        lateinit var clsR: Class<*>
+        lateinit var clsRId: Class<*>
+        lateinit var clsRColor: Class<*>
+        lateinit var clsRDimen: Class<*>
+        lateinit var clsRDrawable: Class<*>
+        lateinit var clsRLayout: Class<*>
 
         var darkMode = false
 
@@ -34,8 +32,10 @@ class Helper {
          */
         fun init(): Boolean {
             return try {
-                prefs = context?.getSharedPreferences("zhiliao_preferences", Context.MODE_PRIVATE)
-                packageInfo = context?.packageManager?.getPackageInfo(Constant.NGA_PACKAGE_NAME, 0)
+                prefs = context.getSharedPreferences(Constant.PLUGIN_PREFERENCE, Context.MODE_PRIVATE)
+                packageInfo = context.packageManager.getPackageInfo(Constant.NGA_PACKAGE_NAME, 0)
+
+                Log.i(packageInfo)
 
                 true
             } catch (e: Exception) {

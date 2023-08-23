@@ -2,13 +2,17 @@ package com.chrxw.purenga.hook
 
 import android.app.AlertDialog
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.ScrollView
+import androidx.core.view.children
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.R
-import com.chrxw.purenga.SettingDialog
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -19,10 +23,9 @@ import de.robv.android.xposed.XposedHelpers
 class PreferencesHook : IHook {
 
     companion object {
-        var clsPreference: Class<*>? = null
-        var clsMainActivity: Class<*>? = null
-        var clsHomeDrawerLayout: Class<*>? = null
-        var clsSettingActivity: Class<*>? = null
+        lateinit var clsMainActivity: Class<*>
+        lateinit var clsHomeDrawerLayout: Class<*>
+        lateinit var clsSettingActivity: Class<*>
     }
 
     override fun hookName(): String {
@@ -36,6 +39,23 @@ class PreferencesHook : IHook {
     }
 
     override fun hook() {
+
+        XposedHelpers.findAndHookMethod(
+            clsHomeDrawerLayout,
+            "initLayout",
+            object : XC_MethodHook() {
+                @Throws(Throwable::class)
+                override fun afterHookedMethod(param: MethodHookParam) {
+                    val viewBinding = XposedHelpers.getObjectField(param.thisObject, "binding")
+                    val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
+
+                    for (x in root.children) {
+                        Log.i(x.javaClass)
+                    }
+                }
+            })
+
+
         XposedHelpers.findAndHookMethod(
             clsSettingActivity,
             "initLayout",
@@ -43,123 +63,63 @@ class PreferencesHook : IHook {
                 @Throws(Throwable::class)
                 override fun afterHookedMethod(param: MethodHookParam) {
                     val viewBinding = XposedHelpers.getObjectField(param.thisObject, "viewBinding")
-
-                    val root = XposedHelpers.callMethod(viewBinding, "getRoot") as View
-                    val layoutDrawSetting = Helper.getRId("about_us_title")
-                    val linearLayout = root.findViewById<TextView>(layoutDrawSetting).parent as LinearLayout
-
+                    val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
+                    val scrollView = root.getChildAt(1) as ScrollView
+                    val linearLayout = scrollView.getChildAt(0) as LinearLayout
                     val context = root.context
 
                     val button = Button(context)
                     button.text = "PureNGA 设置"
+                    button.setBackgroundColor(if (Helper.darkMode) 0x21211d else 0xfdfae2)
                     button.setOnClickListener {
                         val context = param.thisObject as Context
-//                        val builder = AlertDialog.Builder(context)
-//                        builder.setTitle("Custom UI")
-//                            .setMessage("This is a custom UI.")
-//                            .setView(R.xml.pref_settings)
-//                            .show()
+                        val dialog = AlertDialog.Builder(context).setTitle("PureNGA 设置")
+//                            .setCancelable(false)
+                            .setView(generateView(context))
+                            .create()
 
-                        SettingDialog(context).show()
+                        dialog.show()
+
+                        val lp = WindowManager.LayoutParams()
+                        lp.copyFrom(dialog.window!!.attributes)
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                        dialog.show()
+                        dialog.window?.attributes = lp
+
                     }
 
+                    button.setPadding(5, 5, 5, 5)
+
+//                    val line = linearLayout.getChildAt(linearLayout.childCount-2)
+//                    linearLayout.addView(line)
+                    linearLayout.removeViewAt(linearLayout.childCount - 1)
                     linearLayout.addView(button)
                 }
             })
-
-
-        val settingXmlId = Helper.getRLayout("activity_setting")
-
-//        XposedHelpers.findAndHookMethod(
-//            LayoutInflater::class.java, "inflate",
-//            Int::class.javaPrimitiveType,
-//            ViewGroup::class.java,
-//            Boolean::class.javaPrimitiveType, object : XC_MethodHook() {
-//                override fun afterHookedMethod(param: MethodHookParam) {
-//                    val id = param.args[0] as Int
-//                    val vg = param.args[1] as ViewGroup?
-//                    val attachToRoot = param.args[2] as Boolean
-//
-//                    if (id == settingXmlId) {
-//
-//                        Log.i(id)
-//                        Log.i(vg)
-//                        Log.i(attachToRoot)
-//
-//                        val viewGroup = param.result as ViewGroup
-//
-//                        val childViewGroup = viewGroup.getChildAt(1) as ScrollView
-//
-//                        Log.i(childViewGroup.javaClass)
-//
-////                        for (x: View in childViewGroup.children) {
-////                            Log.i("id:" + x.id)
-////                        }
-//
-//
-////                        val title = childViewGroup.getChildAt(0) as TextView
-////
-////                        title.setTextColor(if (Helper.darkMode) -0x2c2c2d else -0xbbbbbc)
-////
-////                        val summary = childViewGroup.getChildAt(1) as TextView
-////                        summary.setTextColor(if (Helper.darkMode) -0x666667 else -0xededee)
-////                        summary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-////                        val seekbarValue = (childViewGroup.getChildAt(2) as ViewGroup).getChildAt(1) as TextView
-////                        seekbarValue.setTextColor(if (Helper.darkMode) -0x2c2c2d else -0xbbbbbc)
-////
-////                        val root = LinearLayout(Helper.context)
-////                        run {
-////                            val layoutParams =
-////                                ViewGroup.LayoutParams(
-////                                    ViewGroup.LayoutParams.MATCH_PARENT,
-////                                    ViewGroup.LayoutParams.WRAP_CONTENT
-////                                )
-////                            root.orientation = LinearLayout.VERTICAL
-////                            root.layoutParams = layoutParams
-////                            root.addView(viewGroup)
-////                        }
-////                        param.result = root
-//                    }
-//                }
-//            })
-
-
-        //        XposedHelpers.findAndHookMethod(
-//            clsMainActivity,
-//            "initLayout",
-//            object : XC_MethodHook() {
-//                @Throws(Throwable::class)
-//                override fun afterHookedMethod(param: MethodHookParam) {
-//
-//                    val viewBinding = XposedHelpers.getObjectField(param.thisObject, "viewBinding")
-//
-////                    val drawerLayout = XposedHelpers.getObjectField(viewBinding,"b" ) as DrawerLayout
-//
-////                    val context = drawerLayout.context
-//
-////                    Helper.toast(drawerLayout.toString())
-//
-//                    val linearLayout = XposedHelpers.getObjectField(viewBinding, "h") as LinearLayout
-//
-//                    val context = linearLayout.context
-//
-//                    val tv1 = XposedHelpers.getObjectField(viewBinding, "k") as TextView
-//                    val tv2 = XposedHelpers.getObjectField(viewBinding, "l") as TextView
-//                    val tv3 = XposedHelpers.getObjectField(viewBinding, "m") as TextView
-//
-//                    Log.i(tv1.text)
-//                    Log.i(tv2.text)
-//                    Log.i(tv3.text)
-//
-//                    tv1.text = "2333"
-//                    tv2.text = "444"
-//                    tv3.text = "555"
-//
-//                    Log.i(tv1.text)
-//                    Log.i(tv2.text)
-//                    Log.i(tv3.text)
-//                }
-//            })
     }
 
+    fun generateView(context: Context): View {
+        var layout = LinearLayout(context)
+//        var btn = Button(context)
+//        btn.text = "ette"
+//        var textView = TextView(context)
+//        textView.text = "1234"
+//        layout.addView(textView)
+//        layout.addView(btn)
+//
+//        return layout
+
+        val ctx = context.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
+        val inflater = LayoutInflater.from(ctx)
+
+        val view = inflater.inflate(R.layout.inapp_setting_activity, null)
+
+        Log.i(view.toString())
+
+//        view.
+
+        return view
+    }
 }
+

@@ -11,9 +11,9 @@ import de.robv.android.xposed.XposedHelpers
 class SplashHook : IHook {
 
     companion object {
-        var clsLoadingActivity: Class<*>? = null
-        var clsActivityLifecycle: Class<*>? = null
-        var clsSPUtil: Class<*>? = null
+        lateinit var clsLoadingActivity: Class<*>
+        lateinit var clsActivityLifecycle: Class<*>
+        lateinit var clsSPUtil: Class<*>
     }
 
     override fun hookName(): String {

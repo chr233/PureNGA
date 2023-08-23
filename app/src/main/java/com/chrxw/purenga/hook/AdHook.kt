@@ -13,10 +13,10 @@ import de.robv.android.xposed.XposedHelpers
  */
 class AdHook : IHook {
     companion object {
-        var clsDnFeedAd: Class<*>? = null
-        var clsNativeExpressAD: Class<*>? = null
-        var clsUtils_bp: Class<*>? = null
-        var clsAdSize: Class<*>? = null
+        lateinit var clsDnFeedAd: Class<*>
+        lateinit var clsNativeExpressAD: Class<*>
+        lateinit var clsUtils_bp: Class<*>
+        lateinit var clsAdSize: Class<*>
     }
 
     override fun hookName(): String {

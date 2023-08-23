@@ -14,6 +14,7 @@ import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
+
 /**
  * 初始化Xposed
  */
@@ -38,6 +39,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     }
                 }
             )
+
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             Log.d("NGA内运行")
 
