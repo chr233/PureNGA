@@ -11,14 +11,13 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Switch
 import androidx.core.view.children
-import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
+import com.chrxw.purenga.XposedInit
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
-
 
 /**
  * 设置页面钩子
@@ -71,8 +70,7 @@ class PreferencesHook : IHook {
                     btn.text = "PureNGA 设置"
                     btn.setOnClickListener {
                         val view = generateView(context)
-                        val context = param.thisObject as Context
-                        AlertDialog.Builder(context).run {
+                        AlertDialog.Builder(view.context).run {
                             setTitle("PureNGA 设置")
                             setCancelable(false).setView(view)
                             setNegativeButton("取消") { dialog, which ->
@@ -117,9 +115,8 @@ class PreferencesHook : IHook {
      * 生成设置界面
      */
     fun generateView(context: Context): View {
-        val ctx = context.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
-        val inflater = LayoutInflater.from(ctx)
-        val view = inflater.inflate(R.layout.inapp_setting_activity, null)
+        val parser = XposedInit.moduleRes.getLayout(R.layout.inapp_setting_activity)
+        val view = LayoutInflater.from(context).inflate(parser, null)
         loadSetting(view)
         return view
     }

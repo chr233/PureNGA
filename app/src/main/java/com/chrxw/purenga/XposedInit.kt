@@ -11,19 +11,20 @@ import com.chrxw.purenga.hook.IHook
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.*
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 
 /**
  * 初始化Xposed
  */
-class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
+class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
+
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
         modulePath = startupParam.modulePath
         moduleRes = getModuleRes(modulePath)
     }
 
-    @Throws(Throwable::class)
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
         if (lpparam.packageName == BuildConfig.APPLICATION_ID) {
             Log.d("模块内运行")
@@ -64,14 +65,30 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                     "获取失败"
                                 }
                                 Helper.toast(
-                                    "PureNGA 初始化失败, 可能不支持当前版本 NGA: $ngaVersion",
-                                    Toast.LENGTH_LONG
+                                    "PureNGA 初始化失败, 可能不支持当前版本 NGA: $ngaVersion", Toast.LENGTH_LONG
                                 )
                             }
                         }
                     }
                 })
         }
+    }
+
+    override fun handleInitPackageResources(resParam: InitPackageResourcesParam) {
+//        if (resParam.packageName != "your.plugin.package.name") return
+
+        // 创建XModuleResources对象
+//        val modRes = XModuleResources.createInstance(modulePath, null)
+
+        // 注入资源到主应用程序
+//        resParam.res.hookLayout("inapp_setting_activity", modRes.fwd(R.layout.inapp_setting_activity))
+        // 添加更多需要注入的资源...
+
+        // 可以在这里修改主应用程序的其他资源，如字符串、颜色等
+        // resParam.res.hookResForPackageName(R.string.your_plugin_string_name, modRes.fwd(R.string.your_plugin_string_name));
+
+        // 在这里指定要注入的布局
+        // resParam.res.hookLayout("your_plugin_layout_name", modRes.fwd(R.layout.your_plugin_layout_name));
     }
 
     companion object {
