@@ -1,11 +1,13 @@
 package com.chrxw.purenga
 
+import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -40,15 +42,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onPreferenceTreeClick(preference: Preference): Boolean {
-            if (preference.key == "hide_icon") {
+            val prefKey = preference.key
+
+            if (prefKey == "hide_icon") {
                 val ctx = context
                 if (ctx != null) {
                     hideAppIcon(ctx)
                 }
                 return true
+            } else if (prefKey == "plugin_setting") {
+                AlertDialog.Builder(activity).run {
+                    setView(View.inflate(activity, R.layout.plugin_setting, null))
+                    setNegativeButton("关闭", null)
+                    show()
+                }
+                return true
             }
 
-            val intent = when (preference.key) {
+
+            val intent = when (prefKey) {
                 "version" -> {
                     Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_url)))
                 }

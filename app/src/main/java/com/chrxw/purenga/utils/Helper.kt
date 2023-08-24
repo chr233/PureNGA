@@ -1,8 +1,8 @@
 package com.chrxw.purenga.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.PackageInfo
 import android.widget.Toast
 import com.chrxw.purenga.Constant
 import de.robv.android.xposed.XposedHelpers
@@ -13,17 +13,12 @@ import de.robv.android.xposed.XposedHelpers
  */
 class Helper {
     companion object {
+        @SuppressLint("StaticFieldLeak")
         lateinit var context: Context
+        private lateinit var spDoinfo: SharedPreferences
 
-        lateinit var spDoinfo: SharedPreferences
-        lateinit var packageInfo: PackageInfo
-
-//        lateinit var clsR: Class<*>
-//        lateinit var clsRId: Class<*>
-//        lateinit var clsRColor: Class<*>
-//        lateinit var clsRDimen: Class<*>
-//        lateinit var clsRDrawable: Class<*>
-//        lateinit var clsRLayout: Class<*>
+        lateinit var clsR: Class<*>
+        lateinit var clsRId: Class<*>
 
         lateinit var clsSPUtil: Class<*>
         lateinit var spPlugin: SharedPreferences
@@ -33,11 +28,9 @@ class Helper {
          */
         fun init(): Boolean {
             return try {
-                packageInfo = context.packageManager.getPackageInfo(Constant.NGA_PACKAGE_NAME, 0)
-                Log.i(packageInfo)
-
-//                packageInfo = context.packageManager.getPackageInfo(BuildConfig.APPLICATION_ID, 0)
-//                Log.i(packageInfo)
+                //设置SharedPreferences
+                spDoinfo = context.getSharedPreferences(Constant.DNINFO, Context.MODE_PRIVATE)
+                spPlugin = context.getSharedPreferences(Constant.PLUGIN_PREFERENCE_NAME, Context.MODE_PRIVATE)
 
                 true
             } catch (e: Exception) {
@@ -50,14 +43,14 @@ class Helper {
          * 显示Toast
          */
         fun toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
-            if (context != null) {
+            try {
                 Toast.makeText(context, text, duration).show()
-            } else {
-                Log.d("AppContext 为 NULL")
+            } catch (e: Throwable) {
+                Log.d("toast 出错")
             }
         }
 
-        private inline fun getRes(cls: Class<*>?, key: String): Int {
+        private fun getRes(cls: Class<*>?, key: String): Int {
             return try {
                 XposedHelpers.getStaticIntField(cls, key)
             } catch (e: Throwable) {
@@ -67,30 +60,12 @@ class Helper {
             }
         }
 
-//        fun getRId(key: String): Int {
-//            return getRes(clsRId, key)
-//        }
-//
-//        fun getRColor(key: String): Int {
-//            return getRes(clsRColor, key)
-//        }
-//
-//        fun getRDimen(key: String): Int {
-//            return getRes(clsRDimen, key)
-//
-//        }
-//
-//        fun getRDrawable(key: String): Int {
-//            return getRes(clsRDrawable, key)
-//        }
-//
-//        fun getRLayout(key: String): Int {
-//            return getRes(clsRLayout, key)
-//        }
-
-        fun isDarkModel(): Boolean {
-            return spPlugin.getBoolean("DARK_MODEL", false)
+        fun getRId(key: String): Int {
+            return getRes(clsRId, key)
         }
 
+        fun isDarkModel(): Boolean {
+            return spDoinfo.getBoolean("DARK_MODEL", false)
+        }
     }
 }

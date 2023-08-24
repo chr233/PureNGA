@@ -17,6 +17,7 @@
     <string name="donate_summary">爱发电</string>
     <string name="hide_icon">隐藏桌面图标</string>
     <string name="hide_icon_summary">不在启动器中显示图标</string>
+    <string name="plugin_setting">插件设置入口</string>
     <string name="plugin_setting_summary"><![CDATA[NGA > 设置 > PureNGA 设置]]></string>
     <string name="pure_function_setting">功能设置</string>
     <string name="pure_ad_setting">广告设置</string>
@@ -29,4 +30,8 @@
     <string name="hide_hook_info">不显示模块运行信息</string>
     <string name="pure_ad_icon">屏蔽导航栏上的活动图标(WIP)</string>
     <string name="kill_popup_dialog">屏蔽应用内弹窗</string>
+    <string name="tutorials_first">在侧滑菜单找到【设置】</string>
+    <string name="tutorials_second">在最底部找到【PureNGA 设置】</string>
+    <string name="open_nga_summary">屎黄色论坛, 启动!</string>
+    <string name="setting">设置</string>
 </resources>

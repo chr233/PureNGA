@@ -2,7 +2,6 @@
 
 package com.chrxw.purenga.utils
 
-import com.chrxw.purenga.Constant.TAG
 import de.robv.android.xposed.XposedBridge
 import android.util.Log as ALog
 
@@ -10,6 +9,9 @@ import android.util.Log as ALog
  * 日志
  */
 object Log {
+    private const val TAG = "PureNGA"
+    private const val maxLength = 3000
+
     @JvmStatic
     private fun doLog(f: (String, String) -> Int, obj: Any?, toXposed: Boolean = true) {
         if (obj is Throwable) {
@@ -65,7 +67,5 @@ object Log {
     fun w(obj: Any?) {
         doLog(ALog::w, obj)
     }
-
-    private const val maxLength = 3000
 }
 

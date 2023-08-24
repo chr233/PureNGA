@@ -3,6 +3,7 @@ package com.chrxw.purenga
 import android.app.AndroidAppHelper
 import android.app.Application
 import android.app.Instrumentation
+import android.content.pm.PackageInfo
 import android.content.res.Resources
 import android.content.res.XModuleResources
 import com.chrxw.purenga.hook.IHook
@@ -54,10 +55,17 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                             if (Helper.init()) {
                                 Hooks.initHooks(lpparam.classLoader)
                                 if (!Helper.spPlugin.getBoolean(Constant.HIDE_HOOK_INFO, false)) {
-                                    Helper.toast("PureNGA 加载成功, 请到设置页面开启功能")
+                                    Helper.toast("PureNGA 加载成功, 请到【设置】>【PureNGA】开启功能")
                                 }
                             } else {
-                                Helper.toast("PureNGA 初始化失败，可能不支持当前版本 NGA: " + Helper.packageInfo.versionName)
+                                val ngaVersion = try {
+                                    Helper.context.packageManager.getPackageInfo(
+                                        Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
+                                    ).versionName
+                                } catch (e: Throwable) {
+                                    "获取失败"
+                                }
+                                Helper.toast("PureNGA 初始化失败，可能不支持当前版本 NGA: $ngaVersion")
                             }
                         }
                     }

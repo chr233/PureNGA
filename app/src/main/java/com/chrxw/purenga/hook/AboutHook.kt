@@ -1,9 +1,14 @@
 package com.chrxw.purenga.hook
 
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.net.Uri
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.chrxw.purenga.BuildConfig
+import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
@@ -30,16 +35,34 @@ class AboutHook : IHook {
         XposedHelpers.findAndHookMethod(clsAboutUsActivity, "initLayout", object : XC_MethodHook() {
             override fun afterHookedMethod(param: MethodHookParam) {
                 val viewBinding = XposedHelpers.callMethod(param.thisObject, "getViewBinding")
-                val textView = XposedHelpers.getObjectField(viewBinding, "h") as TextView
-                val newText =
-                    textView.text.toString() + " + PureNGA:" + BuildConfig.VERSION_NAME + " (点此检查插件更新)"
-                textView.text = newText
-                textView.setOnClickListener {
-                    val intent = Intent(
-                        Intent.ACTION_VIEW, Uri.parse("https://github.com/chr233/PureNGA")
-                    )
-                    Helper.context?.startActivity(intent)
+                val root = XposedHelpers.callMethod(viewBinding, "getRoot") as View
+                val viewId = Helper.getRId("tv_app_version")
+                val textView = root.findViewById<TextView>(viewId)
+
+                val pluginVersion = BuildConfig.VERSION_NAME
+                val ngaVersion = try {
+                    Helper.context.packageManager.getPackageInfo(
+                        Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
+                    ).versionName
+                } catch (e: Throwable) {
+                    "获取失败"
                 }
+
+                textView.text =
+                    "NGA 版本: $ngaVersion" + System.lineSeparator() + "PureNGA 版本: $pluginVersion"
+
+                val linearLayout = textView.parent as LinearLayout
+                val btn = Button(root.context)
+                btn.text = "检查插件更新"
+                btn.setOnClickListener {
+                    root.context.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW, Uri.parse(Constant.REPO_URL)
+                        )
+                    )
+                }
+
+                linearLayout.addView(btn)
             }
         })
     }
