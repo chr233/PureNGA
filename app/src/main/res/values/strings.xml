@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">NGA净化</string>
     <string name="app_desc">过滤NGA烦人的广告</string>
-    <string name="block_splash_ad">屏蔽开屏广告</string>
-    <string name="block_splash_ad_summary">过滤NGA烦人的广告</string>
-    <string name="crack_ad_task">去广告任务破解</string>
-    <string name="crack_ad_task_summary">秒关广告不影响结算</string>
     <string name="running_status">运行状态</string>
     <string name="about">关于</string>
     <string name="version">版本</string>
@@ -17,10 +13,20 @@
     <string name="github_url">https://github.com/chr233/PureNGA</string>
     <string name="author_url">https://github.com/chr233</string>
     <string name="donate_url">https://afdian.net/a/chr233</string>
-    <string name="author_summary">chr233</string>
+    <string name="author_summary" translatable="false">chr233</string>
     <string name="donate_summary">爱发电</string>
-    <string name="block_post_ad">屏蔽帖子列表广告</string>
-    <string name="block_post_ad_summary">屏蔽列表中插入的广告</string>
     <string name="hide_icon">隐藏桌面图标</string>
-    <string name="hide_icon_summary">反正也没有什么设置项</string>
+    <string name="hide_icon_summary">不在启动器中显示图标</string>
+    <string name="plugin_setting_summary"><![CDATA[NGA > 设置 > PureNGA 设置]]></string>
+    <string name="pure_function_setting">功能设置</string>
+    <string name="pure_ad_setting">广告设置</string>
+    <string name="pure_other_setting">杂项</string>
+    <string name="pure_splash_ad">屏蔽开屏广告</string>
+    <string name="pure_post_ad">屏蔽信息流广告</string>
+    <string name="crack_ad_task">破解去广告任务</string>
+    <string name="use_external_browser">使用外部浏览器打开链接</string>
+    <string name="kill_update_check">禁止APP检查更新</string>
+    <string name="hide_hook_info">不显示模块运行信息</string>
+    <string name="pure_ad_icon">屏蔽导航栏上的活动图标(WIP)</string>
+    <string name="kill_popup_dialog">屏蔽应用内弹窗</string>
 </resources>

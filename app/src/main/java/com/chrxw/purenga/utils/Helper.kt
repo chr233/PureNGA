@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.widget.Toast
-import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import de.robv.android.xposed.XposedHelpers
 
@@ -16,30 +15,29 @@ class Helper {
     companion object {
         lateinit var context: Context
 
-        lateinit var prefs: SharedPreferences
+        lateinit var spDoinfo: SharedPreferences
         lateinit var packageInfo: PackageInfo
 
-        lateinit var clsR: Class<*>
-        lateinit var clsRId: Class<*>
-        lateinit var clsRColor: Class<*>
-        lateinit var clsRDimen: Class<*>
-        lateinit var clsRDrawable: Class<*>
-        lateinit var clsRLayout: Class<*>
+//        lateinit var clsR: Class<*>
+//        lateinit var clsRId: Class<*>
+//        lateinit var clsRColor: Class<*>
+//        lateinit var clsRDimen: Class<*>
+//        lateinit var clsRDrawable: Class<*>
+//        lateinit var clsRLayout: Class<*>
 
-        var darkMode = false
+        lateinit var clsSPUtil: Class<*>
+        lateinit var spPlugin: SharedPreferences
 
         /**
          * 初始化
          */
         fun init(): Boolean {
             return try {
-                prefs = context.getSharedPreferences(Constant.PLUGIN_PREFERENCE, Context.MODE_PRIVATE)
                 packageInfo = context.packageManager.getPackageInfo(Constant.NGA_PACKAGE_NAME, 0)
                 Log.i(packageInfo)
 
-
-                packageInfo = context.packageManager.getPackageInfo(BuildConfig.APPLICATION_ID, 0)
-                Log.i(packageInfo)
+//                packageInfo = context.packageManager.getPackageInfo(BuildConfig.APPLICATION_ID, 0)
+//                Log.i(packageInfo)
 
                 true
             } catch (e: Exception) {
@@ -69,25 +67,29 @@ class Helper {
             }
         }
 
-        fun getRId(key: String): Int {
-            return getRes(clsRId, key)
-        }
+//        fun getRId(key: String): Int {
+//            return getRes(clsRId, key)
+//        }
+//
+//        fun getRColor(key: String): Int {
+//            return getRes(clsRColor, key)
+//        }
+//
+//        fun getRDimen(key: String): Int {
+//            return getRes(clsRDimen, key)
+//
+//        }
+//
+//        fun getRDrawable(key: String): Int {
+//            return getRes(clsRDrawable, key)
+//        }
+//
+//        fun getRLayout(key: String): Int {
+//            return getRes(clsRLayout, key)
+//        }
 
-        fun getRColor(key: String): Int {
-            return getRes(clsRColor, key)
-        }
-
-        fun getRDimen(key: String): Int {
-            return getRes(clsRDimen, key)
-
-        }
-
-        fun getRDrawable(key: String): Int {
-            return getRes(clsRDrawable, key)
-        }
-
-        fun getRLayout(key: String): Int {
-            return getRes(clsRLayout, key)
+        fun isDarkModel(): Boolean {
+            return spPlugin.getBoolean("DARK_MODEL", false)
         }
 
     }

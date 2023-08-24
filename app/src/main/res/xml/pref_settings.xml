@@ -1,39 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:key="other"
-        android:title="@string/other">
+        android:key="setting"
+        android:title="设置">
 
         <Preference
-            android:key="reopen_nga"
-            android:title="@string/reopen_nga" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="净化设置">
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:enabled="false"
-            android:key="block_splash_ad"
-            android:summary="@string/block_splash_ad_summary"
-            android:title="@string/block_splash_ad" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:enabled="false"
-            android:key="block_post_ad"
-            android:summary="@string/block_post_ad_summary"
-            android:title="@string/block_post_ad" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:enabled="false"
-            android:key="crack_ad_task"
-            android:summary="@string/crack_ad_task_summary"
-            android:title="@string/crack_ad_task" />
+            android:key="plugin_setting"
+            android:summary="@string/plugin_setting_summary"
+            android:title="@string/pure_function_setting" />
 
         <Preference
             android:key="hide_icon"
@@ -45,10 +20,6 @@
     <PreferenceCategory
         android:key="about"
         android:title="@string/about">
-
-        <Preference
-            android:key="running_status"
-            android:title="@string/running_status" />
 
         <Preference
             android:key="version"
@@ -63,6 +34,26 @@
             android:key="donate"
             android:summary="@string/donate_summary"
             android:title="@string/donate" />
+
+        <Preference
+            android:key="qq_channel"
+            android:summary="QQ 频道"
+            android:title="QQ 频道" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="other"
+        android:title="@string/other">
+
+        <Preference
+            android:key="running_status"
+            android:title="@string/running_status" />
+
+        <Preference
+            android:key="open_nga"
+            android:summary=""
+            android:title="@string/reopen_nga" />
 
     </PreferenceCategory>
 

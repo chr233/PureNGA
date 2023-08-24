@@ -2,7 +2,6 @@ package com.chrxw.purenga
 
 import com.chrxw.purenga.hook.AboutHook
 import com.chrxw.purenga.hook.AdHook
-import com.chrxw.purenga.hook.IHook
 import com.chrxw.purenga.hook.MainHook
 import com.chrxw.purenga.hook.OptimizeHook
 import com.chrxw.purenga.hook.PreferencesHook
@@ -16,13 +15,13 @@ class Hooks {
     companion object {
         private val hooks = arrayOf(
             MainHook(),
+            OptimizeHook(),
             SplashHook(),
             RewardHook(),
             AdHook(),
             PreferencesHook(),
             AboutHook(),
             WebViewHook(),
-            OptimizeHook(),
         )
 
         fun initHooks(classLoader: ClassLoader) {

@@ -1,11 +1,10 @@
 package com.chrxw.purenga.hook
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.chrxw.purenga.BuildConfig
+import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
-import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 
@@ -14,8 +13,8 @@ import de.robv.android.xposed.XposedHelpers
  */
 class RewardHook : IHook {
     companion object {
-        lateinit  var clsLoginWebView_a: Class<*>
-        lateinit  var clsLoginWebView_b: Class<*>
+        lateinit var clsLoginWebView_a: Class<*>
+        lateinit var clsLoginWebView_b: Class<*>
     }
 
     override fun hookName(): String {
@@ -28,13 +27,10 @@ class RewardHook : IHook {
     }
 
     override fun hook() {
-        try {
-            // Hook onRewardVerify 方法
-            XposedHelpers.findAndHookMethod(
-                clsLoginWebView_b,
-                "onAdShow",
-                object : XC_MethodReplacement() {
-                    @Throws(Throwable::class)
+        if (Helper.spPlugin.getBoolean(Constant.CRACK_AD_TASK, false)) {
+            try {
+                // Hook onRewardVerify 方法
+                XposedHelpers.findAndHookMethod(clsLoginWebView_b, "onAdShow", object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
                         Log.i(("b.onAdShow"))
                         val obj = param?.thisObject
@@ -46,12 +42,8 @@ class RewardHook : IHook {
                     }
                 })
 
-            // Hook onRewardVerify 方法
-            XposedHelpers.findAndHookMethod(
-                clsLoginWebView_a,
-                "onAdShow",
-                object : XC_MethodReplacement() {
-                    @Throws(Throwable::class)
+                // Hook onRewardVerify 方法
+                XposedHelpers.findAndHookMethod(clsLoginWebView_a, "onAdShow", object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
                         Log.i(("a.onAdShow"))
                         val obj = param?.thisObject
@@ -101,15 +93,14 @@ class RewardHook : IHook {
 //                        }
 //                    })
 //            }
-        } catch (e: Exception) {
-            Log.e(e)
+            } catch (e: Exception) {
+                Log.e(e)
+            }
         }
     }
 
     private fun newStartActivityForResult(
-        intent: Intent,
-        requestCode: Int,
-        options: Bundle? = null
+        intent: Intent, requestCode: Int, options: Bundle? = null
     ) {
         Log.i(intent)
         Log.i(requestCode)
@@ -125,10 +116,7 @@ class RewardHook : IHook {
             null
         )
         XposedHelpers.callMethod(
-            mWebView,
-            "evaluateJavascript",
-            "javascript:__doAction\\(\\'windowFocus\\'\\)",
-            null
+            mWebView, "evaluateJavascript", "javascript:__doAction\\(\\'windowFocus\\'\\)", null
         )
     }
 }

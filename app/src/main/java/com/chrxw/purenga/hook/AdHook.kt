@@ -1,9 +1,8 @@
 package com.chrxw.purenga.hook
 
-import android.R.attr.classLoader
-import android.webkit.WebView
+import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
-import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 
@@ -31,50 +30,44 @@ class AdHook : IHook {
     }
 
     override fun hook() {
-        try {
-            XposedHelpers.findAndHookMethod(
-                clsDnFeedAd,
-                "requestServerSuccess",
-                object : XC_MethodReplacement() {
+        if (Helper.spPlugin.getBoolean(Constant.PURE_POST_AD, false)) {
+            try {
+                XposedHelpers.findAndHookMethod(clsDnFeedAd, "requestServerSuccess", object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
                         Log.i("DnFeedAd.requestServerSuccess")
                     }
                 })
-        } catch (e: NoSuchMethodException) {
-            Log.e("Donews 广告过滤失败")
-            Log.e(e)
-        }
+            } catch (e: NoSuchMethodException) {
+                Log.e("Donews 广告过滤失败")
+                Log.e(e)
+            }
 
-        try {
-            XposedHelpers.findAndHookMethod(
-                clsNativeExpressAD,
-                "a",
-                clsAdSize,
-                object : XC_MethodReplacement() {
+            try {
+                XposedHelpers.findAndHookMethod(clsNativeExpressAD, "a", clsAdSize, object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
                         Log.i("NativeExpressAD.a")
                         param?.result = true
                     }
                 })
-        } catch (e: NoSuchMethodException) {
-            Log.e("qq 广告过滤失败")
-            Log.e(e)
-        }
+            } catch (e: NoSuchMethodException) {
+                Log.e("qq 广告过滤失败")
+                Log.e(e)
+            }
 
-        try {
-            XposedHelpers.findAndHookMethod(
-                clsUtils_bp,
-                "runOnUiThread",
-                Runnable::class.java,
-                object : XC_MethodReplacement() {
-                    override fun replaceHookedMethod(param: MethodHookParam?) {
-                        Log.i("utils.bp.runOnUiThread")
-                        param?.result = true
-                    }
-                })
-        } catch (e: NoSuchMethodException) {
-            Log.e("kwad 广告过滤失败")
-            Log.e(e)
+            try {
+                XposedHelpers.findAndHookMethod(clsUtils_bp,
+                    "runOnUiThread",
+                    Runnable::class.java,
+                    object : XC_MethodReplacement() {
+                        override fun replaceHookedMethod(param: MethodHookParam?) {
+                            Log.i("utils.bp.runOnUiThread")
+                            param?.result = true
+                        }
+                    })
+            } catch (e: NoSuchMethodException) {
+                Log.e("kwad 广告过滤失败")
+                Log.e(e)
+            }
         }
     }
 }

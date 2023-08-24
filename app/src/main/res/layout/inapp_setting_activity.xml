@@ -1,91 +1,94 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/crack_ad_task" />
+            android:padding="10dp"
+            android:text="@string/pure_ad_setting" />
 
-        <LinearLayout
+        <Switch
+            android:id="@+id/pure_splash_ad"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="16dp"
+            android:text="@string/pure_splash_ad" />
 
-            android:orientation="vertical"
-           >
+        <Switch
+            android:id="@+id/pure_post_ad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/pure_post_ad" />
 
-            <Switch
-                android:id="@+id/switch1"
-                android:layout_width="match_parent"
-                android:layout_height="198dp"
-                android:padding="10dp"
-                android:text="过滤开屏广告" />
+        <Switch
+            android:id="@+id/crack_ad_task"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/crack_ad_task" />
 
-            <Switch
-                android:id="@+id/switch3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="10dp"
-                android:text="过滤开屏广告" />
+        <Switch
+            android:id="@+id/pure_ad_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:enabled="false"
+            android:text="@string/pure_ad_icon" />
 
-            <Switch
-                android:id="@+id/switch4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="过滤开屏广告" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/pure_function_setting" />
 
-            <Switch
-                android:id="@+id/switch5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="过滤开屏广告" />
+        <Switch
+            android:id="@+id/use_external_browser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:text="@string/use_external_browser" />
 
-            <Switch
-                android:id="@+id/switch6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="过滤开屏广告" />
+        <Switch
+            android:id="@+id/kill_update_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/kill_update_check" />
 
-            <Switch
-                android:id="@+id/switch7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="过滤开屏广告" />
+        <Switch
+            android:id="@+id/kill_popup_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/kill_popup_dialog" />
 
-            <Switch
-                android:id="@+id/switch8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="过滤开屏广告" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/pure_function_setting" />
 
-            <Switch
-                android:id="@+id/switch9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="过滤开屏广告" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/pure_other_setting" />
 
-            <Switch
-                android:id="@+id/switch2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="过滤开屏广告" />
-        </LinearLayout>
+        <Switch
+            android:id="@+id/hide_hook_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:text="@string/hide_hook_info" />
 
     </LinearLayout>
 </ScrollView>

@@ -5,15 +5,7 @@ import android.app.Application
 import android.app.Instrumentation
 import android.content.res.Resources
 import android.content.res.XModuleResources
-import android.widget.Toast
-import com.chrxw.purenga.hook.AboutHook
-import com.chrxw.purenga.hook.AdHook
 import com.chrxw.purenga.hook.IHook
-import com.chrxw.purenga.hook.MainHook
-import com.chrxw.purenga.hook.PreferencesHook
-import com.chrxw.purenga.hook.RewardHook
-import com.chrxw.purenga.hook.SplashHook
-import com.chrxw.purenga.hook.WebViewHook
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.*
@@ -61,7 +53,9 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                             if (Helper.init()) {
                                 Hooks.initHooks(lpparam.classLoader)
-                                Helper.toast("PureNGA 加载成功, 请到设置页面开启功能")
+                                if (!Helper.spPlugin.getBoolean(Constant.HIDE_HOOK_INFO, false)) {
+                                    Helper.toast("PureNGA 加载成功, 请到设置页面开启功能")
+                                }
                             } else {
                                 Helper.toast("PureNGA 初始化失败，可能不支持当前版本 NGA: " + Helper.packageInfo.versionName)
                             }

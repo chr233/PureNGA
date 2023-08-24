@@ -26,10 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
         if (savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.settings, SettingsFragment())
-                .commit()
+            supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
         }
     }
 
@@ -53,34 +50,20 @@ class MainActivity : AppCompatActivity() {
 
             val intent = when (preference.key) {
                 "version" -> {
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(getString(R.string.github_url))
-                    )
+                    Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_url)))
                 }
 
                 "author" -> {
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(getString(R.string.author_url))
-                    )
+                    Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.author_url)))
                 }
 
                 "donate" -> {
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(getString(R.string.donate_url))
-                    )
+                    Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.donate_url)))
                 }
 
-                "reopen_nga" -> {
+                "open_nga" -> {
                     Intent(Intent.ACTION_MAIN)
-                        .setComponent(
-                            ComponentName(
-                                Constant.NGA_PACKAGE_NAME,
-                                Constant.NGA_MAIN_ACTIVITY_NAME
-                            )
-                        )
+                        .setComponent(ComponentName(Constant.NGA_PACKAGE_NAME, Constant.NGA_MAIN_ACTIVITY_NAME))
                         .setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
                 }
 
@@ -106,9 +89,7 @@ class MainActivity : AppCompatActivity() {
             val state = packageManager.getComponentEnabledSetting(componentName)
             if (state != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
                 packageManager.setComponentEnabledSetting(
-                    componentName,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP
+                    componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP
                 )
             }
         }

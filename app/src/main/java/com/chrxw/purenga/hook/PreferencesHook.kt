@@ -1,17 +1,18 @@
 package com.chrxw.purenga.hook
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.Switch
 import androidx.core.view.children
 import com.chrxw.purenga.BuildConfig
+import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
@@ -28,6 +29,8 @@ class PreferencesHook : IHook {
         lateinit var clsMainActivity: Class<*>
         lateinit var clsHomeDrawerLayout: Class<*>
         lateinit var clsSettingActivity: Class<*>
+
+        var btnPureNGASetting: Button? = null
     }
 
     override fun hookName(): String {
@@ -42,74 +45,109 @@ class PreferencesHook : IHook {
 
     override fun hook() {
 
-        XposedHelpers.findAndHookMethod(
-            clsHomeDrawerLayout,
-            "initLayout",
-            object : XC_MethodHook() {
-                @Throws(Throwable::class)
-                override fun afterHookedMethod(param: MethodHookParam) {
-                    val viewBinding = XposedHelpers.getObjectField(param.thisObject, "binding")
-                    val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
+        XposedHelpers.findAndHookMethod(clsHomeDrawerLayout, "initLayout", object : XC_MethodHook() {
+            @Throws(Throwable::class)
+            override fun afterHookedMethod(param: MethodHookParam) {
+                val viewBinding = XposedHelpers.getObjectField(param.thisObject, "binding")
+                val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
 
-                    for (x in root.children) {
-                        Log.i(x.javaClass)
-                    }
+                for (x in root.children) {
+                    Log.i(x.javaClass)
                 }
-            })
+            }
+        })
 
+        XposedHelpers.findAndHookMethod(clsSettingActivity, "initLayout", object : XC_MethodHook() {
+            @Throws(Throwable::class)
+            override fun afterHookedMethod(param: MethodHookParam) {
+                val viewBinding = XposedHelpers.getObjectField(param.thisObject, "viewBinding")
+                val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
+                val scrollView = root.getChildAt(1) as ScrollView
+                val linearLayout = scrollView.getChildAt(0) as LinearLayout
+
+                val context = root.context
+
+                val isDarkModel = Helper.isDarkModel()
+
+                btnPureNGASetting = Button(context).also { btn ->
+                    btn.text = "PureNGA 设置"
+                    btn.setOnClickListener {
+                        val view = generateView(context)
+                        val context = param.thisObject as Context
+                        AlertDialog.Builder(context).setTitle("PureNGA 设置").setCancelable(false).setView(view)
+                            .setNegativeButton("取消") { dialog, which ->
+                                Helper.toast("设置未保存")
+                            }.setPositiveButton("确定") { dialog, which ->
+                                saveSetting(view)
+                                Helper.toast("设置已保存, 重启APP生效")
+                            }.create().also { dialog ->
+                                val params = dialog.window?.attributes
+                                val metrics = DisplayMetrics()
+                                dialog.window!!.windowManager.defaultDisplay.getMetrics(metrics)
+                                params?.width = metrics.widthPixels
+                                params?.height = metrics.heightPixels
+                                dialog.window!!.attributes = params
+                                dialog.show()
+                            }
+                    }
+                    btn.setTextColor(Color.parseColor(if (isDarkModel) "#f8fae3" else "#3c3b39"))
+                    btn.setBackgroundColor(0)
+                    btn.setPadding(5, 5, 5, 5)
+                    linearLayout.removeViewAt(linearLayout.childCount - 1)
+                    linearLayout.addView(btn)
+                }
+            }
+        })
 
         XposedHelpers.findAndHookMethod(
-            clsSettingActivity,
-            "initLayout",
+            OptimizeHook.clsAppConfig,
+            "setDarkModel",
+            Boolean::class.java,
             object : XC_MethodHook() {
-                @Throws(Throwable::class)
                 override fun afterHookedMethod(param: MethodHookParam) {
-                    val viewBinding = XposedHelpers.getObjectField(param.thisObject, "viewBinding")
-                    val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
-                    val scrollView = root.getChildAt(1) as ScrollView
-                    val linearLayout = scrollView.getChildAt(0) as LinearLayout
-                    val context = root.context
-
-                    val button = Button(context)
-                    button.text = "PureNGA 设置"
-                    button.setBackgroundColor(if (Helper.darkMode) 0x21211d else 0xfdfae2)
-                    button.setOnClickListener {
-                        val context = param.thisObject as Context
-                        val dialog = AlertDialog.Builder(context).setTitle("PureNGA 设置")
-//                            .setCancelable(false)
-                            .setView(generateView(context))
-                            .create()
-
-                        dialog.show()
-
-                        val lp = WindowManager.LayoutParams()
-                        lp.copyFrom(dialog.window!!.attributes)
-                        lp.width = WindowManager.LayoutParams.MATCH_PARENT
-                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-                        dialog.show()
-                        dialog.window?.attributes = lp
-
-                    }
-
-                    button.setPadding(5, 5, 5, 5)
-
-//                    val line = linearLayout.getChildAt(linearLayout.childCount-2)
-//                    linearLayout.addView(line)
-                    linearLayout.removeViewAt(linearLayout.childCount - 1)
-                    linearLayout.addView(button)
+                    val isDarkModel = Helper.isDarkModel()
+                    btnPureNGASetting?.setTextColor(Color.parseColor(if (isDarkModel) "#f8fae3" else "#3c3b39"))
                 }
             })
     }
 
+    /**
+     * 生成设置界面
+     */
     fun generateView(context: Context): View {
         val ctx = context.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
         val inflater = LayoutInflater.from(ctx)
         val view = inflater.inflate(R.layout.inapp_setting_activity, null)
-
-//        val text = view.findViewById<TextView>(R.id.switch1)
-//        text.text = "114514"
-
+        loadSetting(view)
         return view
+    }
+
+    private fun loadSetting(view: View) {
+        Helper.spPlugin.also { sp ->
+            view.findViewById<Switch>(R.id.pure_splash_ad).isChecked = sp.getBoolean(Constant.PURE_SPLASH_AD, false)
+            view.findViewById<Switch>(R.id.pure_post_ad).isChecked = sp.getBoolean(Constant.PURE_POST_AD, false)
+            view.findViewById<Switch>(R.id.crack_ad_task).isChecked = sp.getBoolean(Constant.CRACK_AD_TASK, false)
+            view.findViewById<Switch>(R.id.use_external_browser).isChecked =
+                sp.getBoolean(Constant.USE_EXTERNAL_BROWSER, false)
+            view.findViewById<Switch>(R.id.kill_update_check).isChecked =
+                sp.getBoolean(Constant.KILL_UPDATE_CHECK, false)
+            view.findViewById<Switch>(R.id.kill_popup_dialog).isChecked =
+                sp.getBoolean(Constant.KILL_UPDATE_CHECK, false)
+            view.findViewById<Switch>(R.id.hide_hook_info).isChecked = sp.getBoolean(Constant.HIDE_HOOK_INFO, false)
+        }
+    }
+
+    private fun saveSetting(view: View) {
+        Helper.spPlugin.edit().also { sp ->
+            sp.putBoolean(Constant.PURE_SPLASH_AD, view.findViewById<Switch>(R.id.pure_splash_ad).isChecked)
+            sp.putBoolean(Constant.PURE_POST_AD, view.findViewById<Switch>(R.id.pure_post_ad).isChecked)
+            sp.putBoolean(Constant.CRACK_AD_TASK, view.findViewById<Switch>(R.id.crack_ad_task).isChecked)
+            sp.putBoolean(Constant.USE_EXTERNAL_BROWSER, view.findViewById<Switch>(R.id.use_external_browser).isChecked)
+            sp.putBoolean(Constant.KILL_UPDATE_CHECK, view.findViewById<Switch>(R.id.kill_update_check).isChecked)
+            sp.putBoolean(Constant.KILL_UPDATE_CHECK, view.findViewById<Switch>(R.id.kill_popup_dialog).isChecked)
+            sp.putBoolean(Constant.HIDE_HOOK_INFO, view.findViewById<Switch>(R.id.hide_hook_info).isChecked)
+            sp.commit()
+        }
     }
 }
 

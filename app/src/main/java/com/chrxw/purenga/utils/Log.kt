@@ -14,10 +14,10 @@ object Log {
     private fun doLog(f: (String, String) -> Int, obj: Any?, toXposed: Boolean = true) {
         if (obj is Throwable) {
             val str = ALog.getStackTraceString(obj)
-
             f(TAG, str)
-            if (toXposed)
+            if (toXposed) {
                 XposedBridge.log(obj)
+            }
 
         } else {
             val str = obj.toString()
@@ -34,8 +34,9 @@ object Log {
                 }
             } else {
                 f(TAG, str)
-                if (toXposed)
+                if (toXposed) {
                     XposedBridge.log("$TAG : $str")
+                }
             }
         }
     }
