@@ -6,6 +6,7 @@ import android.app.Instrumentation
 import android.content.pm.PackageInfo
 import android.content.res.Resources
 import android.content.res.XModuleResources
+import android.widget.Toast
 import com.chrxw.purenga.hook.IHook
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
@@ -27,22 +28,19 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         if (lpparam.packageName == BuildConfig.APPLICATION_ID) {
             Log.d("模块内运行")
 
-            XposedHelpers.findAndHookMethod(
-                MainActivity.Companion::class.java.name,
+            XposedHelpers.findAndHookMethod(MainActivity.Companion::class.java.name,
                 lpparam.classLoader,
                 "isModuleActive",
                 object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?): Any {
                         return true
                     }
-                }
-            )
+                })
 
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             Log.d("NGA内运行")
 
-            XposedHelpers.findAndHookMethod(
-                Instrumentation::class.java,
+            XposedHelpers.findAndHookMethod(Instrumentation::class.java,
                 "callApplicationOnCreate",
                 Application::class.java,
                 object : XC_MethodHook() {
@@ -55,7 +53,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                             if (Helper.init()) {
                                 Hooks.initHooks(lpparam.classLoader)
                                 if (!Helper.spPlugin.getBoolean(Constant.HIDE_HOOK_INFO, false)) {
-                                    Helper.toast("PureNGA 加载成功, 请到【设置】>【PureNGA】开启功能")
+                                    Helper.toast("PureNGA 加载成功, 请到【设置】>【PureNGA】开启功能", Toast.LENGTH_LONG)
                                 }
                             } else {
                                 val ngaVersion = try {
@@ -65,7 +63,10 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 } catch (e: Throwable) {
                                     "获取失败"
                                 }
-                                Helper.toast("PureNGA 初始化失败，可能不支持当前版本 NGA: $ngaVersion")
+                                Helper.toast(
+                                    "PureNGA 初始化失败, 可能不支持当前版本 NGA: $ngaVersion",
+                                    Toast.LENGTH_LONG
+                                )
                             }
                         }
                     }
