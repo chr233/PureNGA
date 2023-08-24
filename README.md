@@ -41,5 +41,5 @@
 
 ## 设置菜单入口
 
-![img1](app\src\main\res\drawable\tutorials.webp)
-![img2](app\src\main\res\drawable\tutorials2.webp)
+![img1](app/src/main/res/drawable/tutorials.webp)
+![img2](app/src/main/res/drawable/tutorials2.webp)
