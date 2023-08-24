@@ -39,9 +39,9 @@ android {
         jvmTarget = '11'
     }
 
-    aaptOptions {
-        additionalParameters '--allow-reserved-package-id', '--package-id', '0xA0'
-    }
+//    aaptOptions {
+//        additionalParameters '--allow-reserved-package-id', '--package-id', '0xA0'
+//    }
 
     buildToolsVersion = '33.0.1'
 }

@@ -8,10 +8,12 @@ import android.content.res.Resources
 import android.content.res.XModuleResources
 import android.widget.Toast
 import com.chrxw.purenga.hook.IHook
+import com.chrxw.purenga.hook.PreferencesHook
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam
+import de.robv.android.xposed.callbacks.XC_LayoutInflated
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 
@@ -46,7 +48,6 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookIni
                 Application::class.java,
                 object : XC_MethodHook() {
                     override fun afterHookedMethod(param: MethodHookParam) {
-                        Log.i(param.args[0].toString())
 
                         if (param.args[0] is Application) {
                             Helper.context = AndroidAppHelper.currentApplication().applicationContext
@@ -75,20 +76,12 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookIni
     }
 
     override fun handleInitPackageResources(resParam: InitPackageResourcesParam) {
-//        if (resParam.packageName != "your.plugin.package.name") return
+        if (resParam.packageName == Constant.NGA_PACKAGE_NAME) {
+            val modRes = XModuleResources.createInstance(modulePath, resParam.res)
+            PreferencesHook.resInAppSetting = resParam.res.addResource(modRes, R.layout.inapp_setting_activity)
 
-        // 创建XModuleResources对象
-//        val modRes = XModuleResources.createInstance(modulePath, null)
-
-        // 注入资源到主应用程序
-//        resParam.res.hookLayout("inapp_setting_activity", modRes.fwd(R.layout.inapp_setting_activity))
-        // 添加更多需要注入的资源...
-
-        // 可以在这里修改主应用程序的其他资源，如字符串、颜色等
-        // resParam.res.hookResForPackageName(R.string.your_plugin_string_name, modRes.fwd(R.string.your_plugin_string_name));
-
-        // 在这里指定要注入的布局
-        // resParam.res.hookLayout("your_plugin_layout_name", modRes.fwd(R.layout.your_plugin_layout_name));
+            PreferencesHook.mRes = modRes
+        }
     }
 
     companion object {

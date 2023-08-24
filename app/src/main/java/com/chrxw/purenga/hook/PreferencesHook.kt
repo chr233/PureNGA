@@ -2,6 +2,7 @@ package com.chrxw.purenga.hook
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.res.XModuleResources
 import android.graphics.Color
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -10,10 +11,8 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Switch
-import androidx.core.view.children
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
-import com.chrxw.purenga.XposedInit
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
@@ -26,8 +25,11 @@ class PreferencesHook : IHook {
 
     companion object {
         lateinit var clsMainActivity: Class<*>
-        lateinit var clsHomeDrawerLayout: Class<*>
         lateinit var clsSettingActivity: Class<*>
+
+        lateinit var mRes: XModuleResources
+
+        var resInAppSetting = 0
 
         var btnPureNGASetting: Button? = null
     }
@@ -38,24 +40,10 @@ class PreferencesHook : IHook {
 
     override fun init(classLoader: ClassLoader) {
         clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
-        clsHomeDrawerLayout = classLoader.loadClass("com.donews.nga.widget.HomeDrawerLayout")
         clsSettingActivity = classLoader.loadClass("com.donews.nga.setting.SettingActivity")
     }
 
     override fun hook() {
-
-        XposedHelpers.findAndHookMethod(clsHomeDrawerLayout, "initLayout", object : XC_MethodHook() {
-            @Throws(Throwable::class)
-            override fun afterHookedMethod(param: MethodHookParam) {
-                val viewBinding = XposedHelpers.getObjectField(param.thisObject, "binding")
-                val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
-
-                for (x in root.children) {
-                    Log.i(x.javaClass)
-                }
-            }
-        })
-
         XposedHelpers.findAndHookMethod(clsSettingActivity, "initLayout", object : XC_MethodHook() {
             @Throws(Throwable::class)
             override fun afterHookedMethod(param: MethodHookParam) {
@@ -73,10 +61,10 @@ class PreferencesHook : IHook {
                         AlertDialog.Builder(view.context).run {
                             setTitle("PureNGA 设置")
                             setCancelable(false).setView(view)
-                            setNegativeButton("取消") { dialog, which ->
+                            setNegativeButton("取消") { _, _ ->
                                 Helper.toast("设置未保存")
                             }
-                            setPositiveButton("确定") { dialog, which ->
+                            setPositiveButton("确定") { _, _ ->
                                 saveSetting(view)
                                 Helper.toast("设置已保存, 重启APP生效")
                             }
@@ -115,8 +103,12 @@ class PreferencesHook : IHook {
      * 生成设置界面
      */
     fun generateView(context: Context): View {
-        val parser = XposedInit.moduleRes.getLayout(R.layout.inapp_setting_activity)
-        val view = LayoutInflater.from(context).inflate(parser, null)
+        Log.i("resId $resInAppSetting")
+
+        val layoutParser = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = layoutParser.inflate(mRes.getLayout(resInAppSetting), null)
+
+//        val view = LayoutInflater.from(context).inflate(resInAppSetting, null)
         loadSetting(view)
         return view
     }
