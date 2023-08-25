@@ -2,7 +2,6 @@ package com.chrxw.purenga.hook
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.res.XModuleResources
 import android.graphics.Color
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -11,10 +10,11 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Switch
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
+import com.chrxw.purenga.XposedInit
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -26,12 +26,6 @@ class PreferencesHook : IHook {
     companion object {
         lateinit var clsMainActivity: Class<*>
         lateinit var clsSettingActivity: Class<*>
-
-        lateinit var mRes: XModuleResources
-
-        var resInAppSetting = 0
-
-        var btnPureNGASetting: Button? = null
     }
 
     override fun hookName(): String {
@@ -44,6 +38,9 @@ class PreferencesHook : IHook {
     }
 
     override fun hook() {
+
+        var btnPureNGASetting: Button? = null
+
         XposedHelpers.findAndHookMethod(clsSettingActivity, "initLayout", object : XC_MethodHook() {
             @Throws(Throwable::class)
             override fun afterHookedMethod(param: MethodHookParam) {
@@ -88,8 +85,7 @@ class PreferencesHook : IHook {
             }
         })
 
-        XposedHelpers.findAndHookMethod(
-            OptimizeHook.clsAppConfig,
+        XposedHelpers.findAndHookMethod(OptimizeHook.clsAppConfig,
             "setDarkModel",
             Boolean::class.java,
             object : XC_MethodHook() {
@@ -103,26 +99,49 @@ class PreferencesHook : IHook {
      * 生成设置界面
      */
     fun generateView(context: Context): View {
-        Log.i("resId $resInAppSetting")
-
-        val layoutParser = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = layoutParser.inflate(mRes.getLayout(resInAppSetting), null)
-
-//        val view = LayoutInflater.from(context).inflate(resInAppSetting, null)
+        val view = try {
+            val ctx = context.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
+            val inflater = LayoutInflater.from(ctx)
+            inflater.inflate(R.layout.inapp_setting_activity, null)
+        } catch (e: Throwable) {
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            inflater.inflate(XposedInit.moduleRes.getLayout(R.layout.inapp_setting_activity), null)
+        }
         loadSetting(view)
         return view
     }
 
     private fun loadSetting(view: View) {
+        val mRes = XposedInit.moduleRes
         Helper.spPlugin.run {
-            view.findViewById<Switch>(R.id.pure_splash_ad).isChecked = getBoolean(Constant.PURE_SPLASH_AD, false)
-            view.findViewById<Switch>(R.id.pure_post_ad).isChecked = getBoolean(Constant.PURE_POST_AD, false)
-            view.findViewById<Switch>(R.id.crack_ad_task).isChecked = getBoolean(Constant.CRACK_AD_TASK, false)
-            view.findViewById<Switch>(R.id.use_external_browser).isChecked =
-                getBoolean(Constant.USE_EXTERNAL_BROWSER, false)
-            view.findViewById<Switch>(R.id.kill_update_check).isChecked = getBoolean(Constant.KILL_UPDATE_CHECK, false)
-            view.findViewById<Switch>(R.id.kill_popup_dialog).isChecked = getBoolean(Constant.KILL_UPDATE_CHECK, false)
-            view.findViewById<Switch>(R.id.hide_hook_info).isChecked = getBoolean(Constant.HIDE_HOOK_INFO, false)
+            view.findViewById<Switch>(R.id.pure_splash_ad).run {
+                text = mRes.getString(R.string.pure_splash_ad)
+                isChecked = getBoolean(Constant.PURE_SPLASH_AD, false)
+            }
+            view.findViewById<Switch>(R.id.pure_post_ad).run {
+                text = mRes.getString(R.string.pure_post_ad)
+                isChecked = getBoolean(Constant.PURE_POST_AD, false)
+            }
+            view.findViewById<Switch>(R.id.crack_ad_task).run {
+                text = mRes.getString(R.string.crack_ad_task)
+                isChecked = getBoolean(Constant.CRACK_AD_TASK, false)
+            }
+            view.findViewById<Switch>(R.id.use_external_browser).run {
+                text = mRes.getString(R.string.use_external_browser)
+                isChecked = getBoolean(Constant.USE_EXTERNAL_BROWSER, false)
+            }
+            view.findViewById<Switch>(R.id.kill_update_check).run {
+                text = mRes.getString(R.string.kill_update_check)
+                isChecked = getBoolean(Constant.KILL_UPDATE_CHECK, false)
+            }
+            view.findViewById<Switch>(R.id.kill_popup_dialog).run {
+                text = mRes.getString(R.string.kill_popup_dialog)
+                isChecked = getBoolean(Constant.KILL_UPDATE_CHECK, false)
+            }
+            view.findViewById<Switch>(R.id.hide_hook_info).run {
+                text = mRes.getString(R.string.hide_hook_info)
+                isChecked = getBoolean(Constant.HIDE_HOOK_INFO, false)
+            }
         }
     }
 

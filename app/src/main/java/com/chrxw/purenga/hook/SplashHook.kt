@@ -13,8 +13,8 @@ import de.robv.android.xposed.XposedHelpers
 class SplashHook : IHook {
 
     companion object {
-        lateinit var clsLoadingActivity: Class<*>
-        lateinit var clsActivityLifecycle: Class<*>
+        private lateinit var clsLoadingActivity: Class<*>
+        private lateinit var clsActivityLifecycle: Class<*>
     }
 
     override fun hookName(): String {

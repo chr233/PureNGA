@@ -1,17 +1,19 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
-        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
+        maven("https://api.xposed.info/")
+        maven("https://www.jitpack.io/")
+        maven("https://s01.oss.sonatype.org/content/repositories/releases")
         mavenCentral()
-        maven { url "https://api.xposed.info/" }
     }
 }
 rootProject.name = "PureNGA"
-include ':app'
+include(":app")

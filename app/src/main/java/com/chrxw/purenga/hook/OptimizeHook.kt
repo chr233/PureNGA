@@ -19,9 +19,9 @@ class OptimizeHook : IHook {
 
     companion object {
         lateinit var clsAppConfig: Class<*>
-        lateinit var clsNGAApplication: Class<*>
-        lateinit var clsMainActivityPresenter: Class<*>
-        lateinit var clsHomeDrawerLayout: Class<*>
+        private lateinit var clsNGAApplication: Class<*>
+        private lateinit var clsMainActivityPresenter: Class<*>
+        private lateinit var clsHomeDrawerLayout: Class<*>
     }
 
     override fun hookName(): String {

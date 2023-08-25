@@ -8,19 +8,20 @@ import android.content.res.Resources
 import android.content.res.XModuleResources
 import android.widget.Toast
 import com.chrxw.purenga.hook.IHook
-import com.chrxw.purenga.hook.PreferencesHook
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
-import de.robv.android.xposed.*
-import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam
-import de.robv.android.xposed.callbacks.XC_LayoutInflated
+import de.robv.android.xposed.IXposedHookLoadPackage
+import de.robv.android.xposed.IXposedHookZygoteInit
+import de.robv.android.xposed.XC_MethodHook
+import de.robv.android.xposed.XC_MethodReplacement
+import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 
 /**
  * 初始化Xposed
  */
-class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
+class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
         modulePath = startupParam.modulePath
@@ -75,18 +76,16 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookIni
         }
     }
 
-    override fun handleInitPackageResources(resParam: InitPackageResourcesParam) {
-        if (resParam.packageName == Constant.NGA_PACKAGE_NAME) {
-            val modRes = XModuleResources.createInstance(modulePath, resParam.res)
-            PreferencesHook.resInAppSetting = resParam.res.addResource(modRes, R.layout.inapp_setting_activity)
-
-            PreferencesHook.mRes = modRes
-        }
-    }
+//    override fun handleInitPackageResources(resParam: InitPackageResourcesParam) {
+//        if (resParam.packageName == Constant.NGA_PACKAGE_NAME) {
+//            modRes = XModuleResources.createInstance(modulePath, resParam.res)
+//        }
+//    }
 
     companion object {
         lateinit var modulePath: String
         lateinit var moduleRes: Resources
+        lateinit var modRes: XModuleResources
 
 
         @JvmStatic

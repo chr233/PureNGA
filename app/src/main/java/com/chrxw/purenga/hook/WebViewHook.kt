@@ -1,6 +1,5 @@
 package com.chrxw.purenga.hook
 
-import android.R.attr
 import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +7,7 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.XposedHelpers
+import java.lang.reflect.Method
 
 
 /**
@@ -17,8 +16,11 @@ import de.robv.android.xposed.XposedHelpers
 class WebViewHook : IHook {
 
     companion object {
+        private lateinit var insAppConfig: Object
+        private lateinit var mtdIsNgaUrl: Method
+
         private fun isNgaUrl(url: String): Boolean {
-            return XposedHelpers.callMethod(OptimizeHook.clsAppConfig, "isNgaUrl", url) as Boolean
+            return mtdIsNgaUrl.invoke(insAppConfig, url) as Boolean
         }
     }
 
@@ -27,6 +29,9 @@ class WebViewHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
+        val field = OptimizeHook.clsAppConfig.getField("INSTANCE")
+        insAppConfig = field.get(null) as Object
+        mtdIsNgaUrl = OptimizeHook.clsAppConfig.getMethod("isNgaUrl", String::class.java)
     }
 
     override fun hook() {

@@ -13,8 +13,8 @@ import de.robv.android.xposed.XposedHelpers
  */
 class RewardHook : IHook {
     companion object {
-        lateinit var clsLoginWebView_a: Class<*>
-        lateinit var clsLoginWebView_b: Class<*>
+        private lateinit var clsLoginWebView_a: Class<*>
+        private lateinit var clsLoginWebView_b: Class<*>
     }
 
     override fun hookName(): String {

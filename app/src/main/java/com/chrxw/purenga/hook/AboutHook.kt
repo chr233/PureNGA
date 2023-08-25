@@ -20,7 +20,7 @@ import de.robv.android.xposed.XposedHelpers
 class AboutHook : IHook {
 
     companion object {
-        lateinit var clsAboutUsActivity: Class<*>
+        private lateinit var clsAboutUsActivity: Class<*>
     }
 
     override fun hookName(): String {
