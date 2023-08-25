@@ -53,8 +53,8 @@ class PreferencesHook : IHook {
                     btn.text = "PureNGA 设置"
                     btn.setOnClickListener {
                         val view = generateView(Helper.context)
-//                        loadSetting(view)
-                        AlertDialog.Builder(view.context).run {
+                        loadSetting(view)
+                        AlertDialog.Builder(context).run {
                             setTitle("PureNGA 设置")
                             setCancelable(false)
                             setView(view)
@@ -100,12 +100,11 @@ class PreferencesHook : IHook {
      */
     fun generateView(context: Context): View {
         return try {
-            throw Exception()
             val ctx = context.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
             val inflater = LayoutInflater.from(ctx)
             inflater.inflate(R.layout.inapp_setting_activity, null)
         } catch (e: Throwable) {
-            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = LayoutInflater.from(context)
             inflater.inflate(XposedInit.moduleRes.getLayout(R.layout.inapp_setting_activity), null)
         }
     }

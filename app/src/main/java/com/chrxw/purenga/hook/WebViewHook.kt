@@ -16,7 +16,7 @@ import java.lang.reflect.Method
 class WebViewHook : IHook {
 
     companion object {
-        private lateinit var insAppConfig: Object
+        private lateinit var insAppConfig: Any
         private lateinit var mtdIsNgaUrl: Method
 
         private fun isNgaUrl(url: String): Boolean {
@@ -30,7 +30,7 @@ class WebViewHook : IHook {
 
     override fun init(classLoader: ClassLoader) {
         val field = OptimizeHook.clsAppConfig.getField("INSTANCE")
-        insAppConfig = field.get(null) as Object
+        insAppConfig = field.get(null)
         mtdIsNgaUrl = OptimizeHook.clsAppConfig.getMethod("isNgaUrl", String::class.java)
     }
 
