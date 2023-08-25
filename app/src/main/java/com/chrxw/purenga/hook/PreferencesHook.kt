@@ -3,7 +3,6 @@ package com.chrxw.purenga.hook
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -42,22 +41,23 @@ class PreferencesHook : IHook {
         var btnPureNGASetting: Button? = null
 
         XposedHelpers.findAndHookMethod(clsSettingActivity, "initLayout", object : XC_MethodHook() {
-            @Throws(Throwable::class)
             override fun afterHookedMethod(param: MethodHookParam) {
                 val viewBinding = XposedHelpers.getObjectField(param.thisObject, "viewBinding")
                 val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
                 val scrollView = root.getChildAt(1) as ScrollView
                 val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
-                val context = root.context
+                val context = param.thisObject as Context
 
                 btnPureNGASetting = Button(context).also { btn ->
                     btn.text = "PureNGA 设置"
                     btn.setOnClickListener {
-                        val view = generateView(context)
+                        val view = generateView(Helper.context)
+//                        loadSetting(view)
                         AlertDialog.Builder(view.context).run {
                             setTitle("PureNGA 设置")
-                            setCancelable(false).setView(view)
+                            setCancelable(false)
+                            setView(view)
                             setNegativeButton("取消") { _, _ ->
                                 Helper.toast("设置未保存")
                             }
@@ -67,7 +67,7 @@ class PreferencesHook : IHook {
                             }
                             create().also { dialog ->
                                 val params = dialog.window?.attributes
-                                val metrics = DisplayMetrics()
+                                val metrics = android.util.DisplayMetrics()
                                 dialog.window!!.windowManager.defaultDisplay.getMetrics(metrics)
                                 params?.width = metrics.widthPixels
                                 params?.height = metrics.heightPixels
@@ -99,7 +99,8 @@ class PreferencesHook : IHook {
      * 生成设置界面
      */
     fun generateView(context: Context): View {
-        val view = try {
+        return try {
+            throw Exception()
             val ctx = context.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
             val inflater = LayoutInflater.from(ctx)
             inflater.inflate(R.layout.inapp_setting_activity, null)
@@ -107,8 +108,6 @@ class PreferencesHook : IHook {
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             inflater.inflate(XposedInit.moduleRes.getLayout(R.layout.inapp_setting_activity), null)
         }
-        loadSetting(view)
-        return view
     }
 
     private fun loadSetting(view: View) {

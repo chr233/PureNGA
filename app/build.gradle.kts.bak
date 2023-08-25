@@ -27,9 +27,12 @@ android {
 
     buildTypes {
         named("release") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            proguardFiles("proguard-rules.pro")
+            isShrinkResources = false
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -48,8 +51,6 @@ android {
 }
 
 dependencies {
-    implementation("com.highcapable.yukihookapi:api:1.1.11")
-    implementation("com.highcapable.yukihookapi:ksp-xposed:1.1.11")
     compileOnly("de.robv.android.xposed:api:82")
 
     implementation("androidx.core:core-ktx:1.10.1")

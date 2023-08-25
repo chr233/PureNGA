@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo
 import android.content.res.Resources
 import android.content.res.XModuleResources
 import android.widget.Toast
-import com.chrxw.purenga.hook.IHook
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.IXposedHookLoadPackage
@@ -55,6 +54,8 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                             if (Helper.init()) {
                                 Hooks.initHooks(lpparam.classLoader)
+
+
                                 if (!Helper.spPlugin.getBoolean(Constant.HIDE_HOOK_INFO, false)) {
                                     Helper.toast("PureNGA 加载成功, 请到【设置】>【PureNGA】开启功能", Toast.LENGTH_LONG)
                                 }
@@ -91,23 +92,6 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         @JvmStatic
         fun getModuleRes(path: String): Resources {
             return XModuleResources.createInstance(path, null)
-        }
-
-        fun initHooks(classLoader: ClassLoader, vararg hooks: IHook) {
-            for (hook in hooks) {
-                val name = hook.hookName()
-                try {
-                    Log.i("加载 $name 模块")
-                    hook.init(classLoader)
-                    hook.hook()
-                } catch (e: NoSuchMethodError) {
-                    Helper.toast("模块 $name 加载失败, 可能不支持当前版本的NGA")
-                    Log.e(e)
-                } catch (e: Exception) {
-                    Helper.toast("模块 $name 加载遇到未知错误")
-                    Log.e(e)
-                }
-            }
         }
     }
 }
