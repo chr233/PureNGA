@@ -1,8 +1,5 @@
 package com.chrxw.purenga.hook
 
-import android.R.attr.classLoader
-import android.content.Intent
-import android.os.Bundle
 import android.webkit.WebView
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
@@ -29,7 +26,7 @@ class RewardHook : IHook {
 
     override fun init(classLoader: ClassLoader) {
         clsLoginWebView_a = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$a")
-        clsLoginWebView_b =classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$b")
+        clsLoginWebView_b = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$b")
         clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
         clsLoginWebView_P = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$p")
     }
@@ -73,7 +70,7 @@ class RewardHook : IHook {
 
             XposedHelpers.findAndHookMethod(clsLoginWebView, "initView", object : XC_MethodHook() {
                 override fun afterHookedMethod(param: MethodHookParam) {
-                    val obj = param?.thisObject
+                    val obj = param.thisObject
                     webView = XposedHelpers.getObjectField(obj, "mWebView") as WebView
                 }
             })
@@ -86,34 +83,12 @@ class RewardHook : IHook {
                 object : XC_MethodHook() {
                     override fun afterHookedMethod(param: MethodHookParam) {
                         if (webView != null) {
-                            var url = webView!!.url
+                            val url = webView!!.url
                             Log.i("url: $url")
                         }
 
                     }
                 })
-
         }
-    }
-
-    private fun newStartActivityForResult(
-        intent: Intent, requestCode: Int, options: Bundle? = null
-    ) {
-        Log.i(intent)
-        Log.i(requestCode)
-        Log.i(options)
-    }
-
-    private fun onAdClose(webView: Any) {
-        val mWebView = XposedHelpers.getObjectField(webView, "mWebView")
-        XposedHelpers.callMethod(
-            mWebView,
-            "evaluateJavascript",
-            "javascript:__doAction\\(\\'domissionComplete\\',{\\'action\\':\\'app_ad_video\\'}\\)",
-            null
-        )
-        XposedHelpers.callMethod(
-            mWebView, "evaluateJavascript", "javascript:__doAction\\(\\'windowFocus\\'\\)", null
-        )
     }
 }
