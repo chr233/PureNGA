@@ -51,6 +51,8 @@ android {
 }
 
 dependencies {
+    implementation("com.github.kyuubiran:EzXHelper:2.0.7")
+    implementation("androidx.preference:preference-ktx:1.2.1")
     compileOnly("de.robv.android.xposed:api:82")
 
     implementation("androidx.core:core-ktx:1.10.1")

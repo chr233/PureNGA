@@ -1,12 +1,16 @@
 package com.chrxw.purenga.hook
 
+import android.R.attr.classLoader
 import android.content.Intent
 import android.os.Bundle
+import android.webkit.WebView
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
+import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
+
 
 /**
  * 浏览广告钩子
@@ -15,6 +19,8 @@ class RewardHook : IHook {
     companion object {
         private lateinit var clsLoginWebView_a: Class<*>
         private lateinit var clsLoginWebView_b: Class<*>
+        private lateinit var clsLoginWebView: Class<*>
+        private lateinit var clsLoginWebView_P: Class<*>
     }
 
     override fun hookName(): String {
@@ -22,8 +28,10 @@ class RewardHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsLoginWebView_a = XposedHelpers.findClass("gov.pianzong.androidnga.activity.user.LoginWebView.a", classLoader)
-        clsLoginWebView_b = XposedHelpers.findClass("gov.pianzong.androidnga.activity.user.LoginWebView.b", classLoader)
+        clsLoginWebView_a = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$a")
+        clsLoginWebView_b =classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$b")
+        clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
+        clsLoginWebView_P = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$p")
     }
 
     override fun hook() {
@@ -36,6 +44,7 @@ class RewardHook : IHook {
                         val obj = param?.thisObject
 
                         val webView = XposedHelpers.getObjectField(obj, "a")
+                        XposedHelpers.setBooleanField(webView, "mRewardVerify", true)
                         XposedHelpers.setBooleanField(webView, "mFreeRewardVerify", true)
                         XposedHelpers.callMethod(obj, "onAdClose")
                         return
@@ -49,53 +58,41 @@ class RewardHook : IHook {
                         val obj = param?.thisObject
 
                         val webView = XposedHelpers.getObjectField(obj, "a")
+                        XposedHelpers.setBooleanField(webView, "mRewardVerify", true)
                         XposedHelpers.setBooleanField(webView, "mFreeRewardVerify", true)
                         XposedHelpers.callMethod(obj, "onAdClose")
-
-//                        XposedHelpers.setBooleanField(webView, "mFreeRewardVerify", true)
-//                        XposedHelpers.callMethod(obj, "onAdClose")
                         return
                     }
                 })
 
-//            if (BuildConfig.DEBUG) {
-//                // Hook startActivityForResult 方法
-//                XposedHelpers.findAndHookMethod(
-//                    Activity::class.java,
-//                    "startActivityForResult",
-//                    Intent::class.java,
-//                    Int::class.javaPrimitiveType,
-//                    Bundle::class.java,
-//                    object : XC_MethodHook() {
-//                        @Throws(Throwable::class)
-//                        override fun beforeHookedMethod(param: MethodHookParam?) {
-//                            Log.i("1")
-//                            val intent = param?.args?.get(0) as Intent
-//                            val code = param.args?.get(1) as Int
-//                            val options = param.args?.get(2) as Bundle?
-//                            newStartActivityForResult(intent, code, options)
-//                            super.beforeHookedMethod(param)
-//                        }
-//                    })
-//                XposedHelpers.findAndHookMethod(
-//                    Activity::class.java,
-//                    "startActivityForResult",
-//                    Intent::class.java,
-//                    Int::class.java,
-//                    object : XC_MethodHook() {
-//                        @Throws(Throwable::class)
-//                        override fun beforeHookedMethod(param: MethodHookParam?) {
-//                            Log.i("2")
-//                            val intent = param?.args?.get(0) as Intent
-//                            val code = param.args?.get(1) as Int
-//                            newStartActivityForResult(intent, code)
-//                            super.beforeHookedMethod(param)
-//                        }
-//                    })
-//            }
             } catch (e: Exception) {
                 Log.e(e)
             }
+
+            var webView: WebView? = null
+
+            XposedHelpers.findAndHookMethod(clsLoginWebView, "initView", object : XC_MethodHook() {
+                override fun afterHookedMethod(param: MethodHookParam) {
+                    val obj = param?.thisObject
+                    webView = XposedHelpers.getObjectField(obj, "mWebView") as WebView
+                }
+            })
+
+
+            XposedHelpers.findAndHookMethod(clsLoginWebView_P,
+                "onProgressChanged",
+                WebView::class.java,
+                Int::class.javaPrimitiveType,
+                object : XC_MethodHook() {
+                    override fun afterHookedMethod(param: MethodHookParam) {
+                        if (webView != null) {
+                            var url = webView!!.url
+                            Log.i("url: $url")
+                        }
+
+                    }
+                })
+
         }
     }
 

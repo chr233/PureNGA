@@ -19,6 +19,7 @@ import androidx.preference.PreferenceFragmentCompat
 class MainActivity : AppCompatActivity() {
 
     companion object {
+        @JvmStatic
         fun isModuleActive(): Boolean {
             return false
         }
@@ -28,7 +29,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.settings, SettingsFragment())
+                .commit()
         }
     }
 

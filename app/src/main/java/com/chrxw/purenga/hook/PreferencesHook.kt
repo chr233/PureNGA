@@ -14,6 +14,7 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
 import com.chrxw.purenga.XposedInit
 import com.chrxw.purenga.utils.Helper
+import com.github.kyuubiran.ezxhelper.EzXHelper
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -49,10 +50,14 @@ class PreferencesHook : IHook {
 
                 val context = param.thisObject as Context
 
+
+                EzXHelper.addModuleAssetPath(XposedInit.moduleRes)
+
+
                 btnPureNGASetting = Button(context).also { btn ->
                     btn.text = "PureNGA 设置"
                     btn.setOnClickListener {
-                        val view = generateView(Helper.context)
+                        val view = generateView()
                         loadSetting(view)
                         AlertDialog.Builder(context).run {
                             setTitle("PureNGA 设置")
@@ -75,6 +80,9 @@ class PreferencesHook : IHook {
                                 dialog.show()
                             }
                         }
+
+
+
                     }
                     btn.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))
                     btn.setBackgroundColor(0)
@@ -98,46 +106,40 @@ class PreferencesHook : IHook {
     /**
      * 生成设置界面
      */
-    fun generateView(context: Context): View {
-        return try {
-            val ctx = context.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
-            val inflater = LayoutInflater.from(ctx)
-            inflater.inflate(R.layout.inapp_setting_activity, null)
-        } catch (e: Throwable) {
-            val inflater = LayoutInflater.from(context)
-            inflater.inflate(XposedInit.moduleRes.getLayout(R.layout.inapp_setting_activity), null)
-        }
+    fun generateView(): View {
+        val inflater = LayoutInflater.from(EzXHelper.appContext)
+        return inflater.inflate(R.layout.inapp_setting_activity, null)
     }
 
     private fun loadSetting(view: View) {
         val mRes = XposedInit.moduleRes
         Helper.spPlugin.run {
             view.findViewById<Switch>(R.id.pure_splash_ad).run {
-                text = mRes.getString(R.string.pure_splash_ad)
+//                text = mRes.getString(R.string.pure_splash_ad)
                 isChecked = getBoolean(Constant.PURE_SPLASH_AD, false)
             }
             view.findViewById<Switch>(R.id.pure_post_ad).run {
-                text = mRes.getString(R.string.pure_post_ad)
+//                text = mRes.getString(R.string.pure_post_ad)
                 isChecked = getBoolean(Constant.PURE_POST_AD, false)
             }
             view.findViewById<Switch>(R.id.crack_ad_task).run {
-                text = mRes.getString(R.string.crack_ad_task)
+//                text = mRes.getString(R.string.crack_ad_task)
                 isChecked = getBoolean(Constant.CRACK_AD_TASK, false)
             }
             view.findViewById<Switch>(R.id.use_external_browser).run {
-                text = mRes.getString(R.string.use_external_browser)
+//                text = mRes.getString(R.string.use_external_browser)
                 isChecked = getBoolean(Constant.USE_EXTERNAL_BROWSER, false)
             }
             view.findViewById<Switch>(R.id.kill_update_check).run {
-                text = mRes.getString(R.string.kill_update_check)
+//                text = mRes.getString(R.string.kill_update_check)
                 isChecked = getBoolean(Constant.KILL_UPDATE_CHECK, false)
             }
             view.findViewById<Switch>(R.id.kill_popup_dialog).run {
-                text = mRes.getString(R.string.kill_popup_dialog)
+//                text = mRes.getString(R.string.kill_popup_dialog)
                 isChecked = getBoolean(Constant.KILL_UPDATE_CHECK, false)
             }
             view.findViewById<Switch>(R.id.hide_hook_info).run {
-                text = mRes.getString(R.string.hide_hook_info)
+//                text = mRes.getString(R.string.hide_hook_info)
                 isChecked = getBoolean(Constant.HIDE_HOOK_INFO, false)
             }
         }

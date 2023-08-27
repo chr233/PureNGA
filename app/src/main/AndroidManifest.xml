@@ -11,11 +11,16 @@
         android:theme="@style/Theme.PureNGA"
         tools:targetApi="31">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
+        <activity
             android:name=".MainActivity"
             android:autoRemoveFromRecents="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -23,15 +28,12 @@
         <meta-data
             android:name="xposedmodule"
             android:value="true" />
-
         <meta-data
             android:name="xposeddescription"
             android:value="@string/app_desc" />
-
         <meta-data
             android:name="xposedminversion"
             android:value="82" />
-
         <meta-data
             android:name="xposedscope"
             android:resource="@array/xposed_scope" />

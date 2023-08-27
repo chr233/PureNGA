@@ -18,5 +18,4 @@ interface IHook {
      * 执行Hook
      */
     fun hook()
-
 }

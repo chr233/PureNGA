@@ -9,6 +9,7 @@ object Constant {
     const val DNINFO = "dninfo"
     const val REPO_URL="https://github.com/chr233/PureNGA"
 
+    const val LOG_TAG = "PureNGA"
 
     /**
      * 模块SharedPreferences名称
