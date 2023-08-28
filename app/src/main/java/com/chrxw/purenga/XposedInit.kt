@@ -1,8 +1,10 @@
 package com.chrxw.purenga
 
+import android.app.Activity
 import android.app.AndroidAppHelper
 import android.app.Application
 import android.app.Instrumentation
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.res.Resources
 import android.content.res.XModuleResources
@@ -14,6 +16,7 @@ import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
+import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -50,6 +53,27 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             Log.d("NGA内运行")
 
+            XposedBridge.hookAllMethods(Activity::class.java, "startActivity", object : XC_MethodHook() {
+                override fun beforeHookedMethod(param: MethodHookParam?) {
+                    var obj = param?.args?.get(0)
+                    if (obj is Activity) {
+                        val activity = obj
+                        val clsName = activity.localClassName
+                        Log.i("className: $clsName")
+                    } else if (obj is Array<*> && obj.isArrayOf<Activity>()) {
+                        for (activity in obj) {
+                            val clsName = (activity as Activity).localClassName
+                            Log.i("classNames: $clsName")
+                        }
+                    } else if (obj is Intent) {
+                        val clsName = obj.component?.className ?: ""
+                        Log.i("className: $clsName")
+                    } else {
+                        Log.i(obj.toString())
+                    }
+                }
+            })
+
             XposedHelpers.findAndHookMethod(Instrumentation::class.java,
                 "callApplicationOnCreate",
                 Application::class.java,
@@ -58,7 +82,6 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                         if (param.args[0] is Application) {
                             val context = AndroidAppHelper.currentApplication().applicationContext
-                            Helper.context = context
 
                             EzXHelper.initAppContext(context, true)
 
@@ -70,7 +93,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 }
                             } else {
                                 val ngaVersion = try {
-                                    Helper.context.packageManager.getPackageInfo(
+                                    EzXHelper.appContext.packageManager.getPackageInfo(
                                         Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
                                     ).versionName
                                 } catch (e: Throwable) {

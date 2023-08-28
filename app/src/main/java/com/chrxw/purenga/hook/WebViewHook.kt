@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
 import java.lang.reflect.Method
@@ -29,8 +30,7 @@ class WebViewHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        val field = OptimizeHook.clsAppConfig.getField("INSTANCE")
-        insAppConfig = field.get(null)
+        insAppConfig = OptimizeHook.clsAppConfig.getField("INSTANCE").get(null)!!
         mtdIsNgaUrl = OptimizeHook.clsAppConfig.getMethod("isNgaUrl", String::class.java)
     }
 
@@ -46,6 +46,8 @@ class WebViewHook : IHook {
                         if (url != null && !isNgaUrl(url)) {
                             param.args[4] = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                         }
+                    } else {
+                        Log.i("execStartActivity className: $clsName")
                     }
                 }
             })

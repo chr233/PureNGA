@@ -36,13 +36,27 @@
             android:padding="16dp"
             android:text="@string/crack_ad_task" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/ui_optimize" />
+
         <Switch
-            android:id="@+id/pure_ad_icon"
+            android:id="@+id/remove_store_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:enabled="true"
             android:padding="16dp"
-            android:enabled="false"
-            android:text="@string/pure_ad_icon" />
+            android:text="@string/remove_store_icon" />
+
+        <Switch
+            android:id="@+id/remove_activity_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:enabled="true"
+            android:padding="16dp"
+            android:text="@string/remove_activity_icon" />
 
         <TextView
             android:layout_width="match_parent"

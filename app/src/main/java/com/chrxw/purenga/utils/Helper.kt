@@ -1,10 +1,10 @@
 package com.chrxw.purenga.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
 import com.chrxw.purenga.Constant
+import com.github.kyuubiran.ezxhelper.EzXHelper
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -13,8 +13,6 @@ import de.robv.android.xposed.XposedHelpers
  */
 class Helper {
     companion object {
-        @SuppressLint("StaticFieldLeak")
-        lateinit var context: Context
         private lateinit var spDoinfo: SharedPreferences
 
         lateinit var clsR: Class<*>
@@ -29,8 +27,9 @@ class Helper {
         fun init(): Boolean {
             return try {
                 //设置SharedPreferences
-                spDoinfo = context.getSharedPreferences(Constant.DNINFO, Context.MODE_PRIVATE)
-                spPlugin = context.getSharedPreferences(Constant.PLUGIN_PREFERENCE_NAME, Context.MODE_PRIVATE)
+                spDoinfo = EzXHelper.appContext.getSharedPreferences(Constant.DNINFO, Context.MODE_PRIVATE)
+                spPlugin =
+                    EzXHelper.appContext.getSharedPreferences(Constant.PLUGIN_PREFERENCE_NAME, Context.MODE_PRIVATE)
 
                 true
             } catch (e: Exception) {
@@ -44,7 +43,7 @@ class Helper {
          */
         fun toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
             try {
-                Toast.makeText(context, text, duration).show()
+                Toast.makeText(EzXHelper.appContext, text, duration).show()
             } catch (e: Throwable) {
                 Log.d("toast 出错")
             }

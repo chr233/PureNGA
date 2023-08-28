@@ -1,5 +1,6 @@
 package com.chrxw.purenga.hook
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.net.Uri
@@ -34,14 +35,17 @@ class AboutHook : IHook {
     override fun hook() {
         XposedHelpers.findAndHookMethod(clsAboutUsActivity, "initLayout", object : XC_MethodHook() {
             override fun afterHookedMethod(param: MethodHookParam) {
-                val viewBinding = XposedHelpers.callMethod(param.thisObject, "getViewBinding")
+
+                val activity = param.thisObject as Activity
+
+                val viewBinding = XposedHelpers.getObjectField(activity, "viewBinding")
                 val root = XposedHelpers.callMethod(viewBinding, "getRoot") as View
                 val viewId = Helper.getRId("tv_app_version")
                 val textView = root.findViewById<TextView>(viewId)
 
                 val pluginVersion = BuildConfig.VERSION_NAME
                 val ngaVersion = try {
-                    Helper.context.packageManager.getPackageInfo(
+                    activity.packageManager.getPackageInfo(
                         Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
                     ).versionName
                 } catch (e: Throwable) {

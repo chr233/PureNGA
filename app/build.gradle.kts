@@ -17,7 +17,7 @@ android {
         minSdk = 24
         targetSdk = 33
         versionCode = 11
-        versionName = "1.7.2"
+        versionName = "1.8.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles()
@@ -30,8 +30,7 @@ android {
             isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -52,7 +51,6 @@ android {
 
 dependencies {
     implementation("com.github.kyuubiran:EzXHelper:2.0.7")
-    implementation("androidx.preference:preference-ktx:1.2.1")
     compileOnly("de.robv.android.xposed:api:82")
 
     implementation("androidx.core:core-ktx:1.10.1")

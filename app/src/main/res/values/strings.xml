@@ -28,10 +28,12 @@
     <string name="use_external_browser">使用外部浏览器打开链接</string>
     <string name="kill_update_check">禁止APP检查更新</string>
     <string name="hide_hook_info">不显示模块运行信息</string>
-    <string name="pure_ad_icon">屏蔽导航栏上的活动图标(WIP)</string>
     <string name="kill_popup_dialog">屏蔽应用内弹窗</string>
     <string name="tutorials_first">在侧滑菜单找到【设置】</string>
     <string name="tutorials_second">在最底部找到【PureNGA 设置】</string>
     <string name="open_nga_summary">屎黄色论坛, 启动!</string>
     <string name="setting">设置</string>
+    <string name="remove_activity_icon">去除导航栏上的活动图标</string>
+    <string name="remove_store_icon">去除商城和钱包入口</string>
+    <string name="ui_optimize">界面优化</string>
 </resources>

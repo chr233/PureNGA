@@ -37,6 +37,7 @@ class SplashHook : IHook {
                     override fun beforeHookedMethod(param: MethodHookParam?) {
                         super.beforeHookedMethod(param)
                         val activity = param?.args?.get(0) as Activity
+
                         if (activity.javaClass == clsLoadingActivity) {
                             Log.d("跳过启动页")
                             XposedHelpers.setBooleanField(activity, "canJump", true)
