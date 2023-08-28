@@ -53,26 +53,28 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             Log.d("NGA内运行")
 
-            XposedBridge.hookAllMethods(Activity::class.java, "startActivity", object : XC_MethodHook() {
-                override fun beforeHookedMethod(param: MethodHookParam?) {
-                    var obj = param?.args?.get(0)
-                    if (obj is Activity) {
-                        val activity = obj
-                        val clsName = activity.localClassName
-                        Log.i("className: $clsName")
-                    } else if (obj is Array<*> && obj.isArrayOf<Activity>()) {
-                        for (activity in obj) {
-                            val clsName = (activity as Activity).localClassName
-                            Log.i("classNames: $clsName")
-                        }
-                    } else if (obj is Intent) {
-                        val clsName = obj.component?.className ?: ""
-                        Log.i("className: $clsName")
-                    } else {
-                        Log.i(obj.toString())
-                    }
-                }
-            })
+//            XposedBridge.hookAllMethods(Activity::class.java, "startActivity", object : XC_MethodHook() {
+//                override fun beforeHookedMethod(param: MethodHookParam?) {
+//                    var obj = param?.args?.get(0)
+//                    if (obj is Activity) {
+//                        val activity = obj
+//                        val clsName = activity.localClassName
+//                        Log.i("className: $clsName")
+//                    } else if (obj is Array<*> && obj.isArrayOf<Activity>()) {
+//                        for (activity in obj) {
+//                            val clsName = (activity as Activity).localClassName
+//                            Log.i("classNames: $clsName")
+//                        }
+//                    } else if (obj is Intent) {
+//                        val clsName = obj.component?.className ?: ""
+//                        Log.i("className: $clsName")
+//                    } else {
+//                        Log.i(obj.toString())
+//                    }
+//                }
+//            })
+
+            var inited = false
 
             XposedHelpers.findAndHookMethod(Instrumentation::class.java,
                 "callApplicationOnCreate",
@@ -85,7 +87,9 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                             EzXHelper.initAppContext(context, true)
 
-                            if (Helper.init()) {
+                            if (Helper.init() && !inited) {
+                                inited = true
+
                                 Hooks.initHooks(lpparam.classLoader)
 
                                 if (!Helper.spPlugin.getBoolean(Constant.HIDE_HOOK_INFO, false)) {
