@@ -34,7 +34,7 @@ class Hooks {
                 } catch (e: NoSuchMethodError) {
                     Helper.toast("模块 $name 加载失败, 可能不支持当前版本的NGA")
                     Log.e(e)
-                } catch (e: Exception) {
+                } catch (e: Throwable) {
                     Helper.toast("模块 $name 加载遇到未知错误")
                     Log.e(e)
                 }

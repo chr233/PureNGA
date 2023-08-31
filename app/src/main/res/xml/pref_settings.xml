@@ -1,54 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        android:key="other"
-        android:title="@string/other">
+        app:key="other"
+        app:title="@string/other">
 
         <Preference
-            android:key="running_status"
-            android:title="@string/running_status" />
+            app:key="running_status"
+            app:title="@string/running_status" />
 
         <Preference
-            android:key="open_nga"
-            android:summary="@string/open_nga_summary"
-            android:title="@string/reopen_nga" />
+            app:key="open_nga"
+            app:summary="@string/open_nga_summary"
+            app:title="@string/reopen_nga" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="setting"
-        android:title="@string/setting">
+        app:key="setting"
+        app:title="@string/setting">
 
         <Preference
-            android:key="plugin_setting"
-            android:summary="@string/plugin_setting_summary"
-            android:title="@string/plugin_setting" />
+            app:key="plugin_setting"
+            app:summary="@string/plugin_setting_summary"
+            app:title="@string/plugin_setting" />
 
         <Preference
-            android:key="hide_icon"
-            android:summary="@string/hide_icon_summary"
-            android:title="@string/hide_icon" />
+            app:key="hide_icon"
+            app:summary="@string/hide_icon_summary"
+            app:title="@string/hide_icon" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="about"
-        android:title="@string/about">
+        app:key="about"
+        app:title="@string/about">
 
         <Preference
-            android:key="version"
-            android:title="@string/version" />
+            app:key="version"
+            app:title="@string/version" />
 
         <Preference
-            android:key="author"
-            android:summary="@string/author_summary"
-            android:title="@string/author" />
+            app:key="author"
+            app:summary="@string/author_summary"
+            app:title="@string/author" />
 
         <Preference
-            android:key="donate"
-            android:summary="@string/donate_summary"
-            android:title="@string/donate" />
+            app:key="donate"
+            app:summary="@string/donate_summary"
+            app:title="@string/donate" />
 
     </PreferenceCategory>
 

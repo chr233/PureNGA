@@ -2,19 +2,21 @@ package com.chrxw.purenga.hook
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.Switch
+import android.widget.TableRow.LayoutParams
+import androidx.appcompat.content.res.AppCompatResources
 import com.chrxw.purenga.Constant
-import com.chrxw.purenga.R
-import com.chrxw.purenga.XposedInit
+import com.chrxw.purenga.ui.ClickableItemView
+import com.chrxw.purenga.ui.ToggleItemView
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Log
 import com.github.kyuubiran.ezxhelper.EzXHelper
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 import kotlin.system.exitProcess
@@ -50,8 +52,8 @@ class PreferencesHook : IHook {
 
         var btnPureNGASetting: Button? = null
 
-        XposedHelpers.findAndHookMethod(clsSettingActivity, "initLayout", object : XC_MethodHook() {
-            override fun afterHookedMethod(param: MethodHookParam) {
+        MethodFinder.fromClass(clsSettingActivity).filterByName("initLayout").first().createHook {
+            after { param ->
                 val activity = param.thisObject as Activity
 
                 val viewBinding = XposedHelpers.getObjectField(activity, "viewBinding")
@@ -59,34 +61,28 @@ class PreferencesHook : IHook {
                 val scrollView = root.getChildAt(1) as ScrollView
                 val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
-                EzXHelper.addModuleAssetPath(XposedInit.moduleRes)
+                EzXHelper.addModuleAssetPath(activity)
 
                 btnPureNGASetting = Button(activity).also { btn ->
                     btn.text = Constant.BTN_TITLE
                     btn.setOnClickListener {
-                        val view = generateView()
-                        loadSetting(view)
+
+                        val view = generateView(activity)
+
                         AlertDialog.Builder(activity).run {
                             setTitle(Constant.BTN_TITLE)
                             setCancelable(false)
                             setView(view)
-                            setNegativeButton("取消") { _, _ ->
-                                Helper.toast("设置未保存")
+                            setNegativeButton("关闭") { _, _ ->
+                                Helper.toast("设置已保存, 重启后生效")
                             }
-                            setPositiveButton("保存并重启 NGA") { _, _ ->
-                                saveSetting(view)
+                            setPositiveButton("重启 NGA") { _, _ ->
                                 Helper.toast("设置已保存")
                                 restartApplication(activity)
                             }
-                            create().also { dialog ->
-                                val params = dialog.window?.attributes
-                                val metrics = android.util.DisplayMetrics()
-                                dialog.window!!.windowManager.defaultDisplay.getMetrics(metrics)
-                                params?.width = metrics.widthPixels
-                                params?.height = metrics.heightPixels
-                                dialog.window!!.attributes = params
-                                dialog.show()
-                            }
+
+                            create()
+                            show()
                         }
                     }
 
@@ -97,7 +93,7 @@ class PreferencesHook : IHook {
                     linearLayout.addView(btn)
                 }
             }
-        })
+        }
 
         XposedHelpers.findAndHookMethod(OptimizeHook.clsAppConfig,
             "setDarkModel",
@@ -112,46 +108,67 @@ class PreferencesHook : IHook {
     /**
      * 生成设置界面
      */
-    fun generateView(): View {
-        val inflater = LayoutInflater.from(EzXHelper.appContext)
-        return try {
-            inflater.inflate(R.layout.inapp_setting_activity, null)
-        } catch (e: Throwable) {
-            Log.e(e)
-            Helper.toast("渲染界面异常, 请重启APP")
-            inflater.inflate(XposedInit.moduleRes.getLayout(R.layout.inapp_setting_activity), null)
-        }
-    }
+    private fun generateView(context: Context): View {
+        val root = ScrollView(context)
+        val container = LinearLayout(context)
+        container.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        container.orientation = LinearLayout.VERTICAL
+        container.dividerDrawable = AppCompatResources.getDrawable(context, android.R.drawable.divider_horizontal_dark)
 
-    private fun loadSetting(view: View) {
-        Helper.spPlugin.run {
-            view.findViewById<Switch>(R.id.pure_splash_ad).isChecked = getBoolean(Constant.PURE_SPLASH_AD, false)
-            view.findViewById<Switch>(R.id.pure_post_ad).isChecked = getBoolean(Constant.PURE_POST_AD, false)
-            view.findViewById<Switch>(R.id.crack_ad_task).isChecked = getBoolean(Constant.CRACK_AD_TASK, false)
-            view.findViewById<Switch>(R.id.remove_store_icon).isChecked = getBoolean(Constant.REMOVE_STORE_ICON, false)
-            view.findViewById<Switch>(R.id.remove_activity_icon).isChecked =
-                getBoolean(Constant.REMOVE_ACTIVITY_ICON, false)
-            view.findViewById<Switch>(R.id.use_external_browser).isChecked =
-                getBoolean(Constant.USE_EXTERNAL_BROWSER, false)
-            view.findViewById<Switch>(R.id.kill_update_check).isChecked = getBoolean(Constant.KILL_UPDATE_CHECK, false)
-            view.findViewById<Switch>(R.id.kill_popup_dialog).isChecked = getBoolean(Constant.KILL_UPDATE_CHECK, false)
-            view.findViewById<Switch>(R.id.hide_hook_info).isChecked = getBoolean(Constant.HIDE_HOOK_INFO, false)
-        }
-    }
+        container.addView(ClickableItemView(context).apply { title = "广告设置" })
+        container.addView(ToggleItemView(context, Constant.PURE_SPLASH_AD).apply {
+            title = "屏蔽开屏广告"
+            subTitle = "可能失效, 建议配合【跳过开屏页面】使用"
+        })
+        container.addView(ToggleItemView(context, Constant.PURE_POST_AD).apply {
+            title = "屏蔽信息流广告"
+            subTitle = "去除Banner位, 帖子列表, 帖子末尾的广告"
+        })
+        container.addView(ToggleItemView(context, Constant.CRACK_AD_TASK).apply {
+            title = "破解看广告任务"
+            subTitle = "秒关不影响任务奖励结算"
+        })
 
-    private fun saveSetting(view: View) {
-        Helper.spPlugin.edit().run {
-            putBoolean(Constant.PURE_SPLASH_AD, view.findViewById<Switch>(R.id.pure_splash_ad).isChecked)
-            putBoolean(Constant.PURE_POST_AD, view.findViewById<Switch>(R.id.pure_post_ad).isChecked)
-            putBoolean(Constant.CRACK_AD_TASK, view.findViewById<Switch>(R.id.crack_ad_task).isChecked)
-            putBoolean(Constant.REMOVE_STORE_ICON, view.findViewById<Switch>(R.id.remove_store_icon).isChecked)
-            putBoolean(Constant.REMOVE_ACTIVITY_ICON, view.findViewById<Switch>(R.id.remove_activity_icon).isChecked)
-            putBoolean(Constant.USE_EXTERNAL_BROWSER, view.findViewById<Switch>(R.id.use_external_browser).isChecked)
-            putBoolean(Constant.KILL_UPDATE_CHECK, view.findViewById<Switch>(R.id.kill_update_check).isChecked)
-            putBoolean(Constant.KILL_UPDATE_CHECK, view.findViewById<Switch>(R.id.kill_popup_dialog).isChecked)
-            putBoolean(Constant.HIDE_HOOK_INFO, view.findViewById<Switch>(R.id.hide_hook_info).isChecked)
-            commit()
-        }
+        container.addView(ClickableItemView(context).apply { title = "界面优化" })
+        container.addView(ToggleItemView(context, Constant.SKIP_SPLASH_SCREEN).apply {
+            title = "跳过开屏页面"
+            subTitle = "大幅提升进入首屏的速度,但是会短暂黑屏"
+        })
+        container.addView(ToggleItemView(context, Constant.REMOVE_STORE_ICON).apply {
+            title = "去除商城和钱包入口"
+            subTitle = "移除导航栏和滑动菜单中的入口"
+        })
+        container.addView(ToggleItemView(context, Constant.REMOVE_ACTIVITY_ICON).apply {
+            title = "去除活动图标(WIP)"
+            subTitle = "好像不起作用, 待修复"
+        })
+
+        container.addView(ClickableItemView(context).apply { title = "功能设置" })
+        container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply {
+            title = "使用外部浏览器打开链接"
+            subTitle = "打开非NGA链接时自动调用外部系统浏览器"
+        })
+        container.addView(ToggleItemView(context, Constant.KILL_UPDATE_CHECK).apply {
+            title = "禁止APP检查更新"
+            subTitle = ""
+        })
+        container.addView(ToggleItemView(context, Constant.REMOVE_ACTIVITY_ICON).apply {
+            title = "屏蔽应用内弹窗"
+            subTitle = "作用不明"
+        })
+
+        container.addView(ClickableItemView(context).apply { title = "插件设置" })
+        container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply {
+            title = "使用外部浏览器打开链接"
+            subTitle = "打开非NGA链接时自动调用外部系统浏览器"
+        })
+        container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply {
+            title = "静默运行"
+            subTitle = "不显示模块运行信息"
+        })
+
+        root.addView(container)
+        return root
     }
 }
 

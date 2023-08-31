@@ -6,6 +6,10 @@ import android.widget.Toast
 import com.chrxw.purenga.Constant
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import de.robv.android.xposed.XposedHelpers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.net.URL
 
 
 /**
@@ -13,7 +17,7 @@ import de.robv.android.xposed.XposedHelpers
  */
 class Helper {
     companion object {
-        private lateinit var spDoinfo: SharedPreferences
+        lateinit var spDoinfo: SharedPreferences
 
         lateinit var clsR: Class<*>
         lateinit var clsRId: Class<*>
@@ -66,5 +70,19 @@ class Helper {
         fun isDarkModel(): Boolean {
             return spDoinfo.getBoolean("DARK_MODEL", false)
         }
+
+        fun getSpBool(key: String, defValue: Boolean): Boolean {
+            return spPlugin.getBoolean(key, defValue)
+        }
+
+        suspend fun fetchJson(url: URL) = withContext(Dispatchers.IO) {
+            try {
+                JSONObject(url.readText())
+            } catch (e: Throwable) {
+                null
+            }
+        }
+
+        suspend fun fetchJson(url: String) = fetchJson(URL(url))
     }
 }

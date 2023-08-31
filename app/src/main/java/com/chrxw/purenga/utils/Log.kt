@@ -55,7 +55,7 @@ object Log {
 
     @JvmStatic
     fun e(obj: Any?) {
-        doLog(ALog::e, obj, true)
+        doLog(ALog::e, obj)
     }
 
     @JvmStatic

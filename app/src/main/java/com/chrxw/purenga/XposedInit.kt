@@ -1,23 +1,20 @@
 package com.chrxw.purenga
 
-import android.app.Activity
 import android.app.AndroidAppHelper
 import android.app.Application
 import android.app.Instrumentation
-import android.content.Intent
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager.NameNotFoundException
 import android.content.res.Resources
 import android.content.res.XModuleResources
 import android.widget.Toast
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
 import com.github.kyuubiran.ezxhelper.EzXHelper
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XC_MethodReplacement
-import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 
@@ -34,82 +31,58 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     }
 
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
-
+        // 初始化EzHelper
         EzXHelper.initHandleLoadPackage(lpparam)
         EzXHelper.setLogTag(Constant.LOG_TAG)
 
         if (lpparam.packageName == BuildConfig.APPLICATION_ID) {
             Log.d("模块内运行")
 
-            XposedHelpers.findAndHookMethod(MainActivity.Companion::class.java.name,
-                lpparam.classLoader,
-                "isModuleActive",
-                object : XC_MethodReplacement() {
-                    override fun replaceHookedMethod(param: MethodHookParam?): Any {
-                        return true
+            MethodFinder.fromClass(MainActivity.Companion::class.java.name).filterByName("isModuleActive").first()
+                .createHook {
+                    replace {
+                        return@replace true
                     }
-                })
+                }
 
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             Log.d("NGA内运行")
 
-//            XposedBridge.hookAllMethods(Activity::class.java, "startActivity", object : XC_MethodHook() {
-//                override fun beforeHookedMethod(param: MethodHookParam?) {
-//                    var obj = param?.args?.get(0)
-//                    if (obj is Activity) {
-//                        val activity = obj
-//                        val clsName = activity.localClassName
-//                        Log.i("className: $clsName")
-//                    } else if (obj is Array<*> && obj.isArrayOf<Activity>()) {
-//                        for (activity in obj) {
-//                            val clsName = (activity as Activity).localClassName
-//                            Log.i("classNames: $clsName")
-//                        }
-//                    } else if (obj is Intent) {
-//                        val clsName = obj.component?.className ?: ""
-//                        Log.i("className: $clsName")
-//                    } else {
-//                        Log.i(obj.toString())
-//                    }
-//                }
-//            })
-
             var inited = false
 
-            XposedHelpers.findAndHookMethod(Instrumentation::class.java,
-                "callApplicationOnCreate",
-                Application::class.java,
-                object : XC_MethodHook() {
-                    override fun afterHookedMethod(param: MethodHookParam) {
+            MethodFinder.fromClass(Instrumentation::class.java).filterByName("callApplicationOnCreate")
+                .filterByAssignableParamTypes(Application::class.java).first().createHook {
+                    after { param ->
+                        if (!inited && param.args[0] is Application) {
+                            inited = true
 
-                        if (param.args[0] is Application) {
                             val context = AndroidAppHelper.currentApplication().applicationContext
 
                             EzXHelper.initAppContext(context, true)
 
-                            if (Helper.init() && !inited) {
-                                inited = true
-
+                            if (Helper.init()) {
                                 Hooks.initHooks(lpparam.classLoader)
 
                                 if (!Helper.spPlugin.getBoolean(Constant.HIDE_HOOK_INFO, false)) {
                                     Helper.toast("PureNGA 加载成功, 请到【设置】>【PureNGA】开启功能", Toast.LENGTH_LONG)
                                 }
                             } else {
+                                var crlf = System.lineSeparator()
                                 val ngaVersion = try {
-                                    EzXHelper.appContext.packageManager.getPackageInfo(
+                                    context.packageManager.getPackageInfo(
                                         Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
                                     ).versionName
-                                } catch (e: Throwable) {
+                                } catch (e: NameNotFoundException) {
                                     "获取失败"
                                 }
                                 Helper.toast(
-                                    "PureNGA 初始化失败, 可能不支持当前版本 NGA: $ngaVersion", Toast.LENGTH_LONG
+                                    "PureNGA 初始化失败, 可能不支持当前版本${crlf}NGA 版本: $ngaVersion${crlf}插件版本: ${BuildConfig.VERSION_NAME}",
+                                    Toast.LENGTH_LONG
                                 )
                             }
                         }
                     }
-                })
+                }
         }
     }
 

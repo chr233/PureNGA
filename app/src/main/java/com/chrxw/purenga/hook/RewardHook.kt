@@ -5,8 +5,8 @@ import android.webkit.WebView
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.Log
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XC_MethodReplacement
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -44,28 +44,21 @@ class RewardHook : IHook {
 
     override fun hook() {
 
-//        XposedHelpers.findAndHookMethod(clsAdManager_d, "onNoAD", String::class.java, object : XC_MethodHook() {
-//            override fun beforeHookedMethod(param: MethodHookParam) {
-//                val str = param.args?.get(0) as String
-//                Log.i("d.onNoAD $str")
-//            }
-//        })
-
         if (Helper.spPlugin.getBoolean(Constant.CRACK_AD_TASK, false)) {
             var activity: Activity? = null
             var webView: WebView? = null
 
-            XposedHelpers.findAndHookMethod(clsLoginWebView, "initView", object : XC_MethodHook() {
-                override fun afterHookedMethod(param: MethodHookParam) {
+            MethodFinder.fromClass(clsLoginWebView).filterByName("initView").first().createHook {
+                after { param ->
                     activity = param.thisObject as Activity?
                     webView = XposedHelpers.getObjectField(activity, "mWebView") as WebView
                 }
-            })
+            }
 
             try {
                 // Hook onRewardVerify 方法
-                XposedHelpers.findAndHookMethod(clsLoginWebView_b, "onAdShow", object : XC_MethodReplacement() {
-                    override fun replaceHookedMethod(param: MethodHookParam?) {
+                MethodFinder.fromClass(clsLoginWebView_b).filterByName("onAdShow").first().createHook {
+                    replace { param ->
                         Log.i(("b.onAdShow"))
                         val obj = param?.thisObject
 
@@ -73,13 +66,12 @@ class RewardHook : IHook {
                         XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
                         XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
                         XposedHelpers.callMethod(obj, "onAdClose")
-                        return
                     }
-                })
+                }
 
                 // Hook onRewardVerify 方法
-                XposedHelpers.findAndHookMethod(clsLoginWebView_a, "onAdShow", object : XC_MethodReplacement() {
-                    override fun replaceHookedMethod(param: MethodHookParam?) {
+                MethodFinder.fromClass(clsLoginWebView_b).filterByName("onAdShow").first().createHook {
+                    replace { param ->
                         Log.i(("a.onAdShow"))
                         val obj = param?.thisObject
 
@@ -87,9 +79,8 @@ class RewardHook : IHook {
                         XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
                         XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
                         XposedHelpers.callMethod(obj, "onAdClose")
-                        return
                     }
-                })
+                }
             } catch (e: Exception) {
                 Log.e(e)
             }
