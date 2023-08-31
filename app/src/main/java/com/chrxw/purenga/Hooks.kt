@@ -9,7 +9,7 @@ import com.chrxw.purenga.hook.RewardHook
 import com.chrxw.purenga.hook.SplashHook
 import com.chrxw.purenga.hook.WebViewHook
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Log
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 
 class Hooks {
     companion object {
@@ -28,15 +28,15 @@ class Hooks {
             for (hook in hooks) {
                 val name = hook.hookName()
                 try {
-                    Log.i("加载 $name 模块")
+                    AndroidLogger.i("加载 $name 模块")
                     hook.init(classLoader)
                     hook.hook()
                 } catch (e: NoSuchMethodError) {
                     Helper.toast("模块 $name 加载失败, 可能不支持当前版本的NGA")
-                    Log.e(e)
+                    AndroidLogger.e(e)
                 } catch (e: Throwable) {
                     Helper.toast("模块 $name 加载遇到未知错误")
-                    Log.e(e)
+                    AndroidLogger.e(e)
                 }
             }
         }

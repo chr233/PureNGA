@@ -10,11 +10,7 @@ object ViewUtils {
         return this * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
     }
 
-    fun Float.toPixelInt(context: Context): Int {
-        return this.toPixel(context).toInt()
-    }
-
-    fun Int.toPixelInt(context: Context): Int {
+    fun Int.toPixel(context: Context): Int {
         val resources = context.resources
         val metrics = resources.displayMetrics
         return this * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
@@ -26,11 +22,7 @@ object ViewUtils {
         return this / (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
     }
 
-    fun Float.toDpInt(context: Context): Int {
-        return this.toDp(context).toInt()
-    }
-
-    fun Int.toDpInt(context: Context): Int {
+    fun Int.toDp(context: Context): Int {
         val resources = context.resources
         val metrics = resources.displayMetrics
         return this / (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)

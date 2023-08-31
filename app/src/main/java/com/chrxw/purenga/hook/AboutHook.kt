@@ -52,8 +52,7 @@ class AboutHook : IHook {
                     "获取失败"
                 }
 
-                textView.text =
-                    "NGA 版本: $ngaVersion" + System.lineSeparator() + "PureNGA 版本: $pluginVersion"
+                textView.text = "NGA 版本: $ngaVersion" + System.lineSeparator() + "PureNGA 版本: $pluginVersion"
 
                 val linearLayout = textView.parent as LinearLayout
                 val btn = Button(root.context)

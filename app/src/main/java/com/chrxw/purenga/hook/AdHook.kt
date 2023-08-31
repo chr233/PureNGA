@@ -2,7 +2,7 @@ package com.chrxw.purenga.hook
 
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Log
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 
@@ -34,24 +34,22 @@ class AdHook : IHook {
             try {
                 XposedHelpers.findAndHookMethod(clsDnFeedAd, "requestServerSuccess", object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
-                        Log.i("DnFeedAd.requestServerSuccess")
+                        AndroidLogger.i("DnFeedAd.requestServerSuccess")
                     }
                 })
             } catch (e: NoSuchMethodException) {
-                Log.e("Donews 广告过滤失败")
-                Log.e(e)
+                AndroidLogger.e("Donews 广告过滤失败", e)
             }
 
             try {
                 XposedHelpers.findAndHookMethod(clsNativeExpressAD, "a", clsAdSize, object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
-                        Log.i("NativeExpressAD.a")
+                        AndroidLogger.i("NativeExpressAD.a")
                         param?.result = true
                     }
                 })
             } catch (e: NoSuchMethodException) {
-                Log.e("qq 广告过滤失败")
-                Log.e(e)
+                AndroidLogger.e("qq 广告过滤失败", e)
             }
 
             try {
@@ -60,13 +58,12 @@ class AdHook : IHook {
                     Runnable::class.java,
                     object : XC_MethodReplacement() {
                         override fun replaceHookedMethod(param: MethodHookParam?) {
-                            Log.i("utils.bp.runOnUiThread")
+                            AndroidLogger.i("utils.bp.runOnUiThread")
                             param?.result = true
                         }
                     })
             } catch (e: NoSuchMethodException) {
-                Log.e("kwad 广告过滤失败")
-                Log.e(e)
+                AndroidLogger.e("kwad 广告过滤失败", e)
             }
         }
     }

@@ -9,7 +9,7 @@ import android.content.res.Resources
 import android.content.res.XModuleResources
 import android.widget.Toast
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Log
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -36,7 +36,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         EzXHelper.setLogTag(Constant.LOG_TAG)
 
         if (lpparam.packageName == BuildConfig.APPLICATION_ID) {
-            Log.d("模块内运行")
+            AndroidLogger.d("模块内运行")
 
             MethodFinder.fromClass(MainActivity.Companion::class.java.name).filterByName("isModuleActive").first()
                 .createHook {
@@ -46,7 +46,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                 }
 
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
-            Log.d("NGA内运行")
+            AndroidLogger.d("NGA内运行")
 
             var inited = false
 
@@ -55,7 +55,6 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     after { param ->
                         if (!inited && param.args[0] is Application) {
                             inited = true
-
                             val context = AndroidAppHelper.currentApplication().applicationContext
 
                             EzXHelper.initAppContext(context, true)
@@ -67,16 +66,9 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                     Helper.toast("PureNGA 加载成功, 请到【设置】>【PureNGA】开启功能", Toast.LENGTH_LONG)
                                 }
                             } else {
-                                var crlf = System.lineSeparator()
-                                val ngaVersion = try {
-                                    context.packageManager.getPackageInfo(
-                                        Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
-                                    ).versionName
-                                } catch (e: NameNotFoundException) {
-                                    "获取失败"
-                                }
+                                val ngaVersion = Helper.getNgaVersion()
                                 Helper.toast(
-                                    "PureNGA 初始化失败, 可能不支持当前版本${crlf}NGA 版本: $ngaVersion${crlf}插件版本: ${BuildConfig.VERSION_NAME}",
+                                    "PureNGA 初始化失败, 可能不支持当前版本\nNGA 版本: $ngaVersion\n插件版本: ${BuildConfig.VERSION_NAME}",
                                     Toast.LENGTH_LONG
                                 )
                             }
@@ -90,7 +82,6 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         lateinit var modulePath: String
         lateinit var moduleRes: Resources
 
-        @JvmStatic
         fun getModuleRes(path: String): Resources {
             return XModuleResources.createInstance(path, null)
         }

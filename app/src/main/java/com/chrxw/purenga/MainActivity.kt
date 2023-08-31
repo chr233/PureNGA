@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             } else if (prefKey == "plugin_setting") {
                 AlertDialog.Builder(activity).run {
-                    setView(View.inflate(activity, R.layout.plugin_setting, null))
+                    setView(R.layout.plugin_setting)
                     setNegativeButton("关闭", null)
                     show()
                 }

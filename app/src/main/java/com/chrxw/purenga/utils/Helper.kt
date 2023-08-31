@@ -2,8 +2,12 @@ package com.chrxw.purenga.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.widget.Toast
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import de.robv.android.xposed.XposedHelpers
 import kotlinx.coroutines.Dispatchers
@@ -37,19 +41,33 @@ class Helper {
 
                 true
             } catch (e: Exception) {
-                Log.e(e)
+                AndroidLogger.e(e)
                 false
             }
         }
 
-        /**
-         * 显示Toast
-         */
         fun toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
-            try {
-                Toast.makeText(EzXHelper.appContext, text, duration).show()
-            } catch (e: Throwable) {
-                Log.d("toast 出错")
+            AndroidLogger.toast(text, duration)
+        }
+
+        fun getNgaVersion(): String {
+            return try {
+                EzXHelper.appContext.packageManager.getPackageInfo(
+                    Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
+                ).versionName
+            } catch (e: PackageManager.NameNotFoundException) {
+                "获取失败"
+            }
+        }
+
+        fun isBundled(): Boolean {
+            return try {
+                EzXHelper.appContext.packageManager.getPackageInfo(
+                    BuildConfig.APPLICATION_ID, PackageInfo.INSTALL_LOCATION_AUTO
+                ).versionName
+                true
+            } catch (e: PackageManager.NameNotFoundException) {
+                false
             }
         }
 
@@ -57,8 +75,8 @@ class Helper {
             return try {
                 XposedHelpers.getStaticIntField(cls, key)
             } catch (e: Throwable) {
-                Log.e("加载资源 $key 失败")
-                Log.e(e)
+                AndroidLogger.e("加载资源 $key 失败")
+                AndroidLogger.e(e)
                 -1
             }
         }

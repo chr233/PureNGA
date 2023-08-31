@@ -4,7 +4,7 @@ import android.app.Activity
 import android.webkit.WebView
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Log
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
@@ -59,7 +59,7 @@ class RewardHook : IHook {
                 // Hook onRewardVerify 方法
                 MethodFinder.fromClass(clsLoginWebView_b).filterByName("onAdShow").first().createHook {
                     replace { param ->
-                        Log.i(("b.onAdShow"))
+                        AndroidLogger.i(("b.onAdShow"))
                         val obj = param?.thisObject
 
                         val webView = XposedHelpers.getObjectField(obj, "a")
@@ -72,7 +72,7 @@ class RewardHook : IHook {
                 // Hook onRewardVerify 方法
                 MethodFinder.fromClass(clsLoginWebView_b).filterByName("onAdShow").first().createHook {
                     replace { param ->
-                        Log.i(("a.onAdShow"))
+                        AndroidLogger.i(("a.onAdShow"))
                         val obj = param?.thisObject
 
                         val webView = XposedHelpers.getObjectField(obj, "a")
@@ -82,7 +82,7 @@ class RewardHook : IHook {
                     }
                 }
             } catch (e: Exception) {
-                Log.e(e)
+                AndroidLogger.e(e)
             }
 
             try {
@@ -102,7 +102,7 @@ class RewardHook : IHook {
 //                    })
 
             } catch (e: Throwable) {
-                Log.e(e)
+                AndroidLogger.e(e)
             }
 
 //            XposedHelpers.findAndHookMethod(clsLoginWebView_P,

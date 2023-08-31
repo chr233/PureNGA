@@ -2,12 +2,14 @@ package com.chrxw.purenga.hook
 
 import android.R.attr.classLoader
 import android.app.Activity
-import android.view.View
+import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Log
+import com.github.kyuubiran.ezxhelper.AndroidLogger
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
@@ -25,6 +27,7 @@ class OptimizeHook : IHook {
         private lateinit var clsMainActivityPresenter: Class<*>
         private lateinit var clsHomeDrawerLayout: Class<*>
         private lateinit var clsCommentDialog: Class<*>
+        private lateinit var clsMainActivity: Class<*>
     }
 
     override fun hookName(): String {
@@ -37,6 +40,7 @@ class OptimizeHook : IHook {
         clsMainActivityPresenter = classLoader.loadClass("com.donews.nga.activitys.presenters.MainActivityPresenter")
         clsHomeDrawerLayout = classLoader.loadClass("com.donews.nga.widget.HomeDrawerLayout")
         clsCommentDialog = classLoader.loadClass("gov.pianzong.androidnga.view.CommentDialog")
+        clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
     }
 
     override fun hook() {
@@ -50,7 +54,7 @@ class OptimizeHook : IHook {
 
             XposedBridge.hookAllMethods(clsNGAApplication, "showNotificationDialog", object : XC_MethodReplacement() {
                 override fun replaceHookedMethod(param: MethodHookParam?) {
-                    Log.i("showNotificationDialog")
+                    AndroidLogger.i("showNotificationDialog")
                 }
             })
         }
@@ -63,7 +67,7 @@ class OptimizeHook : IHook {
                 Activity::class.java,
                 object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
-                        Log.i("checkAppUpdate")
+                        AndroidLogger.i("checkAppUpdate")
                     }
                 })
 
@@ -73,14 +77,14 @@ class OptimizeHook : IHook {
                 String::class.java,
                 object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
-                        Log.i("showUpdate")
+                        AndroidLogger.i("showUpdate")
                     }
                 })
         }
 
         //移除首页滑动菜单底部无用元素
-        XposedHelpers.findAndHookMethod(clsHomeDrawerLayout, "initLayout", object : XC_MethodHook() {
-            override fun afterHookedMethod(param: MethodHookParam) {
+        MethodFinder.fromClass(clsHomeDrawerLayout).filterByName("initLayout").first().createHook {
+            after { param ->
                 val viewBinding = XposedHelpers.getObjectField(param.thisObject, "binding")
                 val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
                 val scrollView = root.getChildAt(1) as ScrollView
@@ -92,11 +96,11 @@ class OptimizeHook : IHook {
                     linearLayout.removeViewAt(5)
                 }
             }
-        })
+        }
 
         //移除商城TAB导航栏按钮以及滑动菜单项
-        XposedHelpers.findAndHookMethod(clsMainActivityPresenter, "initTabParams", object : XC_MethodHook() {
-            override fun beforeHookedMethod(param: MethodHookParam) {
+        MethodFinder.fromClass(clsMainActivityPresenter).filterByName("initTabParams").first().createHook {
+            before { param ->
                 val activity = param.thisObject
                 val tabParam = XposedHelpers.getObjectField(activity, "tabParams") as ArrayList<*>
 
@@ -105,7 +109,7 @@ class OptimizeHook : IHook {
 
                 var i = 0
                 while (i < tabParam.size) {
-                    var current = tabParam[i]
+                    val current = tabParam[i]
                     val tabId = XposedHelpers.getIntField(current, "tabId")
                     if ((tabId == 2 && pureStore) || (tabId == 4 && pureActivity)) {
                         tabParam.remove(current)
@@ -114,7 +118,7 @@ class OptimizeHook : IHook {
                     }
                 }
             }
-        })
+        }
     }
 }
 

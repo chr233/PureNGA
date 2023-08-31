@@ -3,7 +3,7 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Log
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XC_MethodHook
@@ -72,23 +72,32 @@ class SplashHook : IHook {
             // 修改时间戳实现切屏无广告
 //            MethodFinder.fromClass(Helper.clsSPUtil).filterByName("getInt").filterFinal().first().createHook {
 //                replace { param ->
-//                    val key = param.args[0]
-//                    when (key as String) {
+//                    when (param.args?.get(0) as String) {
 //                        "AD_FORGROUND_TIME" -> {
-//                            return@replace 0
+//                            AndroidLogger.d("FG " + param.result.toString())
+//                            param.result = 0
 //                        }
 //
 //                        "AD_BACKGROUND_TIME" -> {
-//                            Log.d("BG " + param.result.toString())
-//                            return@replace 0
-//                        }
-//
-//                        else -> {
-//                            return@replace Helper.spDoinfo.getInt(key, param.args[1] as Int)
+//                            AndroidLogger.d("BG " + param.result.toString())
+//                            param.result = 0
 //                        }
 //                    }
 //                }
 //            }
+
+            // 跳过开屏Logo页面
+            MethodFinder.fromClass(clsActivityLifecycle).filterByName("toForeGround").first().createHook {
+                replace { param ->
+                    val activity = param?.args?.get(0) as Activity
+                    if (activity.javaClass == clsLoadingActivity) {
+                        AndroidLogger.d("跳过启动页")
+                        XposedHelpers.setBooleanField(activity, "canJump", true)
+                        XposedHelpers.setBooleanField(activity, "isADShow", true)
+                        XposedHelpers.callMethod(activity, "goHome")
+                    }
+                }
+            }
 
             // 修改时间戳实现切屏无广告
             XposedHelpers.findAndHookMethod(
@@ -97,36 +106,23 @@ class SplashHook : IHook {
                 String::class.java,
                 Int::class.java,
                 object : XC_MethodHook() {
-                    @Throws(Throwable::class)
                     override fun afterHookedMethod(param: MethodHookParam) {
+
+                        Helper.toast(param.args[0].toString())
+
                         when (param.args[0] as String) {
                             "AD_FORGROUND_TIME" -> {
-                                Log.d("FG " + param.result.toString())
+                                AndroidLogger.d("FG " + param.result.toString())
                                 param.result = 0
                             }
 
                             "AD_BACKGROUND_TIME" -> {
-                                Log.d("BG " + param.result.toString())
+                                AndroidLogger.d("BG " + param.result.toString())
                                 param.result = 0
                             }
                         }
                     }
                 })
-        }
-
-        // 跳过开屏Logo页面
-        if (Helper.getSpBool(Constant.SKIP_SPLASH_SCREEN, false)) {
-            MethodFinder.fromClass(clsActivityLifecycle).filterByName("toForeGround").first().createHook {
-                replace { param ->
-                    val activity = param?.args?.get(0) as Activity
-                    if (activity.javaClass == clsLoadingActivity) {
-                        Log.d("跳过启动页")
-                        XposedHelpers.setBooleanField(activity, "canJump", true)
-                        XposedHelpers.setBooleanField(activity, "isADShow", true)
-                        XposedHelpers.callMethod(activity, "goHome")
-                    }
-                }
-            }
         }
     }
 }

@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Log
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
 import java.lang.reflect.Method
@@ -47,7 +47,7 @@ class WebViewHook : IHook {
                             param.args[4] = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                         }
                     } else {
-                        Log.i("execStartActivity className: $clsName")
+                        AndroidLogger.i("execStartActivity className: $clsName")
                     }
                 }
             })
