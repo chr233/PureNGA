@@ -3,8 +3,6 @@ package com.chrxw.purenga
 import android.app.AndroidAppHelper
 import android.app.Application
 import android.app.Instrumentation
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager.NameNotFoundException
 import android.content.res.Resources
 import android.content.res.XModuleResources
 import android.widget.Toast
@@ -48,13 +46,13 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             AndroidLogger.d("NGA内运行")
 
-            var inited = false
+            var isInit = false
 
             MethodFinder.fromClass(Instrumentation::class.java).filterByName("callApplicationOnCreate")
                 .filterByAssignableParamTypes(Application::class.java).first().createHook {
                     after { param ->
-                        if (!inited && param.args[0] is Application) {
-                            inited = true
+                        if (!isInit && param.args[0] is Application) {
+                            isInit = true
                             val context = AndroidAppHelper.currentApplication().applicationContext
 
                             EzXHelper.initAppContext(context, true)

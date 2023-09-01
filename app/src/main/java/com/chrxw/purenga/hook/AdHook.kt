@@ -3,7 +3,8 @@ package com.chrxw.purenga.hook
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
-import de.robv.android.xposed.XC_MethodReplacement
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -32,36 +33,35 @@ class AdHook : IHook {
     override fun hook() {
         if (Helper.spPlugin.getBoolean(Constant.PURE_POST_AD, false)) {
             try {
-                XposedHelpers.findAndHookMethod(clsDnFeedAd, "requestServerSuccess", object : XC_MethodReplacement() {
-                    override fun replaceHookedMethod(param: MethodHookParam?) {
+                MethodFinder.fromClass(clsDnFeedAd).filterByName("requestServerSuccess").first().createHook {
+                    replace {
                         AndroidLogger.i("DnFeedAd.requestServerSuccess")
                     }
-                })
+                }
             } catch (e: NoSuchMethodException) {
                 AndroidLogger.e("Donews 广告过滤失败", e)
             }
 
             try {
-                XposedHelpers.findAndHookMethod(clsNativeExpressAD, "a", clsAdSize, object : XC_MethodReplacement() {
-                    override fun replaceHookedMethod(param: MethodHookParam?) {
-                        AndroidLogger.i("NativeExpressAD.a")
-                        param?.result = true
+                MethodFinder.fromClass(clsNativeExpressAD).filterByName("a").filterByAssignableParamTypes(clsAdSize)
+                    .first().createHook {
+                        replace {
+                            AndroidLogger.i("NativeExpressAD.a")
+                            return@replace true
+                        }
                     }
-                })
             } catch (e: NoSuchMethodException) {
                 AndroidLogger.e("qq 广告过滤失败", e)
             }
 
             try {
-                XposedHelpers.findAndHookMethod(clsUtils_bp,
-                    "runOnUiThread",
-                    Runnable::class.java,
-                    object : XC_MethodReplacement() {
-                        override fun replaceHookedMethod(param: MethodHookParam?) {
+                MethodFinder.fromClass(clsUtils_bp).filterByName("runOnUiThread")
+                    .filterByAssignableParamTypes(Runnable::class.java).first().createHook {
+                        replace {
                             AndroidLogger.i("utils.bp.runOnUiThread")
-                            param?.result = true
+                            return@replace true
                         }
-                    })
+                    }
             } catch (e: NoSuchMethodException) {
                 AndroidLogger.e("kwad 广告过滤失败", e)
             }

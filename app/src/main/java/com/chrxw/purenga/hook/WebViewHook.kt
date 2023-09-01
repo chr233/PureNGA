@@ -6,8 +6,8 @@ import android.net.Uri
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XposedBridge
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import java.lang.reflect.Method
 
 
@@ -36,9 +36,9 @@ class WebViewHook : IHook {
 
     override fun hook() {
         if (Helper.spPlugin.getBoolean(Constant.USE_EXTERNAL_BROWSER, false)) {
-            XposedBridge.hookAllMethods(Instrumentation::class.java, "execStartActivity", object : XC_MethodHook() {
-                override fun beforeHookedMethod(param: MethodHookParam?) {
-                    val intent = param?.args?.get(4) as? Intent ?: return
+            MethodFinder.fromClass(Instrumentation::class.java).filterByName("execStartActivity").first().createHook {
+                before { param ->
+                    val intent = param.args?.get(4) as? Intent ?: return@before
                     val bundle = intent.extras
                     val clsName = intent.component?.className ?: ""
                     if (bundle != null && clsName == "com.donews.nga.activitys.WebActivity") {
@@ -50,7 +50,7 @@ class WebViewHook : IHook {
                         AndroidLogger.i("execStartActivity className: $clsName")
                     }
                 }
-            })
+            }
         }
     }
 }

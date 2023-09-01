@@ -1,8 +1,5 @@
 package com.chrxw.purenga.hook
 
-import android.R.attr.classLoader
-import android.app.Activity
-import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import com.chrxw.purenga.Constant
@@ -10,9 +7,6 @@ import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XC_MethodReplacement
-import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -46,40 +40,34 @@ class OptimizeHook : IHook {
     override fun hook() {
         // 屏蔽弹窗
         if (Helper.spPlugin.getBoolean(Constant.KILL_POPUP_DIALOG, false)) {
-            XposedHelpers.findAndHookMethod(clsAppConfig, "isAgreedAgreement", object : XC_MethodReplacement() {
-                override fun replaceHookedMethod(param: MethodHookParam?): Any {
-                    return true
+            MethodFinder.fromClass(clsAppConfig).filterByName("isAgreedAgreement").first().createHook {
+                replace {
+                    AndroidLogger.i("isAgreedAgreement")
+                    return@replace true
                 }
-            })
+            }
 
-            XposedBridge.hookAllMethods(clsNGAApplication, "showNotificationDialog", object : XC_MethodReplacement() {
-                override fun replaceHookedMethod(param: MethodHookParam?) {
+            MethodFinder.fromClass(clsNGAApplication).filterByName("showNotificationDialog").first().createHook {
+                replace {
                     AndroidLogger.i("showNotificationDialog")
+                    return@replace true
                 }
-            })
+            }
         }
 
         // 屏蔽更新检测
         if (Helper.spPlugin.getBoolean(Constant.KILL_UPDATE_CHECK, false)) {
-            XposedHelpers.findAndHookMethod(
-                clsMainActivityPresenter,
-                "checkAppUpdate",
-                Activity::class.java,
-                object : XC_MethodReplacement() {
-                    override fun replaceHookedMethod(param: MethodHookParam?) {
-                        AndroidLogger.i("checkAppUpdate")
-                    }
-                })
+            MethodFinder.fromClass(clsMainActivityPresenter).filterByName("checkAppUpdate").first().createHook {
+                replace {
+                    AndroidLogger.i("checkAppUpdate")
+                }
+            }
 
-            XposedHelpers.findAndHookMethod(clsCommentDialog,
-                "showUpdate",
-                String::class.java,
-                String::class.java,
-                object : XC_MethodReplacement() {
-                    override fun replaceHookedMethod(param: MethodHookParam?) {
-                        AndroidLogger.i("showUpdate")
-                    }
-                })
+            MethodFinder.fromClass(clsCommentDialog).filterByName("showUpdate").first().createHook {
+                replace {
+                    AndroidLogger.i("showUpdate")
+                }
+            }
         }
 
         //移除首页滑动菜单底部无用元素

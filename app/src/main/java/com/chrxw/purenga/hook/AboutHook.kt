@@ -1,8 +1,8 @@
 package com.chrxw.purenga.hook
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.net.Uri
 import android.view.View
 import android.widget.Button
@@ -11,7 +11,8 @@ import android.widget.TextView
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
-import de.robv.android.xposed.XC_MethodHook
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -32,27 +33,21 @@ class AboutHook : IHook {
         clsAboutUsActivity = classLoader.loadClass("com.donews.nga.setting.AboutUsActivity")
     }
 
+    @SuppressLint("SetTextI18n")
     override fun hook() {
-        XposedHelpers.findAndHookMethod(clsAboutUsActivity, "initLayout", object : XC_MethodHook() {
-            override fun afterHookedMethod(param: MethodHookParam) {
-
+        MethodFinder.fromClass(clsAboutUsActivity).filterByName("initLayout").first().createHook {
+            after { param ->
                 val activity = param.thisObject as Activity
 
                 val viewBinding = XposedHelpers.getObjectField(activity, "viewBinding")
                 val root = XposedHelpers.callMethod(viewBinding, "getRoot") as View
                 val viewId = Helper.getRId("tv_app_version")
-                val textView = root.findViewById<TextView>(viewId)
 
                 val pluginVersion = BuildConfig.VERSION_NAME
-                val ngaVersion = try {
-                    activity.packageManager.getPackageInfo(
-                        Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
-                    ).versionName
-                } catch (e: Throwable) {
-                    "获取失败"
-                }
+                val ngaVersion = Helper.getNgaVersion()
 
-                textView.text = "NGA 版本: $ngaVersion" + System.lineSeparator() + "PureNGA 版本: $pluginVersion"
+                val textView = root.findViewById<TextView>(viewId)
+                textView.text = "NGA 版本: $ngaVersion\nPureNGA 版本: $pluginVersion"
 
                 val linearLayout = textView.parent as LinearLayout
                 val btn = Button(root.context)
@@ -67,6 +62,6 @@ class AboutHook : IHook {
 
                 linearLayout.addView(btn)
             }
-        })
+        }
     }
 }

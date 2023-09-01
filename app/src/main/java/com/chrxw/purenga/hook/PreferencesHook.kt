@@ -11,17 +11,14 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
-import androidx.appcompat.content.res.AppCompatResources
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
-import com.chrxw.purenga.R
 import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.ui.ToggleItemView
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
-import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 import kotlin.system.exitProcess
 
@@ -101,15 +98,13 @@ class PreferencesHook : IHook {
             }
         }
 
-        XposedHelpers.findAndHookMethod(
-            OptimizeHook.clsAppConfig,
-            "setDarkModel",
-            Boolean::class.java,
-            object : XC_MethodHook() {
-                override fun afterHookedMethod(param: MethodHookParam) {
+        MethodFinder.fromClass(OptimizeHook.clsAppConfig).filterByName("setDarkModel")
+            .filterByAssignableParamTypes(Boolean::class.java)
+            .first().createHook {
+                after {
                     btnPureNGASetting?.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))
                 }
-            })
+            }
     }
 
     /**
@@ -176,7 +171,7 @@ class PreferencesHook : IHook {
             val type = if (Helper.isBundled()) "插件版" else "整合版"
             subTitle = "NGA版本: $ngaVersion | 插件版本: ${BuildConfig.VERSION_NAME} - $type"
             setOnClickListener {
-                var intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.REPO_URL))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.REPO_URL))
                 context.startActivity(intent)
 //                Helper.toast("todo")
             }
@@ -187,7 +182,7 @@ class PreferencesHook : IHook {
             title = "作者"
             subTitle = "chr233"
             setOnClickListener {
-                var intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.AUTHOR_URL))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.AUTHOR_URL))
                 context.startActivity(intent)
             }
         })
@@ -195,7 +190,7 @@ class PreferencesHook : IHook {
             title = "捐赠(爱发电)"
             subTitle = "@chr233"
             setOnClickListener {
-                var intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.DONATE_URL))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.DONATE_URL))
                 context.startActivity(intent)
             }
         })
