@@ -7,7 +7,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
+import android.widget.Toast
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
+        @Keep
         fun isModuleActive(): Boolean {
             return false
         }
@@ -28,10 +30,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.settings, SettingsFragment())
-            .commit()
+        supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
@@ -59,8 +58,22 @@ class MainActivity : AppCompatActivity() {
                     show()
                 }
                 return true
-            }
+            } else if (prefKey == "open_nga") {
+                try {
+                    startActivity(
+                        Intent(Intent.ACTION_MAIN).setComponent(
+                            ComponentName(
+                                Constant.NGA_PACKAGE_NAME,
+                                "com.donews.nga.activitys.MainActivity"
+                            )
+                        )//.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+                    )
+                } catch (e: Throwable) {
 
+                    toast("打开 NGA 失败")
+                }
+                return true
+            }
 
             val intent = when (prefKey) {
                 "version" -> {
@@ -75,12 +88,6 @@ class MainActivity : AppCompatActivity() {
                     Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.donate_url)))
                 }
 
-                "open_nga" -> {
-                    Intent(Intent.ACTION_MAIN)
-                        .setComponent(ComponentName(Constant.NGA_PACKAGE_NAME, Constant.NGA_MAIN_ACTIVITY_NAME))
-                        .setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-                }
-
                 else -> null
             }
 
@@ -93,8 +100,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onResume() {
             super.onResume()
-            val resId = if (isModuleActive()) R.string.module_enabled else R.string.module_disabled
-            runningStatusPref?.summary = resources.getString(resId)
+            runningStatusPref?.setSummary(if (isModuleActive()) R.string.module_enabled else R.string.module_disabled)
         }
 
         private fun hideAppIcon(context: Context) {
@@ -106,6 +112,11 @@ class MainActivity : AppCompatActivity() {
                     componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP
                 )
             }
+        }
+
+        fun toast(text: String, duration: Int = Toast.LENGTH_LONG) {
+            val t = Toast.makeText(this.context, text, duration)
+            t.show()
         }
     }
 }

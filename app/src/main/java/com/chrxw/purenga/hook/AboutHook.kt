@@ -25,10 +25,6 @@ class AboutHook : IHook {
         private lateinit var clsAboutUsActivity: Class<*>
     }
 
-    override fun hookName(): String {
-        return "关于页修改"
-    }
-
     override fun init(classLoader: ClassLoader) {
         clsAboutUsActivity = classLoader.loadClass("com.donews.nga.setting.AboutUsActivity")
     }

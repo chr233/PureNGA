@@ -25,10 +25,6 @@ class WebViewHook : IHook {
         }
     }
 
-    override fun hookName(): String {
-        return "内置浏览器优化"
-    }
-
     override fun init(classLoader: ClassLoader) {
         insAppConfig = OptimizeHook.clsAppConfig.getField("INSTANCE").get(null)!!
         mtdIsNgaUrl = OptimizeHook.clsAppConfig.getMethod("isNgaUrl", String::class.java)

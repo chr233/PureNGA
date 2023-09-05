@@ -26,7 +26,7 @@ class Hooks {
 
         fun initHooks(classLoader: ClassLoader) {
             for (hook in hooks) {
-                val name = hook.hookName()
+                val name = hook::class.java.name
                 try {
                     AndroidLogger.i("加载 $name 模块")
                     hook.init(classLoader)

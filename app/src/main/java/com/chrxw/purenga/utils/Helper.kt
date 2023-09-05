@@ -93,7 +93,7 @@ class Helper {
             return spPlugin.getBoolean(key, defValue)
         }
 
-        suspend fun fetchJson(url: URL) = withContext(Dispatchers.IO) {
+        private suspend fun fetchJson(url: URL) = withContext(Dispatchers.IO) {
             try {
                 JSONObject(url.readText())
             } catch (e: Throwable) {

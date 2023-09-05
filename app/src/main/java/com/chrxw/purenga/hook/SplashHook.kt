@@ -20,10 +20,6 @@ class SplashHook : IHook {
         private lateinit var clsNGAApplication: Class<*>
     }
 
-    override fun hookName(): String {
-        return "开屏广告过滤"
-    }
-
     override fun init(classLoader: ClassLoader) {
         clsLoadingActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity")
         clsActivityLifecycle = classLoader.loadClass("com.donews.nga.interfaces.ActivityLifecycleImpl")

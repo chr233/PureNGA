@@ -40,10 +40,6 @@ class PreferencesHook : IHook {
         }
     }
 
-    override fun hookName(): String {
-        return "设置页面"
-    }
-
     override fun init(classLoader: ClassLoader) {
         clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
         clsSettingActivity = classLoader.loadClass("com.donews.nga.setting.SettingActivity")
@@ -136,8 +132,12 @@ class PreferencesHook : IHook {
             subTitle = "移除导航栏和滑动菜单中的入口"
         })
         container.addView(ToggleItemView(context, Constant.REMOVE_ACTIVITY_ICON).apply {
-            title = "去除活动图标(WIP)"
-            subTitle = "好像不起作用, 待修复"
+            title = "去除活动图标"
+            subTitle = "移除导航栏活动图标"
+        })
+        container.addView(ToggleItemView(context, Constant.REMOVE_WECHAT_ICON).apply {
+            title = "去除微信分享图标"
+            subTitle = "移除文章详情页右上角微信图标"
         })
 
         container.addView(ClickableItemView(context).apply { title = "功能设置" })

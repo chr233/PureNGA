@@ -5,11 +5,6 @@ package com.chrxw.purenga.hook
  */
 interface IHook {
     /**
-     * Hook名称
-     */
-    fun hookName(): String
-
-    /**
      * 初始化Hook
      */
     fun init(classLoader: ClassLoader)

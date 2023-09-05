@@ -19,10 +19,6 @@ class AdHook : IHook {
         private lateinit var clsAdSize: Class<*>
     }
 
-    override fun hookName(): String {
-        return "信息流广告过滤"
-    }
-
     override fun init(classLoader: ClassLoader) {
         clsDnFeedAd = XposedHelpers.findClass("com.donews.admediation.adimpl.feed.DnFeedAd", classLoader)
         clsNativeExpressAD = XposedHelpers.findClass("com.qq.e.ads.nativ.NativeExpressAD", classLoader)

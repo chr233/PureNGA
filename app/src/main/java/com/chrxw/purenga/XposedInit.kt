@@ -3,8 +3,6 @@ package com.chrxw.purenga
 import android.app.AndroidAppHelper
 import android.app.Application
 import android.app.Instrumentation
-import android.content.res.Resources
-import android.content.res.XModuleResources
 import android.widget.Toast
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -23,9 +21,6 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
         EzXHelper.initZygote(startupParam)
-
-        modulePath = startupParam.modulePath
-        moduleRes = getModuleRes(modulePath)
     }
 
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
@@ -46,29 +41,34 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             AndroidLogger.d("NGA内运行")
 
-            var isInit = false
-
             MethodFinder.fromClass(Instrumentation::class.java).filterByName("callApplicationOnCreate")
                 .filterByAssignableParamTypes(Application::class.java).first().createHook {
                     after { param ->
-                        if (!isInit && param.args[0] is Application) {
-                            isInit = true
-                            val context = AndroidAppHelper.currentApplication().applicationContext
+                        if (param.args[0] is Application) {
+                            if (!isInit) {
+                                isInit = true
+                                val context = AndroidAppHelper.currentApplication().applicationContext
 
-                            EzXHelper.initAppContext(context, true)
+                                EzXHelper.initAppContext(context, true)
 
-                            if (Helper.init()) {
-                                Hooks.initHooks(lpparam.classLoader)
+                                if (Helper.init()) {
+                                    Hooks.initHooks(lpparam.classLoader)
 
-                                if (!Helper.spPlugin.getBoolean(Constant.HIDE_HOOK_INFO, false)) {
-                                    Helper.toast("PureNGA 加载成功, 请到【设置】>【PureNGA】开启功能", Toast.LENGTH_LONG)
+                                    if (!Helper.spPlugin.getBoolean(Constant.HIDE_HOOK_INFO, false)) {
+                                        Helper.toast(
+                                            "PureNGA 加载成功, 请到【设置】>【PureNGA】开启功能",
+                                            Toast.LENGTH_LONG
+                                        )
+                                    }
+                                } else {
+                                    val ngaVersion = Helper.getNgaVersion()
+                                    Helper.toast(
+                                        "PureNGA 初始化失败, 可能不支持当前版本\nNGA 版本: $ngaVersion\n插件版本: ${BuildConfig.VERSION_NAME}",
+                                        Toast.LENGTH_LONG
+                                    )
                                 }
                             } else {
-                                val ngaVersion = Helper.getNgaVersion()
-                                Helper.toast(
-                                    "PureNGA 初始化失败, 可能不支持当前版本\nNGA 版本: $ngaVersion\n插件版本: ${BuildConfig.VERSION_NAME}",
-                                    Toast.LENGTH_LONG
-                                )
+                                AndroidLogger.d("跳过初始化")
                             }
                         }
                     }
@@ -77,12 +77,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     }
 
     companion object {
-        lateinit var modulePath: String
-        lateinit var moduleRes: Resources
-
-        fun getModuleRes(path: String): Resources {
-            return XModuleResources.createInstance(path, null)
-        }
+        private var isInit = false
     }
 }
 

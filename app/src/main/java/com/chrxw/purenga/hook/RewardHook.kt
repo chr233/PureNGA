@@ -1,6 +1,7 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import android.content.Context
 import android.webkit.WebView
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
@@ -23,10 +24,12 @@ class RewardHook : IHook {
         private lateinit var clsZKAdNativeImpl: Class<*>
         private lateinit var clsAdManager_b: Class<*>
         private lateinit var clsAdManager_d: Class<*>
-    }
 
-    override fun hookName(): String {
-        return "去广告任务破解"
+        fun logMap(map: MutableMap<*, *>) {
+            for (item in map) {
+                AndroidLogger.i("${item.key} - ${item.value}")
+            }
+        }
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -40,6 +43,38 @@ class RewardHook : IHook {
         clsAdManager_d = classLoader.loadClass("com.nga.admodule.AdManager\$d")
 
 
+        MethodFinder.fromClass("rg.a", classLoader).filterByName("d")
+            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
+                before { param ->
+                    val map = param.args[1] as MutableMap<*, *>
+                    logMap(map)
+                }
+            }
+
+
+        MethodFinder.fromClass("rg.a", classLoader).filterByName("e")
+            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
+                before { param ->
+                    val map = param.args[1] as MutableMap<*, *>
+                    logMap(map)
+                }
+            }
+
+        MethodFinder.fromClass("rg.a", classLoader).filterByName("f")
+            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
+                before { param ->
+                    val map = param.args[1] as MutableMap<*, *>
+                    logMap(map)
+                }
+            }
+
+        MethodFinder.fromClass("rg.a", classLoader).filterByName("c")
+            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
+                before { param ->
+                    val map = param.args[1] as MutableMap<*, *>
+                    logMap(map)
+                }
+            }
     }
 
     override fun hook() {

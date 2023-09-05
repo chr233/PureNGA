@@ -55,3 +55,19 @@
     void *(**On*Event);
     void *(**On*Listener);
 }
+#这段混淆规则用于保护使用了@Keep注解的类和成员不被混淆，以及忽略特定的冗余类。
+-keep class androidx.annotation.Keep
+#保留使用了@Keep注解的类和接口的所有成员
+-keep @androidx.annotation.Keep class * {*;}
+#保留使用了@Keep注解的类的方法
+-keepclasseswithmembers class * {
+@androidx.annotation.Keep <methods>;
+}
+#保留使用了@Keep注解的类的字段
+-keepclasseswithmembers class * {
+@androidx.annotation.Keep <fields>;
+}
+#保留使用了@Keep注解的类的构造方法
+-keepclasseswithmembers class * {
+@androidx.annotation.Keep <init>(...);
+}
