@@ -51,10 +51,9 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                                 EzXHelper.initAppContext(context, true)
 
-                                if (Helper.init()) {
-                                    Hooks.initHooks(lpparam.classLoader)
-
-                                    if (!Helper.spPlugin.getBoolean(Constant.HIDE_HOOK_INFO, false)) {
+                                val error = Hooks.initHooks(lpparam.classLoader)
+                                if (error == 0) {
+                                    if (!Helper.getSpBool(Constant.HIDE_HOOK_INFO, false)) {
                                         Helper.toast(
                                             "PureNGA 加载成功, 请到【设置】>【PureNGA】开启功能",
                                             Toast.LENGTH_LONG
@@ -63,7 +62,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 } else {
                                     val ngaVersion = Helper.getNgaVersion()
                                     Helper.toast(
-                                        "PureNGA 初始化失败, 可能不支持当前版本\nNGA 版本: $ngaVersion\n插件版本: ${BuildConfig.VERSION_NAME}",
+                                        "PureNGA $error 个模块加载失败, 可能不支持当前版本\nNGA 版本: $ngaVersion\n插件版本: ${BuildConfig.VERSION_NAME}",
                                         Toast.LENGTH_LONG
                                     )
                                 }

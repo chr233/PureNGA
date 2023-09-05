@@ -15,15 +15,11 @@ import de.robv.android.xposed.XposedHelpers
 class SplashHook : IHook {
 
     companion object {
-        private lateinit var clsLoadingActivity: Class<*>
         private lateinit var clsActivityLifecycle: Class<*>
-        private lateinit var clsNGAApplication: Class<*>
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsLoadingActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity")
         clsActivityLifecycle = classLoader.loadClass("com.donews.nga.interfaces.ActivityLifecycleImpl")
-        clsNGAApplication = classLoader.loadClass("gov.pianzong.androidnga.activity.NGAApplication")
     }
 
     override fun hook() {
@@ -32,7 +28,7 @@ class SplashHook : IHook {
             MethodFinder.fromClass(clsActivityLifecycle).filterByName("toForeGround").first().createHook {
                 replace { param ->
                     val activity = param.args?.get(0) as Activity
-                    if (activity.javaClass == clsLoadingActivity) {
+                    if (activity.javaClass == MainHook.clsLoadingActivity) {
                         AndroidLogger.d("跳过启动页")
                         XposedHelpers.setBooleanField(activity, "canJump", true)
                         XposedHelpers.setBooleanField(activity, "isADShow", true)
@@ -42,7 +38,7 @@ class SplashHook : IHook {
             }
 
             // 修改时间戳实现切屏无广告
-            MethodFinder.fromClass(Helper.clsSPUtil).filterByName("getInt")
+            MethodFinder.fromClass(MainHook.clsSPUtil).filterByName("getInt")
                 .filterByAssignableParamTypes(String::class.java, Int::class.java).first().createHook {
                     after { param ->
                         Helper.toast(param.args[0].toString())

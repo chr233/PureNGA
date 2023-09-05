@@ -1,8 +1,6 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
-import android.content.Context
-import android.webkit.WebView
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -43,50 +41,50 @@ class RewardHook : IHook {
         clsAdManager_d = classLoader.loadClass("com.nga.admodule.AdManager\$d")
 
 
-        MethodFinder.fromClass("rg.a", classLoader).filterByName("d")
-            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
-                before { param ->
-                    val map = param.args[1] as MutableMap<*, *>
-                    logMap(map)
-                }
-            }
-
-
-        MethodFinder.fromClass("rg.a", classLoader).filterByName("e")
-            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
-                before { param ->
-                    val map = param.args[1] as MutableMap<*, *>
-                    logMap(map)
-                }
-            }
-
-        MethodFinder.fromClass("rg.a", classLoader).filterByName("f")
-            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
-                before { param ->
-                    val map = param.args[1] as MutableMap<*, *>
-                    logMap(map)
-                }
-            }
-
-        MethodFinder.fromClass("rg.a", classLoader).filterByName("c")
-            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
-                before { param ->
-                    val map = param.args[1] as MutableMap<*, *>
-                    logMap(map)
-                }
-            }
+//        MethodFinder.fromClass("rg.a", classLoader).filterByName("d")
+//            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
+//                before { param ->
+//                    val map = param.args[1] as MutableMap<*, *>
+//                    logMap(map)
+//                }
+//            }
+//
+//
+//        MethodFinder.fromClass("rg.a", classLoader).filterByName("e")
+//            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
+//                before { param ->
+//                    val map = param.args[1] as MutableMap<*, *>
+//                    logMap(map)
+//                }
+//            }
+//
+//        MethodFinder.fromClass("rg.a", classLoader).filterByName("f")
+//            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
+//                before { param ->
+//                    val map = param.args[1] as MutableMap<*, *>
+//                    logMap(map)
+//                }
+//            }
+//
+//        MethodFinder.fromClass("rg.a", classLoader).filterByName("c")
+//            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
+//                before { param ->
+//                    val map = param.args[1] as MutableMap<*, *>
+//                    logMap(map)
+//                }
+//            }
     }
 
     override fun hook() {
 
-        if (Helper.spPlugin.getBoolean(Constant.CRACK_AD_TASK, false)) {
+        if (Helper.getSpBool(Constant.CRACK_AD_TASK, false)) {
             var activity: Activity? = null
-            var webView: WebView? = null
+//            var webView: WebView? = null
 
             MethodFinder.fromClass(clsLoginWebView).filterByName("initView").first().createHook {
                 after { param ->
                     activity = param.thisObject as Activity?
-                    webView = XposedHelpers.getObjectField(activity, "mWebView") as WebView
+//                    webView = XposedHelpers.getObjectField(activity, "mWebView") as WebView
                 }
             }
 
@@ -95,9 +93,9 @@ class RewardHook : IHook {
                 MethodFinder.fromClass(clsLoginWebView_b).filterByName("onAdShow").first().createHook {
                     replace { param ->
                         AndroidLogger.i(("b.onAdShow"))
-                        val obj = param?.thisObject
+                        val obj = param.thisObject
 
-                        val webView = XposedHelpers.getObjectField(obj, "a")
+//                        val webView = XposedHelpers.getObjectField(obj, "a")
                         XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
                         XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
                         XposedHelpers.callMethod(obj, "onAdClose")
@@ -108,9 +106,9 @@ class RewardHook : IHook {
                 MethodFinder.fromClass(clsLoginWebView_b).filterByName("onAdShow").first().createHook {
                     replace { param ->
                         AndroidLogger.i(("a.onAdShow"))
-                        val obj = param?.thisObject
+                        val obj = param.thisObject
 
-                        val webView = XposedHelpers.getObjectField(obj, "a")
+//                        val webView = XposedHelpers.getObjectField(obj, "a")
                         XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
                         XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
                         XposedHelpers.callMethod(obj, "onAdClose")
@@ -119,89 +117,6 @@ class RewardHook : IHook {
             } catch (e: Exception) {
                 AndroidLogger.e(e)
             }
-
-            try {
-//                XposedHelpers.findAndHookMethod(clsDoNewsAdNative, "showRewardAd", object : XC_MethodReplacement() {
-//                    override fun replaceHookedMethod(param: MethodHookParam?) {
-//                        Log.i("clsDoNewsAdNative showRewardAd")
-//                    }
-//                })
-//
-//                XposedHelpers.findAndHookMethod(clsZKAdNativeImpl,
-//                    "showRewardAd",
-//                    Activity::class.java,
-//                    object : XC_MethodReplacement() {
-//                        override fun replaceHookedMethod(param: MethodHookParam?) {
-//                            Log.i("clsZKAdNativeImpl showRewardAd")
-//                        }
-//                    })
-
-            } catch (e: Throwable) {
-                AndroidLogger.e(e)
-            }
-
-//            XposedHelpers.findAndHookMethod(clsLoginWebView_P,
-//                "onProgressChanged",
-//                WebView::class.java,
-//                Int::class.javaPrimitiveType,
-//                object : XC_MethodHook() {
-//                    override fun afterHookedMethod(param: MethodHookParam) {
-//                        if (webView != null) {
-//                            val url = webView!!.url
-//                            Log.i("url: $url")
-//                        }
-//
-//                    }
-//                })
-//
-//            XposedHelpers.findAndHookMethod(clsAdManager_b, "onAdShow", object : XC_MethodReplacement() {
-//                override fun replaceHookedMethod(param: MethodHookParam?) {
-//                    val obj = param?.thisObject
-//
-//                    val callback = XposedHelpers.getObjectField(obj, "a")
-//                    XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
-//                    XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
-//                    XposedHelpers.callMethod(callback, "onAdClose")
-//                }
-//            })
-//
-//
-//            XposedHelpers.findAndHookMethod(clsLoginWebView_a,
-//                "onError",
-//                Int::class.javaPrimitiveType,
-//                String::class.java,
-//                object : XC_MethodReplacement() {
-//                    override fun replaceHookedMethod(param: MethodHookParam?) {
-//                        Log.i(("a.onError"))
-//                        val obj = param?.thisObject
-//
-//                        val webView = XposedHelpers.getObjectField(obj, "a")
-//                        XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
-//                        XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
-//                        XposedHelpers.callMethod(obj, "onAdClose")
-//                        return
-//                    }
-//                })
-//
-//
-//            XposedHelpers.findAndHookMethod(clsLoginWebView_b,
-//                "onError",
-//                Int::class.javaPrimitiveType,
-//                String::class.java,
-//                object : XC_MethodReplacement() {
-//                    override fun replaceHookedMethod(param: MethodHookParam?) {
-//                        Log.i(("b.onError"))
-//                        val obj = param?.thisObject
-//
-//                        val webView = XposedHelpers.getObjectField(obj, "a")
-//                        XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
-//                        XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
-//                        XposedHelpers.callMethod(obj, "onAdClose")
-//                        return
-//                    }
-//                })
-
-
         }
     }
 }

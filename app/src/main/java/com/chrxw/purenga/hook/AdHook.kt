@@ -5,7 +5,6 @@ import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
-import de.robv.android.xposed.XposedHelpers
 
 
 /**
@@ -20,14 +19,15 @@ class AdHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsDnFeedAd = XposedHelpers.findClass("com.donews.admediation.adimpl.feed.DnFeedAd", classLoader)
-        clsNativeExpressAD = XposedHelpers.findClass("com.qq.e.ads.nativ.NativeExpressAD", classLoader)
-        clsUtils_bp = XposedHelpers.findClass("com.kwad.sdk.utils.bp", classLoader)
-        clsAdSize = XposedHelpers.findClass("com.qq.e.ads.nativ.ADSize", classLoader)
+        clsDnFeedAd = classLoader.loadClass("com.donews.admediation.adimpl.feed.DnFeedAd")
+        clsNativeExpressAD = classLoader.loadClass("com.qq.e.ads.nativ.NativeExpressAD")
+        clsUtils_bp = classLoader.loadClass("com.kwad.sdk.utils.bp")
+        clsAdSize = classLoader.loadClass("com.qq.e.ads.nativ.ADSize")
     }
 
     override fun hook() {
-        if (Helper.spPlugin.getBoolean(Constant.PURE_POST_AD, false)) {
+        //屏蔽广告
+        if (Helper.getSpBool(Constant.PURE_POST_AD, false)) {
             try {
                 MethodFinder.fromClass(clsDnFeedAd).filterByName("requestServerSuccess").first().createHook {
                     replace {
@@ -60,6 +60,18 @@ class AdHook : IHook {
                     }
             } catch (e: NoSuchMethodException) {
                 AndroidLogger.e("kwad 广告过滤失败", e)
+            }
+
+            MethodFinder.fromClass(MainHook.clsNGAApplication).filterByName("preThirdParty").first().createHook {
+                replace {
+                    AndroidLogger.i("preThirdParty")
+                }
+            }
+
+            MethodFinder.fromClass(MainHook.clsLoadingActivity).filterByName("loadAD").first().createHook {
+                replace {
+                    AndroidLogger.i("loadAD")
+                }
             }
         }
     }

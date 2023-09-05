@@ -94,7 +94,7 @@ class PreferencesHook : IHook {
             }
         }
 
-        MethodFinder.fromClass(OptimizeHook.clsAppConfig).filterByName("setDarkModel")
+        MethodFinder.fromClass(MainHook.clsAppConfig).filterByName("setDarkModel")
             .filterByAssignableParamTypes(Boolean::class.java)
             .first().createHook {
                 after {

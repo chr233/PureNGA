@@ -35,7 +35,7 @@ class ToggleItemView(context: Context, spKey: String) : ClickableItemView(contex
         get() = switch.isChecked
         set(value) {
             switch.isChecked = value
-            Helper.spPlugin.edit().putBoolean(spKey, isChecked).apply()
+            Helper.setSpBool(spKey, isChecked)
         }
 
     override fun onClick(v: View?) {

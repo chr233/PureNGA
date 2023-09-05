@@ -18,8 +18,6 @@ import de.robv.android.xposed.XposedHelpers
 class OptimizeHook : IHook {
 
     companion object {
-        lateinit var clsAppConfig: Class<*>
-        private lateinit var clsNGAApplication: Class<*>
         private lateinit var clsMainActivityPresenter: Class<*>
         private lateinit var clsHomeDrawerLayout: Class<*>
         private lateinit var clsCommentDialog: Class<*>
@@ -28,8 +26,6 @@ class OptimizeHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsAppConfig = classLoader.loadClass("com.donews.nga.common.utils.AppConfig")
-        clsNGAApplication = classLoader.loadClass("gov.pianzong.androidnga.activity.NGAApplication")
         clsMainActivityPresenter = classLoader.loadClass("com.donews.nga.activitys.presenters.MainActivityPresenter")
         clsHomeDrawerLayout = classLoader.loadClass("com.donews.nga.widget.HomeDrawerLayout")
         clsCommentDialog = classLoader.loadClass("gov.pianzong.androidnga.view.CommentDialog")
@@ -40,24 +36,25 @@ class OptimizeHook : IHook {
 
     override fun hook() {
         // 屏蔽弹窗
-        if (Helper.spPlugin.getBoolean(Constant.KILL_POPUP_DIALOG, false)) {
-            MethodFinder.fromClass(clsAppConfig).filterByName("isAgreedAgreement").first().createHook {
+        if (Helper.getSpBool(Constant.KILL_POPUP_DIALOG, false)) {
+            MethodFinder.fromClass(MainHook.clsAppConfig).filterByName("isAgreedAgreement").first().createHook {
                 replace {
                     AndroidLogger.i("isAgreedAgreement")
                     return@replace true
                 }
             }
 
-            MethodFinder.fromClass(clsNGAApplication).filterByName("showNotificationDialog").first().createHook {
-                replace {
-                    AndroidLogger.i("showNotificationDialog")
-                    return@replace true
+            MethodFinder.fromClass(MainHook.clsNGAApplication).filterByName("showNotificationDialog").first()
+                .createHook {
+                    replace {
+                        AndroidLogger.i("showNotificationDialog")
+                        return@replace true
+                    }
                 }
-            }
         }
 
         // 屏蔽更新检测
-        if (Helper.spPlugin.getBoolean(Constant.KILL_UPDATE_CHECK, false)) {
+        if (Helper.getSpBool(Constant.KILL_UPDATE_CHECK, false)) {
             MethodFinder.fromClass(clsMainActivityPresenter).filterByName("checkAppUpdate").first().createHook {
                 replace {
                     AndroidLogger.i("checkAppUpdate")
@@ -72,7 +69,7 @@ class OptimizeHook : IHook {
         }
 
         //移除首页商城入口
-        if (Helper.spPlugin.getBoolean(Constant.REMOVE_STORE_ICON, false)) {
+        if (Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)) {
             MethodFinder.fromClass(clsHomeDrawerLayout).filterByName("initLayout").first().createHook {
                 after { param ->
                     val viewBinding = XposedHelpers.getObjectField(param.thisObject, "binding")
@@ -110,7 +107,7 @@ class OptimizeHook : IHook {
         }
 
         //移除导航栏活动图标
-        if (Helper.spPlugin.getBoolean(Constant.REMOVE_ACTIVITY_ICON, false)) {
+        if (Helper.getSpBool(Constant.REMOVE_ACTIVITY_ICON, false)) {
             MethodFinder.fromClass(clsMainActivity).filterByName("initActivityMenu").first().createHook {
                 replace { param ->
                     val args = param.args[0]
@@ -120,7 +117,7 @@ class OptimizeHook : IHook {
         }
 
         //移除右上角微信图标
-        if (Helper.spPlugin.getBoolean(Constant.REMOVE_WECHAT_ICON, false)) {
+        if (Helper.getSpBool(Constant.REMOVE_WECHAT_ICON, false)) {
             MethodFinder.fromClass(clsArticleDetailActivity).filterByName("initView").first().createHook {
                 after { param ->
                     val activity = param.thisObject as Activity

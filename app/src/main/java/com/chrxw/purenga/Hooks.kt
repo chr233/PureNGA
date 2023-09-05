@@ -24,7 +24,8 @@ class Hooks {
             WebViewHook(),
         )
 
-        fun initHooks(classLoader: ClassLoader) {
+        fun initHooks(classLoader: ClassLoader): Int {
+            var error = 0
             for (hook in hooks) {
                 val name = hook::class.java.name
                 try {
@@ -33,12 +34,15 @@ class Hooks {
                     hook.hook()
                 } catch (e: NoSuchMethodError) {
                     Helper.toast("模块 $name 加载失败, 可能不支持当前版本的NGA")
+                    error++
                     AndroidLogger.e(e)
                 } catch (e: Throwable) {
                     Helper.toast("模块 $name 加载遇到未知错误")
+                    error++
                     AndroidLogger.e(e)
                 }
             }
+            return error
         }
     }
 }

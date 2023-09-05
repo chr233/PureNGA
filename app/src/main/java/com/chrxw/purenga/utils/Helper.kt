@@ -1,6 +1,5 @@
 package com.chrxw.purenga.utils
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -23,28 +22,8 @@ class Helper {
     companion object {
         lateinit var spDoinfo: SharedPreferences
 
-        lateinit var clsR: Class<*>
-        lateinit var clsRId: Class<*>
-
-        lateinit var clsSPUtil: Class<*>
         lateinit var spPlugin: SharedPreferences
-
-        /**
-         * 初始化
-         */
-        fun init(): Boolean {
-            return try {
-                //设置SharedPreferences
-                spDoinfo = EzXHelper.appContext.getSharedPreferences(Constant.DNINFO, Context.MODE_PRIVATE)
-                spPlugin =
-                    EzXHelper.appContext.getSharedPreferences(Constant.PLUGIN_PREFERENCE_NAME, Context.MODE_PRIVATE)
-
-                true
-            } catch (e: Exception) {
-                AndroidLogger.e(e)
-                false
-            }
-        }
+        lateinit var clsRId: Class<*>
 
         fun toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
             AndroidLogger.toast(text, duration)
@@ -93,6 +72,10 @@ class Helper {
             return spPlugin.getBoolean(key, defValue)
         }
 
+        fun setSpBool(key: String, value: Boolean) {
+            spPlugin.edit().putBoolean(key, value).apply()
+        }
+
         private suspend fun fetchJson(url: URL) = withContext(Dispatchers.IO) {
             try {
                 JSONObject(url.readText())
@@ -101,6 +84,10 @@ class Helper {
             }
         }
 
-        suspend fun fetchJson(url: String) = fetchJson(URL(url))
+        private suspend fun fetchJson(url: String) = fetchJson(URL(url))
+
+        private suspend fun checkUpdate() {
+            val response = fetchJson(Constant.REPO_URL)
+        }
     }
 }

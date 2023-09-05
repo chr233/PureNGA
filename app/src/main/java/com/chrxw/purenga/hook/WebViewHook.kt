@@ -26,12 +26,12 @@ class WebViewHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        insAppConfig = OptimizeHook.clsAppConfig.getField("INSTANCE").get(null)!!
-        mtdIsNgaUrl = OptimizeHook.clsAppConfig.getMethod("isNgaUrl", String::class.java)
+        insAppConfig = MainHook.clsAppConfig.getField("INSTANCE").get(null)!!
+        mtdIsNgaUrl = MainHook.clsAppConfig.getMethod("isNgaUrl", String::class.java)
     }
 
     override fun hook() {
-        if (Helper.spPlugin.getBoolean(Constant.USE_EXTERNAL_BROWSER, false)) {
+        if (Helper.getSpBool(Constant.USE_EXTERNAL_BROWSER, false)) {
             MethodFinder.fromClass(Instrumentation::class.java).filterByName("execStartActivity").first().createHook {
                 before { param ->
                     val intent = param.args?.get(4) as? Intent ?: return@before
