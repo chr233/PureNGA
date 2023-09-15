@@ -49,57 +49,63 @@ class MainActivity : AppCompatActivity() {
         override fun onPreferenceTreeClick(preference: Preference): Boolean {
             val prefKey = preference.key
 
-            if (prefKey == "hide_icon") {
-                val ctx = context
-                if (ctx != null) {
-                    hideAppIcon(ctx)
+            when (prefKey) {
+                "hide_icon" -> {
+                    val ctx = context
+                    if (ctx != null) {
+                        hideAppIcon(ctx)
+                    }
+                    return true
                 }
-                return true
-            } else if (prefKey == "plugin_setting") {
-                AlertDialog.Builder(activity).run {
-                    setView(R.layout.plugin_setting)
-                    setNegativeButton("关闭", null)
-                    show()
+                "plugin_setting" -> {
+                    AlertDialog.Builder(activity).run {
+                        setView(R.layout.plugin_setting)
+                        setNegativeButton("关闭", null)
+                        show()
+                    }
+                    return true
                 }
-                return true
-            } else if (prefKey == "open_nga") {
-                try {
-                    startActivity(
-                        Intent(Intent.ACTION_MAIN).setComponent(
-                            ComponentName(
-                                Constant.NGA_PACKAGE_NAME,
-                                "com.donews.nga.activitys.MainActivity"
-                            )
-                        )//.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-                    )
-                } catch (e: Throwable) {
+                "open_nga" -> {
+                    try {
+                        startActivity(
+                            Intent(Intent.ACTION_MAIN).setComponent(
+                                ComponentName(
+                                    Constant.NGA_PACKAGE_NAME,
+                                    "com.donews.nga.activitys.MainActivity"
+                                )
+                            )//.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+                        )
+                    } catch (e: Throwable) {
 
-                    toast("打开 NGA 失败")
+                        toast("打开 NGA 失败")
+                    }
+                    return true
                 }
-                return true
+                else -> {
+                    val intent = when (prefKey) {
+                        "version" -> {
+                            Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_url)))
+                        }
+
+                        "author" -> {
+                            Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.author_url)))
+                        }
+
+                        "donate" -> {
+                            Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.donate_url)))
+                        }
+
+                        else -> null
+                    }
+
+                    if (intent != null) {
+                        startActivity(intent)
+                    }
+
+                    return true
+                }
             }
 
-            val intent = when (prefKey) {
-                "version" -> {
-                    Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_url)))
-                }
-
-                "author" -> {
-                    Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.author_url)))
-                }
-
-                "donate" -> {
-                    Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.donate_url)))
-                }
-
-                else -> null
-            }
-
-            if (intent != null) {
-                startActivity(intent)
-            }
-
-            return true
         }
 
         override fun onResume() {
