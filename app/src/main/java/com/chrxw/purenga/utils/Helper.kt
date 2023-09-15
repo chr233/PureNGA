@@ -25,10 +25,16 @@ class Helper {
         lateinit var spPlugin: SharedPreferences
         lateinit var clsRId: Class<*>
 
+        /**
+         * 发送Toast
+         */
         fun toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
             AndroidLogger.toast(text, duration)
         }
 
+        /**
+         * 获取版本号
+         */
         fun getNgaVersion(): String {
             return try {
                 EzXHelper.appContext.packageManager.getPackageInfo(
@@ -50,6 +56,9 @@ class Helper {
             }
         }
 
+        /**
+         * 获取ResId
+         */
         private fun getRes(cls: Class<*>?, key: String): Int {
             return try {
                 XposedHelpers.getStaticIntField(cls, key)
@@ -60,18 +69,30 @@ class Helper {
             }
         }
 
+        /**
+         * 获取ResId
+         */
         fun getRId(key: String): Int {
             return getRes(clsRId, key)
         }
 
+        /**
+         * 是否为夜间模式
+         */
         fun isDarkModel(): Boolean {
             return spDoinfo.getBoolean("DARK_MODEL", false)
         }
 
+        /**
+         * 获取SharedPreference值
+         */
         fun getSpBool(key: String, defValue: Boolean): Boolean {
             return spPlugin.getBoolean(key, defValue)
         }
 
+        /**
+         * 设置SharedPreference值
+         */
         fun setSpBool(key: String, value: Boolean) {
             spPlugin.edit().putBoolean(key, value).apply()
         }

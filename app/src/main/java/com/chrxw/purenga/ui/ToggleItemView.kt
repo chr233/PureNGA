@@ -8,6 +8,9 @@ import android.view.View.OnClickListener
 import android.widget.Switch
 import com.chrxw.purenga.utils.Helper
 
+/**
+ * 开关控件
+ */
 class ToggleItemView(context: Context, spKey: String) : ClickableItemView(context), OnClickListener {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private val switch = Switch(context)

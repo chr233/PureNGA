@@ -31,7 +31,10 @@ class PreferencesHook : IHook {
         lateinit var clsMainActivity: Class<*>
         lateinit var clsSettingActivity: Class<*>
 
-        fun restartApplication(activity: Activity) {
+        /**
+         * 重启应用
+         */
+        private fun restartApplication(activity: Activity) {
             val pm = activity.packageManager
             val intent = pm.getLaunchIntentForPackage(activity.packageName)
             activity.finishAffinity()

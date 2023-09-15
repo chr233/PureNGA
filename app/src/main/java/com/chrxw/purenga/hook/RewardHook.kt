@@ -6,6 +6,7 @@ import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
+import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -41,39 +42,66 @@ class RewardHook : IHook {
         clsAdManager_d = classLoader.loadClass("com.nga.admodule.AdManager\$d")
 
 
-//        MethodFinder.fromClass("rg.a", classLoader).filterByName("d")
-//            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
-//                before { param ->
-//                    val map = param.args[1] as MutableMap<*, *>
-//                    logMap(map)
-//                }
-//            }
-//
-//
-//        MethodFinder.fromClass("rg.a", classLoader).filterByName("e")
-//            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
-//                before { param ->
-//                    val map = param.args[1] as MutableMap<*, *>
-//                    logMap(map)
-//                }
-//            }
-//
-//        MethodFinder.fromClass("rg.a", classLoader).filterByName("f")
-//            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
-//                before { param ->
-//                    val map = param.args[1] as MutableMap<*, *>
-//                    logMap(map)
-//                }
-//            }
-//
-//        MethodFinder.fromClass("rg.a", classLoader).filterByName("c")
-//            .filterByAssignableParamTypes(Context::class.java, MutableMap::class.java).first().createHook {
-//                before { param ->
-//                    val map = param.args[1] as MutableMap<*, *>
-//                    logMap(map)
-//                }
-//            }
+        XposedHelpers.findAndHookMethod("com.donews.nga.fragments.CommonWebFragment\$JsInterface\$createListener$1",
+            classLoader,
+            "clickItem",
+            Int::class.javaPrimitiveType,
+            String::class.java,
+            object : XC_MethodHook() {
+                override fun beforeHookedMethod(param: MethodHookParam) {
+                    val i10 = param.args[0] as Int
+                    val str4 = param.args[1] as String
+                    AndroidLogger.i("clickItem: i10 $i10 str4 $str4")
+                }
+            })
+
+        XposedHelpers.findAndHookMethod("com.donews.nga.fragments.CommonWebFragment\$JsInterface",
+            classLoader,
+            "doAction",
+            Int::class.javaPrimitiveType,
+            Array<String>::class.java,
+            object : XC_MethodHook() {
+                override fun beforeHookedMethod(param: MethodHookParam) {
+                    val i10 = param.args[0] as Int
+                    val str4 = param.args[1] as Array<String>
+                    AndroidLogger.i("doAction: i10 $i10 str4 $str4")
+                }
+
+
+            })
+
+        MethodFinder.fromClass("com.umeng.socialize.UMShareAPI", classLoader).filterByName("isInstall").first()
+            .createHook {
+                after { param ->
+                    val activity = param.args[0] as Activity
+                    val mode = param.args[1]
+
+                    AndroidLogger.i("isInstall $activity mode $mode")
+
+                    param.result = true
+                }
+            }
+
+        //假装分享
+        //内置浏览器分享
+        MethodFinder.fromClass("com.donews.nga.fragments.CommonWebFragment\$JsInterface", classLoader)
+            .filterByName("createListener").first().createHook {
+                before {
+                    AndroidLogger.i("createListener")
+                }
+            }
+
+        //帖子分享
+        MethodFinder.fromClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity\$x", classLoader)
+            .filterByName("clickItem").first().createHook {
+                before { param ->
+                    val i = param.args[0] as Int
+                    val s = param.args[1] as String
+                    AndroidLogger.i("clickItem $i $s")
+                }
+            }
     }
+
 
     override fun hook() {
 

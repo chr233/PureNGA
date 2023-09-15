@@ -11,6 +11,9 @@ import com.chrxw.purenga.hook.WebViewHook
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 
+/**
+ * 钩子
+ */
 class Hooks {
     companion object {
         private val hooks = arrayOf(

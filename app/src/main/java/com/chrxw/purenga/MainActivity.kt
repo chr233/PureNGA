@@ -20,6 +20,10 @@ import androidx.preference.PreferenceFragmentCompat
 class MainActivity : AppCompatActivity() {
 
     companion object {
+
+        /**
+         * 检测模块启用状态
+         */
         @JvmStatic
         @Keep
         fun isModuleActive(): Boolean {
@@ -114,7 +118,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        fun toast(text: String, duration: Int = Toast.LENGTH_LONG) {
+        private fun toast(text: String, duration: Int = Toast.LENGTH_LONG) {
             val t = Toast.makeText(this.context, text, duration)
             t.show()
         }

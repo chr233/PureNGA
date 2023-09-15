@@ -9,6 +9,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.chrxw.purenga.utils.ViewUtils.toPixel
 
+/**
+ * 文本控件
+ */
 open class ClickableItemView(context: Context) : FrameLayout(context) {
     protected val containerLayout = LinearLayout(context)
     protected val titleTextView = TextView(context)

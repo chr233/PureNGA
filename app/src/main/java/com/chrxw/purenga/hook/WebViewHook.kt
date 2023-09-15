@@ -34,7 +34,7 @@ class WebViewHook : IHook {
         if (Helper.getSpBool(Constant.USE_EXTERNAL_BROWSER, false)) {
             MethodFinder.fromClass(Instrumentation::class.java).filterByName("execStartActivity").first().createHook {
                 before { param ->
-                    val intent = param.args?.get(4) as? Intent ?: return@before
+                    val intent = param.args?.get(4) as? Intent? ?: return@before
                     val bundle = intent.extras
                     val clsName = intent.component?.className ?: ""
                     if (bundle != null && clsName == "com.donews.nga.activitys.WebActivity") {
