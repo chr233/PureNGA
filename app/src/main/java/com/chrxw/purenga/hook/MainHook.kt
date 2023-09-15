@@ -33,6 +33,5 @@ class MainHook : IHook {
 
     }
 
-    override fun hook() {
-    }
+    override fun hook() {}
 }

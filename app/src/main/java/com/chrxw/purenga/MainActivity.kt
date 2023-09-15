@@ -37,6 +37,9 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
     }
 
+    /**
+     * 设置页
+     */
     class SettingsFragment : PreferenceFragmentCompat() {
         private var runningStatusPref: Preference? = null
 

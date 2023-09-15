@@ -23,12 +23,6 @@ class RewardHook : IHook {
         private lateinit var clsZKAdNativeImpl: Class<*>
         private lateinit var clsAdManager_b: Class<*>
         private lateinit var clsAdManager_d: Class<*>
-
-        fun logMap(map: MutableMap<*, *>) {
-            for (item in map) {
-                AndroidLogger.i("${item.key} - ${item.value}")
-            }
-        }
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -63,11 +57,9 @@ class RewardHook : IHook {
             object : XC_MethodHook() {
                 override fun beforeHookedMethod(param: MethodHookParam) {
                     val i10 = param.args[0] as Int
-                    val str4 = param.args[1] as Array<String>
+                    val str4 = param.args[1] as Array<*>
                     AndroidLogger.i("doAction: i10 $i10 str4 $str4")
                 }
-
-
             })
 
         MethodFinder.fromClass("com.umeng.socialize.UMShareAPI", classLoader).filterByName("isInstall").first()
