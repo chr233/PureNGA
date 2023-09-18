@@ -156,6 +156,14 @@ class PreferencesHook : IHook {
             title = "屏蔽应用内弹窗"
             subTitle = "作用不明"
         })
+        container.addView(ToggleItemView(context, Constant.FAKE_SHARE).apply {
+            title = "假装分享"
+            subTitle = "在分享菜单增加一个“假装分享”按钮"
+        })
+        container.addView(ToggleItemView(context, Constant.FAKE_SHARE).apply {
+            title = "绕过应用是否安装检查"
+            subTitle = "没什么卵用"
+        })
 
         container.addView(ClickableItemView(context).apply { title = "插件设置" })
 //        container.addView(ToggleItemView(context, Constant.CHECK_PLUGIN_UPDATE).apply {

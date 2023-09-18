@@ -29,6 +29,8 @@ object Constant {
     const val KILL_UPDATE_CHECK = "kill_update_check"
     const val KILL_POPUP_DIALOG = "kill_popup_dialog"
     const val CHECK_PLUGIN_UPDATE = "check_plugin_update"
+    const val FAKE_SHARE = "fake_share"
+    const val FORCE_INSTALLED = "force_installed"
     const val HIDE_HOOK_INFO = "hide_hook_info"
 
     const val BTN_TITLE = "PureNGA 设置"

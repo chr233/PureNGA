@@ -25,6 +25,7 @@ class MainHook : IHook {
         clsSPUtil = classLoader.loadClass("com.donews.nga.common.utils.SPUtil")
 
         Helper.clsRId = classLoader.loadClass("gov.pianzong.androidnga.R\$id")
+        Helper.clsDrawerId=classLoader.loadClass("gov.pianzong.androidnga.R\$drawable")
 
         EzXHelper.appContext.run {
             Helper.spDoinfo = getSharedPreferences(Constant.DNINFO, Context.MODE_PRIVATE)

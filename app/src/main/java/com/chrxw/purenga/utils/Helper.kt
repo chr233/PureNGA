@@ -23,6 +23,7 @@ object Helper {
 
     lateinit var spPlugin: SharedPreferences
     lateinit var clsRId: Class<*>
+    lateinit var clsDrawerId: Class<*>
 
     /**
      * 发送Toast
@@ -63,7 +64,6 @@ object Helper {
             XposedHelpers.getStaticIntField(cls, key)
         } catch (e: Throwable) {
             AndroidLogger.e("加载资源 $key 失败")
-            AndroidLogger.e(e)
             -1
         }
     }
@@ -73,6 +73,10 @@ object Helper {
      */
     fun getRId(key: String): Int {
         return getRes(clsRId, key)
+    }
+
+    fun getDrawerId(key: String): Int {
+        return getRes(clsDrawerId, key);
     }
 
     /**
