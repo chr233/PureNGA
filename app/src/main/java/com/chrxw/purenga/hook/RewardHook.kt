@@ -1,10 +1,12 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.MemberExtensions.isAbstract
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 
@@ -36,15 +38,106 @@ class RewardHook : IHook {
     }
 
     override fun hook() {
-
+        //任务破解
         if (Helper.getSpBool(Constant.CRACK_AD_TASK, false)) {
             var activity: Activity? = null
-//            var webView: WebView? = null
+            var webView: Any? = null
 
-            MethodFinder.fromClass(clsLoginWebView).filterByName("initView").first().createHook {
-                after { param ->
+            MethodFinder.fromClass(clsLoginWebView).filterByName("onCreate").first().createHook {
+                before { param ->
                     activity = param.thisObject as Activity?
-//                    webView = XposedHelpers.getObjectField(activity, "mWebView") as WebView
+                    webView = XposedHelpers.getObjectField(activity, "mWebView")
+                    AndroidLogger.i("clsLoginWebView onCreate")
+                }
+            }
+            MethodFinder.fromClass(clsLoginWebView).filterByName("onDestroy").first().createHook {
+                before {
+                    activity = null
+                    webView = null
+                    AndroidLogger.i("clsLoginWebView onDestroy")
+
+                }
+            }
+
+            if (BuildConfig.DEBUG) {
+                MethodFinder.fromClass(clsAdManager_b).forEach {
+                    val mtdName = it.name
+
+                    if (!it.isAbstract) {
+                        if (mtdName.startsWith("on1")) {
+                            it.createHook {
+                                replace { param ->
+                                    AndroidLogger.i("clsAdManager_b $mtdName")
+
+                                    val obj = param.thisObject
+                                    val a = XposedHelpers.getObjectField(obj, "a")
+                                    XposedHelpers.callMethod(a, mtdName)
+
+                                    return@replace null
+                                }
+                            }
+                        } else {
+                            it.createHook {
+                                before {
+                                    AndroidLogger.i("clsAdManager_b $mtdName")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                MethodFinder.fromClass(clsAdManager_d).forEach {
+                    val mtdName = it.name
+
+                    if (!it.isAbstract) {
+                        if (mtdName.startsWith("on1")) {
+                            it.createHook {
+                                replace { param ->
+                                    AndroidLogger.i("clsAdManager_d $mtdName")
+
+                                    val obj = param.thisObject
+                                    val a = XposedHelpers.getObjectField(obj, "d")
+                                    XposedHelpers.callMethod(a, mtdName)
+
+                                    return@replace null
+                                }
+                            }
+                        } else {
+                            it.createHook {
+                                before {
+                                    AndroidLogger.i("clsAdManager_b $mtdName")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                MethodFinder.fromClass(clsLoginWebView).filterByName("requestAD").first().createHook {
+                    replace { param ->
+                        if (webView != null) {
+                            AndroidLogger.i("clsLoginWebView_a onAdShow")
+                            XposedHelpers.callMethod(webView, "loadUrl", "https://baidu.com", null)
+//                            LoginWebView.this.mWebView.evaluateJavascript(
+//                                "javascript:__doAction('domissionComplete',{'action':'app_ad_video'})",
+//                                null
+//                            );
+//                            LoginWebView.this.mWebView.evaluateJavascript("javascript:__doAction('windowFocus')", null);
+                        }
+                    }
+                }
+
+                MethodFinder.fromClass(clsLoginWebView).filterByName("requestFreeOfAD").first().createHook {
+                    replace { param ->
+                        if (webView != null) {
+                            AndroidLogger.i("clsLoginWebView_a onAdShow")
+                            XposedHelpers.callMethod(webView, "loadUrl", "https://baidu.com", null)
+//                            LoginWebView.this.mWebView.evaluateJavascript(
+//                                "javascript:__doAction('domissionComplete',{'action':'app_ad_video'})",
+//                                null
+//                            );
+//                            LoginWebView.this.mWebView.evaluateJavascript("javascript:__doAction('windowFocus')", null);
+                        }
+                    }
                 }
             }
 
@@ -54,8 +147,6 @@ class RewardHook : IHook {
                     replace { param ->
                         AndroidLogger.i(("b.onAdShow"))
                         val obj = param.thisObject
-
-//                        val webView = XposedHelpers.getObjectField(obj, "a")
                         XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
                         XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
                         XposedHelpers.callMethod(obj, "onAdClose")
@@ -67,8 +158,6 @@ class RewardHook : IHook {
                     replace { param ->
                         AndroidLogger.i(("a.onAdShow"))
                         val obj = param.thisObject
-
-//                        val webView = XposedHelpers.getObjectField(obj, "a")
                         XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
                         XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
                         XposedHelpers.callMethod(obj, "onAdClose")

@@ -63,7 +63,7 @@ object Helper {
         return try {
             XposedHelpers.getStaticIntField(cls, key)
         } catch (e: Throwable) {
-            AndroidLogger.e("加载资源 $key 失败")
+            AndroidLogger.w("加载资源 $key 失败")
             -1
         }
     }

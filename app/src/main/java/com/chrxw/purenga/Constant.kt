@@ -30,8 +30,11 @@ object Constant {
     const val KILL_POPUP_DIALOG = "kill_popup_dialog"
     const val CHECK_PLUGIN_UPDATE = "check_plugin_update"
     const val FAKE_SHARE = "fake_share"
-    const val FORCE_INSTALLED = "force_installed"
+    const val BYPASS_INSTALL_CHECK = "bypass_install_check"
     const val HIDE_HOOK_INFO = "hide_hook_info"
 
     const val BTN_TITLE = "PureNGA 设置"
+
+    const val STR_FAKE_SHARE = "假装分享"
+    const val STR_FAKE_SHARE_TRIPLE = "分享三次"
 }

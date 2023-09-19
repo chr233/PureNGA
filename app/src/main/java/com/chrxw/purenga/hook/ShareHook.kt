@@ -1,6 +1,7 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -23,17 +24,19 @@ class ShareHook : IHook {
         private lateinit var clsArticleDetailActivity: Class<*>
         private lateinit var clsNetRequestWrapper: Class<*>
         private lateinit var clsNetRequestCallback: Class<*>
-
+        private lateinit var clsActionType: Class<*>
+        private lateinit var clsEvt: Class<*>
+        private lateinit var eShareSuccess: Any
         private lateinit var MtdOnEvent: Method
 
-        private fun fakeShare(tid: String) {
-            if (::MtdOnEvent.isInitialized) {
-                AndroidLogger.i("fake share $tid")
-            } else {
-                AndroidLogger.e("mtdOnEvent not inited")
-            }
+        /**
+         * 假装分享
+         */
+        private  fun fakeShare(obj:Any, num :Int){
+            val evt = clsEvt.getDeclaredConstructor(clsActionType, Any::class.java)
+                .newInstance(eShareSuccess, num)
+            MtdOnEvent.invoke(obj, evt)
         }
-
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -48,35 +51,48 @@ class ShareHook : IHook {
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
         clsNetRequestWrapper = classLoader.loadClass("gov.pianzong.androidnga.activity.NetRequestWrapper")
         clsNetRequestCallback = classLoader.loadClass("gov.pianzong.androidnga.activity.NetRequestCallback")
+        clsActionType = classLoader.loadClass("gov.pianzong.androidnga.event.ActionType")
 
-//        MethodFinder.fromClass("vg.a\$a", classLoader).filterByName("onError").first().createHook {
-
-//        MethodFinder.fromClass("rg.a\$a", classLoader).filterByName("onError").first().createHook {
-//            replace { param ->
-//                val obj = param.thisObject
-//
-//                val arg0 = param.args[0]
-//
-//                XposedHelpers.callMethod(obj, "onResult", arg0)
-//
-//                return@replace null
-//            }
-//        }
+        MtdOnEvent = MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onEvent").first()
+        clsEvt = MtdOnEvent.parameterTypes[0]
     }
 
     override fun hook() {
         //假装分享
         if (Helper.getSpBool(Constant.FAKE_SHARE, false)) {
+            //获取枚举值
+            for (enum in clsActionType.enumConstants) {
+                if (enum.toString() == "SHARE_SUCCESS") {
+                    eShareSuccess = enum
+                    break
+                }
+            }
 
-            var tid = "114514"
-            var fid = ""
+            //维护 objArticleDetailActivity 对象
+            var objArticleDetailActivity: Any? = null
+            MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onCreate").first().createHook {
+                before { param ->
+                    objArticleDetailActivity = param.thisObject
+                }
+            }
+            MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onDestroy").first().createHook {
+                before {
+                    objArticleDetailActivity = null
+                }
+            }
+
+            var tid: String
 
             //获取帖子信息
             MethodFinder.fromClass(clsArticleDetailActivity).filterByName("setThreadInfo").first().createHook {
                 before { param ->
+                    objArticleDetailActivity = param.thisObject
+
                     val post = param.args[0]
                     tid = XposedHelpers.callMethod(post, "getTid") as String
-                    fid = XposedHelpers.callMethod(post, "getFid") as String
+                    val fid = XposedHelpers.callMethod(post, "getFid") as String
+
+                    AndroidLogger.i("tid $tid fid $fid")
                 }
             }
 
@@ -93,9 +109,14 @@ class ShareHook : IHook {
                         imgId = Helper.getDrawerId("drawer_setting_icon")
                     }
 
-                    val newItem2 = clsActionsInfo.getConstructor(String::class.java, Int::class.java)
-                        .newInstance("假装分享", imgId)
-                    newMenu.add(newItem2)
+                    val fakeShare = clsActionsInfo.getConstructor(String::class.java, Int::class.java)
+                        .newInstance(Constant.STR_FAKE_SHARE, imgId)
+                    newMenu.add(fakeShare)
+
+                    val fakeShare3 = clsActionsInfo.getConstructor(String::class.java, Int::class.java)
+                        .newInstance(Constant.STR_FAKE_SHARE_TRIPLE, imgId)
+                    newMenu.add(fakeShare3)
+
 
                     XposedHelpers.setObjectField(activity, "menus", newMenu)
                 }
@@ -108,8 +129,8 @@ class ShareHook : IHook {
                     val btnName = param.args[1] as String
                     AndroidLogger.i("clickItem: i10 $i str4 $btnName")
 
-                    if (btnName == "假装分享") {
-                        fakeShare(tid)
+                    when (btnName) {
+                        Constant.STR_FAKE_SHARE, Constant.STR_FAKE_SHARE_TRIPLE -> Helper.toast("假装分享成功")
                     }
                 }
             }
@@ -121,48 +142,54 @@ class ShareHook : IHook {
                     val btnName = param.args[1] as String
                     AndroidLogger.i("clickItem $i $btnName")
 
-                    if (btnName == "假装分享") {
-                        fakeShare(tid)
+                    when (btnName) {
+                        Constant.STR_FAKE_SHARE, Constant.STR_FAKE_SHARE_TRIPLE -> {
+                            if (objArticleDetailActivity != null) {
+                                val num = (1..4)
+
+                                fakeShare(objArticleDetailActivity!!, num.random())
+
+                                if (btnName == Constant.STR_FAKE_SHARE_TRIPLE) {
+                                    Thread.sleep(100)
+                                    fakeShare(objArticleDetailActivity!!, num.random())
+                                    Thread.sleep(100)
+                                    fakeShare(objArticleDetailActivity!!, num.random())
+                                }
+
+                                Helper.toast("假装分享成功")
+                            } else {
+                                Helper.toast("假装分享失败")
+                            }
+                        }
                     }
                 }
             }
 
-            //Event回调
-            MtdOnEvent = MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onEvent").first()
+            if(BuildConfig.DEBUG) {
+                //Event回调
+                MtdOnEvent.createHook {
+                    before { param ->
+                        val arg = param.args[0]
+                        val actionType = XposedHelpers.callMethod(arg, "c")
+                        val data = XposedHelpers.callMethod(arg, "d")
+                        val list = XposedHelpers.callMethod(arg, "e") as List<*>?
+                        val index = XposedHelpers.callMethod(actionType, "ordinal")
 
-            val clsEvt = MtdOnEvent.parameterTypes[0]
+                        AndroidLogger.i("onEvent $arg $actionType[$index] $data")
 
-            AndroidLogger.i(clsEvt.name)
-
-
-            MtdOnEvent.createHook {
-                before { param ->
-                    val arg = param.args[0]
-                    val actionType = XposedHelpers.callMethod(arg, "c")
-                    val data = XposedHelpers.callMethod(arg, "d")
-                    val index = XposedHelpers.callMethod(actionType, "ordinal")
-                    AndroidLogger.i("onEvent MainActivity $arg $actionType [ $index ] $data")
+                        if (list != null) {
+                            val str = list.joinToString {
+                                it.toString()
+                            }
+                            AndroidLogger.i("list $str")
+                        }
+                    }
                 }
             }
-
-            //分享后网络请求
-            MethodFinder.fromClass(clsNetRequestWrapper).filterByAssignableParamTypes(
-                String::class.java, String::class.java, String::class.java, clsNetRequestCallback
-            ).last().createHook {
-                before { param ->
-                    val str1 = param.args[0]
-                    val str2 = param.args[1]
-                    val str3 = param.args[2]
-
-                    AndroidLogger.i("$str1 $str2 $str3")
-                }
-            }
-
-
         }
 
         //绕过分享前验证是否安装App
-        if (Helper.getSpBool(Constant.FORCE_INSTALLED, false)) {
+        if (Helper.getSpBool(Constant.BYPASS_INSTALL_CHECK, false)) {
             MethodFinder.fromClass(clsUMShareAPI).filterByName("isInstall").first().createHook {
                 replace { param ->
                     val activity = param.args[0] as Activity

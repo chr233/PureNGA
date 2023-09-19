@@ -98,8 +98,7 @@ class PreferencesHook : IHook {
         }
 
         MethodFinder.fromClass(MainHook.clsAppConfig).filterByName("setDarkModel")
-            .filterByAssignableParamTypes(Boolean::class.java)
-            .first().createHook {
+            .filterByAssignableParamTypes(Boolean::class.java).first().createHook {
                 after {
                     btnPureNGASetting?.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))
                 }
@@ -160,18 +159,17 @@ class PreferencesHook : IHook {
             title = "假装分享"
             subTitle = "在分享菜单增加一个“假装分享”按钮"
         })
-        container.addView(ToggleItemView(context, Constant.FAKE_SHARE).apply {
-            title = "绕过应用是否安装检查"
-            subTitle = "没什么卵用"
+        container.addView(ToggleItemView(context, Constant.BYPASS_INSTALL_CHECK).apply {
+            title = "绕过已安装检查"
+            subTitle = "分享到指定App前检查不检查是否已安装"
         })
 
         container.addView(ClickableItemView(context).apply { title = "插件设置" })
-//        container.addView(ToggleItemView(context, Constant.CHECK_PLUGIN_UPDATE).apply {
-//            title = "检查插件更新(WIP)"
-//            subTitle = "定期检查插件更新"
-//            isEnabled=false
-//
-//        })
+        container.addView(ToggleItemView(context, Constant.CHECK_PLUGIN_UPDATE).apply {
+            title = "检查插件更新(未完成)"
+            subTitle = "定期检查插件更新"
+            isEnabled = false
+        })
         container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply {
             title = "静默运行"
             subTitle = "不显示模块运行信息"
