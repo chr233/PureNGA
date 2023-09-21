@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.pref_settings, rootKey)
-            findPreference<Preference>("version")?.summary = BuildConfig.VERSION_NAME
+            findPreference<Preference>("version")?.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
             runningStatusPref = findPreference("running_status")
         }
 
