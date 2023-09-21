@@ -3,6 +3,7 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -29,8 +30,10 @@ class SplashHook : IHook {
         if (Helper.getSpBool(Constant.PURE_SPLASH_AD, false)) {
             // 跳过开屏Logo页面
             MethodFinder.fromClass(clsActivityLifecycle).filterByName("toForeGround").first().createHook {
-                replace { param ->
-                    val activity = param.args[0] as Activity
+                replace {
+                    it.log()
+
+                    val activity = it.args[0] as Activity
                     if (activity.javaClass == MainHook.clsLoadingActivity) {
                         AndroidLogger.d("跳过启动页")
                         XposedHelpers.setBooleanField(activity, "canJump", true)
@@ -43,30 +46,23 @@ class SplashHook : IHook {
             // 修改时间戳实现切屏无广告
             MethodFinder.fromClass(MainHook.clsSPUtil).filterByName("getInt")
                 .filterByAssignableParamTypes(String::class.java, Int::class.java).first().createHook {
-                    after { param ->
-                        Helper.toast(param.args[0].toString())
-                        when (param.args[0] as String) {
-                            "AD_FORGROUND_TIME" -> {
-                                AndroidLogger.d("FG " + param.result.toString())
-                                param.result = 0
-                            }
+                    after {
+                        it.log()
 
-                            "AD_BACKGROUND_TIME" -> {
-                                AndroidLogger.d("BG " + param.result.toString())
-                                param.result = 0
+                        when (it.args[0] as String) {
+                            "AD_FORGROUND_TIME", "AD_BACKGROUND_TIME" -> {
+                                it.result = 0
                             }
                         }
                     }
                 }
 
             try {
-                MethodFinder.fromClass(clsLoadingActivity_a)
-                    .filterByName("callBack").first().createHook {
-                        replace { param ->
-                            val arg = param.args[0] as Long
-                            AndroidLogger.i("callback $arg")
-                        }
+                MethodFinder.fromClass(clsLoadingActivity_a).filterByName("callBack").first().createHook {
+                    replace {
+                        it.log()
                     }
+                }
             } catch (e: Throwable) {
                 AndroidLogger.w("去开屏广告功能部分开启失败")
             }

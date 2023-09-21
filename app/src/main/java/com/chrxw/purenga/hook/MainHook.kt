@@ -29,7 +29,7 @@ class MainHook : IHook {
         Helper.clsDrawerId = classLoader.loadClass("gov.pianzong.androidnga.R\$drawable")
 
         EzXHelper.appContext.run {
-            Helper.spDoinfo = getSharedPreferences(Constant.DNINFO, Context.MODE_PRIVATE)
+            Helper.spDoinfo = getSharedPreferences(Constant.DN_INFO_PREFERENCE_NAME, Context.MODE_PRIVATE)
             Helper.spPlugin = getSharedPreferences(Constant.PLUGIN_PREFERENCE_NAME, Context.MODE_PRIVATE)
 
             Helper.enableLog = Helper.getSpBool(Constant.ENABLE_LOG, BuildConfig.DEBUG)

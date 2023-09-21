@@ -8,8 +8,7 @@ import android.widget.TextView
 import androidx.core.view.children
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Helper.log
-import com.github.kyuubiran.ezxhelper.AndroidLogger
+import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
@@ -35,24 +34,6 @@ class OptimizeHook : IHook {
         clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
-
-        MethodFinder.fromClass(clsMainActivity).filterByName("initTabs").first().createHook {
-            after {
-                it.log()
-
-                val activity = it.thisObject as Activity
-                val tabId = Helper.getRId("tab_home_navigation")
-                val actionBars = activity.findViewById<HorizontalScrollView>(tabId)
-                val linearLayout = actionBars.children.first() as LinearLayout
-
-                for (view in linearLayout.children) {
-                    AndroidLogger.i(view.toString())
-                    val desc = view.contentDescription ?: ""
-                    AndroidLogger.i(desc.toString())
-                }
-
-            }
-        }
     }
 
     override fun hook() {
@@ -150,6 +131,26 @@ class OptimizeHook : IHook {
                     val wxBtn = activity.findViewById<TextView>(wxRid)
                     val actionBar = wxBtn.parent as LinearLayout
                     actionBar.removeView(wxBtn)
+                }
+            }
+        }
+
+        val option = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
+        if (!option.isNullOrEmpty()) {
+            MethodFinder.fromClass(clsMainActivity).filterByName("initTabs").first().createHook {
+                after {
+                    it.log()
+
+                    val activity = it.thisObject as Activity
+                    val tabId = Helper.getRId("tab_home_navigation")
+                    val actionBars = activity.findViewById<HorizontalScrollView>(tabId)
+                    val linearLayout = actionBars.children.first() as LinearLayout
+
+                    for (view in linearLayout.children) {
+                        if (view.contentDescription == option) {
+                            view.performClick()
+                        }
+                    }
                 }
             }
         }

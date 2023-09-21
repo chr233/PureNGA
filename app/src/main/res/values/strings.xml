@@ -12,9 +12,9 @@
     <string name="module_disabled">模块未启用</string>
     <string name="github_url">https://github.com/chr233/PureNGA</string>
     <string name="author_url">https://github.com/chr233</string>
-    <string name="donate_url">https://afdian.net/a/chr233</string>
+    <string name="donate_url">https://afdian.net/order/create?user_id=81888d36247c11ea8ac152540025c377</string>
     <string name="author_summary" translatable="false">chr233</string>
-    <string name="donate_summary">爱发电</string>
+    <string name="donate_summary">爱发电 @chr233</string>
     <string name="hide_icon">隐藏桌面图标</string>
     <string name="hide_icon_summary">不在启动器中显示图标</string>
     <string name="plugin_setting">插件设置入口</string>
@@ -23,4 +23,5 @@
     <string name="tutorials_second">在最底部找到【PureNGA 设置】</string>
     <string name="open_nga_summary">屎黄色论坛, 启动!</string>
     <string name="setting">设置</string>
+    <string name="source_code">获取源码</string>
 </resources>

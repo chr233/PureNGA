@@ -2,8 +2,8 @@ package com.chrxw.purenga.hook
 
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Helper.log
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -148,10 +148,7 @@ class ShareHook : IHook {
                 before {
                     it.log()
 
-                    val i = it.args[0] as Int
-                    val btnName = it.args[1] as String
-
-                    when (btnName) {
+                    when (val btnName = it.args[1] as String) {
                         Constant.STR_FAKE_SHARE, Constant.STR_FAKE_SHARE_TRIPLE -> {
                             if (objArticleDetailActivity != null) {
                                 val num = (1..4)

@@ -6,8 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.text.InputType
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
@@ -70,7 +72,7 @@ class PreferencesHook : IHook {
 
                             val view = generateView(activity)
 
-                            AlertDialog.Builder(activity).run {
+                            AlertDialog.Builder(activity).apply {
                                 setTitle(Constant.BTN_TITLE)
                                 setCancelable(false)
                                 setView(view)
@@ -141,6 +143,37 @@ class PreferencesHook : IHook {
             title = "去除微信分享图标"
             subTitle = "移除文章详情页右上角微信图标"
         })
+        container.addView(ClickableItemView(context).apply {
+            title = "自定义首页"
+            subTitle = "设置APP首页 (首页,社区,我的)"
+            setOnClickListener {
+
+                val input = EditText(context).apply {
+                    val option = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
+                    setText(option)
+                    hint = subTitle
+                    inputType = InputType.TYPE_CLASS_TEXT
+                }
+
+                AlertDialog.Builder(context).apply {
+                    setTitle(title)
+                    setCancelable(false)
+                    setView(input)
+                    setNeutralButton("清除设置") { _, _ ->
+                        Helper.setSpStr(Constant.CUSTOM_INDEX, null)
+                        Helper.toast("设置已清除")
+                    }
+                    setNegativeButton("关闭") { _, _ ->
+                    }
+                    setPositiveButton("保存") { _, _ ->
+                        Helper.setSpStr(Constant.CUSTOM_INDEX, input.text.toString())
+                        Helper.toast("设置已保存")
+                    }
+                    create()
+                    show()
+                }
+            }
+        })
 
         container.addView(ClickableItemView(context).apply { title = "功能设置" })
         container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply {
@@ -165,11 +198,15 @@ class PreferencesHook : IHook {
         })
 
         container.addView(ClickableItemView(context).apply { title = "插件设置" })
-        container.addView(ToggleItemView(context, Constant.CHECK_PLUGIN_UPDATE).apply {
-            title = "检查插件更新(未完成)"
-            subTitle = "定期检查插件更新"
-            idDisabled = true
+        container.addView(ToggleItemView(context, Constant.ENABLE_LOG, BuildConfig.DEBUG).apply {
+            title = "启用日志"
+            subTitle = "在Logcat中输出详细日志"
         })
+//        container.addView(ToggleItemView(context, Constant.CHECK_PLUGIN_UPDATE).apply {
+//            title = "检查插件更新(未完成)"
+//            subTitle = "定期检查插件更新"
+//            idDisabled = true
+//        })
         container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply {
             title = "静默运行"
             subTitle = "不显示模块运行信息"
@@ -177,27 +214,27 @@ class PreferencesHook : IHook {
         container.addView(ClickableItemView(context).apply {
             title = "手动检查更新"
             val ngaVersion = Helper.getNgaVersion()
-            val type = if (Helper.isBundled()) "插件版" else "整合版"
-            subTitle = "NGA版本: $ngaVersion | 插件版本: ${BuildConfig.VERSION_NAME} - $type"
+            val sunType = if (Helper.isBundled()) "整合版" else "插件版"
+            subTitle = "NGA版本: $ngaVersion | 插件版本: ${BuildConfig.VERSION_NAME} - $sunType"
             setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.REPO_URL))
+                val uri = if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                 context.startActivity(intent)
-//                Helper.toast("todo")
             }
         })
 
         container.addView(ClickableItemView(context).apply { title = "关于" })
         container.addView(ClickableItemView(context).apply {
             title = "作者"
-            subTitle = "chr233"
+            subTitle = "GitHub @chr233"
             setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.AUTHOR_URL))
                 context.startActivity(intent)
             }
         })
         container.addView(ClickableItemView(context).apply {
-            title = "捐赠(爱发电)"
-            subTitle = "@chr233"
+            title = "捐赠"
+            subTitle = "爱发电 @chr233"
             setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.DONATE_URL))
                 context.startActivity(intent)

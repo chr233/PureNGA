@@ -8,12 +8,7 @@ import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
-import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.net.URL
 
 
 /**
@@ -53,9 +48,9 @@ object Helper {
             EzXHelper.appContext.packageManager.getPackageInfo(
                 BuildConfig.APPLICATION_ID, PackageInfo.INSTALL_LOCATION_AUTO
             ).versionName
-            true
-        } catch (e: PackageManager.NameNotFoundException) {
             false
+        } catch (e: PackageManager.NameNotFoundException) {
+            true
         }
     }
 
@@ -79,7 +74,7 @@ object Helper {
     }
 
     fun getDrawerId(key: String): Int {
-        return getRes(clsDrawerId, key);
+        return getRes(clsDrawerId, key)
     }
 
     /**
@@ -103,31 +98,32 @@ object Helper {
         spPlugin.edit().putBoolean(key, value).apply()
     }
 
-    private suspend fun fetchJson(url: URL) = withContext(Dispatchers.IO) {
-        try {
-            JSONObject(url.readText())
-        } catch (e: Throwable) {
-            null
-        }
+    /**
+     * 获取SharedPreference值
+     */
+    fun getSpStr(key: String, defValue: String?): String? {
+        return spPlugin.getString(key, defValue)
     }
 
-    private suspend fun fetchJson(url: String) = fetchJson(URL(url))
-
-    private suspend fun checkUpdate() {
-        val response = fetchJson(Constant.REPO_URL)
+    /**
+     * 设置SharedPreference值
+     */
+    fun setSpStr(key: String, value: String?) {
+        spPlugin.edit().putString(key, value).apply()
     }
 
-    fun XC_MethodHook.MethodHookParam.log() {
-        if (enableLog) {
-            AndroidLogger.i("Method: ${this.method.name}")
-            AndroidLogger.i("Object: ${this.thisObject}")
-
-            if (this.args.any()) {
-                AndroidLogger.i("Args:")
-                this.args.forEachIndexed { index, item ->
-                    AndroidLogger.d(" $index: $item")
-                }
-            }
-        }
-    }
+//    private suspend fun fetchJson(url: URL) = withContext(Dispatchers.IO) {
+//        try {
+//            JSONObject(url.readText())
+//        } catch (e: Throwable) {
+//            null
+//        }
+//    }
+//
+//    suspend fun checkUpdate() {
+//        val url = URL(Constant.API_PLUGIN_STANDALONE_URL)
+//        val result = fetchJson(url)
+//
+//        AndroidLogger.i(result.toString())
+//    }
 }

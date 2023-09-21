@@ -5,8 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.Helper.log
-import com.github.kyuubiran.ezxhelper.AndroidLogger
+import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import java.lang.reflect.Method
@@ -45,8 +44,6 @@ class WebViewHook : IHook {
                         if (url != null && !isNgaUrl(url)) {
                             it.args[4] = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                         }
-                    } else {
-                        AndroidLogger.i("execStartActivity className: $clsName")
                     }
                 }
             }

@@ -18,9 +18,7 @@ import androidx.preference.PreferenceFragmentCompat
  * 主界面
  */
 class MainActivity : AppCompatActivity() {
-
     companion object {
-
         /**
          * 检测模块启用状态
          */
@@ -50,9 +48,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onPreferenceTreeClick(preference: Preference): Boolean {
-            val prefKey = preference.key
 
-            when (prefKey) {
+            when (val prefKey = preference.key) {
                 "hide_icon" -> {
                     val ctx = context
                     if (ctx != null) {
@@ -60,14 +57,16 @@ class MainActivity : AppCompatActivity() {
                     }
                     return true
                 }
+
                 "plugin_setting" -> {
-                    AlertDialog.Builder(activity).run {
+                    AlertDialog.Builder(activity).apply {
                         setView(R.layout.plugin_setting)
                         setNegativeButton("关闭", null)
                         show()
                     }
                     return true
                 }
+
                 "open_nga" -> {
                     try {
                         startActivity(
@@ -79,29 +78,22 @@ class MainActivity : AppCompatActivity() {
                             )//.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
                         )
                     } catch (e: Throwable) {
-
                         toast("打开 NGA 失败")
                     }
                     return true
                 }
+
                 else -> {
-                    val intent = when (prefKey) {
-                        "version" -> {
-                            Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_url)))
-                        }
-
-                        "author" -> {
-                            Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.author_url)))
-                        }
-
-                        "donate" -> {
-                            Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.donate_url)))
-                        }
-
+                    val uri = when (prefKey) {
+                        "version" -> Constant.RELEASE_STANDALONE
+                        "author" -> Constant.AUTHOR_URL
+                        "donate" -> Constant.DONATE_URL
+                        "repo" -> Constant.REPO_URL
                         else -> null
                     }
 
-                    if (intent != null) {
+                    if (!uri.isNullOrEmpty()) {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                         startActivity(intent)
                     }
 
@@ -128,8 +120,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         private fun toast(text: String, duration: Int = Toast.LENGTH_LONG) {
-            val t = Toast.makeText(this.context, text, duration)
-            t.show()
+            Toast.makeText(this.context, text, duration).show()
         }
     }
 }

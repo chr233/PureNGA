@@ -11,14 +11,15 @@ import com.chrxw.purenga.utils.Helper
 /**
  * 开关控件
  */
-class ToggleItemView(context: Context, spKey: String) : ClickableItemView(context), OnClickListener {
+class ToggleItemView(context: Context, spKey: String, defValue: Boolean = false) : ClickableItemView(context),
+    OnClickListener {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private val switch = Switch(context)
     private var spKey: String = ""
 
     init {
         this.spKey = spKey
-        switch.isChecked = Helper.getSpBool(spKey, false)
+        switch.isChecked = Helper.getSpBool(spKey, defValue)
 
         val switchParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT).apply {
             gravity = Gravity.CENTER_VERTICAL or Gravity.END
