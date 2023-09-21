@@ -41,6 +41,13 @@ class ToggleItemView(context: Context, spKey: String) : ClickableItemView(contex
             Helper.setSpBool(spKey, isChecked)
         }
 
+    override var idDisabled: Boolean
+        get() = !switch.isEnabled
+        set(value) {
+            switch.isEnabled = !value
+            super.idDisabled = value
+        }
+
     override fun onClick(v: View?) {
         isChecked = if (v !is Switch) {
             !isChecked

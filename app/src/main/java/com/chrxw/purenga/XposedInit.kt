@@ -5,6 +5,7 @@ import android.app.Application
 import android.app.Instrumentation
 import android.widget.Toast
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.Helper.log
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
@@ -34,6 +35,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
             MethodFinder.fromClass(MainActivity.Companion::class.java.name).filterByName("isModuleActive").first()
                 .createHook {
                     replace {
+                        it.log()
                         return@replace true
                     }
                 }
@@ -41,10 +43,30 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             AndroidLogger.d("NGA内运行")
 
+
+//            XposedHelpers.findAndHookMethod("android.widget.Toast", lpparam.classLoader, "makeText",
+//                Context::class.java,
+//                CharSequence::class.java,
+//                Int::class.javaPrimitiveType, object : XC_MethodHook() {
+//                    @Throws(Throwable::class)
+//                    override fun beforeHookedMethod(param: MethodHookParam) {
+//                        try {
+//                            val str = param.args[1] as String
+//                            AndroidLogger.i("toast $str")
+//
+//                            throw Exception("test")
+//                        } catch (e: Exception) {
+//                            AndroidLogger.e("toastMessage", e)
+//                        }
+//                    }
+//                })
+
             MethodFinder.fromClass(Instrumentation::class.java).filterByName("callApplicationOnCreate")
                 .filterByAssignableParamTypes(Application::class.java).first().createHook {
-                    after { param ->
-                        if (param.args[0] is Application) {
+                    after {
+                        it.log()
+
+                        if (it.args[0] is Application) {
                             if (!isInit) {
                                 isInit = true
                                 val context = AndroidAppHelper.currentApplication().applicationContext

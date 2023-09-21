@@ -8,6 +8,7 @@ import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
+import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,6 +25,8 @@ object Helper {
     lateinit var spPlugin: SharedPreferences
     lateinit var clsRId: Class<*>
     lateinit var clsDrawerId: Class<*>
+
+    var enableLog = false
 
     /**
      * 发送Toast
@@ -112,5 +115,19 @@ object Helper {
 
     private suspend fun checkUpdate() {
         val response = fetchJson(Constant.REPO_URL)
+    }
+
+    fun XC_MethodHook.MethodHookParam.log() {
+        if (enableLog) {
+            AndroidLogger.i("Method: ${this.method.name}")
+            AndroidLogger.i("Object: ${this.thisObject}")
+
+            if (this.args.any()) {
+                AndroidLogger.i("Args:")
+                this.args.forEachIndexed { index, item ->
+                    AndroidLogger.d(" $index: $item")
+                }
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.chrxw.purenga.hook
 
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.Helper.log
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -31,7 +32,7 @@ class AdHook : IHook {
             try {
                 MethodFinder.fromClass(clsDnFeedAd).filterByName("requestServerSuccess").first().createHook {
                     replace {
-                        AndroidLogger.i("DnFeedAd.requestServerSuccess")
+                        it.log()
                     }
                 }
             } catch (e: NoSuchMethodException) {
@@ -42,7 +43,7 @@ class AdHook : IHook {
                 MethodFinder.fromClass(clsNativeExpressAD).filterByName("a").filterByAssignableParamTypes(clsAdSize)
                     .first().createHook {
                         replace {
-                            AndroidLogger.i("NativeExpressAD.a")
+                            it.log()
                             return@replace true
                         }
                     }
@@ -54,7 +55,7 @@ class AdHook : IHook {
                 MethodFinder.fromClass(clsUtils_bp).filterByName("runOnUiThread")
                     .filterByAssignableParamTypes(Runnable::class.java).first().createHook {
                         replace {
-                            AndroidLogger.i("utils.bp.runOnUiThread")
+                            it.log()
                             return@replace true
                         }
                     }
@@ -64,13 +65,13 @@ class AdHook : IHook {
 
             MethodFinder.fromClass(MainHook.clsNGAApplication).filterByName("preThirdParty").first().createHook {
                 replace {
-                    AndroidLogger.i("preThirdParty")
+                    it.log()
                 }
             }
 
             MethodFinder.fromClass(MainHook.clsLoadingActivity).filterByName("loadAD").first().createHook {
                 replace {
-                    AndroidLogger.i("loadAD")
+                    it.log()
                 }
             }
         }

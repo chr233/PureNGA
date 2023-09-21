@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.Helper.log
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -33,14 +34,16 @@ class WebViewHook : IHook {
     override fun hook() {
         if (Helper.getSpBool(Constant.USE_EXTERNAL_BROWSER, false)) {
             MethodFinder.fromClass(Instrumentation::class.java).filterByName("execStartActivity").first().createHook {
-                before { param ->
-                    val intent = param.args?.get(4) as? Intent? ?: return@before
+                before {
+                    it.log()
+
+                    val intent = it.args?.get(4) as? Intent? ?: return@before
                     val bundle = intent.extras
                     val clsName = intent.component?.className ?: ""
                     if (bundle != null && clsName == "com.donews.nga.activitys.WebActivity") {
                         val url = bundle.getString("act_url")
                         if (url != null && !isNgaUrl(url)) {
-                            param.args[4] = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            it.args[4] = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                         }
                     } else {
                         AndroidLogger.i("execStartActivity className: $clsName")

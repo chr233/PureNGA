@@ -33,6 +33,8 @@ object Constant {
     const val BYPASS_INSTALL_CHECK = "bypass_install_check"
     const val HIDE_HOOK_INFO = "hide_hook_info"
 
+    const val ENABLE_LOG = "enable_log"
+
     const val BTN_TITLE = "PureNGA 设置"
 
     const val STR_FAKE_SHARE = "假装分享"

@@ -61,4 +61,11 @@ open class ClickableItemView(context: Context) : FrameLayout(context) {
                 titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             }
         }
+
+    open var idDisabled: Boolean
+        get() = !titleTextView.isEnabled
+        set(value) {
+            titleTextView.isEnabled = !value
+            subTextView.isEnabled = !value
+        }
 }

@@ -161,14 +161,14 @@ class PreferencesHook : IHook {
         })
         container.addView(ToggleItemView(context, Constant.BYPASS_INSTALL_CHECK).apply {
             title = "绕过已安装检查"
-            subTitle = "分享到指定App前检查不检查是否已安装"
+            subTitle = "分享到指定App前检查不检查是否已安装(调试用)"
         })
 
         container.addView(ClickableItemView(context).apply { title = "插件设置" })
         container.addView(ToggleItemView(context, Constant.CHECK_PLUGIN_UPDATE).apply {
             title = "检查插件更新(未完成)"
             subTitle = "定期检查插件更新"
-            isEnabled = false
+            idDisabled = true
         })
         container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply {
             title = "静默运行"

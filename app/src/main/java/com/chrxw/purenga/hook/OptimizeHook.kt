@@ -1,11 +1,14 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.core.view.children
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.Helper.log
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -32,6 +35,24 @@ class OptimizeHook : IHook {
         clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
+
+        MethodFinder.fromClass(clsMainActivity).filterByName("initTabs").first().createHook {
+            after {
+                it.log()
+
+                val activity = it.thisObject as Activity
+                val tabId = Helper.getRId("tab_home_navigation")
+                val actionBars = activity.findViewById<HorizontalScrollView>(tabId)
+                val linearLayout = actionBars.children.first() as LinearLayout
+
+                for (view in linearLayout.children) {
+                    AndroidLogger.i(view.toString())
+                    val desc = view.contentDescription ?: ""
+                    AndroidLogger.i(desc.toString())
+                }
+
+            }
+        }
     }
 
     override fun hook() {
@@ -39,7 +60,7 @@ class OptimizeHook : IHook {
         if (Helper.getSpBool(Constant.KILL_POPUP_DIALOG, false)) {
             MethodFinder.fromClass(MainHook.clsAppConfig).filterByName("isAgreedAgreement").first().createHook {
                 replace {
-                    AndroidLogger.i("isAgreedAgreement")
+                    it.log()
                     return@replace true
                 }
             }
@@ -47,7 +68,7 @@ class OptimizeHook : IHook {
             MethodFinder.fromClass(MainHook.clsNGAApplication).filterByName("showNotificationDialog").first()
                 .createHook {
                     replace {
-                        AndroidLogger.i("showNotificationDialog")
+                        it.log()
                         return@replace true
                     }
                 }
@@ -57,13 +78,13 @@ class OptimizeHook : IHook {
         if (Helper.getSpBool(Constant.KILL_UPDATE_CHECK, false)) {
             MethodFinder.fromClass(clsMainActivityPresenter).filterByName("checkAppUpdate").first().createHook {
                 replace {
-                    AndroidLogger.i("checkAppUpdate")
+                    it.log()
                 }
             }
 
             MethodFinder.fromClass(clsCommentDialog).filterByName("showUpdate").first().createHook {
                 replace {
-                    AndroidLogger.i("showUpdate")
+                    it.log()
                 }
             }
         }
@@ -71,8 +92,10 @@ class OptimizeHook : IHook {
         //移除首页商城入口
         if (Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)) {
             MethodFinder.fromClass(clsHomeDrawerLayout).filterByName("initLayout").first().createHook {
-                after { param ->
-                    val viewBinding = XposedHelpers.getObjectField(param.thisObject, "binding")
+                after {
+                    it.log()
+
+                    val viewBinding = XposedHelpers.getObjectField(it.thisObject, "binding")
                     val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
                     val scrollView = root.getChildAt(1) as ScrollView
                     val linearLayout = scrollView.getChildAt(0) as LinearLayout
@@ -87,9 +110,10 @@ class OptimizeHook : IHook {
             }
 
             MethodFinder.fromClass(clsMainActivityPresenter).filterByName("initTabParams").first().createHook {
-                before { param ->
-                    AndroidLogger.i("initTabs")
-                    val activity = param.thisObject
+                before {
+                    it.log()
+
+                    val activity = it.thisObject
                     val tabParam = XposedHelpers.getObjectField(activity, "tabParams") as ArrayList<*>
 
                     var i = 0
@@ -109,9 +133,8 @@ class OptimizeHook : IHook {
         //移除导航栏活动图标
         if (Helper.getSpBool(Constant.REMOVE_ACTIVITY_ICON, false)) {
             MethodFinder.fromClass(clsMainActivity).filterByName("initActivityMenu").first().createHook {
-                replace { param ->
-                    val args = param.args[0]
-                    AndroidLogger.i("initActivityMenu $args")
+                replace {
+                    it.log()
                 }
             }
         }
@@ -119,8 +142,10 @@ class OptimizeHook : IHook {
         //移除右上角微信图标
         if (Helper.getSpBool(Constant.REMOVE_WECHAT_ICON, false)) {
             MethodFinder.fromClass(clsArticleDetailActivity).filterByName("initView").first().createHook {
-                after { param ->
-                    val activity = param.thisObject as Activity
+                after {
+                    it.log()
+
+                    val activity = it.thisObject as Activity
                     val wxRid = Helper.getRId("right_second_btn")
                     val wxBtn = activity.findViewById<TextView>(wxRid)
                     val actionBar = wxBtn.parent as LinearLayout

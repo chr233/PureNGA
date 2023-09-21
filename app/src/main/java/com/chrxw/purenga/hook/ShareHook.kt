@@ -1,9 +1,9 @@
 package com.chrxw.purenga.hook
 
-import android.app.Activity
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.Helper.log
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -32,7 +32,7 @@ class ShareHook : IHook {
         /**
          * 假装分享
          */
-        private  fun fakeShare(obj:Any, num :Int){
+        private fun fakeShare(obj: Any, num: Int) {
             val evt = clsEvt.getDeclaredConstructor(clsActionType, Any::class.java)
                 .newInstance(eShareSuccess, num)
             MtdOnEvent.invoke(obj, evt)
@@ -71,12 +71,14 @@ class ShareHook : IHook {
             //维护 objArticleDetailActivity 对象
             var objArticleDetailActivity: Any? = null
             MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onCreate").first().createHook {
-                before { param ->
-                    objArticleDetailActivity = param.thisObject
+                before {
+                    it.log()
+                    objArticleDetailActivity = it.thisObject
                 }
             }
             MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onDestroy").first().createHook {
                 before {
+                    it.log()
                     objArticleDetailActivity = null
                 }
             }
@@ -85,10 +87,12 @@ class ShareHook : IHook {
 
             //获取帖子信息
             MethodFinder.fromClass(clsArticleDetailActivity).filterByName("setThreadInfo").first().createHook {
-                before { param ->
-                    objArticleDetailActivity = param.thisObject
+                before {
+                    it.log()
 
-                    val post = param.args[0]
+                    objArticleDetailActivity = it.thisObject
+
+                    val post = it.args[0]
                     tid = XposedHelpers.callMethod(post, "getTid") as String
                     val fid = XposedHelpers.callMethod(post, "getFid") as String
 
@@ -98,8 +102,10 @@ class ShareHook : IHook {
 
             //添加按钮
             MethodFinder.fromClass(clsBottomMenuDialog).filterByName("initMenus").first().createHook {
-                before { param ->
-                    val activity = param.thisObject
+                before {
+                    it.log()
+
+                    val activity = it.thisObject
                     val menus = XposedHelpers.getObjectField(activity, "menus") as MutableList<*>
 
                     val newMenu = menus.filterIsInstance<Any>() as MutableList<Any>
@@ -124,9 +130,11 @@ class ShareHook : IHook {
 
             //内置浏览器分享点击事件
             MethodFinder.fromClass(clsCreateListener_1).filterByName("clickItem").first().createHook {
-                before { param ->
-                    val i = param.args[0] as Int
-                    val btnName = param.args[1] as String
+                before {
+                    it.log()
+
+                    val i = it.args[0] as Int
+                    val btnName = it.args[1] as String
                     AndroidLogger.i("clickItem: i10 $i str4 $btnName")
 
                     when (btnName) {
@@ -137,10 +145,11 @@ class ShareHook : IHook {
 
             //帖子分享点击事件
             MethodFinder.fromClass(clsArticleDetailActivity_x).filterByName("clickItem").first().createHook {
-                before { param ->
-                    val i = param.args[0] as Int
-                    val btnName = param.args[1] as String
-                    AndroidLogger.i("clickItem $i $btnName")
+                before {
+                    it.log()
+
+                    val i = it.args[0] as Int
+                    val btnName = it.args[1] as String
 
                     when (btnName) {
                         Constant.STR_FAKE_SHARE, Constant.STR_FAKE_SHARE_TRIPLE -> {
@@ -165,11 +174,13 @@ class ShareHook : IHook {
                 }
             }
 
-            if(BuildConfig.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 //Event回调
                 MtdOnEvent.createHook {
-                    before { param ->
-                        val arg = param.args[0]
+                    before {
+                        it.log()
+
+                        val arg = it.args[0]
                         val actionType = XposedHelpers.callMethod(arg, "c")
                         val data = XposedHelpers.callMethod(arg, "d")
                         val list = XposedHelpers.callMethod(arg, "e") as List<*>?
@@ -178,9 +189,7 @@ class ShareHook : IHook {
                         AndroidLogger.i("onEvent $arg $actionType[$index] $data")
 
                         if (list != null) {
-                            val str = list.joinToString {
-                                it.toString()
-                            }
+                            val str = list.joinToString { x -> x.toString() }
                             AndroidLogger.i("list $str")
                         }
                     }
@@ -191,10 +200,8 @@ class ShareHook : IHook {
         //绕过分享前验证是否安装App
         if (Helper.getSpBool(Constant.BYPASS_INSTALL_CHECK, false)) {
             MethodFinder.fromClass(clsUMShareAPI).filterByName("isInstall").first().createHook {
-                replace { param ->
-                    val activity = param.args[0] as Activity
-                    val mode = param.args[1]
-                    AndroidLogger.i("isInstall $activity mode $mode")
+                replace {
+                    it.log()
                     return@replace true
                 }
             }

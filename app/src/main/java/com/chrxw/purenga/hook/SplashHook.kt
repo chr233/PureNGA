@@ -16,10 +16,13 @@ class SplashHook : IHook {
 
     companion object {
         private lateinit var clsActivityLifecycle: Class<*>
+        private lateinit var clsLoadingActivity_a: Class<*>
     }
 
     override fun init(classLoader: ClassLoader) {
         clsActivityLifecycle = classLoader.loadClass("com.donews.nga.interfaces.ActivityLifecycleImpl")
+        clsLoadingActivity_a = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity\$a")
+
     }
 
     override fun hook() {
@@ -27,7 +30,7 @@ class SplashHook : IHook {
             // 跳过开屏Logo页面
             MethodFinder.fromClass(clsActivityLifecycle).filterByName("toForeGround").first().createHook {
                 replace { param ->
-                    val activity = param.args?.get(0) as Activity
+                    val activity = param.args[0] as Activity
                     if (activity.javaClass == MainHook.clsLoadingActivity) {
                         AndroidLogger.d("跳过启动页")
                         XposedHelpers.setBooleanField(activity, "canJump", true)
@@ -55,6 +58,20 @@ class SplashHook : IHook {
                         }
                     }
                 }
+
+            try {
+                MethodFinder.fromClass(clsLoadingActivity_a)
+                    .filterByName("callBack").first().createHook {
+                        replace { param ->
+                            val arg = param.args[0] as Long
+                            AndroidLogger.i("callback $arg")
+                        }
+                    }
+            } catch (e: Throwable) {
+                AndroidLogger.w("去开屏广告功能部分开启失败")
+            }
         }
+
+
     }
 }
