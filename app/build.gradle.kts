@@ -16,8 +16,8 @@ android {
         applicationId = "com.chrxw.purenga"
         minSdk = 24
         targetSdk = 34
-        versionCode = 15
-        versionName = "1.12.0"
+        versionCode = 16
+        versionName = "1.12.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles()
@@ -45,7 +45,7 @@ android {
     }
 
     androidResources {
-//        additionalParameters("--allow-reserved-package-id", "--package-id", "0x50")
+        additionalParameters += listOf("--allow-reserved-package-id", "--package-id", "0x50")
     }
 
     buildToolsVersion = "33.0.1"
@@ -63,3 +63,4 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
+
