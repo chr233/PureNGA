@@ -35,7 +35,7 @@ Xposed 仓库
 - [x] 假装分享
 - [x] 自定义首页
 
-兼容 Lspatch
+同时兼容 Lspatch, 支持 9.x.x 版本的 NGA 客户端
 
 ## 设置菜单入口
 
