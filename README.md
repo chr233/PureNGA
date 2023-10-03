@@ -20,9 +20,9 @@ Xposed 仓库
 
 ## 版本说明
 
-|    类型    |                    特性                    |                 发行版链接                 |                     下载量                     |
-| :--------: | :----------------------------------------: | :----------------------------------------: | :--------------------------------------------: |
-| 整合版 NGA | 无需 Xposed 框架, 覆盖安装原版 App, 体积大 |  [![img][release_bundled]][link_bundled]   |    [![img][download_bundled]][link_bundled]    |
+|    类型    |                    特性                    |                  发行版链接                   |                     下载量                     |
+| :--------: | :----------------------------------------: | :-------------------------------------------: | :--------------------------------------------: |
+| 整合版 NGA | 无需 Xposed 框架, 覆盖安装原版 App, 体积大 |    [![img][release_bundled]][link_bundled]    |    [![img][download_bundled]][link_bundled]    |
 | 独立插件版 |     依赖 Xposed 框架, 独立更新, 体积小     | [![img][release_standalone]][link_standalone] | [![img][download_standalone]][link_standalone] |
 
 ## 主要功能
@@ -39,8 +39,8 @@ Xposed 仓库
 
 ## 设置菜单入口
 
-![img1](app/src/main/res/drawable/tutorials.webp)
-![img2](app/src/main/res/drawable/tutorials2.webp)
+| ![img1](app/src/main/res/drawable/tutorials.webp) | ![img2](app/src/main/res/drawable/tutorials2.webp) |
+| ------------------------------------------------- | -------------------------------------------------- |
 
 [release_bundled]: https://img.shields.io/github/v/release/chr233/PureNGA?logo=github&label=版本
 [release_standalone]: https://img.shields.io/github/v/release/Xposed-Modules-Repo/com.chrxw.purenga?logo=github&label=版本
