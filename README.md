@@ -4,13 +4,13 @@
 [![License](https://img.shields.io/github/license/chr233/PureNGA?logo=apache)](https://github.com/chr233/PureNGA/blob/master/license)
 ![GitHub last commit](https://img.shields.io/github/last-commit/chr233/PureNGA?logo=github)
 
-![GitHub Repo stars](https://img.shields.io/github/stars/chr233/PureNGA?logo=github)
-[![GitHub Download](https://img.shields.io/github/downloads/chr233/PureNGA/total?logo=github)](https://img.shields.io/github/v/release/chr233/PureNGA)
-插件仓库
+[![GitHub Repo stars](https://img.shields.io/github/stars/chr233/PureNGA?logo=github)][repo_code]
+[![GitHub Download](https://img.shields.io/github/downloads/chr233/PureNGA/total?logo=github)][repo_code]
+[插件仓库][repo_code]
 
-![GitHub Repo stars](https://img.shields.io/github/stars/Xposed-Modules-Repo/com.chrxw.purenga?logo=github)
-[![GitHub Download](https://img.shields.io/github/downloads/Xposed-Modules-Repo/com.chrxw.purenga/total?logo=github)](https://img.shields.io/github/v/release/Xposed-Modules-Repo/com.chrxw.purenga)
-Xposed 仓库
+[![GitHub Repo stars](https://img.shields.io/github/stars/Xposed-Modules-Repo/com.chrxw.purenga?logo=github)][repo_xposed]
+[![GitHub Download](https://img.shields.io/github/downloads/Xposed-Modules-Repo/com.chrxw.purenga/total?logo=github)][repo_xposed]
+[Xposed 仓库][repo_xposed]
 
 [![Bilibili](https://img.shields.io/badge/bilibili-Chr__-00A2D8.svg?logo=bilibili)](https://space.bilibili.com/5805394)
 [![Steam](https://img.shields.io/badge/steam-Chr__-1B2838.svg?logo=steam)](https://steamcommunity.com/id/Chr_)
@@ -42,6 +42,8 @@ Xposed 仓库
 | ![img1](app/src/main/res/drawable/tutorials.webp) | ![img2](app/src/main/res/drawable/tutorials2.webp) |
 | ------------------------------------------------- | -------------------------------------------------- |
 
+[repo_code]: https://github.com/chr233/PureNGA
+[repo_xposed]: https://github.com/Xposed-Modules-Repo/com.chrxw.purenga
 [release_bundled]: https://img.shields.io/github/v/release/chr233/PureNGA?logo=github&label=版本
 [release_standalone]: https://img.shields.io/github/v/release/Xposed-Modules-Repo/com.chrxw.purenga?logo=github&label=版本
 [download_bundled]: https://img.shields.io/github/downloads/chr233/PureNGA/total?logo=github&label=下载
