@@ -22,8 +22,8 @@ class AdHook : IHook {
     override fun init(classLoader: ClassLoader) {
         clsDnFeedAd = classLoader.loadClass("com.donews.admediation.adimpl.feed.DnFeedAd")
         clsNativeExpressAD = classLoader.loadClass("com.qq.e.ads.nativ.NativeExpressAD")
-        clsUtils_bp = classLoader.loadClass("com.kwad.sdk.utils.bp")
         clsAdSize = classLoader.loadClass("com.qq.e.ads.nativ.ADSize")
+        clsUtils_bp = classLoader.loadClass("com.kwad.sdk.utils.bp")
     }
 
     override fun hook() {
@@ -52,13 +52,14 @@ class AdHook : IHook {
             }
 
             try {
-                MethodFinder.fromClass(clsUtils_bp).filterByName("runOnUiThread")
-                    .filterByAssignableParamTypes(Runnable::class.java).first().createHook {
+                MethodFinder.fromClass(clsUtils_bp).filterByName("runOnUiThread").forEach { method ->
+                    method.createHook {
                         replace {
                             it.log()
                             return@replace true
                         }
                     }
+                }
             } catch (e: NoSuchMethodException) {
                 AndroidLogger.e("kwad 广告过滤失败", e)
             }

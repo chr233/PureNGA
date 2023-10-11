@@ -7,8 +7,8 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
 import com.chrxw.purenga.Constant
-import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.ExtensionUtils.log
+import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers

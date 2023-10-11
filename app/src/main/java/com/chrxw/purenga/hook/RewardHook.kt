@@ -3,8 +3,8 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
-import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.ExtensionUtils.log
+import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.isAbstract
@@ -22,7 +22,6 @@ class RewardHook : IHook {
         private lateinit var clsLoginWebView_b: Class<*>
         private lateinit var clsLoginWebView_P: Class<*>
         private lateinit var clsDoNewsAdNative: Class<*>
-        private lateinit var clsZKAdNativeImpl: Class<*>
         private lateinit var clsAdManager_b: Class<*>
         private lateinit var clsAdManager_d: Class<*>
     }
@@ -33,7 +32,6 @@ class RewardHook : IHook {
         clsLoginWebView_b = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$b")
         clsLoginWebView_P = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$p")
         clsDoNewsAdNative = classLoader.loadClass("com.donews.b.start.DnAdNative")
-        clsZKAdNativeImpl = classLoader.loadClass("com.donews.zkad.api.ZKAdNativeImpl")
         clsAdManager_b = classLoader.loadClass("com.nga.admodule.AdManager\$b")
         clsAdManager_d = classLoader.loadClass("com.nga.admodule.AdManager\$d")
     }

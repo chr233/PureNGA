@@ -37,6 +37,7 @@ object Constant {
     const val BYPASS_INSTALL_CHECK = "bypass_install_check"
     const val HIDE_HOOK_INFO = "hide_hook_info"
     const val CUSTOM_INDEX = "custom_index"
+    const val AUTO_CLEAN_CACHE ="auto_clean_cache"
 
     const val ENABLE_LOG = "enable_log"
 

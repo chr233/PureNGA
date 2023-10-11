@@ -116,6 +116,7 @@ class PreferencesHook : IHook {
         container.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         container.orientation = LinearLayout.VERTICAL
 
+        // 净化设置
         container.addView(ClickableItemView(context).apply { title = "净化设置" })
         container.addView(ToggleItemView(context, Constant.PURE_SPLASH_AD).apply {
             title = "屏蔽开屏广告"
@@ -130,6 +131,7 @@ class PreferencesHook : IHook {
             subTitle = "秒关不影响任务奖励结算"
         })
 
+        // 界面优化
         container.addView(ClickableItemView(context).apply { title = "界面优化" })
         container.addView(ToggleItemView(context, Constant.REMOVE_STORE_ICON).apply {
             title = "去除商城和钱包入口"
@@ -175,7 +177,8 @@ class PreferencesHook : IHook {
             }
         })
 
-        container.addView(ClickableItemView(context).apply { title = "功能设置" })
+        // 其他功能
+        container.addView(ClickableItemView(context).apply { title = "其他功能" })
         container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply {
             title = "使用外部浏览器打开链接"
             subTitle = "打开非NGA链接时自动调用外部系统浏览器"
@@ -196,7 +199,12 @@ class PreferencesHook : IHook {
             title = "绕过已安装检查"
             subTitle = "分享到指定App前检查不检查是否已安装(调试用)"
         })
+//        container.addView(ToggleItemView(context, Constant.AUTO_CLEAN_CACHE).apply {
+//            title = "自动清理缓存"
+//            subTitle = "定时清理NGA的缓存"
+//        })
 
+        // 插件设置
         container.addView(ClickableItemView(context).apply { title = "插件设置" })
         container.addView(ToggleItemView(context, Constant.ENABLE_LOG, BuildConfig.DEBUG).apply {
             title = "启用日志"
