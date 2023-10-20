@@ -38,4 +38,6 @@ class MainHook : IHook {
     }
 
     override fun hook() {}
+
+    override var name = "MainHook"
 }

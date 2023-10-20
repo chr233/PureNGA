@@ -155,5 +155,7 @@ class OptimizeHook : IHook {
             }
         }
     }
+
+    override var name = "OptimizeHook"
 }
 

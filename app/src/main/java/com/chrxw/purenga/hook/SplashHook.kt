@@ -2,8 +2,8 @@ package com.chrxw.purenga.hook
 
 import android.app.Activity
 import com.chrxw.purenga.Constant
-import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.ExtensionUtils.log
+import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -67,7 +67,7 @@ class SplashHook : IHook {
                 AndroidLogger.w("去开屏广告功能部分开启失败")
             }
         }
-
-
     }
+
+    override var name = "SplashHook"
 }

@@ -252,5 +252,7 @@ class PreferencesHook : IHook {
         root.addView(container)
         return root
     }
+
+    override var name = "PreferencesHook"
 }
 

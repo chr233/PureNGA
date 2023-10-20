@@ -20,8 +20,9 @@ class ShareHook : IHook {
         private lateinit var clsCreateListener_1: Class<*>
         private lateinit var clsUMShareAPI: Class<*>
         private lateinit var clsBottomMenuDialog: Class<*>
-        private lateinit var clsArticleDetailActivity_x: Class<*>
         private lateinit var clsArticleDetailActivity: Class<*>
+        private lateinit var clsArticleDetailActivity_x: Class<*>
+        private lateinit var clsArticleDetailActivity_u: Class<*>
         private lateinit var clsNetRequestWrapper: Class<*>
         private lateinit var clsNetRequestCallback: Class<*>
         private lateinit var clsActionType: Class<*>
@@ -29,12 +30,13 @@ class ShareHook : IHook {
         private lateinit var eShareSuccess: Any
         private lateinit var MtdOnEvent: Method
 
+        private lateinit var clsLoader: ClassLoader
+
         /**
          * 假装分享
          */
         private fun fakeShare(obj: Any, num: Int) {
-            val evt = clsEvt.getDeclaredConstructor(clsActionType, Any::class.java)
-                .newInstance(eShareSuccess, num)
+            val evt = clsEvt.getDeclaredConstructor(clsActionType, Any::class.java).newInstance(eShareSuccess, num)
             MtdOnEvent.invoke(obj, evt)
         }
     }
@@ -45,16 +47,20 @@ class ShareHook : IHook {
             classLoader.loadClass("com.donews.nga.fragments.CommonWebFragment\$JsInterface\$createListener$1")
         clsUMShareAPI = classLoader.loadClass("com.umeng.socialize.UMShareAPI")
         clsBottomMenuDialog = classLoader.loadClass("gov.pianzong.androidnga.view.BottomMenuDialog")
-        clsArticleDetailActivity_x =
-            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity\$x")
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
+        clsArticleDetailActivity_x =
+            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity\$x")
+        clsArticleDetailActivity_u =
+            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity\$u")
         clsNetRequestWrapper = classLoader.loadClass("gov.pianzong.androidnga.activity.NetRequestWrapper")
         clsNetRequestCallback = classLoader.loadClass("gov.pianzong.androidnga.activity.NetRequestCallback")
         clsActionType = classLoader.loadClass("gov.pianzong.androidnga.event.ActionType")
 
         MtdOnEvent = MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onEvent").first()
         clsEvt = MtdOnEvent.parameterTypes[0]
+
+        clsLoader = classLoader
     }
 
     override fun hook() {
@@ -123,7 +129,6 @@ class ShareHook : IHook {
                         .newInstance(Constant.STR_FAKE_SHARE_TRIPLE, imgId)
                     newMenu.add(fakeShare3)
 
-
                     XposedHelpers.setObjectField(activity, "menus", newMenu)
                 }
             }
@@ -144,31 +149,39 @@ class ShareHook : IHook {
             }
 
             //帖子分享点击事件
-            MethodFinder.fromClass(clsArticleDetailActivity_x).filterByName("clickItem").first().createHook {
-                before {
-                    it.log()
+            val mtdClickItem =
+                MethodFinder.fromClass(clsArticleDetailActivity_x).filterByName("clickItem").firstOrNull()
+                    ?: MethodFinder.fromClass(clsArticleDetailActivity_u).filterByName("clickItem").firstOrNull()
 
-                    when (val btnName = it.args[1] as String) {
-                        Constant.STR_FAKE_SHARE, Constant.STR_FAKE_SHARE_TRIPLE -> {
-                            if (objArticleDetailActivity != null) {
-                                val num = (1..4)
+            if (mtdClickItem != null) {
+                mtdClickItem.createHook {
+                    before {
+                        it.log()
 
-                                fakeShare(objArticleDetailActivity!!, num.random())
+                        when (val btnName = it.args[1] as String) {
+                            Constant.STR_FAKE_SHARE, Constant.STR_FAKE_SHARE_TRIPLE -> {
+                                if (objArticleDetailActivity != null) {
+                                    val num = (1..4)
 
-                                if (btnName == Constant.STR_FAKE_SHARE_TRIPLE) {
-                                    Thread.sleep(100)
                                     fakeShare(objArticleDetailActivity!!, num.random())
-                                    Thread.sleep(100)
-                                    fakeShare(objArticleDetailActivity!!, num.random())
+
+                                    if (btnName == Constant.STR_FAKE_SHARE_TRIPLE) {
+                                        Thread.sleep(100)
+                                        fakeShare(objArticleDetailActivity!!, num.random())
+                                        Thread.sleep(100)
+                                        fakeShare(objArticleDetailActivity!!, num.random())
+                                    }
+
+                                    Helper.toast("假装分享成功")
+                                } else {
+                                    Helper.toast("假装分享失败")
                                 }
-
-                                Helper.toast("假装分享成功")
-                            } else {
-                                Helper.toast("假装分享失败")
                             }
                         }
                     }
                 }
+            } else {
+                Helper.toast("假装分享功能启用失败, 可能不适用于当前版本")
             }
 
             if (BuildConfig.DEBUG) {
@@ -205,4 +218,5 @@ class ShareHook : IHook {
         }
     }
 
+    override var name = "ShareHook"
 }

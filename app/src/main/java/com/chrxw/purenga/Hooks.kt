@@ -34,7 +34,7 @@ object Hooks {
     fun initHooks(classLoader: ClassLoader): Int {
         var error = 0
         for (hook in hooks) {
-            val name = hook::class.java.name
+            val name = hook.name
             try {
                 AndroidLogger.i("加载 $name 模块")
                 hook.init(classLoader)

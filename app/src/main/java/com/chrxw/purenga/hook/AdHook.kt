@@ -77,4 +77,6 @@ class AdHook : IHook {
             }
         }
     }
+
+    override var name = "AdHook"
 }

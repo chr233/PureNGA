@@ -8,8 +8,8 @@ import android.view.View
 import android.widget.TextView
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
-import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.ExtensionUtils.log
+import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
@@ -56,4 +56,6 @@ class AboutHook : IHook {
             }
         }
     }
+
+    override var name = "AboutHook"
 }

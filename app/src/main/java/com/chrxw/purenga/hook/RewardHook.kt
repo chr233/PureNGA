@@ -177,4 +177,9 @@ class RewardHook : IHook {
             }
         }
     }
+
+    override var name = "RewardHook"
 }
+
+
+

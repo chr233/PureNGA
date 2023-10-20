@@ -13,4 +13,9 @@ interface IHook {
      * 执行Hook
      */
     fun hook()
+
+    /**
+     * 模块名
+     */
+    var name: String
 }
