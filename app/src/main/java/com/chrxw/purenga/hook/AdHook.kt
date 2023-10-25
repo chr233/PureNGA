@@ -26,7 +26,7 @@ class AdHook : IHook {
         clsNativeExpressAD = classLoader.loadClass("com.qq.e.ads.nativ.NativeExpressAD")
         clsAdSize = classLoader.loadClass("com.qq.e.ads.nativ.ADSize")
         clsUtils_bp = classLoader.loadClass("com.kwad.sdk.utils.bp")
-        clsZkAdNativeImpl = classLoader.loadClass("ZkAdNativeImpl")
+        clsZkAdNativeImpl = classLoader.loadClass("com.donews.zkad.api.ZkAdNativeImpl")
     }
 
     override fun hook() {
