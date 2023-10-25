@@ -5,6 +5,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.MemberExtensions.isAbstract
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 
 
@@ -17,6 +18,7 @@ class AdHook : IHook {
         private lateinit var clsNativeExpressAD: Class<*>
         private lateinit var clsUtils_bp: Class<*>
         private lateinit var clsAdSize: Class<*>
+        private lateinit var clsZkAdNativeImpl: Class<*>
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -24,6 +26,7 @@ class AdHook : IHook {
         clsNativeExpressAD = classLoader.loadClass("com.qq.e.ads.nativ.NativeExpressAD")
         clsAdSize = classLoader.loadClass("com.qq.e.ads.nativ.ADSize")
         clsUtils_bp = classLoader.loadClass("com.kwad.sdk.utils.bp")
+        clsZkAdNativeImpl = classLoader.loadClass("ZkAdNativeImpl")
     }
 
     override fun hook() {
@@ -62,6 +65,18 @@ class AdHook : IHook {
                 }
             } catch (e: NoSuchMethodException) {
                 AndroidLogger.e("kwad 广告过滤失败", e)
+            }
+
+            MethodFinder.fromClass(clsZkAdNativeImpl).forEach { mtd ->
+                val name = mtd.name
+                if (name.startsWith("load") && name.endsWith("Ad") && !mtd.isAbstract) {
+                    mtd.createHook {
+                        replace {
+                            it.log()
+                            AndroidLogger.i(mtd.name)
+                        }
+                    }
+                }
             }
 
             MethodFinder.fromClass(MainHook.clsNGAApplication).filterByName("preThirdParty").first().createHook {

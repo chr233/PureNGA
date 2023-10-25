@@ -16,8 +16,8 @@ android {
         applicationId = "com.chrxw.purenga"
         minSdk = 24
         targetSdk = 34
-        versionCode = 18
-        versionName = "1.14.0"
+        versionCode = 19
+        versionName = "1.15.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles()
@@ -55,6 +55,7 @@ android {
     }
 
     buildToolsVersion = "33.0.1"
+    ndkVersion = "25.2.9519653"
 }
 
 dependencies {
