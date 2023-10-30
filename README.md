@@ -6,7 +6,7 @@
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/chr233/PureNGA?logo=github)][repo_code]
 [![GitHub Download](https://img.shields.io/github/downloads/chr233/PureNGA/total?logo=github)][repo_code]
-[插件仓库][repo_code]
+[源码仓库][repo_code]
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/Xposed-Modules-Repo/com.chrxw.purenga?logo=github)][repo_xposed]
 [![GitHub Download](https://img.shields.io/github/downloads/Xposed-Modules-Repo/com.chrxw.purenga/total?logo=github)][repo_xposed]
