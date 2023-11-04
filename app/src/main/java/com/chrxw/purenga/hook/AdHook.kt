@@ -7,6 +7,8 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.isAbstract
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
+import de.robv.android.xposed.XC_MethodHook
+import de.robv.android.xposed.XposedHelpers
 
 
 /**
@@ -27,6 +29,24 @@ class AdHook : IHook {
         clsAdSize = classLoader.loadClass("com.qq.e.ads.nativ.ADSize")
         clsUtils_bp = classLoader.loadClass("com.kwad.sdk.utils.bp")
         clsZkAdNativeImpl = classLoader.loadClass("com.donews.zkad.api.ZkAdNativeImpl")
+
+
+        XposedHelpers.findAndHookMethod(
+            "com.donews.nga.user.activitys.PrestigeActivity",
+            classLoader,
+            "updateInfo",
+            object : XC_MethodHook() {
+                @Throws(Throwable::class)
+                override fun beforeHookedMethod(param: MethodHookParam) {
+                    super.beforeHookedMethod(param)
+                }
+
+                @Throws(Throwable::class)
+                override fun afterHookedMethod(param: MethodHookParam) {
+                    super.afterHookedMethod(param)
+                }
+            })
+
     }
 
     override fun hook() {
@@ -44,7 +64,7 @@ class AdHook : IHook {
 
             try {
                 MethodFinder.fromClass(clsNativeExpressAD).filterByName("a").filterByAssignableParamTypes(clsAdSize)
-                    .first().createHook {
+                    .firstOrNull()?.createHook {
                         replace {
                             it.log()
                             return@replace true
