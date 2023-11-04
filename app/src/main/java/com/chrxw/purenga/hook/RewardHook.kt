@@ -115,7 +115,7 @@ class RewardHook : IHook {
                     }
                 }
 
-                MethodFinder.fromClass(clsLoginWebView).filterByName("requestAD").first().createHook {
+                MethodFinder.fromClass(clsLoginWebView).filterByName("requestAD").firstOrNull()?.createHook {
                     replace {
                         it.log()
 
@@ -131,21 +131,21 @@ class RewardHook : IHook {
                     }
                 }
 
-                MethodFinder.fromClass(clsLoginWebView).filterByName("requestFreeOfAD").first().createHook {
-                    replace {
-                        it.log()
-
-                        if (webView != null) {
-                            AndroidLogger.i("clsLoginWebView_a onAdShow")
-                            XposedHelpers.callMethod(webView, "loadUrl", "https://baidu.com", null)
-//                            LoginWebView.this.mWebView.evaluateJavascript(
-//                                "javascript:__doAction('domissionComplete',{'action':'app_ad_video'})",
-//                                null
-//                            );
-//                            LoginWebView.this.mWebView.evaluateJavascript("javascript:__doAction('windowFocus')", null);
-                        }
-                    }
-                }
+//                MethodFinder.fromClass(clsLoginWebView).filterByName("requestFreeOfAD").first().createHook {
+//                    replace {
+//                        it.log()
+//
+//                        if (webView != null) {
+//                            AndroidLogger.i("clsLoginWebView_a onAdShow")
+//                            XposedHelpers.callMethod(webView, "loadUrl", "https://baidu.com", null)
+////                            LoginWebView.this.mWebView.evaluateJavascript(
+////                                "javascript:__doAction('domissionComplete',{'action':'app_ad_video'})",
+////                                null
+////                            );
+////                            LoginWebView.this.mWebView.evaluateJavascript("javascript:__doAction('windowFocus')", null);
+//                        }
+//                    }
+//                }
             }
 
             try {
