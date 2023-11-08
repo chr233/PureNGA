@@ -146,6 +146,10 @@ class PreferencesHook : IHook {
             title = "去除微信分享图标"
             subTitle = "移除文章详情页右上角微信图标"
         })
+        container.addView(ToggleItemView(context, Constant.REMOVE_POPUP_POST).apply {
+            title = "去除首页文章推荐"
+            subTitle = "移除首页导航栏上方文章推荐"
+        })
         container.addView(ClickableItemView(context).apply {
             title = "自定义首页"
             subTitle = "设置APP首页 (首页,社区,我的)"

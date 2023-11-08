@@ -1,5 +1,6 @@
 package com.chrxw.purenga.hook
 
+import android.R.attr
 import android.app.Activity
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
@@ -10,7 +11,10 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
+import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -132,6 +136,17 @@ class OptimizeHook : IHook {
                     actionBar.removeView(wxBtn)
                 }
             }
+        }
+
+        //移除首页下方浮动文章推送
+        if (Helper.getSpBool(Constant.REMOVE_POPUP_POST, false)) {
+            MethodFinder.fromClass(clsMainActivity).filterByName("setColumn").first()
+                .createHook {
+                    before {
+                        it.log()
+                        it.args[0] = null
+                    }
+                }
         }
 
         val option = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
