@@ -7,10 +7,10 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -39,31 +39,30 @@ class OptimizeHook : IHook {
     override fun hook() {
         // 屏蔽弹窗
         if (Helper.getSpBool(Constant.KILL_POPUP_DIALOG, false)) {
-            MethodFinder.fromClass(MainHook.clsAppConfig).filterByName("isAgreedAgreement").first().createHook {
+            findFirstMethodByName(MainHook.clsAppConfig, "isAgreedAgreement")?.createHook {
                 replace {
                     it.log()
                     return@replace true
                 }
             }
 
-            MethodFinder.fromClass(MainHook.clsNGAApplication).filterByName("showNotificationDialog").first()
-                .createHook {
-                    replace {
-                        it.log()
-                        return@replace true
-                    }
+            findFirstMethodByName(MainHook.clsNGAApplication, "showNotificationDialog")?.createHook {
+                replace {
+                    it.log()
+                    return@replace true
                 }
+            }
         }
 
         // 屏蔽更新检测
         if (Helper.getSpBool(Constant.KILL_UPDATE_CHECK, false)) {
-            MethodFinder.fromClass(clsMainActivityPresenter).filterByName("checkAppUpdate").first().createHook {
+            findFirstMethodByName(clsMainActivityPresenter, "checkAppUpdate")?.createHook {
                 replace {
                     it.log()
                 }
             }
 
-            MethodFinder.fromClass(clsCommentDialog).filterByName("showUpdate").first().createHook {
+            findFirstMethodByName(clsCommentDialog, "showUpdate")?.createHook {
                 replace {
                     it.log()
                 }
@@ -72,7 +71,7 @@ class OptimizeHook : IHook {
 
         //移除首页商城入口
         if (Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)) {
-            MethodFinder.fromClass(clsHomeDrawerLayout).filterByName("initLayout").first().createHook {
+            findFirstMethodByName(clsHomeDrawerLayout, "initLayout")?.createHook {
                 after {
                     it.log()
 
@@ -90,7 +89,7 @@ class OptimizeHook : IHook {
                 }
             }
 
-            MethodFinder.fromClass(clsMainActivityPresenter).filterByName("initTabParams").first().createHook {
+            findFirstMethodByName(clsMainActivityPresenter, "initTabParams")?.createHook {
                 before {
                     it.log()
 
@@ -113,7 +112,7 @@ class OptimizeHook : IHook {
 
         //移除导航栏活动图标
         if (Helper.getSpBool(Constant.REMOVE_ACTIVITY_ICON, false)) {
-            MethodFinder.fromClass(clsMainActivity).filterByName("initActivityMenu").first().createHook {
+            findFirstMethodByName(clsMainActivity, "initActivityMenu")?.createHook {
                 replace {
                     it.log()
                 }
@@ -122,7 +121,7 @@ class OptimizeHook : IHook {
 
         //移除右上角微信图标
         if (Helper.getSpBool(Constant.REMOVE_WECHAT_ICON, false)) {
-            MethodFinder.fromClass(clsArticleDetailActivity).filterByName("initView").first().createHook {
+            findFirstMethodByName(clsArticleDetailActivity, "initView")?.createHook {
                 after {
                     it.log()
 
@@ -137,7 +136,7 @@ class OptimizeHook : IHook {
 
         val option = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
         if (!option.isNullOrEmpty()) {
-            MethodFinder.fromClass(clsMainActivity).filterByName("initTabs").first().createHook {
+            findFirstMethodByName(clsMainActivity, "initTabs")?.createHook {
                 after {
                     it.log()
 

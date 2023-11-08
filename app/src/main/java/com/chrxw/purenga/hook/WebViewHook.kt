@@ -4,10 +4,10 @@ import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import java.lang.reflect.Method
 
 
@@ -32,7 +32,7 @@ class WebViewHook : IHook {
 
     override fun hook() {
         if (Helper.getSpBool(Constant.USE_EXTERNAL_BROWSER, false)) {
-            MethodFinder.fromClass(Instrumentation::class.java).filterByName("execStartActivity").first().createHook {
+            findFirstMethodByName(Instrumentation::class.java, "execStartActivity")?.createHook {
                 before {
                     it.log()
 

@@ -3,6 +3,7 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -40,22 +41,22 @@ class RewardHook : IHook {
         //任务破解
         if (Helper.getSpBool(Constant.CRACK_AD_TASK, false)) {
             var activity: Activity? = null
-            var webView: Any? = null
+//            var webView: Any? = null
 
-            MethodFinder.fromClass(clsLoginWebView).filterByName("onCreate").first().createHook {
+            findFirstMethodByName(clsLoginWebView, "onCreate")?.createHook {
                 before {
                     it.log()
 
                     activity = it.thisObject as Activity?
-                    webView = XposedHelpers.getObjectField(activity, "mWebView")
+//                    webView = XposedHelpers.getObjectField(activity, "mWebView")
                 }
             }
-            MethodFinder.fromClass(clsLoginWebView).filterByName("onDestroy").first().createHook {
+            findFirstMethodByName(clsLoginWebView, "onDestroy")?.createHook {
                 before {
                     it.log()
 
                     activity = null
-                    webView = null
+//                    webView = null
 
                 }
             }
@@ -114,66 +115,30 @@ class RewardHook : IHook {
                         }
                     }
                 }
+            }
 
-                MethodFinder.fromClass(clsLoginWebView).filterByName("requestAD").first().createHook {
-                    replace {
-                        it.log()
+            // Hook onRewardVerify 方法
+            findFirstMethodByName(clsLoginWebView_b, "onAdShow")?.createHook {
+                replace {
+                    it.log()
 
-                        if (webView != null) {
-                            AndroidLogger.i("clsLoginWebView_a onAdShow")
-                            XposedHelpers.callMethod(webView, "loadUrl", "https://baidu.com", null)
-//                            LoginWebView.this.mWebView.evaluateJavascript(
-//                                "javascript:__doAction('domissionComplete',{'action':'app_ad_video'})",
-//                                null
-//                            );
-//                            LoginWebView.this.mWebView.evaluateJavascript("javascript:__doAction('windowFocus')", null);
-                        }
-                    }
-                }
-
-                MethodFinder.fromClass(clsLoginWebView).filterByName("requestFreeOfAD").first().createHook {
-                    replace {
-                        it.log()
-
-                        if (webView != null) {
-                            AndroidLogger.i("clsLoginWebView_a onAdShow")
-                            XposedHelpers.callMethod(webView, "loadUrl", "https://baidu.com", null)
-//                            LoginWebView.this.mWebView.evaluateJavascript(
-//                                "javascript:__doAction('domissionComplete',{'action':'app_ad_video'})",
-//                                null
-//                            );
-//                            LoginWebView.this.mWebView.evaluateJavascript("javascript:__doAction('windowFocus')", null);
-                        }
-                    }
+                    val obj = it.thisObject
+                    XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
+                    XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
+                    XposedHelpers.callMethod(obj, "onAdClose")
                 }
             }
 
-            try {
-                // Hook onRewardVerify 方法
-                MethodFinder.fromClass(clsLoginWebView_b).filterByName("onAdShow").first().createHook {
-                    replace {
-                        it.log()
+            // Hook onRewardVerify 方法
+            findFirstMethodByName(clsLoginWebView_b, "onAdShow")?.createHook {
+                replace {
+                    it.log()
 
-                        val obj = it.thisObject
-                        XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
-                        XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
-                        XposedHelpers.callMethod(obj, "onAdClose")
-                    }
+                    val obj = it.thisObject
+                    XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
+                    XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
+                    XposedHelpers.callMethod(obj, "onAdClose")
                 }
-
-                // Hook onRewardVerify 方法
-                MethodFinder.fromClass(clsLoginWebView_b).filterByName("onAdShow").first().createHook {
-                    replace {
-                        it.log()
-
-                        val obj = it.thisObject
-                        XposedHelpers.setBooleanField(activity, "mRewardVerify", true)
-                        XposedHelpers.setBooleanField(activity, "mFreeRewardVerify", true)
-                        XposedHelpers.callMethod(obj, "onAdClose")
-                    }
-                }
-            } catch (e: Exception) {
-                AndroidLogger.e(e)
             }
         }
     }

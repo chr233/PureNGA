@@ -2,11 +2,11 @@ package com.chrxw.purenga.hook
 
 import android.app.Activity
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -29,7 +29,7 @@ class SplashHook : IHook {
     override fun hook() {
         if (Helper.getSpBool(Constant.PURE_SPLASH_AD, false)) {
             // 跳过开屏Logo页面
-            MethodFinder.fromClass(clsActivityLifecycle).filterByName("toForeGround").first().createHook {
+            val hook1 = findFirstMethodByName(clsActivityLifecycle, "toForeGround")?.createHook {
                 replace {
                     it.log()
 
@@ -44,28 +44,28 @@ class SplashHook : IHook {
             }
 
             // 修改时间戳实现切屏无广告
-            MethodFinder.fromClass(MainHook.clsSPUtil).filterByName("getInt")
-                .filterByAssignableParamTypes(String::class.java, Int::class.java).first().createHook {
-                    after {
-                        it.log()
+            val hook2 = findFirstMethodByName(MainHook.clsSPUtil, "getInt")?.createHook {
+                after {
+                    it.log()
 
-                        when (it.args[0] as String) {
-                            "AD_FORGROUND_TIME", "AD_BACKGROUND_TIME" -> {
-                                it.result = 0
-                            }
+                    when (it.args[0] as String) {
+                        "AD_FORGROUND_TIME", "AD_BACKGROUND_TIME" -> {
+                            it.result = 0
                         }
                     }
                 }
-
-            try {
-                MethodFinder.fromClass(clsLoadingActivity_a).filterByName("callBack").first().createHook {
-                    replace {
-                        it.log()
-                    }
-                }
-            } catch (e: Throwable) {
-                AndroidLogger.w("去开屏广告功能部分开启失败")
             }
+
+            val hook3 = findFirstMethodByName(clsLoadingActivity_a, "callBack")?.createHook {
+                replace {
+                    it.log()
+                }
+            }
+
+            if (hook1 == null || hook2 == null || hook3 == null) {
+                AndroidLogger.w("部分hook加载失败")
+            }
+
         }
     }
 

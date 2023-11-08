@@ -3,7 +3,9 @@ package com.chrxw.purenga.utils
 import android.content.Context
 import android.util.DisplayMetrics
 import com.github.kyuubiran.ezxhelper.AndroidLogger
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XC_MethodHook
+import java.lang.reflect.Method
 
 /**
  * 显示单位换算
@@ -34,5 +36,27 @@ object ExtensionUtils {
                 }
             }
         }
+    }
+
+    fun findMethodByName(clazz: Class<*>, name: String): MethodFinder {
+        val finder = MethodFinder.fromClass(clazz).filterByName(name)
+
+        if (finder.firstOrNull() == null) {
+            AndroidLogger.w("${clazz.name} $name not found")
+        }
+
+        return finder
+    }
+
+    fun findFirstMethodByName(clazz: Class<*>, name: String): Method? {
+        val finder = MethodFinder.fromClass(clazz).filterByName(name)
+
+        val first = finder.firstOrNull()
+
+        if (first == null) {
+            AndroidLogger.w("${clazz.name} $name not found")
+        }
+
+        return first
     }
 }

@@ -17,10 +17,11 @@ import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.ui.ToggleItemView
+import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 import kotlin.system.exitProcess
 
@@ -54,7 +55,7 @@ class PreferencesHook : IHook {
 
         var btnPureNGASetting: Button? = null
 
-        MethodFinder.fromClass(clsSettingActivity).filterByName("initLayout").first().createHook {
+        findFirstMethodByName(clsSettingActivity, "initLayout")?.createHook {
             after { param ->
                 val activity = param.thisObject as Activity
 
@@ -99,7 +100,7 @@ class PreferencesHook : IHook {
             }
         }
 
-        MethodFinder.fromClass(MainHook.clsAppConfig).filterByName("setDarkModel")
+        findMethodByName(MainHook.clsAppConfig, "setDarkModel")
             .filterByAssignableParamTypes(Boolean::class.java).first().createHook {
                 after {
                     btnPureNGASetting?.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))

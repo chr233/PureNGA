@@ -2,11 +2,11 @@ package com.chrxw.purenga.hook
 
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 import java.lang.reflect.Method
 
@@ -57,7 +57,7 @@ class ShareHook : IHook {
         clsNetRequestCallback = classLoader.loadClass("gov.pianzong.androidnga.activity.NetRequestCallback")
         clsActionType = classLoader.loadClass("gov.pianzong.androidnga.event.ActionType")
 
-        MtdOnEvent = MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onEvent").first()
+        MtdOnEvent = findFirstMethodByName(clsArticleDetailActivity, "onEvent")!!
         clsEvt = MtdOnEvent.parameterTypes[0]
 
         clsLoader = classLoader
@@ -76,13 +76,13 @@ class ShareHook : IHook {
 
             //维护 objArticleDetailActivity 对象
             var objArticleDetailActivity: Any? = null
-            MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onCreate").first().createHook {
+            findFirstMethodByName(clsArticleDetailActivity, "onCreate")?.createHook {
                 before {
                     it.log()
                     objArticleDetailActivity = it.thisObject
                 }
             }
-            MethodFinder.fromClass(clsArticleDetailActivity).filterByName("onDestroy").first().createHook {
+            findFirstMethodByName(clsArticleDetailActivity, "onDestroy")?.createHook {
                 before {
                     it.log()
                     objArticleDetailActivity = null
@@ -92,7 +92,7 @@ class ShareHook : IHook {
             var tid: String
 
             //获取帖子信息
-            MethodFinder.fromClass(clsArticleDetailActivity).filterByName("setThreadInfo").first().createHook {
+            findFirstMethodByName(clsArticleDetailActivity, "setThreadInfo")?.createHook {
                 before {
                     it.log()
 
@@ -107,7 +107,7 @@ class ShareHook : IHook {
             }
 
             //添加按钮
-            MethodFinder.fromClass(clsBottomMenuDialog).filterByName("initMenus").first().createHook {
+            findFirstMethodByName(clsBottomMenuDialog, "initMenus")?.createHook {
                 before {
                     it.log()
 
@@ -134,7 +134,7 @@ class ShareHook : IHook {
             }
 
             //内置浏览器分享点击事件
-            MethodFinder.fromClass(clsCreateListener_1).filterByName("clickItem").first().createHook {
+            findFirstMethodByName(clsCreateListener_1, "clickItem")?.createHook {
                 before {
                     it.log()
 
@@ -149,9 +149,9 @@ class ShareHook : IHook {
             }
 
             //帖子分享点击事件
-            val mtdClickItem =
-                MethodFinder.fromClass(clsArticleDetailActivity_x).filterByName("clickItem").firstOrNull()
-                    ?: MethodFinder.fromClass(clsArticleDetailActivity_u).filterByName("clickItem").firstOrNull()
+            val mtdClickItem = findFirstMethodByName(clsArticleDetailActivity_x, "clickItem") ?: findFirstMethodByName(
+                clsArticleDetailActivity_u, "clickItem"
+            )
 
             if (mtdClickItem != null) {
                 mtdClickItem.createHook {
@@ -209,7 +209,7 @@ class ShareHook : IHook {
 
         //绕过分享前验证是否安装App
         if (Helper.getSpBool(Constant.BYPASS_INSTALL_CHECK, false)) {
-            MethodFinder.fromClass(clsUMShareAPI).filterByName("isInstall").first().createHook {
+            findFirstMethodByName(clsUMShareAPI, "isInstall")?.createHook {
                 replace {
                     it.log()
                     return@replace true

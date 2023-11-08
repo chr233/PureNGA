@@ -1,6 +1,8 @@
 package com.chrxw.purenga.hook
 
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -38,13 +40,9 @@ class AdHook : IHook {
             object : XC_MethodHook() {
                 @Throws(Throwable::class)
                 override fun beforeHookedMethod(param: MethodHookParam) {
-                    super.beforeHookedMethod(param)
+                    param.log()
                 }
 
-                @Throws(Throwable::class)
-                override fun afterHookedMethod(param: MethodHookParam) {
-                    super.afterHookedMethod(param)
-                }
             })
 
     }
@@ -52,39 +50,33 @@ class AdHook : IHook {
     override fun hook() {
         //屏蔽广告
         if (Helper.getSpBool(Constant.PURE_POST_AD, false)) {
-            try {
-                MethodFinder.fromClass(clsDnFeedAd).filterByName("requestServerSuccess").first().createHook {
+            val hook1 = findFirstMethodByName(clsDnFeedAd, "requestServerSuccess")?.createHook {
+                replace {
+                    it.log()
+                }
+            }
+            if (hook1 == null) {
+                AndroidLogger.e("Donews 广告过滤失败")
+            }
+
+            val hook2 = findMethodByName(clsNativeExpressAD, "a").filterByAssignableParamTypes(clsAdSize).firstOrNull()
+                ?.createHook {
                     replace {
                         it.log()
+                        return@replace true
                     }
                 }
-            } catch (e: NoSuchMethodException) {
-                AndroidLogger.e("Donews 广告过滤失败", e)
+            if (hook2 == null) {
+                AndroidLogger.e("qq 广告过滤失败")
             }
 
-            try {
-                MethodFinder.fromClass(clsNativeExpressAD).filterByName("a").filterByAssignableParamTypes(clsAdSize)
-                    .firstOrNull()?.createHook {
-                        replace {
-                            it.log()
-                            return@replace true
-                        }
-                    }
-            } catch (e: NoSuchMethodException) {
-                AndroidLogger.e("qq 广告过滤失败", e)
-            }
-
-            try {
-                MethodFinder.fromClass(clsUtils_bp).filterByName("runOnUiThread").forEach { method ->
-                    method.createHook {
-                        replace {
-                            it.log()
-                            return@replace true
-                        }
+            findMethodByName(clsUtils_bp, "runOnUiThread").forEach { method ->
+                method.createHook {
+                    replace {
+                        it.log()
+                        return@replace true
                     }
                 }
-            } catch (e: NoSuchMethodException) {
-                AndroidLogger.e("kwad 广告过滤失败", e)
             }
 
             MethodFinder.fromClass(clsZkAdNativeImpl).forEach { mtd ->
@@ -99,16 +91,20 @@ class AdHook : IHook {
                 }
             }
 
-            MethodFinder.fromClass(MainHook.clsNGAApplication).filterByName("preThirdParty").first().createHook {
-                replace {
-                    it.log()
-                }
-            }
+            //9.9.3 preThirdParty 改为 initThirdParty
+            findFirstMethodByName(MainHook.clsNGAApplication, "preThirdParty")
+                ?: findFirstMethodByName(MainHook.clsNGAApplication, "initThirdParty")?.createHook {
+                        replace {
+                            it.log()
+                        }
+                    }
 
-            MethodFinder.fromClass(MainHook.clsLoadingActivity).filterByName("loadAD").first().createHook {
+            findFirstMethodByName(MainHook.clsLoadingActivity, "loadAD")?.createHook {
                 replace {
                     it.log()
                 }
+            } ?: {
+                AndroidLogger.d("clsLoadingActivity loadAD 匹配失败")
             }
         }
     }
