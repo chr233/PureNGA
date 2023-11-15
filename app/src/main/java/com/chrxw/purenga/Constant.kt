@@ -10,7 +10,7 @@ object Constant {
     const val DONATE_URL = "https://afdian.net/order/create?user_id=81888d36247c11ea8ac152540025c377"
 
     const val API_PLUGIN_BUNDLED_URL = "https://hub.chrxw.com/PureNGA/releases/latest"
-    const val API_PLUGIN_STANDALONE_URL  = "https://xposed.chrxw.com/com.chrxw.purenga/releases/latest"
+    const val API_PLUGIN_STANDALONE_URL = "https://xposed.chrxw.com/com.chrxw.purenga/releases/latest"
 
     const val RELEASE_STANDALONE = "https://github.com/Xposed-Modules-Repo/com.chrxw.purenga/releases"
     const val RELEASE_BUNDLED = "https://github.com/chr233/PureNGA/releases/tag/NGA"
@@ -30,6 +30,7 @@ object Constant {
     const val REMOVE_ACTIVITY_ICON = "remove_activity_icon"
     const val REMOVE_WECHAT_ICON = "remove_wechat_icon"
     const val REMOVE_POPUP_POST = "remove_popup_post"
+    const val REMOVE_VIP_BANNER = "remove_vip_banner"
     const val USE_EXTERNAL_BROWSER = "use_external_browser"
     const val KILL_UPDATE_CHECK = "kill_update_check"
     const val KILL_POPUP_DIALOG = "kill_popup_dialog"
@@ -38,7 +39,7 @@ object Constant {
     const val BYPASS_INSTALL_CHECK = "bypass_install_check"
     const val HIDE_HOOK_INFO = "hide_hook_info"
     const val CUSTOM_INDEX = "custom_index"
-    const val AUTO_CLEAN_CACHE ="auto_clean_cache"
+    const val AUTO_CLEAN_CACHE = "auto_clean_cache"
 
     const val ENABLE_LOG = "enable_log"
 

@@ -149,8 +149,9 @@ class ShareHook : IHook {
             }
 
             //帖子分享点击事件
-            val mtdClickItem = findFirstMethodByName(clsArticleDetailActivity_x, "clickItem") ?: findFirstMethodByName(
-                clsArticleDetailActivity_u, "clickItem"
+            val mtdClickItem = findFirstMethodByName(clsArticleDetailActivity_u, "clickItem") ?: findFirstMethodByName(
+                clsArticleDetailActivity_x,
+                "clickItem"
             )
 
             if (mtdClickItem != null) {

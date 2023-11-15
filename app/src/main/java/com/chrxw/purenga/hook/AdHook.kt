@@ -9,8 +9,6 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.isAbstract
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XposedHelpers
 
 
 /**
@@ -22,7 +20,7 @@ class AdHook : IHook {
         private lateinit var clsNativeExpressAD: Class<*>
         private lateinit var clsUtils_bp: Class<*>
         private lateinit var clsAdSize: Class<*>
-        private lateinit var clsZkAdNativeImpl: Class<*>
+        private var clsZkAdNativeImpl: Class<*>? = null
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -30,7 +28,11 @@ class AdHook : IHook {
         clsNativeExpressAD = classLoader.loadClass("com.qq.e.ads.nativ.NativeExpressAD")
         clsAdSize = classLoader.loadClass("com.qq.e.ads.nativ.ADSize")
         clsUtils_bp = classLoader.loadClass("com.kwad.sdk.utils.bp")
-        clsZkAdNativeImpl = classLoader.loadClass("com.donews.zkad.api.ZkAdNativeImpl")
+        try {
+            clsZkAdNativeImpl = classLoader.loadClass("com.donews.zkad.api.ZkAdNativeImpl")
+        } catch (e: Throwable) {
+            AndroidLogger.e(e)
+        }
     }
 
     override fun hook() {
@@ -65,13 +67,15 @@ class AdHook : IHook {
                 }
             }
 
-            MethodFinder.fromClass(clsZkAdNativeImpl).forEach { mtd ->
-                val name = mtd.name
-                if (name.startsWith("load") && name.endsWith("Ad") && !mtd.isAbstract) {
-                    mtd.createHook {
-                        replace {
-                            it.log()
-                            AndroidLogger.i(mtd.name)
+            if (clsZkAdNativeImpl != null) {
+                MethodFinder.fromClass(clsZkAdNativeImpl!!).forEach { mtd ->
+                    val name = mtd.name
+                    if (name.startsWith("load") && name.endsWith("Ad") && !mtd.isAbstract) {
+                        mtd.createHook {
+                            replace {
+                                it.log()
+                                AndroidLogger.i(mtd.name)
+                            }
                         }
                     }
                 }
@@ -80,10 +84,10 @@ class AdHook : IHook {
             //9.9.3 preThirdParty 改为 initThirdParty
             findFirstMethodByName(MainHook.clsNGAApplication, "preThirdParty")
                 ?: findFirstMethodByName(MainHook.clsNGAApplication, "initThirdParty")?.createHook {
-                        replace {
-                            it.log()
-                        }
+                    replace {
+                        it.log()
                     }
+                }
 
             findFirstMethodByName(MainHook.clsLoadingActivity, "loadAD")?.createHook {
                 replace {
