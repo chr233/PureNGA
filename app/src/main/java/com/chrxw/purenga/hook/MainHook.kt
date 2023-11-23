@@ -16,12 +16,14 @@ class MainHook : IHook {
         lateinit var clsAppConfig: Class<*>
         lateinit var clsLoadingActivity: Class<*>
         lateinit var clsSPUtil: Class<*>
+        lateinit var clsMainActivity: Class<*>
     }
 
     override fun init(classLoader: ClassLoader) {
         clsNGAApplication = classLoader.loadClass("gov.pianzong.androidnga.activity.NGAApplication")
         clsAppConfig = classLoader.loadClass("com.donews.nga.common.utils.AppConfig")
         clsLoadingActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity")
+        clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
 
         clsSPUtil = classLoader.loadClass("com.donews.nga.common.utils.SPUtil")
 

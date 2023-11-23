@@ -6,10 +6,12 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
@@ -50,7 +52,21 @@ class OptimizeHook : IHook {
             findFirstMethodByName(MainHook.clsNGAApplication, "showNotificationDialog")?.createHook {
                 replace {
                     it.log()
-                    return@replace true
+                }
+            }
+
+            findFirstMethodByName(MainHook.clsMainActivity, "showNotificationDialog")?.createHook {
+                replace {
+                    it.log()
+                }
+            }
+
+            if (BuildConfig.DEBUG) {
+                findFirstMethodByName(MainHook.clsNGAApplication, "handleMessage")?.createHook {
+                    before {
+                        it.log()
+                        AndroidLogger.w(it.args.get(0).toString())
+                    }
                 }
             }
         }

@@ -30,7 +30,6 @@ import kotlin.system.exitProcess
 class PreferencesHook : IHook {
 
     companion object {
-        lateinit var clsMainActivity: Class<*>
         lateinit var clsSettingActivity: Class<*>
 
         /**
@@ -200,7 +199,6 @@ class PreferencesHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
         clsSettingActivity = classLoader.loadClass("com.donews.nga.setting.SettingActivity")
     }
 
