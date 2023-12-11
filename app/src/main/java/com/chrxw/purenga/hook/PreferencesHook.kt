@@ -24,6 +24,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
 import kotlin.system.exitProcess
 
+
 /**
  * 设置页面钩子
  */
@@ -91,29 +92,28 @@ class PreferencesHook : IHook {
             })
             container.addView(ClickableItemView(context).apply {
                 title = "自定义首页"
-                subTitle = "设置APP首页 (首页,社区,我的)"
+                subTitle = "设置APP首页"
                 setOnClickListener {
 
-                    val input = EditText(context).apply {
-                        val option = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
-                        setText(option)
-                        hint = subTitle
-                        inputType = InputType.TYPE_CLASS_TEXT
-                    }
+                    val items = arrayOf("首页", "社区", "我的")
+
+                    val curSetting=Helper.getSpStr(Constant.CUSTOM_INDEX,null)
+
+                    val currentIndex = items.indexOf(curSetting)
 
                     AlertDialog.Builder(context).apply {
                         setTitle(title)
                         setCancelable(false)
-                        setView(input)
+//                        setView(input)
+                        setSingleChoiceItems(items, currentIndex) { _, which ->
+                            Helper.setSpStr(Constant.CUSTOM_INDEX, items[which].toString())
+                           Helper.toast(which.toString())
+                        }
                         setNeutralButton("清除设置") { _, _ ->
                             Helper.setSpStr(Constant.CUSTOM_INDEX, null)
                             Helper.toast("设置已清除")
                         }
-                        setNegativeButton("关闭") { _, _ ->
-                        }
-                        setPositiveButton("保存") { _, _ ->
-                            Helper.setSpStr(Constant.CUSTOM_INDEX, input.text.toString())
-                            Helper.toast("设置已保存")
+                        setPositiveButton("关闭") { _, _ ->
                         }
                         create()
                         show()
@@ -131,7 +131,7 @@ class PreferencesHook : IHook {
                 title = "禁止APP检查更新"
                 subTitle = "尝试阻止NGA检查更新"
             })
-            container.addView(ToggleItemView(context, Constant.REMOVE_ACTIVITY_ICON).apply {
+            container.addView(ToggleItemView(context, Constant.KILL_POPUP_DIALOG).apply {
                 title = "屏蔽应用内弹窗"
                 subTitle = "作用不明"
             })
