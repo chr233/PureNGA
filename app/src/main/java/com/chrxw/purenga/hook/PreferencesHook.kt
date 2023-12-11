@@ -6,10 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import android.text.InputType
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
@@ -94,20 +92,16 @@ class PreferencesHook : IHook {
                 title = "自定义首页"
                 subTitle = "设置APP首页"
                 setOnClickListener {
-
                     val items = arrayOf("首页", "社区", "我的")
-
-                    val curSetting=Helper.getSpStr(Constant.CUSTOM_INDEX,null)
-
+                    val curSetting = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
                     val currentIndex = items.indexOf(curSetting)
 
                     AlertDialog.Builder(context).apply {
                         setTitle(title)
                         setCancelable(false)
-//                        setView(input)
                         setSingleChoiceItems(items, currentIndex) { _, which ->
-                            Helper.setSpStr(Constant.CUSTOM_INDEX, items[which].toString())
-                           Helper.toast(which.toString())
+                            Helper.setSpStr(Constant.CUSTOM_INDEX, items[which])
+                            Helper.toast(which.toString())
                         }
                         setNeutralButton("清除设置") { _, _ ->
                             Helper.setSpStr(Constant.CUSTOM_INDEX, null)
