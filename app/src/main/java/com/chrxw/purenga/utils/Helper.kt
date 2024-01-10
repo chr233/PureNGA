@@ -9,6 +9,16 @@ import com.chrxw.purenga.Constant
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import de.robv.android.xposed.XposedHelpers
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 /**
@@ -112,18 +122,44 @@ object Helper {
         spPlugin.edit().putString(key, value).apply()
     }
 
-//    private suspend fun fetchJson(url: URL) = withContext(Dispatchers.IO) {
-//        try {
-//            JSONObject(url.readText())
-//        } catch (e: Throwable) {
-//            null
-//        }
-//    }
-//
-//    suspend fun checkUpdate() {
-//        val url = URL(Constant.API_PLUGIN_STANDALONE_URL)
-//        val result = fetchJson(url)
-//
-//        AndroidLogger.i(result.toString())
-//    }
+    @OptIn(DelicateCoroutinesApi::class)
+    fun checkForUpdates() {
+        val currentVersion = BuildConfig.VERSION_NAME
+        val url = Constant.API_PLUGIN_STANDALONE_URL
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val response = withContext(Dispatchers.IO) {
+                makeHttpRequest()
+            }
+
+            response?.let {
+                val json = JSONObject(response)
+                val latestVersion = json.getString("tag_name")
+                val releaseNotes = json.getString("body")
+
+                if (currentVersion != latestVersion) {
+                    toast("有新版本")
+                }
+            }
+        }
+    }
+
+    private fun makeHttpRequest(): String? {
+        val url = URL(Constant.API_PLUGIN_STANDALONE_URL)
+        val connection = url.openConnection() as? HttpURLConnection
+        connection?.requestMethod = "GET"
+
+        return connection?.inputStream?.use { inputStream ->
+            val reader = BufferedReader(InputStreamReader(inputStream))
+            val response = StringBuilder()
+
+            var line = reader.readLine()
+            while (line != null) {
+                response.append(line)
+                line = reader.readLine()
+            }
+
+            response.toString()
+        }
+    }
 }

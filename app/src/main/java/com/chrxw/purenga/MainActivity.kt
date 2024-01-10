@@ -12,6 +12,7 @@ import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.chrxw.purenga.utils.Helper
 
 
 /**
@@ -80,6 +81,12 @@ class MainActivity : AppCompatActivity() {
                     } catch (e: Throwable) {
                         toast("打开 NGA 失败")
                     }
+                    return true
+                }
+
+                "version" ->{
+                    Helper.checkForUpdates()
+
                     return true
                 }
 
