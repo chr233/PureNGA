@@ -20,10 +20,10 @@
 
 ## 版本说明
 
-|    类型    |                    特性                    |                  发行版链接                   |                     下载量                     |
-| :--------: | :----------------------------------------: | :-------------------------------------------: | :--------------------------------------------: |
-| 整合版 NGA | 无需 Xposed 框架, 覆盖安装原版 App, 体积大 |    [![img][release_bundled]][link_bundled]    |    [![img][download_bundled]][link_bundled]    |
-| 独立插件版 |     依赖 Xposed 框架, 独立更新, 体积小     | [![img][release_standalone]][link_standalone] | [![img][download_standalone]][link_standalone] |
+|     类型     |                    特性                    |                  发行版链接                   |                     下载量                     |
+| :----------: | :----------------------------------------: | :-------------------------------------------: | :--------------------------------------------: |
+|  NGA 净化版  | 无需 Xposed 框架, 覆盖安装原版 App, 体积大 |    [![img][release_bundled]][link_bundled]    |    [![img][download_bundled]][link_bundled]    |
+| 独立净化模块 |     依赖 Xposed 框架, 独立更新, 体积小     | [![img][release_standalone]][link_standalone] | [![img][download_standalone]][link_standalone] |
 
 ## 主要功能
 
@@ -38,6 +38,13 @@
 同时兼容 Lspatch, 支持 9.x.x 版本的 NGA 客户端
 
 ## 设置菜单入口
+
+1.16.0 以后支持从关于页打开插件菜单
+
+| ![img3](app/src/main/res/drawable/tutorials3.webp) | ![img4](app/src/main/res/drawable/tutorials4.webp) |
+| -------------------------------------------------- | -------------------------------------------------- |
+
+全版本通用插件设置菜单位置
 
 | ![img1](app/src/main/res/drawable/tutorials.webp) | ![img2](app/src/main/res/drawable/tutorials2.webp) |
 | ------------------------------------------------- | -------------------------------------------------- |
