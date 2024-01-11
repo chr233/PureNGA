@@ -121,6 +121,10 @@ class PreferencesHook : IHook {
                 title = "使用外部浏览器打开链接"
                 subTitle = "打开非NGA链接时自动调用外部系统浏览器"
             })
+            container.addView(ToggleItemView(context, Constant.OPEN_URL_OPTIMIZE).apply {
+                title = "优先使用本地App打开链接"
+                subTitle = "B站/抖音链接唤起App而不是浏览器"
+            })
             container.addView(ToggleItemView(context, Constant.KILL_UPDATE_CHECK).apply {
                 title = "禁止APP检查更新"
                 subTitle = "尝试阻止NGA检查更新"

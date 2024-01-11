@@ -179,6 +179,7 @@ class OptimizeHook : IHook {
             }
         }
 
+        //自定义起始页
         val option = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
         if (!option.isNullOrEmpty()) {
             findFirstMethodByName(clsMainActivity, "initTabs")?.createHook {

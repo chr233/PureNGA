@@ -187,24 +187,24 @@ class ShareHook : IHook {
 
             if (BuildConfig.DEBUG) {
                 //Event回调
-                MtdOnEvent.createHook {
-                    before {
-                        it.log()
-
-                        val arg = it.args[0]
-                        val actionType = XposedHelpers.callMethod(arg, "c")
-                        val data = XposedHelpers.callMethod(arg, "d")
-                        val list = XposedHelpers.callMethod(arg, "e") as List<*>?
-                        val index = XposedHelpers.callMethod(actionType, "ordinal")
-
-                        AndroidLogger.i("onEvent $arg $actionType[$index] $data")
-
-                        if (list != null) {
-                            val str = list.joinToString { x -> x.toString() }
-                            AndroidLogger.i("list $str")
-                        }
-                    }
-                }
+//                MtdOnEvent.createHook {
+//                    before {
+//                        it.log()
+//
+//                        val arg = it.args[0]
+//                        val actionType = XposedHelpers.callMethod(arg, "c")
+//                        val data = XposedHelpers.callMethod(arg, "d")
+//                        val list = XposedHelpers.callMethod(arg, "e") as List<*>?
+//                        val index = XposedHelpers.callMethod(actionType, "ordinal")
+//
+//                        AndroidLogger.i("onEvent $arg $actionType[$index] $data")
+//
+//                        if (list != null) {
+//                            val str = list.joinToString { x -> x.toString() }
+//                            AndroidLogger.i("list $str")
+//                        }
+//                    }
+//                }
             }
         }
 

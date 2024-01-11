@@ -40,6 +40,7 @@ object Constant {
     const val HIDE_HOOK_INFO = "hide_hook_info"
     const val CUSTOM_INDEX = "custom_index"
     const val AUTO_CLEAN_CACHE = "auto_clean_cache"
+    const val OPEN_URL_OPTIMIZE = "open_url_optimize"
 
     const val ENABLE_LOG = "enable_log"
 

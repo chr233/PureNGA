@@ -20,6 +20,36 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="@string/tutorials_first"
+            android:src="@drawable/tutorials3" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            android:text="@string/tutorials_second"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/tutorials_second"
+            android:src="@drawable/tutorials4" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            android:text="@string/tutorials_first"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/tutorials_first"
             android:src="@drawable/tutorials" />
 
         <TextView
@@ -36,7 +66,6 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/tutorials_second"
             android:src="@drawable/tutorials2" />
-
 
     </LinearLayout>
 </ScrollView>
