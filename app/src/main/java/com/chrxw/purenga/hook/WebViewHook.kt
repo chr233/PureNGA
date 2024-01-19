@@ -18,28 +18,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 class WebViewHook : IHook {
 
     companion object {
-        private val bilibiliUrls = arrayOf(
-            "www.bilibili.com",
-            "b23.tv",
-            "bili2233.cn",
-            "bili23.cn",
-            "bili33.cn",
-            "bili22.cn",
-            "space.bilibili.com",
-            "bilibili.kankanews.com",
-            "bilibili.tv",
-            "bilibili.cn",
-            "bilibili.com",
-            "www.bilibili.tv",
-            "www.bilibili.cn",
-            "www.bilibili.com",
-            "bilibili.smgbb.cn",
-            "m.acg.tv",
-            "n.bilibili.com",
-            "live.bilibili.com",
-        )
-
-        val ngaUrls = arrayOf(
+        private val ngaUrls = arrayOf(
             "ngabbs.com",
             "ngabbs.cn",
             "ngabbs.com",
@@ -56,7 +35,7 @@ class WebViewHook : IHook {
                         AndroidLogger.i("$host == $h")
 
                         return true
-                    }else{
+                    } else {
                         AndroidLogger.i("$host != $h")
                     }
                 }
@@ -66,10 +45,6 @@ class WebViewHook : IHook {
 
         private fun isNgaUrl(host: String?): Boolean {
             return isMatchHost(host, ngaUrls)
-        }
-
-        private fun isBilibiliUrl(host: String?): Boolean {
-            return isMatchHost(host, bilibiliUrls)
         }
     }
 
@@ -95,26 +70,17 @@ class WebViewHook : IHook {
                     if (bundle != null && clsName == "com.donews.nga.activitys.WebActivity") {
                         val actUrl = bundle.getString("act_url")
                         if (actUrl != null) {
-                            var url = Uri.parse(actUrl)
+                            val url = Uri.parse(actUrl)
                             if (isNgaUrl(url.host)) {
                                 return@before
-                            }
-
-                            AndroidLogger.e(actUrl)
-                            AndroidLogger.w("${url.scheme} ${url.host} ${url.path}")
-
-                            if (Helper.getSpBool(Constant.OPEN_URL_OPTIMIZE, false)) {
-                                if (isBilibiliUrl(url.host)) {
-                                    AndroidLogger.w("isBilibiliUrl")
-                                    val builder = url.buildUpon();
-                                    builder.scheme("bilibili")
-                                    url = builder.build()
+                            } else {
+                                if (BuildConfig.DEBUG) {
+                                    AndroidLogger.w(actUrl)
+                                    AndroidLogger.w("${url.scheme} ${url.host} ${url.path}")
                                 }
+
+                                it.args[4] = Intent(Intent.ACTION_VIEW, url)
                             }
-
-                            AndroidLogger.w("${url.scheme} ${url.host} ${url.path}")
-
-                            it.args[4] = Intent(Intent.ACTION_VIEW, url)
                         }
                     }
                 }
