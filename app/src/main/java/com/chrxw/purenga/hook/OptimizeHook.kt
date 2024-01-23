@@ -1,12 +1,12 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import android.content.Context
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
-import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
@@ -28,6 +28,8 @@ class OptimizeHook : IHook {
         private lateinit var clsCommentDialog: Class<*>
         private lateinit var clsMainActivity: Class<*>
         private lateinit var clsArticleDetailActivity: Class<*>
+        private lateinit var clsHomeFragment: Class<*>
+        private lateinit var clsLoginWebView: Class<*>
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -37,40 +39,11 @@ class OptimizeHook : IHook {
         clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
+        clsHomeFragment = classLoader.loadClass("com.donews.nga.fragments.HomeFragment")
+        clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
     }
 
     override fun hook() {
-        // 屏蔽弹窗
-        if (Helper.getSpBool(Constant.KILL_POPUP_DIALOG, false)) {
-            findFirstMethodByName(MainHook.clsAppConfig, "isAgreedAgreement")?.createHook {
-                replace {
-                    it.log()
-                    return@replace true
-                }
-            }
-
-            findFirstMethodByName(MainHook.clsNGAApplication, "showNotificationDialog")?.createHook {
-                replace {
-                    it.log()
-                }
-            }
-
-            findFirstMethodByName(MainHook.clsMainActivity, "showNotificationDialog")?.createHook {
-                replace {
-                    it.log()
-                }
-            }
-
-            if (BuildConfig.DEBUG) {
-                findFirstMethodByName(MainHook.clsNGAApplication, "handleMessage")?.createHook {
-                    before {
-                        it.log()
-                        AndroidLogger.w(it.args.get(0).toString())
-                    }
-                }
-            }
-        }
-
         // 屏蔽更新检测
         if (Helper.getSpBool(Constant.KILL_UPDATE_CHECK, false)) {
             findFirstMethodByName(clsMainActivityPresenter, "checkAppUpdate")?.createHook {
@@ -196,6 +169,44 @@ class OptimizeHook : IHook {
                             view.performClick()
                         }
                     }
+                }
+            }
+        }
+
+        // 修改时间戳实现切屏无广告
+        if (Helper.getSpBool(Constant.KILL_POPUP_DIALOG, false)) {
+            findFirstMethodByName(MainHook.clsSPUtil, "getLong")?.createHook {
+                after {
+                    it.log()
+
+                    when (it.args[0] as String) {
+                        "last_Guide_notification" -> {
+                            it.result = System.currentTimeMillis()
+                        }
+                    }
+                }
+            }
+        }
+
+        // 自动签到
+        if (Helper.getSpBool(Constant.AUTO_SIGN, false)) {
+            findFirstMethodByName(clsHomeFragment, "updateSingStatus")?.createHook {
+                after {
+                    it.log()
+
+                    if (it.args[0] == 0) {
+                        try {
+                            val mtdGetContext = clsHomeFragment.getMethod("getContext")
+                            val context = mtdGetContext.invoke(it.thisObject)
+                            val mtdShowLoginWebView = clsLoginWebView.getMethod("show", Context::class.java)
+                            mtdShowLoginWebView.invoke(null, context)
+                        } catch (ex: Exception) {
+                            AndroidLogger.e(ex, "出错")
+                            Helper.toast("自动签到失败, 可能不适配当前版本")
+                            return@after
+                        }
+                    }
+                    AndroidLogger.w("updateSingStatus")
                 }
             }
         }

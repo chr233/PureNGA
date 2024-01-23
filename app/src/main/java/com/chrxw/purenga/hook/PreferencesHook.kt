@@ -117,6 +117,10 @@ class PreferencesHook : IHook {
 
             // 其他功能
             container.addView(ClickableItemView(context).apply { title = "其他功能" })
+            container.addView(ToggleItemView(context, Constant.AUTO_SIGN).apply {
+                title = "自动打开签到页面"
+                subTitle = "没有签到时自动打开签到页面进行签到"
+            })
             container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply {
                 title = "使用外部浏览器打开链接"
                 subTitle = "打开非NGA链接时自动调用外部系统浏览器"

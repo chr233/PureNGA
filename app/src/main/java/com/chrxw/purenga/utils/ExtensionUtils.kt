@@ -2,6 +2,7 @@ package com.chrxw.purenga.utils
 
 import android.content.Context
 import android.util.DisplayMetrics
+import com.chrxw.purenga.BuildConfig
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XC_MethodHook
@@ -55,8 +56,11 @@ object ExtensionUtils {
 
         if (first == null) {
             AndroidLogger.w("${clazz.name} $name not found")
+        } else {
+            if (BuildConfig.DEBUG) {
+                AndroidLogger.d("${clazz.name} $name hook init success")
+            }
         }
-
         return first
     }
 }

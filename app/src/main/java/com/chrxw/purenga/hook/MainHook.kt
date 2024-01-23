@@ -3,8 +3,12 @@ package com.chrxw.purenga.hook
 import android.content.Context
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 
 
 /**
@@ -39,7 +43,38 @@ class MainHook : IHook {
 
     }
 
-    override fun hook() {}
+    override fun hook() {
+        // 屏蔽弹窗
+        if (Helper.getSpBool(Constant.KILL_POPUP_DIALOG, false)) {
+            findFirstMethodByName(clsAppConfig, "isAgreedAgreement")?.createHook {
+                replace {
+                    it.log()
+                    return@replace true
+                }
+            }
+
+            findFirstMethodByName(clsNGAApplication, "showNotificationDialog")?.createHook {
+                replace {
+                    it.log()
+                }
+            }
+
+            findFirstMethodByName(clsMainActivity, "showNotificationDialog")?.createHook {
+                replace {
+                    it.log()
+                }
+            }
+
+            if (BuildConfig.DEBUG) {
+                findFirstMethodByName(clsNGAApplication, "handleMessage")?.createHook {
+                    before {
+                        it.log()
+                        AndroidLogger.w(it.args.get(0).toString())
+                    }
+                }
+            }
+        }
+    }
 
     override var name = "MainHook"
 }

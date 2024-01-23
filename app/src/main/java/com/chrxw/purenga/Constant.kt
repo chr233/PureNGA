@@ -31,6 +31,7 @@ object Constant {
     const val REMOVE_WECHAT_ICON = "remove_wechat_icon"
     const val REMOVE_POPUP_POST = "remove_popup_post"
     const val REMOVE_VIP_BANNER = "remove_vip_banner"
+    const val AUTO_SIGN = "auto_sign"
     const val USE_EXTERNAL_BROWSER = "use_external_browser"
     const val KILL_UPDATE_CHECK = "kill_update_check"
     const val KILL_POPUP_DIALOG = "kill_popup_dialog"
