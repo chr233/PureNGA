@@ -18,15 +18,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 class WebViewHook : IHook {
 
     companion object {
-        private val ngaUrls = arrayOf(
-            "ngabbs.com",
-            "ngabbs.cn",
-            "ngabbs.com",
-            "bbs.ngacn.cc",
-            "nga.178.com",
-            "bbs.nga.cn",
-            "bbs.bigccq.cn",
-        )
+        private val ngaUrls = mutableListOf<String>()
 
         private fun isNgaUrl(host: String?): Boolean {
             if (host != null) {
@@ -41,11 +33,14 @@ class WebViewHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
+        val hosts = MainHook.clsAppConfig.getField("hosts").get(null) as Array<*>
+        for (host in hosts) {
+            ngaUrls.add(host as String)
+        }
+
         if (BuildConfig.DEBUG) {
-            AndroidLogger.w("NGA urls:")
-            val hosts = MainHook.clsAppConfig.getField("hosts").get(null) as Array<*>
-            for (host in hosts) {
-                AndroidLogger.w(host.toString())
+            for (host in ngaUrls) {
+                AndroidLogger.i(host)
             }
         }
     }

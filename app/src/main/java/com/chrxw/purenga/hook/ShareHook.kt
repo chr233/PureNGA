@@ -1,6 +1,5 @@
 package com.chrxw.purenga.hook
 
-import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
@@ -183,28 +182,6 @@ class ShareHook : IHook {
                 }
             } else {
                 Helper.toast("假装分享功能启用失败, 可能不适用于当前版本")
-            }
-
-            if (BuildConfig.DEBUG) {
-                //Event回调
-//                MtdOnEvent.createHook {
-//                    before {
-//                        it.log()
-//
-//                        val arg = it.args[0]
-//                        val actionType = XposedHelpers.callMethod(arg, "c")
-//                        val data = XposedHelpers.callMethod(arg, "d")
-//                        val list = XposedHelpers.callMethod(arg, "e") as List<*>?
-//                        val index = XposedHelpers.callMethod(actionType, "ordinal")
-//
-//                        AndroidLogger.i("onEvent $arg $actionType[$index] $data")
-//
-//                        if (list != null) {
-//                            val str = list.joinToString { x -> x.toString() }
-//                            AndroidLogger.i("list $str")
-//                        }
-//                    }
-//                }
             }
         }
 

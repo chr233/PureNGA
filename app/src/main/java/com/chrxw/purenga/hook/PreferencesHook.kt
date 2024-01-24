@@ -213,8 +213,6 @@ class PreferencesHook : IHook {
                 val scrollView = root.getChildAt(1) as ScrollView
                 val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
-//                EzXHelper.addModuleAssetPath(activity)
-
                 activity.runOnUiThread {
                     btnPureNGASetting = Button(activity).also { btn ->
                         btn.text = Constant.BTN_TITLE
