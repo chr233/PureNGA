@@ -184,17 +184,19 @@ class OptimizeHook : IHook {
                 after {
                     it.log()
 
+                    val canChecked = it.args[0] == 0
                     val isLogin = mtdCheckLogin.invoke(it.thisObject, false) as Boolean
-                    AndroidLogger.i("isLogin ${isLogin}")
+                    AndroidLogger.i("canCheck ${canChecked} isLogin ${isLogin}")
 
-                    if (it.args[0] == 0 && isLogin && firstClick) {
+                    if (canChecked && isLogin && firstClick) {
                         firstClick = false
                         try {
-                            AndroidLogger.i("自动签到, 打开签到页面")
+                            Helper.toast("自动签到, 打开签到页面")
                             val mtdGetContext = clsHomeFragment.getMethod("getContext")
                             val context = mtdGetContext.invoke(it.thisObject)
-                            val mtdShowLoginWebView = clsLoginWebView.getMethod("show", Context::class.java)
-                            mtdShowLoginWebView.invoke(null, context)
+                            val mtdShowLoginWebView =
+                                clsLoginWebView.getMethod("show", Context::class.java, Int::class.java)
+                            mtdShowLoginWebView.invoke(null, context, 5)
                         } catch (ex: Exception) {
                             AndroidLogger.e(ex, "出错")
                             Helper.toast("自动签到失败, 可能不适配当前版本")
