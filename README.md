@@ -25,6 +25,8 @@
 |  NGA 净化版  | 无需 Xposed 框架, 覆盖安装原版 App, 体积大 |    [![img][release_bundled]][link_bundled]    |    [![img][download_bundled]][link_bundled]    |
 | 独立净化模块 |     依赖 Xposed 框架, 独立更新, 体积小     | [![img][release_standalone]][link_standalone] | [![img][download_standalone]][link_standalone] |
 
+> 历时一年的开发, 所有功能趋于稳定, 后续不再开发新功能
+
 ## 主要功能
 
 - [x] 开屏广告跳过
@@ -34,8 +36,9 @@
 - [x] 屏蔽内置浏览器
 - [x] 假装分享
 - [x] 自定义首页
+- [x] 自动签到
 
-同时兼容 Lspatch, 支持 9.x.x 版本的 NGA 客户端
+同时兼容 Lspatch, 支持 9.9.x 版本的 NGA 客户端, 理论向后兼容
 
 ## 设置菜单入口
 
