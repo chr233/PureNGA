@@ -1,5 +1,6 @@
 package com.chrxw.purenga.hook
 
+import android.app.Activity
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
@@ -9,6 +10,7 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.isAbstract
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
+import de.robv.android.xposed.XposedHelpers
 
 
 /**
@@ -21,6 +23,9 @@ class AdHook : IHook {
         private lateinit var clsUtils_bp: Class<*>
         private lateinit var clsAdSize: Class<*>
         private var clsZkAdNativeImpl: Class<*>? = null
+
+        private lateinit var clsActivityLifecycle: Class<*>
+        private lateinit var clsLoadingActivity_a: Class<*>
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -33,6 +38,8 @@ class AdHook : IHook {
         } catch (e: Throwable) {
             AndroidLogger.e(e)
         }
+        clsActivityLifecycle = classLoader.loadClass("com.donews.nga.interfaces.ActivityLifecycleImpl")
+        clsLoadingActivity_a = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity\$a")
     }
 
     override fun hook() {
@@ -95,6 +102,34 @@ class AdHook : IHook {
                 }
             } ?: {
                 AndroidLogger.d("clsLoadingActivity loadAD 匹配失败")
+            }
+        }
+
+        //屏蔽开屏广告
+        if (Helper.getSpBool(Constant.PURE_SPLASH_AD, false)) {
+            // 跳过开屏Logo页面
+            val hook1 = findFirstMethodByName(clsActivityLifecycle, "toForeGround")?.createHook {
+                replace {
+                    it.log()
+
+                    val activity = it.args[0] as Activity
+                    if (activity.javaClass == MainHook.clsLoadingActivity) {
+                        AndroidLogger.d("跳过启动页")
+                        XposedHelpers.setBooleanField(activity, "canJump", true)
+                        XposedHelpers.setBooleanField(activity, "isADShow", true)
+                        XposedHelpers.callMethod(activity, "goHome")
+                    }
+                }
+            }
+
+            val hook3 = findFirstMethodByName(clsLoadingActivity_a, "callBack")?.createHook {
+                replace {
+                    it.log()
+                }
+            }
+
+            if (hook1 == null || hook3 == null) {
+                AndroidLogger.w("过滤开屏广告功能部分加载失败")
             }
         }
     }

@@ -28,23 +28,15 @@ class WebViewHook : IHook {
             "bbs.bigccq.cn",
         )
 
-        private fun isMatchHost(host: String?, hosts: Array<String>): Boolean {
+        private fun isNgaUrl(host: String?): Boolean {
             if (host != null) {
-                for (h in hosts) {
+                for (h in ngaUrls) {
                     if (host == h) {
-                        AndroidLogger.i("$host == $h")
-
                         return true
-                    } else {
-                        AndroidLogger.i("$host != $h")
                     }
                 }
             }
             return false
-        }
-
-        private fun isNgaUrl(host: String?): Boolean {
-            return isMatchHost(host, ngaUrls)
         }
     }
 

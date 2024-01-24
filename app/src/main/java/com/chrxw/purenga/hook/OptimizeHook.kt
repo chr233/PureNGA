@@ -173,29 +173,24 @@ class OptimizeHook : IHook {
             }
         }
 
-        // 修改时间戳实现切屏无广告
-        if (Helper.getSpBool(Constant.KILL_POPUP_DIALOG, false)) {
-            findFirstMethodByName(MainHook.clsSPUtil, "getLong")?.createHook {
-                after {
-                    it.log()
-
-                    when (it.args[0] as String) {
-                        "last_Guide_notification" -> {
-                            it.result = System.currentTimeMillis()
-                        }
-                    }
-                }
-            }
-        }
-
         // 自动签到
         if (Helper.getSpBool(Constant.AUTO_SIGN, false)) {
+            val mtdCheckLogin = clsHomeFragment.getDeclaredMethod("checkLogin", Boolean::class.java)
+            mtdCheckLogin.isAccessible = true
+
+            var firstClick = true
+
             findFirstMethodByName(clsHomeFragment, "updateSingStatus")?.createHook {
                 after {
                     it.log()
 
-                    if (it.args[0] == 0) {
+                    val isLogin = mtdCheckLogin.invoke(it.thisObject, false) as Boolean
+                    AndroidLogger.i("isLogin ${isLogin}")
+
+                    if (it.args[0] == 0 && isLogin && firstClick) {
+                        firstClick = false
                         try {
+                            AndroidLogger.i("自动签到, 打开签到页面")
                             val mtdGetContext = clsHomeFragment.getMethod("getContext")
                             val context = mtdGetContext.invoke(it.thisObject)
                             val mtdShowLoginWebView = clsLoginWebView.getMethod("show", Context::class.java)

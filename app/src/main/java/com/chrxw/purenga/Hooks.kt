@@ -7,7 +7,7 @@ import com.chrxw.purenga.hook.OptimizeHook
 import com.chrxw.purenga.hook.PreferencesHook
 import com.chrxw.purenga.hook.RewardHook
 import com.chrxw.purenga.hook.ShareHook
-import com.chrxw.purenga.hook.SplashHook
+import com.chrxw.purenga.hook.SpUtilsHook
 import com.chrxw.purenga.hook.WebViewHook
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -19,9 +19,9 @@ object Hooks {
     private val hooks = arrayOf(
         MainHook(),
         OptimizeHook(),
-        SplashHook(),
-        RewardHook(),
         AdHook(),
+        SpUtilsHook(),
+        RewardHook(),
         PreferencesHook(),
         AboutHook(),
         WebViewHook(),
