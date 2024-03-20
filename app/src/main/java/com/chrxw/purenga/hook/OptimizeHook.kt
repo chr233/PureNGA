@@ -30,6 +30,7 @@ class OptimizeHook : IHook {
         private lateinit var clsArticleDetailActivity: Class<*>
         private lateinit var clsHomeFragment: Class<*>
         private lateinit var clsLoginWebView: Class<*>
+        private lateinit var clsCalendarUtils: Class<*>
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -41,6 +42,7 @@ class OptimizeHook : IHook {
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
         clsHomeFragment = classLoader.loadClass("com.donews.nga.fragments.HomeFragment")
         clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
+        clsCalendarUtils = classLoader.loadClass("gov.pianzong.androidnga.utils.CalendarUtils")
     }
 
     override fun hook() {
@@ -204,6 +206,16 @@ class OptimizeHook : IHook {
                         }
                     }
                     AndroidLogger.w("updateSingStatus")
+                }
+            }
+        }
+
+        // 日历弹窗
+        if (Helper.getSpBool(Constant.PURE_CALENDAR_DIALOG, false)) {
+            findFirstMethodByName(clsCalendarUtils, "f")?.createHook {
+                replace {
+                    it.log()
+                    return@replace true
                 }
             }
         }

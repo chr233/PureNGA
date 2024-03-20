@@ -121,6 +121,10 @@ class PreferencesHook : IHook {
                 title = "自动打开签到页面"
                 subTitle = "没有签到时自动打开签到页面进行签到"
             })
+            container.addView(ToggleItemView(context, Constant.PURE_CALENDAR_DIALOG).apply {
+                title = "屏蔽日历弹窗"
+                subTitle = "屏蔽签到页面的添加日历提醒弹窗"
+            })
             container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply {
                 title = "使用外部浏览器打开链接"
                 subTitle = "打开非NGA链接时自动调用外部系统浏览器"
@@ -161,6 +165,7 @@ class PreferencesHook : IHook {
                 title = "静默运行"
                 subTitle = "启动时不显示模块运行信息"
             })
+
             container.addView(ClickableItemView(context).apply {
                 title = "手动检查更新"
                 val ngaVersion = Helper.getNgaVersion()
