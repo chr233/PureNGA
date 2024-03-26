@@ -1,7 +1,10 @@
 package com.chrxw.purenga.hook
 
+import android.R.attr
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
+import android.webkit.WebView
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -14,6 +17,7 @@ import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
+import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
 
@@ -43,6 +47,79 @@ class OptimizeHook : IHook {
         clsHomeFragment = classLoader.loadClass("com.donews.nga.fragments.HomeFragment")
         clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
         clsCalendarUtils = classLoader.loadClass("gov.pianzong.androidnga.utils.CalendarUtils")
+
+//        MethodFinder.fromClass("com.donews.nga.common.skin.SkinManager", classLoader).filterByName("getFont")
+//            .first().createHook {
+//                before {
+//                    it.log()
+//
+//                    AndroidLogger.w("getFont")
+//                }
+//            }
+//
+//        MethodFinder.fromClass("com.donews.nga.common.skin.SkinManager", classLoader).filterByName("getCurSkin")
+//            .first().createHook {
+//                before {
+//                    it.log()
+//
+//                    AndroidLogger.w("getCurSkin")
+//                }
+//            }
+//
+//        MethodFinder.fromClass("com.donews.nga.setting.adapters.SkinListAdapter\$ViewBinder", classLoader).filterByName("setSkin")
+//            .first().createHook {
+//                before {
+//                    it.log()
+//
+//                    AndroidLogger.w("setSkin")
+//                }
+//            }
+//
+//        MethodFinder.fromClass("com.donews.nga.common.skin.SkinManager", classLoader).filterByName("loadSkin")
+//            .first().createHook {
+//                before {
+//                    it.log()
+//
+//                    AndroidLogger.w("loadSkin")
+//                }
+//            }
+
+
+
+        MethodFinder.fromClass("gov.pianzong.androidnga.activity.forumdetail.BaseWebChromeClient", classLoader).filterByName("onShowCustomView")
+            .first().createHook {
+                before() {
+                    it.log()
+
+                    val webView= XposedHelpers.getObjectField(it.thisObject,"mWebView") as WebView?
+//                    if(webView !=null){
+//                        XposedHelpers.callMethod(it.thisObject,"injectJS", webView, "alert")
+//                    }
+
+
+                    AndroidLogger.w("onShowCustomView")
+                }
+            }
+
+        MethodFinder.fromClass("gov.pianzong.androidnga.activity.forumdetail.BaseWebChromeClient", classLoader).filterByName("injectJS")
+            .first().createHook {
+                before() {
+                    it.log()
+
+                    AndroidLogger.w("injectJS")
+                }
+            }
+
+
+        MethodFinder.fromClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity", classLoader).filterByName("onCreate")
+            .first().createHook {
+                before() {
+                    it.log()
+
+                    AndroidLogger.w("ArticleDetailActivity onCreate")
+                }
+            }
+
     }
 
     override fun hook() {
