@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
@@ -93,15 +94,15 @@ class PreferencesHook : IHook {
                 subTitle = "设置APP首页"
                 setOnClickListener {
                     val items = arrayOf("首页", "社区", "我的")
-                    val curSetting = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
-                    val currentIndex = items.indexOf(curSetting)
+                    val indexSetting = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
+                    val currentIndex = items.indexOf(indexSetting)
 
                     AlertDialog.Builder(context).apply {
                         setTitle(title)
                         setCancelable(false)
                         setSingleChoiceItems(items, currentIndex) { _, which ->
                             Helper.setSpStr(Constant.CUSTOM_INDEX, items[which])
-                            Helper.toast(which.toString())
+                            Helper.toast("设置已保存, 重启应用生效")
                         }
                         setNeutralButton("清除设置") { _, _ ->
                             Helper.setSpStr(Constant.CUSTOM_INDEX, null)
@@ -109,39 +110,96 @@ class PreferencesHook : IHook {
                         }
                         setPositiveButton("关闭") { _, _ ->
                         }
-                        create()
                         show()
+                    }
+                }
+            })
+            container.addView(ToggleItemView(context, Constant.ENABLE_CUSTOM_FONT).apply {
+                title = "启用自定义字体"
+                subTitle = "帖子详情页强制使用自定义字体"
+            })
+            container.addView(ClickableItemView(context).apply {
+                title = "设置自定义字体"
+                subTitle = "设置帖子详情页使用的字体"
+                setOnClickListener {
+                    val enable = Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)
+
+                    if (enable) {
+                        val fontName = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)
+                        val input = EditText(context).apply {
+                            hint = "例如 system-ui, Roboto, Helvetica, Arial, sans-serif"
+                            setText(fontName)
+                        }
+
+                        AlertDialog.Builder(context).apply {
+                            setTitle(title)
+                            setCancelable(false)
+                            setView(input)
+                            setNeutralButton("使用系统字体", null)
+                            setPositiveButton("保存") { _, _ ->
+                                Helper.setSpStr(Constant.CUSTOM_FONT_NAME, input.text.toString())
+                                Helper.toast("设置已保存, 重启应用生效")
+                            }
+                            setNegativeButton("关闭") { _, _ ->
+                            }
+                            create().apply {
+                                setOnShowListener {
+                                    getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                                        input.setText(Constant.SYSTEM_FONT)
+                                        Helper.setSpStr(Constant.CUSTOM_FONT_NAME, input.text.toString())
+                                    }
+                                }
+                                show()
+                            }
+                        }
+                    } else {
+                        AlertDialog.Builder(context).apply {
+                            setTitle(title)
+                            setMessage("请先打开【启用自定义字体】")
+                            setPositiveButton("关闭") { _, _ ->
+                            }
+                            create()
+                            show()
+                        }
                     }
                 }
             })
 
             // 其他功能
-            container.addView(ClickableItemView(context).apply { title = "其他功能" })
-            container.addView(ToggleItemView(context, Constant.AUTO_SIGN).apply {
+            container.addView(ClickableItemView(context).apply
+            { title = "其他功能" })
+            container.addView(ToggleItemView(context, Constant.AUTO_SIGN).apply
+            {
                 title = "自动打开签到页面"
                 subTitle = "没有签到时自动打开签到页面进行签到"
             })
-            container.addView(ToggleItemView(context, Constant.PURE_CALENDAR_DIALOG).apply {
+            container.addView(ToggleItemView(context, Constant.PURE_CALENDAR_DIALOG).apply
+            {
                 title = "屏蔽日历弹窗"
                 subTitle = "屏蔽签到页面的添加日历提醒弹窗"
             })
-            container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply {
+            container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply
+            {
                 title = "使用外部浏览器打开链接"
                 subTitle = "打开非NGA链接时自动调用外部系统浏览器"
             })
-            container.addView(ToggleItemView(context, Constant.KILL_UPDATE_CHECK).apply {
+            container.addView(ToggleItemView(context, Constant.KILL_UPDATE_CHECK).apply
+            {
                 title = "禁止APP检查更新"
                 subTitle = "尝试阻止NGA检查更新"
             })
-            container.addView(ToggleItemView(context, Constant.KILL_POPUP_DIALOG).apply {
+            container.addView(ToggleItemView(context, Constant.KILL_POPUP_DIALOG).apply
+            {
                 title = "屏蔽应用内弹窗"
                 subTitle = "作用不明"
             })
-            container.addView(ToggleItemView(context, Constant.FAKE_SHARE).apply {
+            container.addView(ToggleItemView(context, Constant.FAKE_SHARE).apply
+            {
                 title = "假装分享"
                 subTitle = "在分享菜单增加一个“假装分享”按钮"
             })
-            container.addView(ToggleItemView(context, Constant.BYPASS_INSTALL_CHECK).apply {
+            container.addView(ToggleItemView(context, Constant.BYPASS_INSTALL_CHECK).apply
+            {
                 title = "绕过已安装检查"
                 subTitle = "分享到指定App前检查不检查是否已安装(调试用)"
             })
@@ -151,8 +209,10 @@ class PreferencesHook : IHook {
 //        })
 
             // 插件设置
-            container.addView(ClickableItemView(context).apply { title = "插件设置" })
-            container.addView(ToggleItemView(context, Constant.ENABLE_LOG, BuildConfig.DEBUG).apply {
+            container.addView(ClickableItemView(context).apply
+            { title = "插件设置" })
+            container.addView(ToggleItemView(context, Constant.ENABLE_LOG, BuildConfig.DEBUG).apply
+            {
                 title = "启用日志"
                 subTitle = "在Logcat中输出详细日志"
             })
@@ -161,12 +221,14 @@ class PreferencesHook : IHook {
 //            subTitle = "定期检查插件更新"
 //            idDisabled = true
 //        })
-            container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply {
+            container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply
+            {
                 title = "静默运行"
                 subTitle = "启动时不显示模块运行信息"
             })
 
-            container.addView(ClickableItemView(context).apply {
+            container.addView(ClickableItemView(context).apply
+            {
                 title = "手动检查更新"
                 val ngaVersion = Helper.getNgaVersion()
                 val sunType = if (Helper.isBundled()) "整合版" else "插件版"
@@ -178,8 +240,10 @@ class PreferencesHook : IHook {
                 }
             })
 
-            container.addView(ClickableItemView(context).apply { title = "关于" })
-            container.addView(ClickableItemView(context).apply {
+            container.addView(ClickableItemView(context).apply
+            { title = "关于" })
+            container.addView(ClickableItemView(context).apply
+            {
                 title = "作者"
                 subTitle = "GitHub @chr233"
                 setOnClickListener {
@@ -187,7 +251,8 @@ class PreferencesHook : IHook {
                     context.startActivity(intent)
                 }
             })
-            container.addView(ClickableItemView(context).apply {
+            container.addView(ClickableItemView(context).apply
+            {
                 title = "捐赠"
                 subTitle = "爱发电 @chr233"
                 setOnClickListener {

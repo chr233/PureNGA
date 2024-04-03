@@ -49,6 +49,7 @@ class AboutHook : IHook {
                 textView.text = "NGA 版本: $ngaVersion\nPureNGA 版本: $pluginVersion\n点上方图标打开设置"
 
                 textView.setOnClickListener {
+                    Helper.toast("正在前往 PureNGA 项目主页")
                     root.context.startActivity(
                         Intent(
                             Intent.ACTION_VIEW, Uri.parse(Constant.REPO_URL)

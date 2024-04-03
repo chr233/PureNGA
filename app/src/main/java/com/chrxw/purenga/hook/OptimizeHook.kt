@@ -2,9 +2,6 @@ package com.chrxw.purenga.hook
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Typeface
-import android.view.View
-import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -38,27 +35,11 @@ class OptimizeHook : IHook {
         private lateinit var clsLoginWebView: Class<*>
         private lateinit var clsCalendarUtils: Class<*>
         private lateinit var clsAssetManager: Class<*>
+        private lateinit var clsResources: Class<*>
 
         private fun readTextFromInputStream(inputStream: InputStream): String {
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
                 return reader.readText()
-            }
-        }
-
-        private fun setSystemFontForTextViews(view: View) {
-            if (view is ViewGroup)
-            {
-                AndroidLogger.i("$view, ${view.childCount}")
-
-                for (i in 0 until view.childCount) {
-                    val child = view.getChildAt(i)
-                    setSystemFontForTextViews(child)
-                }
-            } else if (view is TextView) {
-                // 设置字体为系统默认字体
-                AndroidLogger.d("$view, ${view.typeface}")
-                view.typeface = Typeface.DEFAULT
-                view.text=view.toString()
             }
         }
     }
@@ -73,131 +54,11 @@ class OptimizeHook : IHook {
         clsHomeFragment = classLoader.loadClass("com.donews.nga.fragments.HomeFragment")
         clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
         clsCalendarUtils = classLoader.loadClass("gov.pianzong.androidnga.utils.CalendarUtils")
-
         clsAssetManager = classLoader.loadClass("android.content.res.AssetManager")
-
-        MethodFinder.fromClass(
-            "gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity", classLoader
-        ).filterByName("refreshPageView").first().createHook {
-            after {
-                it.log()
-
-                AndroidLogger.e("ArticleDetailActivity refreshPageView")
-
-                val activity = it.thisObject as Activity
-                val id = Helper.getRId("pager")
-                val viewPager = activity.findViewById<ViewGroup>(id)
-
-                AndroidLogger.w(viewPager.toString())
-
-                setSystemFontForTextViews(viewPager)
-//
-
-//                val view = XposedHelpers.getObjectField(it.thisObject, "mPagesView") as TextView
-//                setSystemFontForTextViews(view)
-            }
-        }
-        MethodFinder.fromClass(
-            "gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity", classLoader
-        ).filterByName("onResume").first().createHook {
-            after {
-                it.log()
-
-                AndroidLogger.e("ArticleDetailActivity onResume")
-
-//                val activity = it.thisObject as Activity
-//                val id = Helper.getRId("pager")
-//                val viewPager = activity.findViewById<ViewGroup>(id)
-//
-//                AndroidLogger.w(viewPager.toString())
-//
-//                setSystemFontForTextViews(viewPager)
-
-//                val view = XposedHelpers.getObjectField(it.thisObject, "mPagesView") as TextView
-//                setSystemFontForTextViews(view)
-            }
-        }
-
-//
-//        MethodFinder.fromClass("gov.pianzong.androidnga.activity.forumdetail.BaseWebChromeClient", classLoader)
-//            .filterByName("onShowCustomView")
-//            .first().createHook
-//        {
-//            before() {
-//                it.log()
-//
-//
-//
-//                AndroidLogger.w("onShowCustomView")
-//            }
-//        }
-//
-//        MethodFinder.fromClass("gov.pianzong.androidnga.activity.forumdetail.BaseWebChromeClient", classLoader)
-//            .filterByName("injectJS")
-//            .first().createHook
-//        {
-//            before() {
-//                it.log()
-//
-//                AndroidLogger.w("injectJS")
-//            }
-//        }
-//
-//
-//        MethodFinder.fromClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity", classLoader)
-//            .filterByName("onCreate")
-//            .first().createHook
-//        {
-//            before() {
-//                it.log()
-//
-//                AndroidLogger.w("ArticleDetailActivity onCreate")
-//            }
-//        }
+        clsResources = classLoader.loadClass("android.content.res.Resources")
     }
 
     override fun hook() {
-
-        MethodFinder.fromClass(clsAssetManager).filterByName("open").forEach { mtd ->
-            mtd.createHook {
-                after {
-                    val fileName = it.args[0] as String
-
-                    if (fileName == "css/style.night.css" || fileName == "css/style.css") {
-                        AndroidLogger.e("AssetManager.Open css")
-
-                        val inputStream = it.result as InputStream
-                        val css = readTextFromInputStream(inputStream)
-
-//                        AndroidLogger.w(css)
-
-                        val regex = Regex("font-family:[^;]+;?")
-                        val newCss = regex.replace(css, "font-family: unset;")
-
-//                        AndroidLogger.i(newCss)
-
-                        it.result = newCss.byteInputStream()
-                    } else if (fileName == "js/public.js") {
-                        AndroidLogger.e("AssetManager.Open js")
-
-//                        val inputStream = it.result as InputStream
-//                        val js = readTextFromInputStream(inputStream)
-
-//                        AndroidLogger.w(js)
-
-//                        val newJs = js + "alert('114514');";
-
-//                        AndroidLogger.i(newJs)
-
-//                        it.result = newJs.byteInputStream()
-                    }
-
-                    it.log()
-                }
-            }
-        }
-
-
         // 屏蔽更新检测
         if (Helper.getSpBool(Constant.KILL_UPDATE_CHECK, false)) {
             findFirstMethodByName(clsMainActivityPresenter, "checkAppUpdate")?.createHook {
@@ -340,7 +201,7 @@ class OptimizeHook : IHook {
 
                     val canChecked = it.args[0] == 0
                     val isLogin = mtdCheckLogin.invoke(it.thisObject, false) as Boolean
-                    AndroidLogger.i("canCheck ${canChecked} isLogin ${isLogin}")
+                    AndroidLogger.i("canCheck $canChecked isLogin $isLogin")
 
                     if (canChecked && isLogin && firstClick) {
                         firstClick = false
@@ -368,6 +229,32 @@ class OptimizeHook : IHook {
                 replace {
                     it.log()
                     return@replace true
+                }
+            }
+        }
+
+        // 自定义字体
+        if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
+            MethodFinder.fromClass(clsAssetManager).filterByName("open").forEach { mtd ->
+                mtd.createHook {
+                    after {
+                        it.log()
+
+                        val fileName = it.args[0] as String
+
+                        if (fileName == "css/style.night.css" || fileName == "css/style.css") {
+                            AndroidLogger.e("AssetManager.Open css")
+
+                            val inputStream = it.result as InputStream
+                            val css = readTextFromInputStream(inputStream)
+
+                            val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME,Constant.SYSTEM_FONT)
+                            val regex = Regex("font-family:[^;]+;?")
+                            val newCss = regex.replace(css, "font-family: $newFont;")
+
+                            it.result = newCss.byteInputStream()
+                        }
+                    }
                 }
             }
         }
