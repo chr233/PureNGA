@@ -36,6 +36,7 @@ class OptimizeHook : IHook {
         private lateinit var clsCalendarUtils: Class<*>
         private lateinit var clsAssetManager: Class<*>
         private lateinit var clsResources: Class<*>
+        private lateinit var clsAboutUsActivityA:Class<*>
 
         private fun readTextFromInputStream(inputStream: InputStream): String {
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
@@ -56,6 +57,7 @@ class OptimizeHook : IHook {
         clsCalendarUtils = classLoader.loadClass("gov.pianzong.androidnga.utils.CalendarUtils")
         clsAssetManager = classLoader.loadClass("android.content.res.AssetManager")
         clsResources = classLoader.loadClass("android.content.res.Resources")
+        clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
     }
 
     override fun hook() {
@@ -70,6 +72,14 @@ class OptimizeHook : IHook {
             findFirstMethodByName(clsCommentDialog, "showUpdate")?.createHook {
                 replace {
                     it.log()
+                }
+            }
+
+            findFirstMethodByName(clsAboutUsActivityA,"updateCallback")?.createHook {
+                replace {
+                    it.log()
+
+                    Helper.toast("PureNGA")
                 }
             }
         }
