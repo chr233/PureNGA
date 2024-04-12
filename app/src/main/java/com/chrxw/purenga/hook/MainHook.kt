@@ -40,7 +40,6 @@ class MainHook : IHook {
 
             Helper.enableLog = Helper.getSpBool(Constant.ENABLE_LOG, BuildConfig.DEBUG)
         }
-
     }
 
     override fun hook() {

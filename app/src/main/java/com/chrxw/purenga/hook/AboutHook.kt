@@ -2,14 +2,10 @@ package com.chrxw.purenga.hook
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.Intent
-import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.chrxw.purenga.BuildConfig
-import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
@@ -23,7 +19,7 @@ import de.robv.android.xposed.XposedHelpers
 class AboutHook : IHook {
 
     companion object {
-        private lateinit var clsAboutUsActivity: Class<*>
+        lateinit var clsAboutUsActivity: Class<*>
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -50,34 +46,14 @@ class AboutHook : IHook {
 
                 textView.setOnClickListener {
                     Helper.toast("正在前往 PureNGA 项目主页")
-                    root.context.startActivity(
-                        Intent(
-                            Intent.ACTION_VIEW, Uri.parse(Constant.REPO_URL)
-                        )
-                    )
+                    Helper.gotoReleasePage(root.context)
                 }
 
                 val appIconId = Helper.getRId("iv_app_icon")
                 val appIcon = root.findViewById<ImageView>(appIconId)
 
                 appIcon.setOnClickListener {
-                    val view = PreferencesHook.generateView(activity)
-
-                    AlertDialog.Builder(activity).apply {
-                        setTitle(Constant.BTN_TITLE)
-                        setCancelable(false)
-                        setView(view)
-                        setNegativeButton("关闭") { _, _ ->
-                            Helper.toast("设置已保存, 重启后生效")
-                        }
-                        setPositiveButton("重启 NGA") { _, _ ->
-                            Helper.toast("设置已保存")
-                            PreferencesHook.restartApplication(activity)
-                        }
-
-                        create()
-                        show()
-                    }
+                    PreferencesHook.showSettingDialog(activity)
                 }
             }
         }

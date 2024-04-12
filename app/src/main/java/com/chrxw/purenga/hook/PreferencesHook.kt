@@ -4,8 +4,10 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutInfo
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -16,12 +18,14 @@ import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.ui.ToggleItemView
+import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
+import com.chrxw.purenga.utils.ExtensionUtils.buildShortcutIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
-import kotlin.system.exitProcess
 
 
 /**
@@ -33,20 +37,9 @@ class PreferencesHook : IHook {
         lateinit var clsSettingActivity: Class<*>
 
         /**
-         * 重启应用
-         */
-        internal fun restartApplication(activity: Activity) {
-            val pm = activity.packageManager
-            val intent = pm.getLaunchIntentForPackage(activity.packageName)
-            activity.finishAffinity()
-            activity.startActivity(intent)
-            exitProcess(0)
-        }
-
-        /**
          * 生成设置界面
          */
-        internal fun generateView(context: Context): View {
+        private fun generateView(context: Context): View {
             val root = ScrollView(context)
             val container = LinearLayout(context)
             container.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
@@ -89,28 +82,41 @@ class PreferencesHook : IHook {
                 title = "去除侧滑菜单会员横幅"
                 subTitle = "仅 9.9.4 以上版本有效"
             })
+            container.addView(ToggleItemView(context, Constant.QUICK_ACCOUNT_MANAGE).apply {
+                title = "快捷切换账号"
+                subTitle = "长按菜单上方的用户名跳转账号切换, 仅 9.9.4 以上版本有效"
+            })
+
+            // 自定义
+            container.addView(ClickableItemView(context).apply { title = "自定义" })
             container.addView(ClickableItemView(context).apply {
                 title = "自定义首页"
                 subTitle = "设置APP首页"
                 setOnClickListener {
                     val items = arrayOf("首页", "社区", "我的")
                     val indexSetting = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
-                    val currentIndex = items.indexOf(indexSetting)
+                    var currentIndex = items.indexOf(indexSetting)
 
                     AlertDialog.Builder(context).apply {
                         setTitle(title)
                         setCancelable(false)
                         setSingleChoiceItems(items, currentIndex) { _, which ->
-                            Helper.setSpStr(Constant.CUSTOM_INDEX, items[which])
+                            currentIndex = which
+                        }
+                        setNeutralButton("清除选择", null)
+                        setPositiveButton("保存") { _, _ ->
+                            Helper.setSpStr(Constant.CUSTOM_INDEX, items[currentIndex])
                             Helper.toast("设置已保存, 重启应用生效")
                         }
-                        setNeutralButton("清除设置") { _, _ ->
-                            Helper.setSpStr(Constant.CUSTOM_INDEX, null)
-                            Helper.toast("设置已清除")
+                        setNegativeButton("取消", null)
+                        create().apply {
+                            setOnShowListener {
+                                getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                                    listView.setItemChecked(currentIndex, false)
+                                }
+                            }
+                            show()
                         }
-                        setPositiveButton("关闭") { _, _ ->
-                        }
-                        show()
                     }
                 }
             })
@@ -140,8 +146,7 @@ class PreferencesHook : IHook {
                                 Helper.setSpStr(Constant.CUSTOM_FONT_NAME, input.text.toString())
                                 Helper.toast("设置已保存, 重启应用生效")
                             }
-                            setNegativeButton("关闭") { _, _ ->
-                            }
+                            setNegativeButton("取消", null)
                             create().apply {
                                 setOnShowListener {
                                     getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
@@ -153,9 +158,115 @@ class PreferencesHook : IHook {
                             }
                         }
                     } else {
+                        Helper.toast("请先打开【启用自定义字体】")
+                    }
+                }
+            })
+            container.addView(ClickableItemView(context).apply {
+                title = "自定义快捷方式"
+                subTitle = "设置长按APP图标快捷方式, 仅支持安卓 7.1 及以上版本"
+                setOnClickListener {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+
+                        val shortcutSettings = Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null)
+
+                        // 可用快捷方式列表
+                        val availableShortcuts = arrayOf(
+                            context.buildShortcut(
+                                "sign",
+                                "签到",
+                                "签到",
+                                null,
+                                context.buildShortcutIntent(RewardHook.clsLoginWebView).apply {
+                                }),
+                            context.buildShortcut(
+                                "setting",
+                                "设置",
+                                "设置",
+                                null,
+                                context.buildShortcutIntent(clsSettingActivity).apply {
+                                }
+
+                            ),
+                            context.buildShortcut(
+                                "about",
+                                "关于",
+                                "关于",
+                                null,
+                                context.buildShortcutIntent(AboutHook.clsAboutUsActivity).apply {
+                                }),
+                            context.buildShortcut("plugin",
+                                "PureNGA设置",
+                                "PureNGA设置",
+                                null,
+                                context.buildShortcutIntent(clsSettingActivity).apply {
+                                    putExtra("openDialog", true)
+                                }),
+                        )
+
+                        //选中的快捷方式列表
+                        val enabledShortcutIds = shortcutSettings?.split(",")?.toTypedArray() ?: arrayOf()
+
+                        val menuItems = availableShortcuts.map { it?.longLabel.toString() }.toTypedArray()
+                        val checkedItems =
+                            availableShortcuts.map { enabledShortcutIds.contains(it?.id) }.toBooleanArray()
+
+                        val selectedShortcuts = mutableListOf<ShortcutInfo>()
+
                         AlertDialog.Builder(context).apply {
                             setTitle(title)
-                            setMessage("请先打开【启用自定义字体】")
+                            setCancelable(false)
+                            setMultiChoiceItems(menuItems, checkedItems) { _, which, isChecked ->
+                                // 更新选项的选中状态
+                                checkedItems[which] = isChecked
+
+                                selectedShortcuts.clear()
+
+                                val sb = StringBuilder()
+
+                                for (i in menuItems.indices) {
+                                    if (checkedItems[i]) {
+                                        selectedShortcuts.add(availableShortcuts[i]!!)
+
+                                        sb.append(availableShortcuts[i]?.id)
+                                    }
+                                }
+
+                                Helper.toast(sb.toString())
+                            }
+                            setNeutralButton("清空已选择", null)
+                            setPositiveButton("保存") { _, _ ->
+                                val save = selectedShortcuts.joinToString(",") { it.id }
+                                Helper.setSpStr(Constant.SHORTCUT_SETTINGS, save)
+
+                                context.setShortcuts(selectedShortcuts)
+
+                                Helper.toast("设置已保存, 重启应用生效")
+                            }
+                            setNegativeButton("取消", null)
+                            create().apply {
+                                setOnShowListener {
+                                    getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                                        Helper.toast("test")
+
+                                        checkedItems.fill(false)
+
+                                        for ((i, a) in checkedItems.withIndex()) {
+                                            listView.setItemChecked(i, a)
+                                        }
+
+                                        selectedShortcuts.clear()
+                                    }
+                                }
+                                show()
+                            }
+                        }
+                    } else {
+                        Helper.toast("安卓版本不支持此操作")
+                        AlertDialog.Builder(context).apply {
+                            setTitle(title)
+                            setMessage("安卓版本不支持此操作")
                             setPositiveButton("关闭") { _, _ ->
                             }
                             create()
@@ -166,40 +277,32 @@ class PreferencesHook : IHook {
             })
 
             // 其他功能
-            container.addView(ClickableItemView(context).apply
-            { title = "其他功能" })
-            container.addView(ToggleItemView(context, Constant.AUTO_SIGN).apply
-            {
+            container.addView(ClickableItemView(context).apply { title = "其他功能" })
+            container.addView(ToggleItemView(context, Constant.AUTO_SIGN).apply {
                 title = "自动打开签到页面"
                 subTitle = "没有签到时自动打开签到页面进行签到"
             })
-            container.addView(ToggleItemView(context, Constant.PURE_CALENDAR_DIALOG).apply
-            {
+            container.addView(ToggleItemView(context, Constant.PURE_CALENDAR_DIALOG).apply {
                 title = "屏蔽日历弹窗"
                 subTitle = "屏蔽签到页面的添加日历提醒弹窗"
             })
-            container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply
-            {
+            container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply {
                 title = "使用外部浏览器打开链接"
                 subTitle = "打开非NGA链接时自动调用外部系统浏览器"
             })
-            container.addView(ToggleItemView(context, Constant.KILL_UPDATE_CHECK).apply
-            {
+            container.addView(ToggleItemView(context, Constant.KILL_UPDATE_CHECK).apply {
                 title = "禁止APP检查更新"
                 subTitle = "尝试阻止NGA检查更新"
             })
-            container.addView(ToggleItemView(context, Constant.KILL_POPUP_DIALOG).apply
-            {
+            container.addView(ToggleItemView(context, Constant.KILL_POPUP_DIALOG).apply {
                 title = "屏蔽应用内弹窗"
                 subTitle = "作用不明"
             })
-            container.addView(ToggleItemView(context, Constant.FAKE_SHARE).apply
-            {
+            container.addView(ToggleItemView(context, Constant.FAKE_SHARE).apply {
                 title = "假装分享"
                 subTitle = "在分享菜单增加一个“假装分享”按钮"
             })
-            container.addView(ToggleItemView(context, Constant.BYPASS_INSTALL_CHECK).apply
-            {
+            container.addView(ToggleItemView(context, Constant.BYPASS_INSTALL_CHECK).apply {
                 title = "绕过已安装检查"
                 subTitle = "分享到指定App前检查不检查是否已安装(调试用)"
             })
@@ -209,10 +312,8 @@ class PreferencesHook : IHook {
 //        })
 
             // 插件设置
-            container.addView(ClickableItemView(context).apply
-            { title = "插件设置" })
-            container.addView(ToggleItemView(context, Constant.ENABLE_LOG, BuildConfig.DEBUG).apply
-            {
+            container.addView(ClickableItemView(context).apply { title = "插件设置" })
+            container.addView(ToggleItemView(context, Constant.ENABLE_LOG, BuildConfig.DEBUG).apply {
                 title = "启用日志"
                 subTitle = "在Logcat中输出详细日志"
             })
@@ -221,14 +322,12 @@ class PreferencesHook : IHook {
 //            subTitle = "定期检查插件更新"
 //            idDisabled = true
 //        })
-            container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply
-            {
+            container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply {
                 title = "静默运行"
                 subTitle = "启动时不显示模块运行信息"
             })
 
-            container.addView(ClickableItemView(context).apply
-            {
+            container.addView(ClickableItemView(context).apply {
                 title = "手动检查更新"
                 val ngaVersion = Helper.getNgaVersion()
                 val sunType = if (Helper.isBundled()) "整合版" else "插件版"
@@ -240,10 +339,8 @@ class PreferencesHook : IHook {
                 }
             })
 
-            container.addView(ClickableItemView(context).apply
-            { title = "关于" })
-            container.addView(ClickableItemView(context).apply
-            {
+            container.addView(ClickableItemView(context).apply { title = "关于" })
+            container.addView(ClickableItemView(context).apply {
                 title = "作者"
                 subTitle = "GitHub @chr233"
                 setOnClickListener {
@@ -251,8 +348,7 @@ class PreferencesHook : IHook {
                     context.startActivity(intent)
                 }
             })
-            container.addView(ClickableItemView(context).apply
-            {
+            container.addView(ClickableItemView(context).apply {
                 title = "捐赠"
                 subTitle = "爱发电 @chr233"
                 setOnClickListener {
@@ -263,6 +359,33 @@ class PreferencesHook : IHook {
 
             root.addView(container)
             return root
+        }
+
+        internal fun showSettingDialog(activity: Activity) {
+            val view = generateView(activity)
+
+            AlertDialog.Builder(activity).apply {
+                setTitle(Constant.BTN_TITLE)
+                setCancelable(false)
+                setView(view)
+                setNegativeButton("保存") { _, _ ->
+                    Helper.toast("设置已保存, 重启后生效")
+                }
+                setPositiveButton("保存并重启") { _, _ ->
+                    Helper.toast("设置已保存, 正在重启")
+                    Helper.restartApplication(activity)
+                }
+                setNeutralButton("检查更新", null)
+                create().apply {
+                    setOnShowListener {
+                        getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                            Helper.toast("正在前往 PureNGA 项目主页")
+                            Helper.gotoReleasePage(context)
+                        }
+                    }
+                    show()
+                }
+            }
         }
     }
 
@@ -287,24 +410,7 @@ class PreferencesHook : IHook {
                     btnPureNGASetting = Button(activity).also { btn ->
                         btn.text = Constant.BTN_TITLE
                         btn.setOnClickListener {
-
-                            val view = generateView(activity)
-
-                            AlertDialog.Builder(activity).apply {
-                                setTitle(Constant.BTN_TITLE)
-                                setCancelable(false)
-                                setView(view)
-                                setNegativeButton("关闭") { _, _ ->
-                                    Helper.toast("设置已保存, 重启后生效")
-                                }
-                                setPositiveButton("重启 NGA") { _, _ ->
-                                    Helper.toast("设置已保存")
-                                    restartApplication(activity)
-                                }
-
-                                create()
-                                show()
-                            }
+                            showSettingDialog(activity)
                         }
 
                         btn.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))
@@ -314,11 +420,16 @@ class PreferencesHook : IHook {
                         linearLayout.addView(btn)
                     }
                 }
+
+                if (activity.intent.getBooleanExtra("openDialog", false)) {
+                    showSettingDialog(activity)
+                }
+
             }
         }
 
-        findMethodByName(MainHook.clsAppConfig, "setDarkModel")
-            .filterByAssignableParamTypes(Boolean::class.java).first().createHook {
+        findMethodByName(MainHook.clsAppConfig, "setDarkModel").filterByAssignableParamTypes(Boolean::class.java)
+            .first().createHook {
                 after {
                     btnPureNGASetting?.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))
                 }

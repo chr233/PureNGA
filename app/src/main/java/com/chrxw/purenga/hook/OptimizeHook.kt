@@ -2,7 +2,10 @@ package com.chrxw.purenga.hook
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.view.View.OnLongClickListener
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -36,7 +39,8 @@ class OptimizeHook : IHook {
         private lateinit var clsCalendarUtils: Class<*>
         private lateinit var clsAssetManager: Class<*>
         private lateinit var clsResources: Class<*>
-        private lateinit var clsAboutUsActivityA:Class<*>
+        private lateinit var clsAboutUsActivityA: Class<*>
+        private lateinit var clsAccountManageActivity: Class<*>
 
         private fun readTextFromInputStream(inputStream: InputStream): String {
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
@@ -58,6 +62,7 @@ class OptimizeHook : IHook {
         clsAssetManager = classLoader.loadClass("android.content.res.AssetManager")
         clsResources = classLoader.loadClass("android.content.res.Resources")
         clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
+        clsAccountManageActivity = classLoader.loadClass("com.donews.nga.setting.AccountManageActivity")
     }
 
     override fun hook() {
@@ -75,7 +80,7 @@ class OptimizeHook : IHook {
                 }
             }
 
-            findFirstMethodByName(clsAboutUsActivityA,"updateCallback")?.createHook {
+            findFirstMethodByName(clsAboutUsActivityA, "updateCallback")?.createHook {
                 replace {
                     it.log()
 
@@ -117,6 +122,24 @@ class OptimizeHook : IHook {
                         //移除会员banner
                         if (Helper.getSpBool(Constant.REMOVE_VIP_BANNER, false)) {
                             linearLayout.removeViewAt(0)
+                        }
+
+                        //长按切换账号
+                        if (Helper.getSpBool(Constant.QUICK_ACCOUNT_MANAGE, false)) {
+                            val nickNameId = Helper.getRId("tv_home_drawer_name")
+                            val nickNameView = root.findViewById<TextView>(nickNameId)
+
+                            val avatarId = Helper.getRId("civ_home_drawer_head")
+                            val avatarView = root.findViewById<ImageView>(avatarId)
+
+                            val onLongClickListener = OnLongClickListener { view ->
+                                val intent = Intent(root.context, clsAccountManageActivity)
+                                root.context.startActivity(intent)
+                                true
+                            }
+
+                            nickNameView.setOnLongClickListener(onLongClickListener)
+                            avatarView.setOnLongClickListener(onLongClickListener)
                         }
                     }
                 }
@@ -258,7 +281,7 @@ class OptimizeHook : IHook {
                             val inputStream = it.result as InputStream
                             val css = readTextFromInputStream(inputStream)
 
-                            val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME,Constant.SYSTEM_FONT)
+                            val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)
                             val regex = Regex("font-family:[^;]+;?")
                             val newCss = regex.replace(css, "font-family: $newFont;")
 

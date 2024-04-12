@@ -37,14 +37,14 @@ object Constant {
     const val KILL_UPDATE_CHECK = "kill_update_check"
     const val KILL_POPUP_DIALOG = "kill_popup_dialog"
     const val CHECK_PLUGIN_UPDATE = "check_plugin_update"
+    const val QUICK_ACCOUNT_MANAGE = "quick_account_manage"
     const val FAKE_SHARE = "fake_share"
     const val BYPASS_INSTALL_CHECK = "bypass_install_check"
     const val HIDE_HOOK_INFO = "hide_hook_info"
     const val CUSTOM_INDEX = "custom_index"
     const val ENABLE_CUSTOM_FONT = "enable_custom_font"
     const val CUSTOM_FONT_NAME = "custom_font_name"
-    const val AUTO_CLEAN_CACHE = "auto_clean_cache"
-    const val OPEN_URL_OPTIMIZE = "open_url_optimize"
+    const val SHORTCUT_SETTINGS = "shortcut_settings"
 
     const val SYSTEM_FONT = "system-ui"
 

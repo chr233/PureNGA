@@ -1,6 +1,11 @@
 package com.chrxw.purenga.utils
 
 import android.content.Context
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.util.DisplayMetrics
 import com.chrxw.purenga.BuildConfig
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -62,5 +67,40 @@ object ExtensionUtils {
             }
         }
         return first
+    }
+
+    fun Context.buildShortcutIntent(clazz: Class<*>): Intent {
+        val intent = Intent(this, clazz).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            action = Intent.ACTION_VIEW
+            putExtra("fromShortcut", true)
+        }
+
+        return intent
+    }
+
+    fun Context.buildShortcut(
+        id: String, shortLabel: String, long: String, iconId: Int?, intent: Intent
+    ): ShortcutInfo? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val icon = Icon.createWithResource(this, iconId ?: Helper.getDrawerId("app_logo"))
+
+            val shortcut = ShortcutInfo.Builder(this, id).setShortLabel(shortLabel).setLongLabel(long).setIcon(icon)
+                .setIntent(intent).build()
+
+            shortcut
+        } else {
+            Helper.toast("安卓版本不支持此操作")
+            null
+        }
+    }
+
+    fun Context.setShortcuts(shortcuts: List<ShortcutInfo>?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val shortcutManager = this.getSystemService(ShortcutManager::class.java)
+            shortcutManager.dynamicShortcuts = shortcuts ?: listOf<ShortcutInfo>()
+        } else {
+            Helper.toast("安卓版本不支持此操作")
+        }
     }
 }

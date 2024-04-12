@@ -1,8 +1,12 @@
 package com.chrxw.purenga.utils
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.widget.Toast
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
@@ -19,6 +23,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.system.exitProcess
 
 
 /**
@@ -161,5 +166,24 @@ object Helper {
 
             response.toString()
         }
+    }
+
+    /**
+     * 重启应用
+     */
+    fun restartApplication(activity: Activity) {
+        val pm = activity.packageManager
+        val intent = pm.getLaunchIntentForPackage(activity.packageName)
+        activity.finishAffinity()
+        activity.startActivity(intent)
+        exitProcess(0)
+    }
+
+    fun gotoReleasePage(context: Context) {
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW, Uri.parse(Constant.REPO_URL)
+            )
+        )
     }
 }
