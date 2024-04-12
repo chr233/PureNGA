@@ -19,7 +19,6 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.ui.ToggleItemView
 import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
-import com.chrxw.purenga.utils.ExtensionUtils.buildShortcutIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
@@ -57,7 +56,7 @@ class PreferencesHook : IHook {
             })
             container.addView(ToggleItemView(context, Constant.CRACK_AD_TASK).apply {
                 title = "破解看广告任务"
-                subTitle = "秒关不影响任务奖励结算"
+                subTitle = "秒关不影响任务奖励结算 (已弃用)"
             })
 
             // 界面优化
@@ -173,36 +172,13 @@ class PreferencesHook : IHook {
 
                         // 可用快捷方式列表
                         val availableShortcuts = arrayOf(
-                            context.buildShortcut(
-                                "sign",
-                                "签到",
-                                "签到",
-                                null,
-                                context.buildShortcutIntent(RewardHook.clsLoginWebView).apply {
-                                }),
-                            context.buildShortcut(
-                                "setting",
-                                "设置",
-                                "设置",
-                                null,
-                                context.buildShortcutIntent(clsSettingActivity).apply {
-                                }
-
-                            ),
-                            context.buildShortcut(
-                                "about",
-                                "关于",
-                                "关于",
-                                null,
-                                context.buildShortcutIntent(AboutHook.clsAboutUsActivity).apply {
-                                }),
-                            context.buildShortcut("plugin",
-                                "PureNGA设置",
-                                "PureNGA设置",
-                                null,
-                                context.buildShortcutIntent(clsSettingActivity).apply {
-                                    putExtra("openDialog", true)
-                                }),
+                            context.buildShortcut("sign", "签到", "签到", null),
+                            context.buildShortcut("home", "首页", "首页", null),
+                            context.buildShortcut("account", "账号切换", "账号切换", null),
+                            context.buildShortcut("message", "消息", "消息", null),
+                            context.buildShortcut("setting", "设置", "设置", null),
+                            context.buildShortcut("about", "关于", "关于", null),
+                            context.buildShortcut("pluginSetting", "PureNGA设置", "PureNGA设置", null),
                         )
 
                         //选中的快捷方式列表
@@ -217,39 +193,39 @@ class PreferencesHook : IHook {
                         AlertDialog.Builder(context).apply {
                             setTitle(title)
                             setCancelable(false)
-                            setMultiChoiceItems(menuItems, checkedItems) { _, which, isChecked ->
+                            setMultiChoiceItems(menuItems, checkedItems) { dialog, which, isChecked ->
                                 // 更新选项的选中状态
                                 checkedItems[which] = isChecked
 
+                                if (isChecked && checkedItems.count { it } > 4) {
+                                    checkedItems[which] = false
+                                    Helper.toast("最多只能选4项")
+
+                                    dialog.dismiss()
+                                    create()
+                                    show()
+                                }
+
                                 selectedShortcuts.clear()
-
-                                val sb = StringBuilder()
-
                                 for (i in menuItems.indices) {
                                     if (checkedItems[i]) {
                                         selectedShortcuts.add(availableShortcuts[i]!!)
-
-                                        sb.append(availableShortcuts[i]?.id)
                                     }
                                 }
 
-                                Helper.toast(sb.toString())
                             }
                             setNeutralButton("清空已选择", null)
                             setPositiveButton("保存") { _, _ ->
                                 val save = selectedShortcuts.joinToString(",") { it.id }
                                 Helper.setSpStr(Constant.SHORTCUT_SETTINGS, save)
-
+                                //保存快捷菜单
                                 context.setShortcuts(selectedShortcuts)
-
                                 Helper.toast("设置已保存, 重启应用生效")
                             }
                             setNegativeButton("取消", null)
                             create().apply {
                                 setOnShowListener {
                                     getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
-                                        Helper.toast("test")
-
                                         checkedItems.fill(false)
 
                                         for ((i, a) in checkedItems.withIndex()) {
@@ -258,17 +234,16 @@ class PreferencesHook : IHook {
 
                                         selectedShortcuts.clear()
                                     }
+
                                 }
                                 show()
                             }
                         }
                     } else {
-                        Helper.toast("安卓版本不支持此操作")
                         AlertDialog.Builder(context).apply {
                             setTitle(title)
-                            setMessage("安卓版本不支持此操作")
-                            setPositiveButton("关闭") { _, _ ->
-                            }
+                            setMessage("当前安卓版本不支持此操作")
+                            setPositiveButton("关闭", null)
                             create()
                             show()
                         }
@@ -365,22 +340,36 @@ class PreferencesHook : IHook {
             val view = generateView(activity)
 
             AlertDialog.Builder(activity).apply {
-                setTitle(Constant.BTN_TITLE)
+                setTitle(Constant.STR_PURENGA_SETTING)
                 setCancelable(false)
                 setView(view)
-                setNegativeButton("保存") { _, _ ->
+                setNegativeButton("仅保存") { _, _ ->
                     Helper.toast("设置已保存, 重启后生效")
                 }
                 setPositiveButton("保存并重启") { _, _ ->
                     Helper.toast("设置已保存, 正在重启")
                     Helper.restartApplication(activity)
                 }
-                setNeutralButton("检查更新", null)
+                setNeutralButton("重置设置", null)
                 create().apply {
                     setOnShowListener {
                         getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
-                            Helper.toast("正在前往 PureNGA 项目主页")
-                            Helper.gotoReleasePage(context)
+                            AlertDialog.Builder(context).apply {
+                                setTitle("警告")
+                                setMessage("确定要清除插件设置吗?")
+                                setCancelable(false)
+                                setPositiveButton("确认") { _, _ ->
+                                    if (Helper.resetPluginConfig()) {
+                                        Helper.toast("插件设置已清除, 正在重启")
+                                        Helper.restartApplication(activity)
+                                    } else {
+                                        Helper.toast("插件设置不存在")
+                                    }
+                                }
+                                setNegativeButton("取消", null)
+                                create()
+                                show()
+                            }
                         }
                     }
                     show()
@@ -394,7 +383,6 @@ class PreferencesHook : IHook {
     }
 
     override fun hook() {
-
         var btnPureNGASetting: Button? = null
 
         findFirstMethodByName(clsSettingActivity, "initLayout")?.createHook {
@@ -408,7 +396,7 @@ class PreferencesHook : IHook {
 
                 activity.runOnUiThread {
                     btnPureNGASetting = Button(activity).also { btn ->
-                        btn.text = Constant.BTN_TITLE
+                        btn.text = Constant.STR_PURENGA_SETTING
                         btn.setOnClickListener {
                             showSettingDialog(activity)
                         }
@@ -424,7 +412,6 @@ class PreferencesHook : IHook {
                 if (activity.intent.getBooleanExtra("openDialog", false)) {
                     showSettingDialog(activity)
                 }
-
             }
         }
 

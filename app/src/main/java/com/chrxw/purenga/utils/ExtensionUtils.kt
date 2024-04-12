@@ -8,6 +8,7 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.DisplayMetrics
 import com.chrxw.purenga.BuildConfig
+import com.chrxw.purenga.hook.OptimizeHook
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XC_MethodHook
@@ -69,21 +70,31 @@ object ExtensionUtils {
         return first
     }
 
-    fun Context.buildShortcutIntent(clazz: Class<*>): Intent {
+    fun Context.buiildNormalIntent(clazz: Class<*>): Intent {
         val intent = Intent(this, clazz).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             action = Intent.ACTION_VIEW
+        }
+        return intent
+    }
+
+    fun Context.buildShortcutIntent(clazz: Class<*>, gotoName: String): Intent {
+        val intent = Intent(this, clazz).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = Intent.ACTION_VIEW
             putExtra("fromShortcut", true)
+            putExtra("gotoName", gotoName)
         }
 
         return intent
     }
 
     fun Context.buildShortcut(
-        id: String, shortLabel: String, long: String, iconId: Int?, intent: Intent
+        id: String, shortLabel: String, long: String, iconId: Int?
     ): ShortcutInfo? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val icon = Icon.createWithResource(this, iconId ?: Helper.getDrawerId("app_logo"))
+            val intent = this.buildShortcutIntent(OptimizeHook.clsMainActivity, id)
 
             val shortcut = ShortcutInfo.Builder(this, id).setShortLabel(shortLabel).setLongLabel(long).setIcon(icon)
                 .setIntent(intent).build()

@@ -1,6 +1,5 @@
 package com.chrxw.purenga.hook
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
 import android.widget.ImageView
@@ -26,7 +25,6 @@ class AboutHook : IHook {
         clsAboutUsActivity = classLoader.loadClass("com.donews.nga.setting.AboutUsActivity")
     }
 
-    @SuppressLint("SetTextI18n")
     override fun hook() {
         findFirstMethodByName(clsAboutUsActivity, "initLayout")?.createHook {
             after {
@@ -42,7 +40,11 @@ class AboutHook : IHook {
                 val ngaVersion = Helper.getNgaVersion()
 
                 val textView = root.findViewById<TextView>(viewId)
-                textView.text = "NGA 版本: $ngaVersion\nPureNGA 版本: $pluginVersion\n点上方图标打开设置"
+                textView.text = buildString {
+                    appendLine("NGA 版本: $ngaVersion")
+                    appendLine("插件 版本: $pluginVersion")
+                    appendLine("点上方图标打开设置")
+                }
 
                 textView.setOnClickListener {
                     Helper.toast("正在前往 PureNGA 项目主页")
@@ -53,6 +55,10 @@ class AboutHook : IHook {
                 val appIcon = root.findViewById<ImageView>(appIconId)
 
                 appIcon.setOnClickListener {
+                    PreferencesHook.showSettingDialog(activity)
+                }
+
+                if (activity.intent.getBooleanExtra("openDialog", false)) {
                     PreferencesHook.showSettingDialog(activity)
                 }
             }

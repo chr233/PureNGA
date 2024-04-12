@@ -1,11 +1,9 @@
 package com.chrxw.purenga.hook
 
-import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 
 
@@ -31,11 +29,11 @@ class SpUtilsHook : IHook {
                         }
                     }
 
-                    else -> {
-                        if (BuildConfig.DEBUG) {
-                            AndroidLogger.w("SPUtils.getInt: ${it.args[0]} ${it.result}")
-                        }
-                    }
+//                    else -> {
+//                        if (BuildConfig.DEBUG) {
+//                            AndroidLogger.w("SPUtils.getInt: ${it.args[0]} ${it.result}")
+//                        }
+//                    }
                 }
             }
         }
@@ -53,11 +51,11 @@ class SpUtilsHook : IHook {
                         }
                     }
 
-                    else -> {
-                        if (BuildConfig.DEBUG) {
-                            AndroidLogger.w("SPUtils.getLong: ${it.args[0]} ${it.result}")
-                        }
-                    }
+//                    else -> {
+//                        if (BuildConfig.DEBUG) {
+//                            AndroidLogger.w("SPUtils.getLong: ${it.args[0]} ${it.result}")
+//                        }
+//                    }
                 }
             }
         }

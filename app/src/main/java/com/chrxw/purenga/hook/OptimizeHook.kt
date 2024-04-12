@@ -1,6 +1,7 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.View.OnLongClickListener
@@ -11,6 +12,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.buiildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
@@ -19,8 +21,8 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
+import java.io.InputStream as InputStream1
 
 
 /**
@@ -32,19 +34,59 @@ class OptimizeHook : IHook {
         private lateinit var clsMainActivityPresenter: Class<*>
         private lateinit var clsHomeDrawerLayout: Class<*>
         private lateinit var clsCommentDialog: Class<*>
-        private lateinit var clsMainActivity: Class<*>
+        lateinit var clsMainActivity: Class<*>
         private lateinit var clsArticleDetailActivity: Class<*>
         private lateinit var clsHomeFragment: Class<*>
-        private lateinit var clsLoginWebView: Class<*>
+        private lateinit var clsHomeFragmentPresenter: Class<*>
+        lateinit var clsLoginWebView: Class<*>
         private lateinit var clsCalendarUtils: Class<*>
         private lateinit var clsAssetManager: Class<*>
         private lateinit var clsResources: Class<*>
         private lateinit var clsAboutUsActivityA: Class<*>
         private lateinit var clsAccountManageActivity: Class<*>
+        private lateinit var clsMessageActivity: Class<*>
 
-        private fun readTextFromInputStream(inputStream: InputStream): String {
+        private fun readTextFromInputStream(inputStream: InputStream1): String {
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
                 return reader.readText()
+            }
+        }
+
+        private fun onShortcut(activity: Activity) {
+            // 如果来源是Shortcut
+            val intent = activity.intent
+            if (intent.getBooleanExtra("fromShortcut", false)) {
+                intent.putExtra("fromShortcut", false)
+
+                val gotoName = intent.getStringExtra("gotoName")
+                Helper.toast(gotoName.toString())
+
+//                if (gotoName == "sign") {
+//                    XposedHelpers.callStaticMethod(clsLoginWebView,"show")
+//                    gotoIntent.putExtra("fromShortcut", true)
+//                    return
+//                }
+
+                val gotoClazz = when (gotoName) {
+                    "sign" -> clsLoginWebView
+                    "home" -> null
+                    "account" -> clsAccountManageActivity
+                    "message" -> clsMessageActivity
+                    "setting" -> PreferencesHook.clsSettingActivity
+                    "about" -> AboutHook.clsAboutUsActivity
+                    "pluginSetting" -> AboutHook.clsAboutUsActivity
+                    else -> null
+                }
+
+                if (gotoClazz != null) {
+                    val gotoIntent = activity.buiildNormalIntent(gotoClazz)
+
+                    if (gotoName == "pluginSetting") {
+                        gotoIntent.putExtra("openDialog", true)
+                    }
+
+                    activity.startActivity(gotoIntent)
+                }
             }
         }
     }
@@ -57,15 +99,55 @@ class OptimizeHook : IHook {
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
         clsHomeFragment = classLoader.loadClass("com.donews.nga.fragments.HomeFragment")
+        clsHomeFragmentPresenter = classLoader.loadClass("com.donews.nga.fragments.presenters.HomeFragmentPresenter")
         clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
         clsCalendarUtils = classLoader.loadClass("gov.pianzong.androidnga.utils.CalendarUtils")
         clsAssetManager = classLoader.loadClass("android.content.res.AssetManager")
         clsResources = classLoader.loadClass("android.content.res.Resources")
         clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
         clsAccountManageActivity = classLoader.loadClass("com.donews.nga.setting.AccountManageActivity")
+        clsMessageActivity = classLoader.loadClass("com.donews.nga.message.MessageActivity")
     }
 
     override fun hook() {
+        // 处理Shortcut跳转以及显示首次运行提示
+        findFirstMethodByName(clsMainActivity, "initLayout")?.createHook {
+            after {
+                it.log()
+
+                val activity = it.thisObject as Activity
+
+                if (!Helper.isPluginConfigExists()) {
+                    // 首次打开APP, 弹出提示框
+                    AlertDialog.Builder(activity).apply {
+                        setTitle("PureNGA 提示")
+                        setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
+                        setCancelable(false)
+                        setNegativeButton("取消", null)
+                        setPositiveButton("确认") { _, _ ->
+                            val intent = context.buiildNormalIntent(PreferencesHook.clsSettingActivity).apply {
+                                putExtra("openDialog", true)
+                            }
+                            context.startActivity(intent)
+                        }
+                        create()
+                        show()
+                    }
+                }
+
+                // 如果来源是Shortcut
+                onShortcut(activity)
+            }
+        }
+
+        findFirstMethodByName(clsMainActivity, "onNewIntent")?.createHook {
+            after {
+                // 如果来源是Shortcut
+                val activity = it.thisObject as Activity
+                onShortcut(activity)
+            }
+        }
+
         // 屏蔽更新检测
         if (Helper.getSpBool(Constant.KILL_UPDATE_CHECK, false)) {
             findFirstMethodByName(clsMainActivityPresenter, "checkAppUpdate")?.createHook {
@@ -278,7 +360,7 @@ class OptimizeHook : IHook {
                         if (fileName == "css/style.night.css" || fileName == "css/style.css") {
                             AndroidLogger.e("AssetManager.Open css")
 
-                            val inputStream = it.result as InputStream
+                            val inputStream = it.result as InputStream1
                             val css = readTextFromInputStream(inputStream)
 
                             val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)

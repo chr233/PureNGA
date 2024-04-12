@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -58,6 +59,9 @@ object Helper {
         }
     }
 
+    /**
+     * 是否为整合版
+     */
     fun isBundled(): Boolean {
         return try {
             EzXHelper.appContext.packageManager.getPackageInfo(
@@ -67,6 +71,18 @@ object Helper {
         } catch (e: PackageManager.NameNotFoundException) {
             true
         }
+    }
+
+    fun isPluginConfigExists(): Boolean {
+        val path =
+            "${EzXHelper.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
+        return File(path).exists()
+    }
+
+    fun resetPluginConfig(): Boolean {
+        val path =
+            "${EzXHelper.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
+        return File(path).delete()
     }
 
     /**

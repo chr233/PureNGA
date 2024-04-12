@@ -73,8 +73,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(
                             Intent(Intent.ACTION_MAIN).setComponent(
                                 ComponentName(
-                                    Constant.NGA_PACKAGE_NAME,
-                                    "com.donews.nga.activitys.MainActivity"
+                                    Constant.NGA_PACKAGE_NAME, "com.donews.nga.activitys.MainActivity"
                                 )
                             )//.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
                         )
@@ -84,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                     return true
                 }
 
-                "version" ->{
+                "version" -> {
                     Helper.checkForUpdates()
 
                     return true
@@ -92,7 +91,6 @@ class MainActivity : AppCompatActivity() {
 
                 else -> {
                     val uri = when (prefKey) {
-                        "version" -> Constant.RELEASE_STANDALONE
                         "author" -> Constant.AUTHOR_URL
                         "donate" -> Constant.DONATE_URL
                         "repo" -> Constant.REPO_URL

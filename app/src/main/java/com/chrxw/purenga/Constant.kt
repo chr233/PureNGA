@@ -50,7 +50,7 @@ object Constant {
 
     const val ENABLE_LOG = "enable_log"
 
-    const val BTN_TITLE = "PureNGA 设置"
+    const val STR_PURENGA_SETTING = "PureNGA 设置"
 
     const val STR_FAKE_SHARE = "假装分享"
     const val STR_FAKE_SHARE_TRIPLE = "分享三次"

@@ -18,7 +18,6 @@ import de.robv.android.xposed.XposedHelpers
  */
 class RewardHook : IHook {
     companion object {
-        lateinit var clsLoginWebView: Class<*>
         private lateinit var clsLoginWebView_a: Class<*>
         private lateinit var clsLoginWebView_b: Class<*>
         private lateinit var clsLoginWebView_P: Class<*>
@@ -28,7 +27,6 @@ class RewardHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
         clsLoginWebView_a = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$a")
         clsLoginWebView_b = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$b")
         clsLoginWebView_P = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView\$p")
@@ -43,15 +41,34 @@ class RewardHook : IHook {
             var activity: Activity? = null
 //            var webView: Any? = null
 
-            findFirstMethodByName(clsLoginWebView, "onCreate")?.createHook {
+            findFirstMethodByName(OptimizeHook.clsLoginWebView, "onCreate")?.createHook {
                 before {
                     it.log()
+
+                    AndroidLogger.e(it.args[0].toString())
 
                     activity = it.thisObject as Activity?
 //                    webView = XposedHelpers.getObjectField(activity, "mWebView")
                 }
             }
-            findFirstMethodByName(clsLoginWebView, "onDestroy")?.createHook {
+
+//            MethodFinder.fromClass(OptimizeHook.clsLoginWebView).filterByName("show").forEach { mtd ->
+//                mtd.createHook {
+//                    before {
+//                        it.log()
+//
+//                        AndroidLogger.e("Loginweb show")
+//                        AndroidLogger.e(it.args[0].toString())
+//
+//                        if (it.args.size > 1) {
+//                            AndroidLogger.e(it.args[1].toString())
+//                        }
+//                    }
+//                }
+//            }
+
+
+            findFirstMethodByName(OptimizeHook.clsLoginWebView, "onDestroy")?.createHook {
                 before {
                     it.log()
 
