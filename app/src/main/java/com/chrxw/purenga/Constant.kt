@@ -23,6 +23,8 @@ object Constant {
     const val DN_INFO_PREFERENCE_NAME = "dninfo"
     const val PLUGIN_PREFERENCE_NAME = "purenga_preference"
 
+    const val SYSTEM_FONT = "system-ui"
+
     const val PURE_SPLASH_AD = "pure_splash_ad"
     const val PURE_POST_AD = "pure_post_ad"
     const val CRACK_AD_TASK = "crack_ad_task"
@@ -45,10 +47,8 @@ object Constant {
     const val ENABLE_CUSTOM_FONT = "enable_custom_font"
     const val CUSTOM_FONT_NAME = "custom_font_name"
     const val SHORTCUT_SETTINGS = "shortcut_settings"
-
-    const val SYSTEM_FONT = "system-ui"
-
-    const val ENABLE_LOG = "enable_log"
+    const val ENABLE_HOOK_LOG = "enable_hook_log"
+    const val ENABLE_ACTIVITY_LOG = "enable_activity_log"
 
     const val STR_PURENGA_SETTING = "PureNGA 设置"
 

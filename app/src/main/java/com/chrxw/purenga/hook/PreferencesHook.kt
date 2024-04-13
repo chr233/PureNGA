@@ -175,9 +175,16 @@ class PreferencesHook : IHook {
                             context.buildShortcut("sign", "签到", "签到", null),
                             context.buildShortcut("home", "首页", "首页", null),
                             context.buildShortcut("account", "账号切换", "账号切换", null),
+                            context.buildShortcut("qrcode", "扫码", "扫码", null),
                             context.buildShortcut("message", "消息", "消息", null),
                             context.buildShortcut("setting", "设置", "设置", null),
                             context.buildShortcut("about", "关于", "关于", null),
+                            context.buildShortcut("theme", "个性装扮", "个性装扮", null),
+                            context.buildShortcut("game", "游戏档案", "游戏档案", null),
+                            context.buildShortcut("favorite", "收藏", "收藏", null),
+                            context.buildShortcut("history", "浏览历史", "浏览历史", null),
+                            context.buildShortcut("draft", "草稿箱", "草稿箱", null),
+                            context.buildShortcut("diagnose", "网络诊断", "网络诊断", null),
                             context.buildShortcut("pluginSetting", "PureNGA设置", "PureNGA设置", null),
                         )
 
@@ -281,27 +288,16 @@ class PreferencesHook : IHook {
                 title = "绕过已安装检查"
                 subTitle = "分享到指定App前检查不检查是否已安装(调试用)"
             })
-//        container.addView(ToggleItemView(context, Constant.AUTO_CLEAN_CACHE).apply {
-//            title = "自动清理缓存"
-//            subTitle = "定时清理NGA的缓存"
-//        })
 
             // 插件设置
             container.addView(ClickableItemView(context).apply { title = "插件设置" })
-            container.addView(ToggleItemView(context, Constant.ENABLE_LOG, BuildConfig.DEBUG).apply {
-                title = "启用日志"
-                subTitle = "在Logcat中输出详细日志"
-            })
-//        container.addView(ToggleItemView(context, Constant.CHECK_PLUGIN_UPDATE).apply {
-//            title = "检查插件更新(未完成)"
-//            subTitle = "定期检查插件更新"
-//            idDisabled = true
-//        })
             container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply {
                 title = "静默运行"
                 subTitle = "启动时不显示模块运行信息"
             })
 
+            // 关于
+            container.addView(ClickableItemView(context).apply { title = "关于" })
             container.addView(ClickableItemView(context).apply {
                 title = "手动检查更新"
                 val ngaVersion = Helper.getNgaVersion()
@@ -313,8 +309,6 @@ class PreferencesHook : IHook {
                     context.startActivity(intent)
                 }
             })
-
-            container.addView(ClickableItemView(context).apply { title = "关于" })
             container.addView(ClickableItemView(context).apply {
                 title = "作者"
                 subTitle = "GitHub @chr233"
@@ -330,6 +324,17 @@ class PreferencesHook : IHook {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.DONATE_URL))
                     context.startActivity(intent)
                 }
+            })
+
+            // 调试设置
+            container.addView(ClickableItemView(context).apply { title = "调试设置" })
+            container.addView(ToggleItemView(context, Constant.ENABLE_HOOK_LOG, false).apply {
+                title = "启用Hook日志"
+                subTitle = "在Logcat中输出详细日志"
+            })
+            container.addView(ToggleItemView(context, Constant.ENABLE_ACTIVITY_LOG, false).apply {
+                title = "启用Activity日志"
+                subTitle = "在Logcat中输出详细日志"
             })
 
             root.addView(container)

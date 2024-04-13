@@ -4,6 +4,7 @@ import android.app.AndroidAppHelper
 import android.app.Application
 import android.app.Instrumentation
 import android.widget.Toast
+import androidx.annotation.Keep
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -18,6 +19,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 /**
  * 初始化Xposed
  */
+@Keep
 class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
@@ -59,14 +61,26 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 if (error == 0) {
                                     if (!Helper.getSpBool(Constant.HIDE_HOOK_INFO, false)) {
                                         Helper.toast(
-                                            "PureNGA 加载成功, 请到【设置】>【PureNGA 设置】中配置插件功能\n\n如果不想显示此信息请打开【静默运行】开关",
+                                            buildString {
+                                                appendLine("PureNGA 加载成功")
+                                                appendLine()
+                                                appendLine("请到【设置】>【PureNGA 设置】中配置插件功能")
+                                                appendLine()
+                                                appendLine("如果不想显示此信息请打开【静默运行】开关")
+                                            },
                                             Toast.LENGTH_LONG
                                         )
                                     }
                                 } else {
                                     val ngaVersion = Helper.getNgaVersion()
                                     Helper.toast(
-                                        "PureNGA $error 个模块加载失败, 可能不支持当前版本\nNGA 版本: $ngaVersion\n插件版本: ${BuildConfig.VERSION_NAME}",
+
+                                        buildString {
+                                            appendLine("PureNGA $error 个模块加载失败")
+                                            appendLine("可能不支持当前版本")
+                                            appendLine("NGA 版本: $ngaVersion")
+                                            appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
+                                        },
                                         Toast.LENGTH_LONG
                                     )
                                 }

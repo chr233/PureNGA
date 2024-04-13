@@ -23,8 +23,6 @@ class AdHook : IHook {
         private lateinit var clsUtils_bp: Class<*>
         private lateinit var clsAdSize: Class<*>
         private var clsZkAdNativeImpl: Class<*>? = null
-
-        private lateinit var clsActivityLifecycle: Class<*>
         private lateinit var clsLoadingActivity_a: Class<*>
     }
 
@@ -38,7 +36,6 @@ class AdHook : IHook {
         } catch (e: Throwable) {
             AndroidLogger.e(e)
         }
-        clsActivityLifecycle = classLoader.loadClass("com.donews.nga.interfaces.ActivityLifecycleImpl")
         clsLoadingActivity_a = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity\$a")
     }
 
@@ -108,7 +105,7 @@ class AdHook : IHook {
         //屏蔽开屏广告
         if (Helper.getSpBool(Constant.PURE_SPLASH_AD, false)) {
             // 跳过开屏Logo页面
-            val hook1 = findFirstMethodByName(clsActivityLifecycle, "toForeGround")?.createHook {
+            val hook1 = findFirstMethodByName(MainHook.clsActivityLifecycle, "toForeGround")?.createHook {
                 replace {
                     it.log()
 

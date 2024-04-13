@@ -1,5 +1,6 @@
 package com.chrxw.purenga.hook
 
+import android.app.Activity
 import android.content.Context
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
@@ -21,6 +22,7 @@ class MainHook : IHook {
         lateinit var clsLoadingActivity: Class<*>
         lateinit var clsSPUtil: Class<*>
         lateinit var clsMainActivity: Class<*>
+        lateinit var clsActivityLifecycle: Class<*>
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -28,6 +30,7 @@ class MainHook : IHook {
         clsAppConfig = classLoader.loadClass("com.donews.nga.common.utils.AppConfig")
         clsLoadingActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity")
         clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
+        clsActivityLifecycle = classLoader.loadClass("com.donews.nga.interfaces.ActivityLifecycleImpl")
 
         clsSPUtil = classLoader.loadClass("com.donews.nga.common.utils.SPUtil")
 
@@ -38,7 +41,7 @@ class MainHook : IHook {
             Helper.spDoinfo = getSharedPreferences(Constant.DN_INFO_PREFERENCE_NAME, Context.MODE_PRIVATE)
             Helper.spPlugin = getSharedPreferences(Constant.PLUGIN_PREFERENCE_NAME, Context.MODE_PRIVATE)
 
-            Helper.enableLog = Helper.getSpBool(Constant.ENABLE_LOG, BuildConfig.DEBUG)
+            Helper.enableLog = Helper.getSpBool(Constant.ENABLE_HOOK_LOG, false)
         }
 
 //        MethodFinder.fromClass("android.app.Activity", classLoader)
@@ -88,6 +91,22 @@ class MainHook : IHook {
                         it.log()
                         AndroidLogger.w(it.args.get(0).toString())
                     }
+                }
+            }
+        }
+
+        // 记录 Activity 日志
+        if (Helper.getSpBool(Constant.ENABLE_ACTIVITY_LOG, false)) {
+            findFirstMethodByName(clsActivityLifecycle, "onActivityStarted")?.createHook {
+                after {
+                    it.log()
+
+                    val activity = it.args[0] as Activity
+
+                    AndroidLogger.e("onActivityStarted")
+                    AndroidLogger.i(activity.toString())
+                    AndroidLogger.i(activity.intent.toString())
+                    AndroidLogger.i(activity.intent.extras.toString())
                 }
             }
         }
