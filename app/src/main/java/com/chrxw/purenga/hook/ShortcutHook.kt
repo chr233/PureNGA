@@ -2,6 +2,7 @@ package com.chrxw.purenga.hook
 
 import android.app.Activity
 import android.app.AlertDialog
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.utils.ExtensionUtils
 import com.chrxw.purenga.utils.ExtensionUtils.buiildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.log
@@ -39,8 +40,11 @@ class ShortcutHook : IHook {
             intent.putExtra("fromShortcut", false)
 
             val gotoName = intent.getStringExtra("gotoName")
-            Helper.toast(gotoName.toString())
 
+            if (BuildConfig.DEBUG) {
+                Helper.toast(gotoName.toString())
+            }
+            
             val gotoClazz = when (gotoName) {
                 "sign" -> OptimizeHook.clsLoginWebView
                 "home" -> null
