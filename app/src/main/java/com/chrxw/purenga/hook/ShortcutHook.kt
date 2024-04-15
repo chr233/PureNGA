@@ -21,6 +21,17 @@ class ShortcutHook : IHook {
         private lateinit var clsDiagnoseNetworkActivity: Class<*>
     }
 
+    override fun init(classLoader: ClassLoader) {
+        clsGamePlatformListActivity = classLoader.loadClass("com.donews.nga.game.activitys.GamePlatformListActivity")
+        clsThemeActivity = classLoader.loadClass("com.donews.nga.setting.ThemeActivity")
+        clsMessageActivity = classLoader.loadClass("com.donews.nga.message.MessageActivity")
+        clsFavoriteActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.post.FavoriteActivity")
+        clsHistoryActivity = classLoader.loadClass("com.donews.nga.activitys.HistoryActivity")
+        clsDraftActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.DraftActivity")
+        clsScanningActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.scan.ScanningActivity")
+        clsDiagnoseNetworkActivity = classLoader.loadClass("com.donews.nga.setting.DiagnoseNetworkActivity")
+    }
+
     private fun onShortcut(activity: Activity) {
         // 如果来源是Shortcut
         val intent = activity.intent
@@ -60,17 +71,6 @@ class ShortcutHook : IHook {
                 activity.startActivity(gotoIntent)
             }
         }
-    }
-
-    override fun init(classLoader: ClassLoader) {
-        clsGamePlatformListActivity = classLoader.loadClass("com.donews.nga.game.activitys.GamePlatformListActivity")
-        clsThemeActivity = classLoader.loadClass("com.donews.nga.setting.ThemeActivity")
-        clsMessageActivity = classLoader.loadClass("com.donews.nga.message.MessageActivity")
-        clsFavoriteActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.post.FavoriteActivity")
-        clsHistoryActivity = classLoader.loadClass("com.donews.nga.activitys.HistoryActivity")
-        clsDraftActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.DraftActivity")
-        clsScanningActivity = classLoader.loadClass("gov.pianzong.androidnga.activity.scan.ScanningActivity")
-        clsDiagnoseNetworkActivity = classLoader.loadClass("com.donews.nga.setting.DiagnoseNetworkActivity")
     }
 
     override fun hook() {
