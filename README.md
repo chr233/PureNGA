@@ -42,6 +42,21 @@
 
 同时兼容 Lspatch, 支持 9.9.x 版本的 NGA 客户端, 理论向后兼容
 
+## 捐赠
+
+|               ![img][afdian_qr]                |                   ![img][bmac_qr]                   |                       ![img][usdt_qr]                       |
+| :--------------------------------------------: | :-------------------------------------------------: | :---------------------------------------------------------: |
+| ![爱发电][afdian_img] <br> [链接][afdian_link] | ![buy me a coffee][bmac_img] <br> [链接][bmac_link] | ![USDT][usdt_img] <br> `TW41eecZ199QK6zujgKP4j1cz2bXzRus3c` |
+
+[afdian_qr]: https://raw.chrxw.com/chr233/master/afadian_qr.png
+[afdian_img]: https://img.shields.io/badge/爱发电-@chr__-ea4aaa.svg?logo=github-sponsors
+[afdian_link]: https://afdian.net/@chr233
+[bmac_qr]: https://raw.chrxw.com/chr233/master/bmc_qr.png
+[bmac_img]: https://img.shields.io/badge/buy%20me%20a%20coffee-@chr233-yellow?logo=buymeacoffee
+[bmac_link]: https://www.buymeacoffee.com/chr233
+[usdt_qr]: https://raw.chrxw.com/chr233/master/usdt_qr.png
+[usdt_img]: https://img.shields.io/badge/USDT-TRC20-2354e6.svg?logo=bitcoin
+
 ## 设置菜单入口
 
 1.16.0 以后支持从关于页打开插件菜单
