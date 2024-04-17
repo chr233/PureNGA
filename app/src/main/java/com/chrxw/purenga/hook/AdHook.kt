@@ -22,8 +22,10 @@ class AdHook : IHook {
         private lateinit var clsNativeExpressAD: Class<*>
         private lateinit var clsUtils_bp: Class<*>
         private lateinit var clsAdSize: Class<*>
-        private var clsZkAdNativeImpl: Class<*>? = null
+        private lateinit var clsZkAdNativeImpl: Class<*>
         private lateinit var clsLoadingActivity_a: Class<*>
+
+        fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -71,8 +73,8 @@ class AdHook : IHook {
                 }
             }
 
-            if (clsZkAdNativeImpl != null) {
-                MethodFinder.fromClass(clsZkAdNativeImpl!!).forEach { mtd ->
+            if (isClsZkAdNativeImplInit()) {
+                MethodFinder.fromClass(clsZkAdNativeImpl).forEach { mtd ->
                     val name = mtd.name
                     if (name.startsWith("load") && name.endsWith("Ad") && !mtd.isAbstract) {
                         mtd.createHook {

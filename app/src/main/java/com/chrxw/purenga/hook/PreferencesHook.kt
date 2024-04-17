@@ -266,7 +266,7 @@ class PreferencesHook : IHook {
             })
             container.addView(ToggleItemView(context, Constant.PURE_CALENDAR_DIALOG).apply {
                 title = "屏蔽日历弹窗"
-                subTitle = "屏蔽签到页面的添加日历提醒弹窗"
+                subTitle = "屏蔽签到页面的添加日历提醒弹窗, 9.9.20 之前无需开启"
             })
             container.addView(ToggleItemView(context, Constant.USE_EXTERNAL_BROWSER).apply {
                 title = "使用外部浏览器打开链接"

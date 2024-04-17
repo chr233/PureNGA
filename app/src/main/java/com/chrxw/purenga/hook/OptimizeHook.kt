@@ -48,6 +48,8 @@ class OptimizeHook : IHook {
                 return reader.readText()
             }
         }
+
+        fun isClsCalendarUtilsInit() = ::clsCalendarUtils.isInitialized
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -59,7 +61,13 @@ class OptimizeHook : IHook {
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
         clsHomeFragment = classLoader.loadClass("com.donews.nga.fragments.HomeFragment")
         clsHomeFragmentPresenter = classLoader.loadClass("com.donews.nga.fragments.presenters.HomeFragmentPresenter")
-        clsCalendarUtils = classLoader.loadClass("gov.pianzong.androidnga.utils.CalendarUtils")
+
+        try {
+            clsCalendarUtils = classLoader.loadClass("gov.pianzong.androidnga.utils.CalendarUtils")
+        } catch (e: Throwable) {
+            AndroidLogger.e(e)
+        }
+
         clsAssetManager = classLoader.loadClass("android.content.res.AssetManager")
         clsResources = classLoader.loadClass("android.content.res.Resources")
         clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
@@ -136,7 +144,7 @@ class OptimizeHook : IHook {
 
                             val onLongClickListener = OnLongClickListener { view ->
                                 val intent = Intent(root.context, clsAccountManageActivity)
-                                root.context.startActivity(intent)
+                                view.context.startActivity(intent)
                                 true
                             }
 
@@ -259,7 +267,7 @@ class OptimizeHook : IHook {
         }
 
         // 日历弹窗
-        if (Helper.getSpBool(Constant.PURE_CALENDAR_DIALOG, false)) {
+        if (Helper.getSpBool(Constant.PURE_CALENDAR_DIALOG, false) && isClsCalendarUtilsInit()) {
             findFirstMethodByName(clsCalendarUtils, "f")?.createHook {
                 replace {
                     it.log()
