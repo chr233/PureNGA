@@ -1,6 +1,7 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -45,6 +46,7 @@ class AboutHook : IHook {
                     appendLine("插件 版本: $pluginVersion")
                     appendLine("点上方图标打开设置")
                 }
+                textView.gravity = Gravity.CENTER
 
                 textView.setOnClickListener {
                     Helper.toast("正在前往 PureNGA 项目主页")

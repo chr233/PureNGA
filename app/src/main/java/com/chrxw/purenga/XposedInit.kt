@@ -72,17 +72,17 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                         )
                                     }
                                 } else {
-                                    val ngaVersion = Helper.getNgaVersion()
-                                    Helper.toast(
-
-                                        buildString {
-                                            appendLine("PureNGA $error 个模块加载失败")
-                                            appendLine("可能不支持当前版本")
-                                            appendLine("NGA 版本: $ngaVersion")
-                                            appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
-                                        },
-                                        Toast.LENGTH_LONG
-                                    )
+                                    if (!Helper.getSpBool(Constant.HIDE_ERROR_INFO, false)) {
+                                        Helper.toast(
+                                            buildString {
+                                                appendLine("PureNGA $error 个模块加载失败")
+                                                appendLine("可能不支持当前版本")
+                                                appendLine("NGA 版本: ${Helper.getNgaVersion()}")
+                                                appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
+                                            },
+                                            Toast.LENGTH_LONG
+                                        )
+                                    }
                                 }
                             } else {
                                 AndroidLogger.d("跳过初始化")

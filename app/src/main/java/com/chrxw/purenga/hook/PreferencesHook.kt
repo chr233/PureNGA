@@ -165,7 +165,6 @@ class PreferencesHook : IHook {
                 title = "自定义快捷方式"
                 subTitle = "设置长按APP图标快捷方式, 仅支持安卓 7.1 及以上版本"
                 setOnClickListener {
-
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
 
                         val shortcutSettings = Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null)
@@ -196,6 +195,11 @@ class PreferencesHook : IHook {
                             availableShortcuts.map { enabledShortcutIds.contains(it?.id) }.toBooleanArray()
 
                         val selectedShortcuts = mutableListOf<ShortcutInfo>()
+                        for (i in menuItems.indices) {
+                            if (checkedItems[i]) {
+                                selectedShortcuts.add(availableShortcuts[i]!!)
+                            }
+                        }
 
                         AlertDialog.Builder(context).apply {
                             setTitle(title)
@@ -284,6 +288,10 @@ class PreferencesHook : IHook {
                 title = "假装分享"
                 subTitle = "在分享菜单增加一个“假装分享”按钮"
             })
+            container.addView(ToggleItemView(context, Constant.LOCAL_VIP).apply {
+                title = "本地会员"
+                subTitle = "假装是付费会员(例如换肤功能有效)"
+            })
             container.addView(ToggleItemView(context, Constant.BYPASS_INSTALL_CHECK).apply {
                 title = "绕过已安装检查"
                 subTitle = "分享到指定App前检查不检查是否已安装(调试用)"
@@ -294,6 +302,10 @@ class PreferencesHook : IHook {
             container.addView(ToggleItemView(context, Constant.HIDE_HOOK_INFO).apply {
                 title = "静默运行"
                 subTitle = "启动时不显示模块运行信息"
+            })
+            container.addView(ToggleItemView(context, Constant.HIDE_ERROR_INFO).apply {
+                title = "静默报错信息"
+                subTitle = "启动时不显示模块报错信息(如果有的话)"
             })
 
             // 关于

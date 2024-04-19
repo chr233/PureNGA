@@ -3,6 +3,8 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.os.Build
 import android.view.View.OnLongClickListener
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
@@ -11,8 +13,11 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.getShortcuts
 import com.chrxw.purenga.utils.ExtensionUtils.log
+import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
@@ -42,6 +47,8 @@ class OptimizeHook : IHook {
         private lateinit var clsAboutUsActivityA: Class<*>
         lateinit var clsLoginWebView: Class<*>
         lateinit var clsAccountManageActivity: Class<*>
+        lateinit var clsVipStatus: Class<*>
+        lateinit var clsAppLogoActivity: Class<*>
 
         private fun readTextFromInputStream(inputStream: InputStream1): String {
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
@@ -73,6 +80,8 @@ class OptimizeHook : IHook {
         clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
         clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
         clsAccountManageActivity = classLoader.loadClass("com.donews.nga.setting.AccountManageActivity")
+        clsVipStatus = classLoader.loadClass("com.donews.nga.vip.entitys.VipStatus")
+        clsAppLogoActivity = classLoader.loadClass("com.donews.nga.setting.AppLogoActivity")
     }
 
     override fun hook() {
@@ -298,6 +307,63 @@ class OptimizeHook : IHook {
                             it.result = newCss.byteInputStream()
                         }
                     }
+                }
+            }
+        }
+
+        // 本地Vip
+        if (Helper.getSpBool(Constant.LOCAL_VIP, false)) {
+            findFirstMethodByName(clsVipStatus, "isVip")?.createHook {
+                after {
+                    it.log()
+
+                    it.result = true
+                }
+            }
+        }
+
+        // 快捷方式优化
+        if (Helper.getSpStr(
+                Constant.SHORTCUT_SETTINGS, null
+            ) != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
+        ) {
+            var shortcuts: MutableList<ShortcutInfo>? = null
+
+            findFirstMethodByName(clsAppLogoActivity, "saveAppLogo")?.createHook {
+                before {
+                    it.log()
+
+                    val activity = it.thisObject as Activity
+
+                    shortcuts = activity.getShortcuts()
+
+                    for (shortcut in shortcuts!!) {
+                        println("Shortcut ID: ${shortcut.id}, Label: ${shortcut.shortLabel}")
+                    }
+
+                    AndroidLogger.e("before")
+                }
+
+                after {
+                    it.log()
+
+                    val activity = it.thisObject as Activity
+
+                    if (shortcuts != null) {
+
+                        val ss = shortcuts!!.map { s ->
+                            activity.buildShortcut(s.id, s.shortLabel.toString(), s.longLabel.toString(), null)!!
+                        }
+
+                        ss?.toMutableList()?.let { it1 -> activity.setShortcuts(it1) }
+
+                        AndroidLogger.e(shortcuts.toString())
+                        AndroidLogger.e(shortcuts?.count().toString())
+                    }
+
+
+                    AndroidLogger.e("after")
+
                 }
             }
         }

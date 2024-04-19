@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.utils.ExtensionUtils
-import com.chrxw.purenga.utils.ExtensionUtils.buiildNormalIntent
+import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
@@ -64,7 +64,7 @@ class ShortcutHook : IHook {
             }
 
             if (gotoClazz != null) {
-                val gotoIntent = activity.buiildNormalIntent(gotoClazz)
+                val gotoIntent = activity.buildNormalIntent(gotoClazz)
 
                 if (gotoName == "pluginSetting") {
                     gotoIntent.putExtra("openDialog", true)
@@ -93,7 +93,7 @@ class ShortcutHook : IHook {
                         setCancelable(false)
                         setNegativeButton("取消", null)
                         setPositiveButton("确认") { _, _ ->
-                            val intent = context.buiildNormalIntent(PreferencesHook.clsSettingActivity).apply {
+                            val intent = context.buildNormalIntent(PreferencesHook.clsSettingActivity).apply {
                                 putExtra("openDialog", true)
                             }
                             context.startActivity(intent)

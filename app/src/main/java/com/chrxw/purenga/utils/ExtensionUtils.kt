@@ -70,7 +70,7 @@ object ExtensionUtils {
         return first
     }
 
-    fun Context.buiildNormalIntent(clazz: Class<*>): Intent {
+    fun Context.buildNormalIntent(clazz: Class<*>): Intent {
         val intent = Intent(this, clazz).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             action = Intent.ACTION_VIEW
@@ -78,7 +78,7 @@ object ExtensionUtils {
         return intent
     }
 
-    fun Context.buildShortcutIntent(clazz: Class<*>, gotoName: String): Intent {
+    private fun Context.buildShortcutIntent(clazz: Class<*>, gotoName: String): Intent {
         val intent = Intent(this, clazz).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             action = Intent.ACTION_VIEW
@@ -100,6 +100,16 @@ object ExtensionUtils {
                 .setIntent(intent).build()
 
             shortcut
+        } else {
+            Helper.toast("安卓版本不支持此操作")
+            null
+        }
+    }
+
+    fun Context.getShortcuts(): MutableList<ShortcutInfo>? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val shortcutManager = this.getSystemService(ShortcutManager::class.java)
+            shortcutManager.dynamicShortcuts
         } else {
             Helper.toast("安卓版本不支持此操作")
             null

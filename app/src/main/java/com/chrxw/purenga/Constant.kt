@@ -43,12 +43,14 @@ object Constant {
     const val FAKE_SHARE = "fake_share"
     const val BYPASS_INSTALL_CHECK = "bypass_install_check"
     const val HIDE_HOOK_INFO = "hide_hook_info"
+    const val HIDE_ERROR_INFO = "hide_error_info"
     const val CUSTOM_INDEX = "custom_index"
     const val ENABLE_CUSTOM_FONT = "enable_custom_font"
     const val CUSTOM_FONT_NAME = "custom_font_name"
     const val SHORTCUT_SETTINGS = "shortcut_settings"
     const val ENABLE_HOOK_LOG = "enable_hook_log"
     const val ENABLE_ACTIVITY_LOG = "enable_activity_log"
+    const val LOCAL_VIP = "local_vip"
 
     const val STR_PURENGA_SETTING = "PureNGA 设置"
 
