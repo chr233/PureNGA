@@ -3,7 +3,6 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutInfo
 import android.os.Build
 import android.view.View.OnLongClickListener
 import android.widget.HorizontalScrollView
@@ -13,11 +12,8 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
 import com.chrxw.purenga.Constant
-import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
-import com.chrxw.purenga.utils.ExtensionUtils.getShortcuts
 import com.chrxw.purenga.utils.ExtensionUtils.log
-import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
@@ -323,47 +319,14 @@ class OptimizeHook : IHook {
         }
 
         // 快捷方式优化
-        if (Helper.getSpStr(
-                Constant.SHORTCUT_SETTINGS, null
-            ) != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
+        if (!Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null)
+                .isNullOrEmpty() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
         ) {
-            var shortcuts: MutableList<ShortcutInfo>? = null
-
             findFirstMethodByName(clsAppLogoActivity, "saveAppLogo")?.createHook {
-                before {
-                    it.log()
-
-                    val activity = it.thisObject as Activity
-
-                    shortcuts = activity.getShortcuts()
-
-                    for (shortcut in shortcuts!!) {
-                        println("Shortcut ID: ${shortcut.id}, Label: ${shortcut.shortLabel}")
-                    }
-
-                    AndroidLogger.e("before")
-                }
-
                 after {
                     it.log()
 
-                    val activity = it.thisObject as Activity
-
-                    if (shortcuts != null) {
-
-                        val ss = shortcuts!!.map { s ->
-                            activity.buildShortcut(s.id, s.shortLabel.toString(), s.longLabel.toString(), null)!!
-                        }
-
-                        ss?.toMutableList()?.let { it1 -> activity.setShortcuts(it1) }
-
-                        AndroidLogger.e(shortcuts.toString())
-                        AndroidLogger.e(shortcuts?.count().toString())
-                    }
-
-
-                    AndroidLogger.e("after")
-
+                    Helper.toast("修改图标后需要重新设置快捷方式")
                 }
             }
         }

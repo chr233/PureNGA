@@ -245,7 +245,6 @@ class PreferencesHook : IHook {
 
                                         selectedShortcuts.clear()
                                     }
-
                                 }
                                 show()
                             }

@@ -3,8 +3,9 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import android.app.AlertDialog
 import com.chrxw.purenga.BuildConfig
-import com.chrxw.purenga.utils.ExtensionUtils
+import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
+import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
@@ -44,7 +45,7 @@ class ShortcutHook : IHook {
             if (BuildConfig.DEBUG) {
                 Helper.toast(gotoName.toString())
             }
-            
+
             val gotoClazz = when (gotoName) {
                 "sign" -> OptimizeHook.clsLoginWebView
                 "home" -> null
@@ -79,40 +80,42 @@ class ShortcutHook : IHook {
 
     override fun hook() {
         // 处理Shortcut跳转以及显示首次运行提示
-        ExtensionUtils.findFirstMethodByName(OptimizeHook.clsMainActivity, "initLayout")?.createHook {
-            after {
-                it.log()
+        if (!Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null).isNullOrEmpty()) {
+            findFirstMethodByName(OptimizeHook.clsMainActivity, "initLayout")?.createHook {
+                after {
+                    it.log()
 
-                val activity = it.thisObject as Activity
+                    val activity = it.thisObject as Activity
 
-                if (!Helper.isPluginConfigExists()) {
-                    // 首次打开APP, 弹出提示框
-                    AlertDialog.Builder(activity).apply {
-                        setTitle("PureNGA 提示")
-                        setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
-                        setCancelable(false)
-                        setNegativeButton("取消", null)
-                        setPositiveButton("确认") { _, _ ->
-                            val intent = context.buildNormalIntent(PreferencesHook.clsSettingActivity).apply {
-                                putExtra("openDialog", true)
+                    if (!Helper.isPluginConfigExists()) {
+                        // 首次打开APP, 弹出提示框
+                        AlertDialog.Builder(activity).apply {
+                            setTitle("PureNGA 提示")
+                            setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
+                            setCancelable(false)
+                            setNegativeButton("取消", null)
+                            setPositiveButton("确认") { _, _ ->
+                                val intent = context.buildNormalIntent(PreferencesHook.clsSettingActivity).apply {
+                                    putExtra("openDialog", true)
+                                }
+                                context.startActivity(intent)
                             }
-                            context.startActivity(intent)
+                            create()
+                            show()
                         }
-                        create()
-                        show()
                     }
+
+                    // 如果来源是Shortcut
+                    onShortcut(activity)
                 }
-
-                // 如果来源是Shortcut
-                onShortcut(activity)
             }
-        }
 
-        ExtensionUtils.findFirstMethodByName(OptimizeHook.clsMainActivity, "onNewIntent")?.createHook {
-            after {
-                // 如果来源是Shortcut
-                val activity = it.thisObject as Activity
-                onShortcut(activity)
+            findFirstMethodByName(OptimizeHook.clsMainActivity, "onNewIntent")?.createHook {
+                after {
+                    // 如果来源是Shortcut
+                    val activity = it.thisObject as Activity
+                    onShortcut(activity)
+                }
             }
         }
     }
