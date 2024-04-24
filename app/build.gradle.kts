@@ -16,8 +16,8 @@ android {
         applicationId = "com.chrxw.purenga"
         minSdk = 24
         targetSdk = 34
-        versionCode = 29
-        versionName = "2.4.1"
+        versionCode = 30
+        versionName = "2.4.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles()
@@ -62,7 +62,7 @@ dependencies {
     implementation("com.github.kyuubiran:EzXHelper:2.0.7")
     compileOnly("de.robv.android.xposed:api:82")
 
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
