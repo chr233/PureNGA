@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.view.View.OnLongClickListener
+import android.view.View
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -105,57 +105,64 @@ class OptimizeHook : IHook {
         }
 
         //移除首页商城入口
-        if (Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)) {
+        val removeStore = Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)
+        val quickAccount = Helper.getSpBool(Constant.QUICK_ACCOUNT_MANAGE, false)
+
+        if (removeStore || quickAccount) {
             findFirstMethodByName(clsHomeDrawerLayout, "initLayout")?.createHook {
                 after {
                     it.log()
 
                     val viewBinding = XposedHelpers.getObjectField(it.thisObject, "binding")
                     val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
-                    val scrollView = root.getChildAt(1) as ScrollView
-                    val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
-                    val childCount = linearLayout.childCount
+                    //移除商店入口
+                    if (removeStore) {
+                        val scrollView = root.getChildAt(1) as ScrollView
+                        val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
-                    //移除滑动菜单底部无用元素
-                    linearLayout.removeViewAt(childCount - 1)
+                        val childCount = linearLayout.childCount
 
-                    if (childCount <= 12) {
-                        //NGA <= 9.9.3
+                        //移除滑动菜单底部无用元素
+                        linearLayout.removeViewAt(childCount - 1)
 
-                        //移除滑动菜单商店和钱包
-                        linearLayout.removeViewAt(6)
-                        linearLayout.removeViewAt(5)
-                    } else {
-                        //NGA >= 9.9.4 新版侧边栏菜单
+                        if (childCount <= 12) {
+                            //NGA <= 9.9.3
 
-                        //移除滑动菜单商店和钱包
-                        linearLayout.removeViewAt(10)
-                        linearLayout.removeViewAt(9)
-                        linearLayout.removeViewAt(4)
+                            //移除滑动菜单商店和钱包
+                            linearLayout.removeViewAt(6)
+                            linearLayout.removeViewAt(5)
+                        } else {
+                            //NGA >= 9.9.4 新版侧边栏菜单
 
-                        //移除会员banner
-                        if (Helper.getSpBool(Constant.REMOVE_VIP_BANNER, false)) {
-                            linearLayout.removeViewAt(0)
-                        }
+                            //移除滑动菜单商店和钱包
+                            linearLayout.removeViewAt(10)
+                            linearLayout.removeViewAt(9)
+                            linearLayout.removeViewAt(4)
 
-                        //长按切换账号
-                        if (Helper.getSpBool(Constant.QUICK_ACCOUNT_MANAGE, false)) {
-                            val nickNameId = Helper.getRId("tv_home_drawer_name")
-                            val nickNameView = root.findViewById<TextView>(nickNameId)
-
-                            val avatarId = Helper.getRId("civ_home_drawer_head")
-                            val avatarView = root.findViewById<ImageView>(avatarId)
-
-                            val onLongClickListener = OnLongClickListener { view ->
-                                val intent = Intent(root.context, clsAccountManageActivity)
-                                view.context.startActivity(intent)
-                                true
+                            //移除会员banner
+                            if (Helper.getSpBool(Constant.REMOVE_VIP_BANNER, false)) {
+                                linearLayout.removeViewAt(0)
                             }
-
-                            nickNameView.setOnLongClickListener(onLongClickListener)
-                            avatarView.setOnLongClickListener(onLongClickListener)
                         }
+                    }
+
+                    //长按切换账号
+                    if (quickAccount) {
+                        val nickNameId = Helper.getRId("tv_home_drawer_name")
+                        val nickNameView = root.findViewById<TextView>(nickNameId)
+
+                        val avatarId = Helper.getRId("civ_home_drawer_head")
+                        val avatarView = root.findViewById<ImageView>(avatarId)
+
+                        val onLongClickListener = View.OnLongClickListener { view ->
+                            val intent = Intent(root.context, clsAccountManageActivity)
+                            view.context.startActivity(intent)
+                            true
+                        }
+
+                        nickNameView.setOnLongClickListener(onLongClickListener)
+                        avatarView.setOnLongClickListener(onLongClickListener)
                     }
                 }
             }
