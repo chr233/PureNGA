@@ -1,6 +1,7 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
@@ -26,8 +27,15 @@ class AdHook : IHook {
         private lateinit var clsLoadingActivity_a: Class<*>
         private lateinit var clsKsAdSDK: Class<*>
         private lateinit var clsTTAdSdk: Class<*>
+        private lateinit var clsDnAdNativeClass: Class<*>
+        private lateinit var clsDnTapFeedAd: Class<*>
 
         fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
+        fun isClsKsAdSDKInit() = ::clsKsAdSDK.isInitialized
+        fun isClsTTAdSdkInit() = ::clsTTAdSdk.isInitialized
+        fun isClsDnAdNativeClassInit() = ::clsDnAdNativeClass.isInitialized
+        fun isClsDnTapFeedAdInit() = ::clsDnTapFeedAd.isInitialized
+
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -42,8 +50,15 @@ class AdHook : IHook {
         }
         clsLoadingActivity_a = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity\$a")
 
-        clsKsAdSDK = classLoader.loadClass("com.kwad.sdk.api.KsAdSDK")
-        clsTTAdSdk = classLoader.loadClass("com.bytedance.sdk.openadsdk.TTAdSdk")
+
+        try {
+            clsKsAdSDK = classLoader.loadClass("com.kwad.sdk.api.KsAdSDK")
+            clsTTAdSdk = classLoader.loadClass("com.bytedance.sdk.openadsdk.TTAdSdk")
+            clsDnAdNativeClass = classLoader.loadClass("com.donews.b.start.DnAdNative")
+            clsDnTapFeedAd = classLoader.loadClass("com.donews.admediation.adimpl.feed.DnTapFeedAd")
+        } catch (e: Throwable) {
+            AndroidLogger.e(e)
+        }
     }
 
     override fun hook() {
@@ -108,24 +123,65 @@ class AdHook : IHook {
                 AndroidLogger.d("clsLoadingActivity loadAD 匹配失败")
             }
 
-            val hook3 = findFirstMethodByName(clsKsAdSDK, "init")?.createHook {
-                replace {
-                    it.log();
-                    return@replace false;
+            if (isClsKsAdSDKInit()) {
+                val hook3 = findFirstMethodByName(clsKsAdSDK, "init")?.createHook {
+                    replace {
+                        it.log();
+                        return@replace false;
+                    }
                 }
-            }
-            if (hook3 == null) {
-                AndroidLogger.d("快手广告过滤失败")
+                if (hook3 == null) {
+                    AndroidLogger.d("快手广告过滤失败")
+                }
             }
 
-            val hook4 = findFirstMethodByName(clsTTAdSdk, "init")?.createHook {
-                replace {
-                    it.log();
-                    return@replace false;
+            if (isClsTTAdSdkInit()) {
+                val hook4 = findFirstMethodByName(clsTTAdSdk, "init")?.createHook {
+                    replace {
+                        it.log();
+                        return@replace false;
+                    }
+                }
+                if (hook4 == null) {
+                    AndroidLogger.d("穿山甲广告过滤失败")
                 }
             }
-            if (hook4 == null) {
-                AndroidLogger.d("穿山甲广告过滤失败")
+
+            if (isClsDnAdNativeClassInit()) {
+                MethodFinder.fromClass(clsDnAdNativeClass).forEach { method ->
+                    val mtdName = method.name
+                    if (!method.isAbstract) {
+                        if (mtdName.startsWith("load") && mtdName.endsWith("Ad")) {
+                            method.createHook {
+                                replace {
+                                    it.log()
+
+                                    if (BuildConfig.DEBUG) {
+                                        AndroidLogger.i("clsDnAdNativeClass $mtdName")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (isClsDnTapFeedAdInit()) {
+                MethodFinder.fromClass(clsDnTapFeedAd).forEach { method ->
+                    val mtdName = method.name
+                    if (!method.isAbstract) {
+                        if (mtdName.startsWith("load") && mtdName.endsWith("Ad")) {
+                            method.createHook {
+                                replace {
+                                    it.log()
+                                    if (BuildConfig.DEBUG) {
+                                        AndroidLogger.i("clsDnTapFeedAd $mtdName")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
