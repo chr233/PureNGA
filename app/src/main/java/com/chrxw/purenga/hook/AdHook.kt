@@ -24,6 +24,8 @@ class AdHook : IHook {
         private lateinit var clsAdSize: Class<*>
         private lateinit var clsZkAdNativeImpl: Class<*>
         private lateinit var clsLoadingActivity_a: Class<*>
+        private lateinit var clsKsAdSDK: Class<*>
+        private lateinit var clsTTAdSdk: Class<*>
 
         fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
     }
@@ -39,6 +41,9 @@ class AdHook : IHook {
             AndroidLogger.e(e)
         }
         clsLoadingActivity_a = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity\$a")
+
+        clsKsAdSDK = classLoader.loadClass("com.kwad.sdk.api.KsAdSDK")
+        clsTTAdSdk = classLoader.loadClass("com.bytedance.sdk.openadsdk.TTAdSdk")
     }
 
     override fun hook() {
@@ -101,6 +106,26 @@ class AdHook : IHook {
                 }
             } ?: {
                 AndroidLogger.d("clsLoadingActivity loadAD 匹配失败")
+            }
+
+            val hook3 = findFirstMethodByName(clsKsAdSDK, "init")?.createHook {
+                replace {
+                    it.log();
+                    return@replace false;
+                }
+            }
+            if (hook3 == null) {
+                AndroidLogger.d("快手广告过滤失败")
+            }
+
+            val hook4 = findFirstMethodByName(clsTTAdSdk, "init")?.createHook {
+                replace {
+                    it.log();
+                    return@replace false;
+                }
+            }
+            if (hook4 == null) {
+                AndroidLogger.d("穿山甲广告过滤失败")
             }
         }
 

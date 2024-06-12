@@ -28,12 +28,6 @@ class SpUtilsHook : IHook {
                             it.result = 0
                         }
                     }
-
-//                    else -> {
-//                        if (BuildConfig.DEBUG) {
-//                            AndroidLogger.w("SPUtils.getInt: ${it.args[0]} ${it.result}")
-//                        }
-//                    }
                 }
             }
         }
@@ -50,12 +44,6 @@ class SpUtilsHook : IHook {
                             it.result = System.currentTimeMillis()
                         }
                     }
-
-//                    else -> {
-//                        if (BuildConfig.DEBUG) {
-//                            AndroidLogger.w("SPUtils.getLong: ${it.args[0]} ${it.result}")
-//                        }
-//                    }
                 }
             }
         }
