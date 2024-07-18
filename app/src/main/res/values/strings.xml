@@ -12,7 +12,7 @@
     <string name="module_disabled">模块未启用</string>
     <string name="github_url">https://github.com/chr233/PureNGA</string>
     <string name="author_url">https://github.com/chr233</string>
-    <string name="donate_url">https://afdian.net/order/create?user_id=81888d36247c11ea8ac152540025c377</string>
+    <string name="donate_url">https://afdian.com/order/create?user_id=81888d36247c11ea8ac152540025c377</string>
     <string name="author_summary" translatable="false">chr233</string>
     <string name="donate_summary">爱发电 @chr233</string>
     <string name="hide_icon">隐藏桌面图标</string>

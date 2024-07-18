@@ -7,7 +7,7 @@ object Constant {
     const val NGA_PACKAGE_NAME = "gov.pianzong.androidnga"
     const val REPO_URL = "https://github.com/chr233/PureNGA"
     const val AUTHOR_URL = "https://github.com/chr233"
-    const val DONATE_URL = "https://afdian.net/order/create?user_id=81888d36247c11ea8ac152540025c377"
+    const val DONATE_URL = "https://afdian.com/order/create?user_id=81888d36247c11ea8ac152540025c377"
 
     const val API_PLUGIN_BUNDLED_URL = "https://hub.chrxw.com/PureNGA/releases/latest"
     const val API_PLUGIN_STANDALONE_URL = "https://xposed.chrxw.com/com.chrxw.purenga/releases/latest"
