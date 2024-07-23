@@ -33,7 +33,9 @@ class WebViewHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        val hosts = MainHook.clsAppConfig.getField("hosts").get(null) as Array<*>
+        val field = MainHook.clsAppConfig.getDeclaredField("hosts")
+        field.isAccessible = true
+        val hosts = field.get(null) as Array<*>
         for (host in hosts) {
             ngaUrls.add(host as String)
         }
