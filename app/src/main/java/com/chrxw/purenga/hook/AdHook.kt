@@ -126,8 +126,8 @@ class AdHook : IHook {
             if (isClsKsAdSDKInit()) {
                 val hook3 = findFirstMethodByName(clsKsAdSDK, "init")?.createHook {
                     replace {
-                        it.log();
-                        return@replace false;
+                        it.log()
+                        return@replace false
                     }
                 }
                 if (hook3 == null) {
@@ -138,8 +138,8 @@ class AdHook : IHook {
             if (isClsTTAdSdkInit()) {
                 val hook4 = findFirstMethodByName(clsTTAdSdk, "init")?.createHook {
                     replace {
-                        it.log();
-                        return@replace false;
+                        it.log()
+                        return@replace false
                     }
                 }
                 if (hook4 == null) {
