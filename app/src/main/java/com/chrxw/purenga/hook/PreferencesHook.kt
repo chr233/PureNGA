@@ -54,9 +54,39 @@ class PreferencesHook : IHook {
                 title = "屏蔽信息流广告"
                 subTitle = "去除Banner位, 帖子列表, 帖子末尾的广告"
             })
-            container.addView(ToggleItemView(context, Constant.CRACK_AD_TASK).apply {
-                title = "破解看广告任务"
-                subTitle = "秒关不影响任务奖励结算 (已弃用)"
+            container.addView(ToggleItemView(context, Constant.ENABLE_PURE_POST).apply {
+                title = "屏蔽广告帖子"
+                subTitle = "按照关键词过滤帖子列表"
+            })
+            container.addView(ClickableItemView(context).apply {
+                title = "设置帖子屏蔽词"
+                subTitle = "关键词之间使用 | 分隔"
+                setOnClickListener {
+
+                    val input = EditText(context).apply {
+                        maxLines = 8
+                        setText(Helper.getSpStr(Constant.PURE_POST, ""))
+                    }
+
+                    AlertDialog.Builder(context).apply {
+                        setTitle(title)
+                        setView(input)
+                        setNeutralButton("内置规则", null)
+                        setPositiveButton("保存") { _, _ ->
+                            Helper.setSpStr(Constant.PURE_POST, input.text.toString())
+                            Helper.toast("设置已保存, 重启应用生效")
+                        }
+                        setNegativeButton("取消", null)
+                        create().apply {
+                            setOnShowListener {
+                                getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                                    input.setText("饿了么|美团")
+                                }
+                            }
+                            show()
+                        }
+                    }
+                }
             })
 
             // 界面优化
@@ -98,7 +128,6 @@ class PreferencesHook : IHook {
 
                     AlertDialog.Builder(context).apply {
                         setTitle(title)
-                        setCancelable(false)
                         setSingleChoiceItems(items, currentIndex) { _, which ->
                             currentIndex = which
                         }
@@ -138,7 +167,6 @@ class PreferencesHook : IHook {
 
                         AlertDialog.Builder(context).apply {
                             setTitle(title)
-                            setCancelable(false)
                             setView(input)
                             setNeutralButton("使用系统字体", null)
                             setPositiveButton("保存") { _, _ ->

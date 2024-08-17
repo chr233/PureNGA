@@ -29,13 +29,13 @@ class AdHook : IHook {
         private lateinit var clsTTAdSdk: Class<*>
         private lateinit var clsDnAdNativeClass: Class<*>
         private lateinit var clsDnTapFeedAd: Class<*>
+        private lateinit var clsPostListFragment: Class<*>
 
         fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
         fun isClsKsAdSDKInit() = ::clsKsAdSDK.isInitialized
         fun isClsTTAdSdkInit() = ::clsTTAdSdk.isInitialized
         fun isClsDnAdNativeClassInit() = ::clsDnAdNativeClass.isInitialized
         fun isClsDnTapFeedAdInit() = ::clsDnTapFeedAd.isInitialized
-
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -50,7 +50,6 @@ class AdHook : IHook {
         }
         clsLoadingActivity_a = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity\$a")
 
-
         try {
             clsKsAdSDK = classLoader.loadClass("com.kwad.sdk.api.KsAdSDK")
             clsTTAdSdk = classLoader.loadClass("com.bytedance.sdk.openadsdk.TTAdSdk")
@@ -59,6 +58,8 @@ class AdHook : IHook {
         } catch (e: Throwable) {
             AndroidLogger.e(e)
         }
+
+        clsPostListFragment = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
     }
 
     override fun hook() {
@@ -210,6 +211,52 @@ class AdHook : IHook {
 
             if (hook1 == null || hook3 == null) {
                 AndroidLogger.w("过滤开屏广告功能部分加载失败")
+            }
+        }
+
+        //屏蔽广告帖子
+        if (Helper.getSpBool(Constant.ENABLE_PURE_POST, false)) {
+
+            val purePost = Helper.getSpStr(Constant.PURE_POST, "")
+
+            if (!purePost.isNullOrEmpty()) {
+                val keywords = purePost.split("|")
+
+                findFirstMethodByName(clsPostListFragment, "addToList")?.createHook {
+                    before {
+                        it.log()
+
+                        val posts = it.args[0] as List<*>
+                        val puredPosts = mutableListOf<Any?>()
+
+                        for (post in posts) {
+                            if (post == null) {
+                                continue
+                            }
+
+                            val author = XposedHelpers.getObjectField(post, "author") as String
+                            val subject = XposedHelpers.getObjectField(post, "subject") as String
+
+                            if (BuildConfig.DEBUG) {
+                                AndroidLogger.w("${author}: ${subject}")
+                            }
+
+                            var pure = false
+                            for (key in keywords) {
+                                if (subject.contains(key)) {
+                                    pure = true
+                                    break
+                                }
+                            }
+
+                            if (!pure) {
+                                puredPosts.add(post)
+                            }
+                        }
+
+                        it.args[0] = puredPosts
+                    }
+                }
             }
         }
     }

@@ -190,6 +190,8 @@ object Helper {
     fun restartApplication(activity: Activity) {
         val pm = activity.packageManager
         val intent = pm.getLaunchIntentForPackage(activity.packageName)
+        intent?.putExtra("fromShortcut", true)
+        intent?.putExtra("gotoName", "pluginSetting")
         activity.finishAffinity()
         activity.startActivity(intent)
         exitProcess(0)

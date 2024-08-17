@@ -24,4 +24,6 @@
     <string name="open_nga_summary">屎黄色论坛, 启动!</string>
     <string name="setting">设置</string>
     <string name="source_code">获取源码</string>
+    <string name="open_purenga_summary">插件设置</string>
+    <string name="open_purenga">打开插件设置</string>
 </resources>

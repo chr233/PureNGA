@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.chrxw.purenga.utils.Helper
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 
 
 /**
@@ -70,14 +71,32 @@ class MainActivity : AppCompatActivity() {
 
                 "open_nga" -> {
                     try {
-                        startActivity(
-                            Intent(Intent.ACTION_MAIN).setComponent(
-                                ComponentName(
-                                    Constant.NGA_PACKAGE_NAME, "com.donews.nga.activitys.MainActivity"
-                                )
-                            )//.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+                        val intent = Intent(Intent.ACTION_MAIN).setComponent(
+                            ComponentName(
+                                Constant.NGA_PACKAGE_NAME, "com.donews.nga.activitys.MainActivity"
+                            )
                         )
+                        startActivity(intent)
                     } catch (e: Throwable) {
+                        toast("打开 NGA 失败")
+                    }
+                    return true
+                }
+
+                "open_purenga" -> {
+                    try {
+                        val intent = Intent(Intent.ACTION_MAIN).setComponent(
+                            ComponentName(
+                                Constant.NGA_PACKAGE_NAME, "com.donews.nga.activitys.MainActivity"
+                            )
+                        )
+
+                        intent.putExtra("fromShortcut", true)
+                        intent.putExtra("gotoName", "pluginSetting")
+
+                        startActivity(intent)
+                    } catch (e: Throwable) {
+                        AndroidLogger.e(e)
                         toast("打开 NGA 失败")
                     }
                     return true
@@ -105,7 +124,6 @@ class MainActivity : AppCompatActivity() {
                     return true
                 }
             }
-
         }
 
         override fun onResume() {

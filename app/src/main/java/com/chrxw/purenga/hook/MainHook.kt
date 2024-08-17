@@ -43,24 +43,6 @@ class MainHook : IHook {
 
             Helper.enableLog = Helper.getSpBool(Constant.ENABLE_HOOK_LOG, false)
         }
-
-//        MethodFinder.fromClass("android.app.Activity", classLoader)
-//            .filterByName("startActivity").forEach { mtd ->
-//                mtd.createHook {
-//                    after {
-//                        it.log()
-//
-//                        val intent = it.args[0] as Intent
-//
-//                        AndroidLogger.e("startActivity")
-//                        AndroidLogger.w(intent.toString())
-//
-//                        for (extra in intent.extras?.keySet()!!) {
-//                            AndroidLogger.e("key: $extra value: ${intent.extras?.get(extra)}")
-//                        }
-//                    }
-//                }
-//            }
     }
 
     override fun hook() {

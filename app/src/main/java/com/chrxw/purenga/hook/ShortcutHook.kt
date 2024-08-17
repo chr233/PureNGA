@@ -79,36 +79,39 @@ class ShortcutHook : IHook {
     }
 
     override fun hook() {
-        // 处理Shortcut跳转以及显示首次运行提示
-        if (!Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null).isNullOrEmpty()) {
-            findFirstMethodByName(OptimizeHook.clsMainActivity, "initLayout")?.createHook {
-                after {
-                    it.log()
+        //显示首次运行提示
+        findFirstMethodByName(OptimizeHook.clsMainActivity, "initLayout")?.createHook {
+            after {
+                it.log()
 
-                    val activity = it.thisObject as Activity
+                val activity = it.thisObject as Activity
 
-                    if (!Helper.isPluginConfigExists()) {
-                        // 首次打开APP, 弹出提示框
-                        AlertDialog.Builder(activity).apply {
-                            setTitle("PureNGA 提示")
-                            setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
-                            setCancelable(false)
-                            setNegativeButton("取消", null)
-                            setPositiveButton("确认") { _, _ ->
-                                val intent = context.buildNormalIntent(PreferencesHook.clsSettingActivity).apply {
-                                    putExtra("openDialog", true)
-                                }
-                                context.startActivity(intent)
+                if (!Helper.isPluginConfigExists()) {
+                    // 首次打开APP, 弹出提示框
+                    AlertDialog.Builder(activity).apply {
+                        setTitle("PureNGA 提示")
+                        setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
+                        setCancelable(false)
+                        setNegativeButton("取消", null)
+                        setPositiveButton("确认") { _, _ ->
+                            val intent = context.buildNormalIntent(PreferencesHook.clsSettingActivity).apply {
+                                putExtra("openDialog", true)
                             }
-                            create()
-                            show()
+                            context.startActivity(intent)
                         }
+                        create()
+                        show()
                     }
-
-                    // 如果来源是Shortcut
-                    onShortcut(activity)
                 }
+
+                // 如果来源是Shortcut
+                onShortcut(activity)
             }
+        }
+
+        // 处理Shortcut跳转
+        if (!Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null).isNullOrEmpty()) {
+
 
             findFirstMethodByName(OptimizeHook.clsMainActivity, "onNewIntent")?.createHook {
                 after {

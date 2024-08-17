@@ -18,11 +18,6 @@
             app:key="version"
             app:title="@string/version" />
 
-        <Preference
-            app:key="repo"
-            app:title="@string/source_code"
-            app:summary="@string/github_url"/>
-
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -37,6 +32,11 @@
             app:key="open_nga"
             app:summary="@string/open_nga_summary"
             app:title="@string/reopen_nga" />
+
+        <Preference
+            app:key="open_purenga"
+            app:summary="@string/open_purenga_summary"
+            app:title="@string/open_purenga" />
 
     </PreferenceCategory>
 
@@ -53,6 +53,11 @@
             app:key="hide_icon"
             app:summary="@string/hide_icon_summary"
             app:title="@string/hide_icon" />
+
+        <Preference
+            app:key="repo"
+            app:summary="@string/github_url"
+            app:title="@string/source_code" />
 
     </PreferenceCategory>
 
