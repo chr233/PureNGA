@@ -53,6 +53,8 @@ object Constant {
     const val LOCAL_VIP = "local_vip"
     const val ENABLE_PURE_POST = "enable_pure_post"
     const val PURE_POST = "pure_post"
+    const val PURE_AUTHOR = "pure_author"
+
     const val CUSTOM_CSS = "custom_css"
 
     const val STR_PURENGA_SETTING = "PureNGA 设置"

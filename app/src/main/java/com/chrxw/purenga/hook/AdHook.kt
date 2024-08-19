@@ -218,9 +218,13 @@ class AdHook : IHook {
         if (Helper.getSpBool(Constant.ENABLE_PURE_POST, false)) {
 
             val purePost = Helper.getSpStr(Constant.PURE_POST, "")
+            val pureAuthor = Helper.getSpStr(Constant.PURE_AUTHOR, "")
 
-            if (!purePost.isNullOrEmpty()) {
-                val keywords = purePost.split("|")
+            val postKeywords = purePost?.split("|") ?: listOf()
+            val authorKeywords = pureAuthor?.split("|") ?: listOf()
+
+
+            if (postKeywords.isNotEmpty() || authorKeywords.isNotEmpty()) {
 
                 findFirstMethodByName(clsPostListFragment, "addToList")?.createHook {
                     before {
@@ -238,12 +242,18 @@ class AdHook : IHook {
                             val subject = XposedHelpers.getObjectField(post, "subject") as String
 
                             if (BuildConfig.DEBUG) {
-                                AndroidLogger.w("${author}: ${subject}")
+                                AndroidLogger.w("$author: $subject")
                             }
 
                             var pure = false
-                            for (key in keywords) {
+                            for (key in postKeywords) {
                                 if (subject.contains(key)) {
+                                    pure = true
+                                    break
+                                }
+                            }
+                            for (key in authorKeywords) {
+                                if (author == key) {
                                     pure = true
                                     break
                                 }

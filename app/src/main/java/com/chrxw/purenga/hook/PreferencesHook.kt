@@ -62,29 +62,66 @@ class PreferencesHook : IHook {
                 title = "设置帖子屏蔽词"
                 subTitle = "关键词之间使用 | 分隔"
                 setOnClickListener {
-
-                    val input = EditText(context).apply {
-                        maxLines = 8
-                        setText(Helper.getSpStr(Constant.PURE_POST, ""))
-                    }
-
-                    AlertDialog.Builder(context).apply {
-                        setTitle(title)
-                        setView(input)
-                        setNeutralButton("内置规则", null)
-                        setPositiveButton("保存") { _, _ ->
-                            Helper.setSpStr(Constant.PURE_POST, input.text.toString())
-                            Helper.toast("设置已保存, 重启应用生效")
+                    if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
+                        val input = EditText(context).apply {
+                            maxLines = 8
+                            setText(Helper.getSpStr(Constant.PURE_POST, ""))
                         }
-                        setNegativeButton("取消", null)
-                        create().apply {
-                            setOnShowListener {
-                                getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
-                                    input.setText("饿了么|美团")
-                                }
+
+                        AlertDialog.Builder(context).apply {
+                            setTitle(title)
+                            setView(input)
+                            setNeutralButton("内置规则", null)
+                            setPositiveButton("保存") { _, _ ->
+                                Helper.setSpStr(Constant.PURE_POST, input.text.toString())
+                                Helper.toast("设置已保存, 重启应用生效")
                             }
-                            show()
+                            setNegativeButton("取消", null)
+                            create().apply {
+                                setOnShowListener {
+                                    getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                                        input.setText("饿了么|美团")
+                                    }
+                                }
+                                show()
+                            }
                         }
+                    } else {
+                        Helper.toast("请先打开【启用自定义字体】")
+                    }
+                }
+            })
+
+            container.addView(ClickableItemView(context).apply {
+                title = "设置发帖人屏蔽词"
+                subTitle = "关键词之间使用 | 分隔"
+                setOnClickListener {
+                    if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
+                        val input = EditText(context).apply {
+                            maxLines = 8
+                            setText(Helper.getSpStr(Constant.PURE_AUTHOR, ""))
+                        }
+
+                        AlertDialog.Builder(context).apply {
+                            setTitle(title)
+                            setView(input)
+                            setNeutralButton("清空", null)
+                            setPositiveButton("保存") { _, _ ->
+                                Helper.setSpStr(Constant.PURE_AUTHOR, input.text.toString())
+                                Helper.toast("设置已保存, 重启应用生效")
+                            }
+                            setNegativeButton("取消", null)
+                            create().apply {
+                                setOnShowListener {
+                                    getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                                        input.setText("")
+                                    }
+                                }
+                                show()
+                            }
+                        }
+                    } else {
+                        Helper.toast("请先打开【启用自定义字体】")
                     }
                 }
             })
@@ -156,9 +193,7 @@ class PreferencesHook : IHook {
                 title = "设置自定义字体"
                 subTitle = "设置帖子详情页使用的字体"
                 setOnClickListener {
-                    val enable = Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)
-
-                    if (enable) {
+                    if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
                         val fontName = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)
                         val input = EditText(context).apply {
                             hint = "例如 system-ui, Roboto, Helvetica, Arial, sans-serif"
