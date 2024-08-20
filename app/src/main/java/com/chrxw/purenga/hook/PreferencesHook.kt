@@ -60,7 +60,7 @@ class PreferencesHook : IHook {
             })
             container.addView(ClickableItemView(context).apply {
                 title = "设置帖子屏蔽词"
-                subTitle = "关键词之间使用 | 分隔"
+                subTitle = "关键词之间使用 | 分隔, 关键词匹配"
                 setOnClickListener {
                     if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
                         val input = EditText(context).apply {
@@ -94,7 +94,7 @@ class PreferencesHook : IHook {
 
             container.addView(ClickableItemView(context).apply {
                 title = "设置发帖人屏蔽词"
-                subTitle = "关键词之间使用 | 分隔"
+                subTitle = "关键词之间使用 | 分隔, 全名匹配"
                 setOnClickListener {
                     if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
                         val input = EditText(context).apply {
