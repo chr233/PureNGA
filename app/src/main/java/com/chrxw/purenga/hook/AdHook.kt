@@ -1,6 +1,7 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import android.view.View
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
@@ -30,6 +31,7 @@ class AdHook : IHook {
         private lateinit var clsDnAdNativeClass: Class<*>
         private lateinit var clsDnTapFeedAd: Class<*>
         private lateinit var clsPostListFragment: Class<*>
+        private lateinit var clsHomeRecommendFragment : Class<*>
 
         fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
         fun isClsKsAdSDKInit() = ::clsKsAdSDK.isInitialized
@@ -60,6 +62,7 @@ class AdHook : IHook {
         }
 
         clsPostListFragment = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
+        clsHomeRecommendFragment = classLoader.loadClass("com.donews.nga.fragments.HomeRecommendFragment")
     }
 
     override fun hook() {
@@ -184,6 +187,15 @@ class AdHook : IHook {
                     }
                 }
             }
+
+            // 屏蔽首页浮窗广告
+            findFirstMethodByName(clsHomeRecommendFragment,"showActivityMenu\$lambda\$10")?.createHook{
+                replace {
+                    it.log()
+
+                    AndroidLogger.w("去你妈的广告")
+                }
+            }
         }
 
         //屏蔽开屏广告
@@ -222,7 +234,6 @@ class AdHook : IHook {
 
             val postKeywords = purePost?.split("|") ?: listOf()
             val authorKeywords = pureAuthor?.split("|") ?: listOf()
-
 
             if (postKeywords.isNotEmpty() || authorKeywords.isNotEmpty()) {
 
