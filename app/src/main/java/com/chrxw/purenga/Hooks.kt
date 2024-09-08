@@ -5,7 +5,6 @@ import com.chrxw.purenga.hook.AdHook
 import com.chrxw.purenga.hook.MainHook
 import com.chrxw.purenga.hook.OptimizeHook
 import com.chrxw.purenga.hook.PreferencesHook
-import com.chrxw.purenga.hook.RewardHook
 import com.chrxw.purenga.hook.ShareHook
 import com.chrxw.purenga.hook.ShortcutHook
 import com.chrxw.purenga.hook.SpUtilsHook
@@ -22,7 +21,6 @@ object Hooks {
         OptimizeHook(),
         AdHook(),
         SpUtilsHook(),
-        RewardHook(),
         PreferencesHook(),
         AboutHook(),
         WebViewHook(),

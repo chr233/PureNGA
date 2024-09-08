@@ -10,7 +10,6 @@ import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 
 
 /**
@@ -45,45 +44,6 @@ class WebViewHook : IHook {
             for (host in ngaUrls) {
                 AndroidLogger.i(host)
             }
-
-
-            MethodFinder.fromClass("com.donews.nga.common.utils.glide.GlideUtils", classLoader)
-                .filterByName("loadUrlImage")
-                .forEach { mtd ->
-                    mtd.createHook {
-                        before {
-                            it.log()
-
-                            val str = it.args[1] as String?
-
-//                        AndroidLogger.w(mtd.name)
-//                        AndroidLogger.i(str ?: "null")
-
-
-                            if (str == "https://img.nga.178.com/attachments/mon_202408/27/c8Q2u-eswvK9T8S35-3t.png") {
-                                throw Exception("guanggao")
-                            }
-                        }
-                    }
-                }
-
-
-//            MethodFinder.fromClass(
-//                "com.donews.nga.fragments.presenters.HomeRecommendFragmentPresenter\$getActivityInfo$1", classLoader
-//            ).filterByName("complete").forEach { mtd ->
-//                mtd.createHook {
-//                    after {
-//                        it.log()
-//
-//                        for (arg in it.args) {
-//                            AndroidLogger.i(arg.toString())
-//                        }
-//
-//                        AndroidLogger.w(mtd.name)
-//                        throw Exception()
-//                    }
-//                }
-//            }
         }
     }
 
@@ -108,7 +68,7 @@ class WebViewHook : IHook {
                                     AndroidLogger.w("${url.scheme} ${url.host} ${url.path}")
                                 }
 
-                                if (url.host == "game.weixin.qq.com") {
+                                if (url.host == "game.weixin.qq.com" && BuildConfig.DEBUG) {
                                     Helper.toast("test")
 
                                     throw Exception("114514")
