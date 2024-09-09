@@ -231,14 +231,13 @@ class AdHook : IHook {
         //屏蔽广告帖子
         if (Helper.getSpBool(Constant.ENABLE_PURE_POST, false)) {
 
-            val purePost = Helper.getSpStr(Constant.PURE_POST, "")
-            val pureAuthor = Helper.getSpStr(Constant.PURE_AUTHOR, "")
+            val purePost = Helper.getSpStr(Constant.PURE_POST, null)
+            val pureAuthor = Helper.getSpStr(Constant.PURE_AUTHOR, null)
 
-            val postKeywords = purePost?.split("|") ?: listOf()
-            val authorKeywords = pureAuthor?.split("|") ?: listOf()
+            val postKeywords = purePost?.split("|")?.filter { it.isNotEmpty() } ?: listOf()
+            val authorKeywords = pureAuthor?.split("|")?.filter { it.isNotEmpty() } ?: listOf()
 
             if (postKeywords.isNotEmpty() || authorKeywords.isNotEmpty()) {
-
                 findFirstMethodByName(clsPostListFragment, "addToList")?.createHook {
                     before {
                         it.log()

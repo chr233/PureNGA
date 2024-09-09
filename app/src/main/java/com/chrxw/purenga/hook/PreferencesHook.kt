@@ -1,5 +1,6 @@
 package com.chrxw.purenga.hook
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -38,6 +39,7 @@ class PreferencesHook : IHook {
         /**
          * 生成设置界面
          */
+        @SuppressLint("SetTextI18n")
         private fun generateView(context: Context): View {
             val root = ScrollView(context)
             val container = LinearLayout(context)
@@ -87,7 +89,7 @@ class PreferencesHook : IHook {
                             }
                         }
                     } else {
-                        Helper.toast("请先打开【启用自定义字体】")
+                        Helper.toast("请先打开【屏蔽广告帖子】")
                     }
                 }
             })
@@ -114,7 +116,7 @@ class PreferencesHook : IHook {
                             create().apply {
                                 setOnShowListener {
                                     getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
-                                        input.setText("")
+                                        input.setText(null)
                                     }
                                 }
                                 show()
