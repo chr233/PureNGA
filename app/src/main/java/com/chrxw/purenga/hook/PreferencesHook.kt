@@ -378,7 +378,8 @@ class PreferencesHook : IHook {
                 title = "手动检查更新"
                 val ngaVersion = Helper.getNgaVersion()
                 val sunType = if (Helper.isBundled()) "整合版" else "插件版"
-                subTitle = "NGA版本: $ngaVersion | 插件版本: ${BuildConfig.VERSION_NAME} - $sunType"
+                val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
+                subTitle = "NGA版本: $ngaVersion | 插件版本: $pluginVersion"
                 setOnClickListener {
                     val uri = if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))

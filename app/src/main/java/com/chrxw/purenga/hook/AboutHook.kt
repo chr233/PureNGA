@@ -37,7 +37,7 @@ class AboutHook : IHook {
                 val root = XposedHelpers.callMethod(viewBinding, "getRoot") as View
                 val viewId = Helper.getRId("tv_app_version")
 
-                val pluginVersion = BuildConfig.VERSION_NAME
+                val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
                 val ngaVersion = Helper.getNgaVersion()
 
                 val textView = root.findViewById<TextView>(viewId)
