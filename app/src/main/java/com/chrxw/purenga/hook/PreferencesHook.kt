@@ -168,7 +168,7 @@ class PreferencesHook : IHook {
                     AlertDialog.Builder(context).apply {
                         setTitle(subTitle)
                         setCancelable(false)
-                        setMultiChoiceItems(avilablePureItems, checkedItems) { dialog, which, isChecked ->
+                        setMultiChoiceItems(avilablePureItems, checkedItems) { _, which, isChecked ->
                             // 更新选项的选中状态
                             checkedItems[which] = isChecked
 
