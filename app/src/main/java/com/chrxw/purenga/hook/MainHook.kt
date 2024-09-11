@@ -85,7 +85,7 @@ class MainHook : IHook {
 
                     val activity = it.args[0] as Activity
 
-                    AndroidLogger.e("onActivityStarted")
+                    AndroidLogger.e("Activity 日志:")
                     AndroidLogger.i(activity.toString())
                     AndroidLogger.i(activity.intent.toString())
                     AndroidLogger.i(activity.intent.extras.toString())

@@ -8,10 +8,14 @@ import android.view.View
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.ui.ClickableItemView
+import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
@@ -105,10 +109,10 @@ class OptimizeHook : IHook {
         }
 
         //移除首页商城入口
-        val removeStore = Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)
+        val pureSlideMenu = Helper.getSpStr(Constant.PURE_SLIDE_MENU, null)?.split("|") ?: arrayListOf()
         val quickAccount = Helper.getSpBool(Constant.QUICK_ACCOUNT_MANAGE, false)
 
-        if (removeStore || quickAccount) {
+        if (pureSlideMenu.isNotEmpty() || quickAccount) {
             findFirstMethodByName(clsHomeDrawerLayout, "initLayout")?.createHook {
                 after {
                     it.log()
@@ -116,8 +120,8 @@ class OptimizeHook : IHook {
                     val viewBinding = XposedHelpers.getObjectField(it.thisObject, "binding")
                     val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
 
-                    //移除商店入口
-                    if (removeStore) {
+                    //净化侧拉菜单
+                    if (pureSlideMenu.isNotEmpty()) {
                         val scrollView = root.getChildAt(1) as ScrollView
                         val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
@@ -126,24 +130,54 @@ class OptimizeHook : IHook {
                         //移除滑动菜单底部无用元素
                         linearLayout.removeViewAt(childCount - 1)
 
-                        if (childCount <= 12) {
-                            //NGA <= 9.9.3
+                        var i = 0;
 
-                            //移除滑动菜单商店和钱包
-                            linearLayout.removeViewAt(6)
-                            linearLayout.removeViewAt(5)
-                        } else {
-                            //NGA >= 9.9.4 新版侧边栏菜单
+                        val pureViewIds = arrayListOf<Int>()
 
-                            //移除滑动菜单商店和钱包
-                            linearLayout.removeViewAt(10)
-                            linearLayout.removeViewAt(9)
-                            linearLayout.removeViewAt(4)
-
-                            //移除会员banner
-                            if (Helper.getSpBool(Constant.REMOVE_VIP_BANNER, false)) {
-                                linearLayout.removeViewAt(0)
+                        for (view in linearLayout.children) {
+                            if (i == 0 && pureSlideMenu.contains("成为NGA付费会员")) {
+                                pureViewIds.add(i);
                             }
+
+                            if (view is RelativeLayout) {
+                                for (childView in view.children) {
+                                    if (childView is TextView && pureSlideMenu.contains(childView.text)) {
+                                        pureViewIds.add(i);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            i++
+                        }
+
+                        for (id in pureViewIds.reversed()) {
+                            linearLayout.removeViewAt(id)
+                        }
+
+                        if (pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于")) {
+                            linearLayout.addView(ClickableItemView(root.context).apply {
+                                title = "PureNGA设置"
+                                subTitle = "插件设置"
+                                setOnClickListener { _ ->
+                                    val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
+                                    val gotoIntent = activity.buildNormalIntent(PreferencesHook.clsSettingActivity)
+                                    gotoIntent.putExtra("openDialog", true)
+                                    activity.startActivity(gotoIntent)
+                                }
+                            })
+                        }
+
+                        if (BuildConfig.DEBUG) {
+                            linearLayout.addView(ClickableItemView(root.context).apply {
+                                title = "重启NGA"
+                                subTitle = "调试用"
+                                setOnClickListener { _ ->
+                                    Helper.toast("正在重启")
+                                    val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
+                                    Helper.restartApplication(activity)
+                                }
+                            })
                         }
                     }
 
@@ -167,6 +201,11 @@ class OptimizeHook : IHook {
                 }
             }
 
+
+        }
+
+        //移除导航栏商城图标
+        if (Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)) {
             findFirstMethodByName(clsMainActivityPresenter, "initTabParams")?.createHook {
                 before {
                     it.log()

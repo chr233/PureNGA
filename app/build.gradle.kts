@@ -16,8 +16,8 @@ android {
         applicationId = "com.chrxw.purenga"
         minSdk = 24
         targetSdk = 34
-        versionCode = 38
-        versionName = "2.7.1"
+        versionCode = 39
+        versionName = "2.8.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles()

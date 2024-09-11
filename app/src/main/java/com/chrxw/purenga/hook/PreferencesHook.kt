@@ -61,10 +61,10 @@ class PreferencesHook : IHook {
                 subTitle = "按照关键词过滤帖子列表"
             })
             container.addView(ClickableItemView(context).apply {
-                title = "设置帖子屏蔽词"
+                title = " - 设置帖子屏蔽词"
                 subTitle = "关键词之间使用 | 分隔, 关键词匹配"
                 setOnClickListener {
-                    if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
+                    if (Helper.getSpBool(Constant.ENABLE_PURE_POST, false)) {
                         val input = EditText(context).apply {
                             maxLines = 8
                             setText(Helper.getSpStr(Constant.PURE_POST, ""))
@@ -95,10 +95,10 @@ class PreferencesHook : IHook {
             })
 
             container.addView(ClickableItemView(context).apply {
-                title = "设置发帖人屏蔽词"
+                title = " - 设置发帖人屏蔽词"
                 subTitle = "关键词之间使用 | 分隔, 全名匹配"
                 setOnClickListener {
-                    if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
+                    if (Helper.getSpBool(Constant.ENABLE_PURE_POST, false)) {
                         val input = EditText(context).apply {
                             maxLines = 8
                             setText(Helper.getSpStr(Constant.PURE_AUTHOR, ""))
@@ -130,25 +130,95 @@ class PreferencesHook : IHook {
 
             // 界面优化
             container.addView(ClickableItemView(context).apply { title = "界面优化" })
+            container.addView(ClickableItemView(context).apply {
+                title = "侧边栏净化"
+                subTitle = "勾选要过滤的侧边栏菜单"
+                setOnClickListener {
+                    val pureSetting = Helper.getSpStr(Constant.PURE_SLIDE_MENU, null)
+
+                    val avilablePureItems = arrayOf(
+                        "成为NGA付费会员",
+                        "收藏",
+                        "浏览历史",
+                        "草稿箱",
+                        "商城",
+                        "积分兑换",
+                        "设置",
+                        "深色模式",
+                        "个性装扮",
+                        "游戏档案",
+                        "微信小游戏",
+                        "钱包",
+                        "分享NGA玩家社区",
+                        "关于"
+                    )
+
+                    val enabledPureItems = pureSetting?.split("|")?.toTypedArray() ?: arrayOf()
+
+                    val checkedItems =
+                        avilablePureItems.map { enabledPureItems.contains(it) }.toBooleanArray()
+
+                    val selectedShortcuts = mutableListOf<String>()
+                    for (i in avilablePureItems.indices) {
+                        if (checkedItems[i]) {
+                            selectedShortcuts.add(avilablePureItems[i])
+                        }
+                    }
+
+                    AlertDialog.Builder(context).apply {
+                        setTitle(subTitle)
+                        setCancelable(false)
+                        setMultiChoiceItems(avilablePureItems, checkedItems) { dialog, which, isChecked ->
+                            // 更新选项的选中状态
+                            checkedItems[which] = isChecked
+
+                            selectedShortcuts.clear()
+                            for (i in avilablePureItems.indices) {
+                                if (checkedItems[i]) {
+                                    selectedShortcuts.add(avilablePureItems[i])
+                                }
+                            }
+
+                        }
+                        setNeutralButton("清空已选择", null)
+                        setPositiveButton("保存") { _, _ ->
+                            val save = selectedShortcuts.joinToString("|")
+                            Helper.setSpStr(Constant.PURE_SLIDE_MENU, save)
+                            Helper.toast("设置已保存, 重启应用生效")
+                        }
+                        setNegativeButton("取消", null)
+                        create().apply {
+                            setOnShowListener {
+                                getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                                    checkedItems.fill(false)
+
+                                    for ((i, a) in checkedItems.withIndex()) {
+                                        listView.setItemChecked(i, a)
+                                    }
+
+                                    selectedShortcuts.clear()
+                                }
+                            }
+                            show()
+                        }
+                    }
+                }
+            })
             container.addView(ToggleItemView(context, Constant.REMOVE_STORE_ICON).apply {
-                title = "去除商城和钱包入口"
-                subTitle = "移除导航栏和滑动菜单中的入口"
+                title = "去除导航栏商城入口"
+                subTitle = "净化导航栏"
             })
             container.addView(ToggleItemView(context, Constant.REMOVE_ACTIVITY_ICON).apply {
-                title = "去除活动图标"
-                subTitle = "移除导航栏活动图标"
+                title = "去除导航栏活动图标"
+                subTitle = "净化导航栏"
             })
             container.addView(ToggleItemView(context, Constant.REMOVE_WECHAT_ICON).apply {
                 title = "去除微信分享图标"
-                subTitle = "移除文章详情页右上角微信图标"
+                subTitle = "移除帖子详情页右上角微信图标"
             })
             container.addView(ToggleItemView(context, Constant.REMOVE_POPUP_POST).apply {
                 title = "去除首页文章推荐"
                 subTitle = "移除首页导航栏上方文章推荐"
-            })
-            container.addView(ToggleItemView(context, Constant.REMOVE_VIP_BANNER).apply {
-                title = "去除侧滑菜单会员横幅"
-                subTitle = "仅 9.9.4 以上版本有效"
             })
             container.addView(ToggleItemView(context, Constant.QUICK_ACCOUNT_MANAGE).apply {
                 title = "快捷切换账号"

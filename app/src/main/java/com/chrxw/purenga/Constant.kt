@@ -27,12 +27,11 @@ object Constant {
 
     const val PURE_SPLASH_AD = "pure_splash_ad"
     const val PURE_POST_AD = "pure_post_ad"
-    const val CRACK_AD_TASK = "crack_ad_task"
+    const val PURE_SLIDE_MENU = "pure_slide_menu"
     const val REMOVE_STORE_ICON = "remove_store_icon"
     const val REMOVE_ACTIVITY_ICON = "remove_activity_icon"
     const val REMOVE_WECHAT_ICON = "remove_wechat_icon"
     const val REMOVE_POPUP_POST = "remove_popup_post"
-    const val REMOVE_VIP_BANNER = "remove_vip_banner"
     const val AUTO_SIGN = "auto_sign"
     const val PURE_CALENDAR_DIALOG = "pure_calendar_dialog"
     const val USE_EXTERNAL_BROWSER = "use_external_browser"
