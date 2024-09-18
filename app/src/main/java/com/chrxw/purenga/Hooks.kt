@@ -17,7 +17,6 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
  */
 object Hooks {
     private val hooks = arrayOf(
-        MainHook(),
         OptimizeHook(),
         AdHook(),
         SpUtilsHook(),
@@ -32,6 +31,18 @@ object Hooks {
      * 初始化钩子
      */
     fun initHooks(classLoader: ClassLoader): Int {
+        val mainHook = MainHook()
+        try {
+            mainHook.init(classLoader)
+            mainHook.hook()
+        } catch (e: Throwable) {
+            Helper.toast("插件核心无法初始化, 可能不适配当前版本")
+            AndroidLogger.e(e)
+            return 1
+        }
+
+        val hideError = Helper.getSpBool(Constant.HIDE_ERROR_INFO, false)
+
         var error = 0
         for (hook in hooks) {
             val name = hook.name
@@ -40,11 +51,15 @@ object Hooks {
                 hook.init(classLoader)
                 hook.hook()
             } catch (e: NoSuchMethodError) {
-                Helper.toast("模块 $name 加载失败, 可能不支持当前版本的NGA")
+                if (!hideError) {
+                    Helper.toast("模块 $name 加载失败, 可能不支持当前版本的NGA")
+                }
                 error++
                 AndroidLogger.e(e)
             } catch (e: Throwable) {
-                Helper.toast("模块 $name 加载遇到未知错误")
+                if (!hideError) {
+                    Helper.toast("模块 $name 加载遇到未知错误")
+                }
                 error++
                 AndroidLogger.e(e)
             }

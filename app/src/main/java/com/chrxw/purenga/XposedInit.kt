@@ -63,9 +63,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                         Helper.toast(
                                             buildString {
                                                 appendLine("PureNGA 加载成功")
-                                                appendLine()
                                                 appendLine("请到【设置】>【PureNGA 设置】中配置插件功能")
-                                                appendLine()
                                                 appendLine("如果不想显示此信息请打开【静默运行】开关")
                                             },
                                             Toast.LENGTH_LONG

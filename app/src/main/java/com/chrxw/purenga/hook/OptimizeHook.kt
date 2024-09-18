@@ -3,6 +3,7 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.widget.HorizontalScrollView
@@ -135,17 +136,20 @@ class OptimizeHook : IHook {
                         val pureViewIds = arrayListOf<Int>()
 
                         for (view in linearLayout.children) {
-                            if (i == 0 && pureSlideMenu.contains("成为NGA付费会员")) {
-                                pureViewIds.add(i);
-                            }
-
                             if (view is RelativeLayout) {
                                 for (childView in view.children) {
                                     if (childView is TextView && pureSlideMenu.contains(childView.text)) {
-                                        pureViewIds.add(i);
-                                        break;
+                                        pureViewIds.add(i)
+                                        break
                                     }
                                 }
+                            } else if (view is TextView) {
+                                AndroidLogger.i(view.text.toString())
+                                if (pureSlideMenu.contains(view.text)) {
+                                    pureViewIds.add(i)
+                                }
+                            } else if (i == 0 && pureSlideMenu.contains("成为NGA付费会员")) {
+                                pureViewIds.add(i)
                             }
 
                             i++
@@ -155,10 +159,13 @@ class OptimizeHook : IHook {
                             linearLayout.removeViewAt(id)
                         }
 
+                        val color = Color.parseColor(if (!Helper.isDarkModel()) "#f8fae3" else "#3c3b39")
+
                         if (pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于")) {
                             linearLayout.addView(ClickableItemView(root.context).apply {
                                 title = "PureNGA设置"
                                 subTitle = "插件设置"
+                                setBackgroundColor(color)
                                 setOnClickListener { _ ->
                                     val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
                                     val gotoIntent = activity.buildNormalIntent(PreferencesHook.clsSettingActivity)
@@ -172,6 +179,7 @@ class OptimizeHook : IHook {
                             linearLayout.addView(ClickableItemView(root.context).apply {
                                 title = "重启NGA"
                                 subTitle = "调试用"
+                                setBackgroundColor(color)
                                 setOnClickListener { _ ->
                                     Helper.toast("正在重启")
                                     val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
@@ -200,8 +208,6 @@ class OptimizeHook : IHook {
                     }
                 }
             }
-
-
         }
 
         //移除导航栏商城图标

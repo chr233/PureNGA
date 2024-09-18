@@ -21,7 +21,6 @@ import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.ui.ToggleItemView
 import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
-import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
@@ -150,7 +149,12 @@ class PreferencesHook : IHook {
                         "微信小游戏",
                         "钱包",
                         "分享NGA玩家社区",
-                        "关于"
+                        "关于",
+                        "退出登录",
+                        "--旧版菜单--",
+                        "商店",
+                        "评分",
+                        "个性换肤",
                     )
 
                     val enabledPureItems = pureSetting?.split("|")?.toTypedArray() ?: arrayOf()
@@ -567,12 +571,11 @@ class PreferencesHook : IHook {
             }
         }
 
-        findMethodByName(MainHook.clsAppConfig, "setDarkModel").filterByAssignableParamTypes(Boolean::class.java)
-            .first().createHook {
-                after {
-                    btnPureNGASetting?.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))
-                }
+        findFirstMethodByName(MainHook.clsAppConfig, "setDarkModel")?.createHook {
+            after {
+                btnPureNGASetting?.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))
             }
+        }
     }
 
     override var name = "PreferencesHook"
