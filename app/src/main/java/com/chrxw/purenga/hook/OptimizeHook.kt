@@ -50,6 +50,7 @@ class OptimizeHook : IHook {
         lateinit var clsAccountManageActivity: Class<*>
         lateinit var clsVipStatus: Class<*>
         lateinit var clsAppLogoActivity: Class<*>
+        private lateinit var clsForumDetailActivity: Class<*>
 
         private fun readTextFromInputStream(inputStream: InputStream1): String {
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
@@ -83,6 +84,8 @@ class OptimizeHook : IHook {
         clsAccountManageActivity = classLoader.loadClass("com.donews.nga.setting.AccountManageActivity")
         clsVipStatus = classLoader.loadClass("com.donews.nga.vip.entitys.VipStatus")
         clsAppLogoActivity = classLoader.loadClass("com.donews.nga.setting.AppLogoActivity")
+        clsForumDetailActivity =
+            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity")
     }
 
     override fun hook() {
@@ -131,32 +134,32 @@ class OptimizeHook : IHook {
                         //移除滑动菜单底部无用元素
                         linearLayout.removeViewAt(childCount - 1)
 
-                        var i = 0;
+                        var i = 0
 
-                        val pureViewIds = arrayListOf<Int>()
+                        val pureViews = arrayListOf<View>()
 
                         for (view in linearLayout.children) {
                             if (view is RelativeLayout) {
                                 for (childView in view.children) {
                                     if (childView is TextView && pureSlideMenu.contains(childView.text)) {
-                                        pureViewIds.add(i)
+                                        pureViews.add(view)
                                         break
                                     }
                                 }
                             } else if (view is TextView) {
                                 AndroidLogger.i(view.text.toString())
                                 if (pureSlideMenu.contains(view.text)) {
-                                    pureViewIds.add(i)
+                                    pureViews.add(view)
                                 }
                             } else if (i == 0 && pureSlideMenu.contains("成为NGA付费会员")) {
-                                pureViewIds.add(i)
+                                pureViews.add(view)
                             }
 
                             i++
                         }
 
-                        for (id in pureViewIds.reversed()) {
-                            linearLayout.removeViewAt(id)
+                        for (view in pureViews) {
+                            linearLayout.removeView(view)
                         }
 
                         val color = Color.parseColor(if (!Helper.isDarkModel()) "#f8fae3" else "#3c3b39")
@@ -379,6 +382,23 @@ class OptimizeHook : IHook {
                     it.log()
 
                     Helper.toast("修改图标后需要重新设置快捷方式")
+                }
+            }
+        }
+
+        // 优先使用“新发布”
+        if (Helper.getSpBool(Constant.PREFER_NEW_POST, false)) {
+            findFirstMethodByName(clsForumDetailActivity, "initTabs")?.createHook {
+                after {
+                    it.log()
+
+                    val activity = it.thisObject as Activity
+                    val id = Helper.getRId2("tv_tab_name")
+                    if (id != -1) {
+                        val tvTabName = activity.findViewById<TextView>(id)
+                        tvTabName.tag = "新发布"
+                        tvTabName.text = "新发布"
+                    }
                 }
             }
         }

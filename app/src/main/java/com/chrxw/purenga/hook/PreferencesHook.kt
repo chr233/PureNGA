@@ -228,6 +228,10 @@ class PreferencesHook : IHook {
                 title = "快捷切换账号"
                 subTitle = "长按菜单上方的用户名跳转账号切换, 仅 9.9.4 以上版本有效"
             })
+            container.addView(ToggleItemView(context, Constant.PREFER_NEW_POST).apply {
+                title = "默认使用“新发布”"
+                subTitle = "帖子列表默认使用“新发布”而不是“新回复”"
+            })
 
             // 自定义
             container.addView(ClickableItemView(context).apply { title = "自定义" })

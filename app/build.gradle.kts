@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.chrxw.purenga"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         buildConfig = true
@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "com.chrxw.purenga"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 40
         versionName = "2.8.1"
 

@@ -35,6 +35,7 @@ object Helper {
 
     lateinit var spPlugin: SharedPreferences
     lateinit var clsRId: Class<*>
+    lateinit var clsRId2: Class<*>
     lateinit var clsDrawerId: Class<*>
 
     var enableLog = false
@@ -53,7 +54,7 @@ object Helper {
         return try {
             EzXHelper.appContext.packageManager.getPackageInfo(
                 Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
-            ).versionName
+            ).versionName.toString()
         } catch (e: PackageManager.NameNotFoundException) {
             "获取失败"
         }
@@ -102,6 +103,10 @@ object Helper {
      */
     fun getRId(key: String): Int {
         return getRes(clsRId, key)
+    }
+
+    fun getRId2(key: String): Int {
+        return getRes(clsRId2, key)
     }
 
     fun getDrawerId(key: String): Int {

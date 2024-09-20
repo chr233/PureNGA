@@ -53,6 +53,7 @@ object Constant {
     const val ENABLE_PURE_POST = "enable_pure_post"
     const val PURE_POST = "pure_post"
     const val PURE_AUTHOR = "pure_author"
+    const val PREFER_NEW_POST = "prefer_new_post"
 
     const val CUSTOM_CSS = "custom_css"
 

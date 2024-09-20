@@ -35,6 +35,7 @@ class MainHook : IHook {
         clsSPUtil = classLoader.loadClass("com.donews.nga.common.utils.SPUtil")
 
         Helper.clsRId = classLoader.loadClass("gov.pianzong.androidnga.R\$id")
+        Helper.clsRId2 = classLoader.loadClass("com.donews.nga.common.R\$id")
         Helper.clsDrawerId = classLoader.loadClass("gov.pianzong.androidnga.R\$drawable")
 
         EzXHelper.appContext.run {
