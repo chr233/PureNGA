@@ -59,12 +59,18 @@ class OptimizeHook : IHook {
         }
 
         fun isClsCalendarUtilsInit() = ::clsCalendarUtils.isInitialized
+        fun isClsCommentDialogInit() = ::clsCommentDialog.isInitialized
+        fun isClsAboutUsActivityAInit() = ::clsAboutUsActivityA.isInitialized
     }
 
     override fun init(classLoader: ClassLoader) {
         clsMainActivityPresenter = classLoader.loadClass("com.donews.nga.activitys.presenters.MainActivityPresenter")
         clsHomeDrawerLayout = classLoader.loadClass("com.donews.nga.widget.HomeDrawerLayout")
-        clsCommentDialog = classLoader.loadClass("gov.pianzong.androidnga.view.CommentDialog")
+        try {
+            clsCommentDialog = classLoader.loadClass("gov.pianzong.androidnga.view.CommentDialog")
+        } catch (e: Throwable) {
+            AndroidLogger.e("CommentDialog 不存在")
+        }
         clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
@@ -79,7 +85,11 @@ class OptimizeHook : IHook {
 
         clsAssetManager = classLoader.loadClass("android.content.res.AssetManager")
         clsResources = classLoader.loadClass("android.content.res.Resources")
-        clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
+        try {
+            clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
+        } catch (e: Throwable) {
+            AndroidLogger.e("AboutUsActivity\$a 不存在")
+        }
         clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
         clsAccountManageActivity = classLoader.loadClass("com.donews.nga.setting.AccountManageActivity")
         clsVipStatus = classLoader.loadClass("com.donews.nga.vip.entitys.VipStatus")
@@ -97,17 +107,21 @@ class OptimizeHook : IHook {
                 }
             }
 
-            findFirstMethodByName(clsCommentDialog, "showUpdate")?.createHook {
-                replace {
-                    it.log()
+            if (isClsCommentDialogInit()) {
+                findFirstMethodByName(clsCommentDialog, "showUpdate")?.createHook {
+                    replace {
+                        it.log()
+                    }
                 }
             }
 
-            findFirstMethodByName(clsAboutUsActivityA, "updateCallback")?.createHook {
-                replace {
-                    it.log()
+            if (isClsAboutUsActivityAInit()) {
+                findFirstMethodByName(clsAboutUsActivityA, "updateCallback")?.createHook {
+                    replace {
+                        it.log()
 
-                    Helper.toast("PureNGA")
+                        Helper.toast("PureNGA")
+                    }
                 }
             }
         }
