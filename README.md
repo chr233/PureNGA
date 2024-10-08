@@ -25,6 +25,11 @@
 |  NGA 净化版  | 无需 Xposed 框架, 覆盖安装原版 App, 体积大 |    [![img][release_bundled]][link_bundled]    |    [![img][download_bundled]][link_bundled]    |
 | 独立净化模块 |     依赖 Xposed 框架, 独立更新, 体积小     | [![img][release_standalone]][link_standalone] | [![img][download_standalone]][link_standalone] |
 
+## FAQ
+
+> Q: 会封号吗
+> A: 原理是基于Xposed修改, 没有直接修改APP本身
+
 ## 主要功能
 
 - [x] 开屏广告跳过
