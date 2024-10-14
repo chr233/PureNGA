@@ -96,6 +96,15 @@ class OptimizeHook : IHook {
         clsAppLogoActivity = classLoader.loadClass("com.donews.nga.setting.AppLogoActivity")
         clsForumDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity")
+
+        MethodFinder.fromClass("gov.pianzong.androidnga.viewBinder.n", classLoader).filterByName("l").first()
+            .createHook {
+                before {
+                    it.log()
+
+                    AndroidLogger.w("viewbinder")
+                }
+            }
     }
 
     override fun hook() {
