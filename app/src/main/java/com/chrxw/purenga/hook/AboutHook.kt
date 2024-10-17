@@ -17,7 +17,9 @@ import de.robv.android.xposed.XposedHelpers
  * 关于页面钩子
  */
 class AboutHook : IHook {
-
+    /**
+     *
+     */
     companion object {
         lateinit var clsAboutUsActivity: Class<*>
     }

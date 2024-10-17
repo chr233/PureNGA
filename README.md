@@ -28,7 +28,7 @@
 ## FAQ
 
 > Q: 会封号吗
-> A: 原理是基于Xposed修改, 没有直接修改APP本身
+> A: 原理是基于 Xposed 修改, 没有直接修改 APP 本身
 
 ## 主要功能
 
@@ -74,7 +74,13 @@
 
 ---
 
+![Repobeats analytics image](https://repobeats.axiom.co/api/embed/4bf56a527045ee543205efea99a07e5d09bcd7c3.svg "Repobeats analytics image")
+
+---
+
 [![Star History Chart](https://api.star-history.com/svg?repos=chr233/PureNGA&type=Date)](https://star-history.com/#chr233/PureNGA&Date)
+
+---
 
 [repo_code]: https://github.com/chr233/PureNGA
 [repo_xposed]: https://github.com/Xposed-Modules-Repo/com.chrxw.purenga

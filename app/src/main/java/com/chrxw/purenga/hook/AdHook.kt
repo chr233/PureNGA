@@ -18,6 +18,9 @@ import de.robv.android.xposed.XposedHelpers
  * 广告钩子
  */
 class AdHook : IHook {
+    /**
+     *
+     */
     companion object {
         private lateinit var clsDnFeedAd: Class<*>
         private lateinit var clsNativeExpressAD: Class<*>

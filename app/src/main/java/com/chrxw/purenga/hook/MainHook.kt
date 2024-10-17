@@ -16,6 +16,9 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
  * 插件初始化钩子
  */
 class MainHook : IHook {
+    /**
+     *
+     */
     companion object {
         lateinit var clsNGAApplication: Class<*>
         lateinit var clsAppConfig: Class<*>

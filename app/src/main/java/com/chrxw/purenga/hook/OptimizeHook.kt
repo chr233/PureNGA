@@ -170,7 +170,6 @@ class OptimizeHook : IHook {
                                     }
                                 }
                             } else if (view is TextView) {
-                                AndroidLogger.i(view.text.toString())
                                 if (pureSlideMenu.contains(view.text)) {
                                     pureViews.add(view)
                                 }
