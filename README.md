@@ -1,5 +1,7 @@
 # PureNGA
 
+![PureNGA](https://socialify.git.ci/chr233/PureNGA/image?description=1&forks=1&language=1&name=1&owner=1&pattern=Diagonal%20Stripes&stargazers=1&theme=Auto)
+
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/de4c75db7487426285bf38f90ad94e6c)](https://www.codacy.com/gh/chr233/PureNGA/dashboard)
 [![License](https://img.shields.io/github/license/chr233/PureNGA?logo=apache)](https://github.com/chr233/PureNGA/blob/master/license)
 ![GitHub last commit](https://img.shields.io/github/last-commit/chr233/PureNGA?logo=github)
