@@ -1,7 +1,7 @@
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-}
+val verCode = 43
+val verName ="2.9.2"
+
+val javaVersion = JavaVersion.VERSION_21
 
 android {
     namespace = "com.chrxw.purenga"
@@ -16,8 +16,8 @@ android {
         applicationId = "com.chrxw.purenga"
         minSdk = 24
         targetSdk = 35
-        versionCode = 43
-        versionName = "2.9.2"
+        versionCode = verCode
+        versionName = verName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles()
@@ -36,17 +36,17 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = javaVersion.toString()
     }
 
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/**"
         }
     }
 
@@ -58,15 +58,21 @@ android {
     ndkVersion = "25.2.9519653"
 }
 
-dependencies {
-    implementation("com.github.kyuubiran:EzXHelper:2.2.0")
-    compileOnly("de.robv.android.xposed:api:82")
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+}
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.preference:preference-ktx:1.2.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+dependencies {
+    implementation(libs.ezxhelper)
+    compileOnly(libs.xposedapi)
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.preference.ktx)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
