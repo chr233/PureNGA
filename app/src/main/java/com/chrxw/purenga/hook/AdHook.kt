@@ -10,8 +10,10 @@ import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.isAbstract
+import com.github.kyuubiran.ezxhelper.finders.FieldFinder
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
+import java.lang.reflect.Field
 
 
 /**
@@ -32,9 +34,10 @@ class AdHook : IHook {
         private lateinit var clsTTAdSdk: Class<*>
         private lateinit var clsDnAdNativeClass: Class<*>
         private lateinit var clsDnTapFeedAd: Class<*>
-        private lateinit var clsPostListFragment: Class<*>
+        lateinit var clsPostListFragment: Class<*>
         private lateinit var clsHomeRecommendFragment: Class<*>
         private lateinit var clsGlideUtils: Class<*>
+        private lateinit var clsActivityEntity: Class<*>
 
         fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
         fun isClsKsAdSDKInit() = ::clsKsAdSDK.isInitialized
@@ -68,6 +71,7 @@ class AdHook : IHook {
         clsHomeRecommendFragment = classLoader.loadClass("com.donews.nga.fragments.HomeRecommendFragment")
 
         clsGlideUtils = classLoader.loadClass("com.donews.nga.common.utils.glide.GlideUtils")
+        clsActivityEntity = classLoader.loadClass("com.donews.nga.entity.ActivityEntity")
     }
 
     override fun hook() {
@@ -192,15 +196,6 @@ class AdHook : IHook {
                     }
                 }
             }
-
-            // 屏蔽首页浮窗广告
-            findFirstMethodByName(clsHomeRecommendFragment, "showActivityMenu\$lambda\$10")?.createHook {
-                replace {
-                    it.log()
-
-                    AndroidLogger.w("去你妈的广告")
-                }
-            }
         }
 
         //屏蔽开屏广告
@@ -240,6 +235,9 @@ class AdHook : IHook {
             val postKeywords = purePost?.split("|")?.filter { it.isNotEmpty() } ?: listOf()
             val authorKeywords = pureAuthor?.split("|")?.filter { it.isNotEmpty() } ?: listOf()
 
+            val fldAuthor = FieldFinder.fromClass(clsPostListFragment).filterByName("author").first()
+            val fldSubject = FieldFinder.fromClass(clsPostListFragment).filterByName("subject").first()
+
             if (postKeywords.isNotEmpty() || authorKeywords.isNotEmpty()) {
                 findFirstMethodByName(clsPostListFragment, "addToList")?.createHook {
                     before {
@@ -253,8 +251,8 @@ class AdHook : IHook {
                                 continue
                             }
 
-                            val author = XposedHelpers.getObjectField(post, "author") as String
-                            val subject = XposedHelpers.getObjectField(post, "subject") as String
+                            val author = fldAuthor.get(post) as String
+                            val subject = fldSubject.get(post) as String
 
                             if (BuildConfig.DEBUG) {
                                 AndroidLogger.w("$author: $subject")
@@ -283,22 +281,25 @@ class AdHook : IHook {
                     }
                 }
             }
+        }
 
-//            MethodFinder.fromClass(clsGlideUtils)
-//                .filterByName("loadUrlImage")
-//                .forEach { mtd ->
-//                    mtd.createHook {
-//                        before {
-//                            it.log()
-//
-//                            val str = it.args[1] as String?
-//
-//                            if (str == "https://img.nga.178.com/attachments/mon_202408/27/c8Q2u-eswvK9T8S35-3t.png") {
-//                                throw Exception("guanggao")
-//                            }
-//                        }
-//                    }
-//                }
+        // 屏蔽首页浮窗广告
+        if (Helper.getSpBool(Constant.PURE_POPUP_AD, false)) {
+            findFirstMethodByName(clsHomeRecommendFragment, "showActivityMenu\$lambda\$10")?.createHook {
+                replace {
+                    it.log()
+
+                    AndroidLogger.w("去你妈的广告")
+                }
+            }
+
+            findFirstMethodByName(clsActivityEntity, "getImageIcon")?.createHook {
+                after {
+                    it.log()
+
+                    it.result = ""
+                }
+            }
         }
     }
 

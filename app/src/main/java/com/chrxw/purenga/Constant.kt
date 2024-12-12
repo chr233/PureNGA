@@ -27,6 +27,7 @@ object Constant {
 
     const val PURE_SPLASH_AD = "pure_splash_ad"
     const val PURE_POST_AD = "pure_post_ad"
+    const val PURE_POPUP_AD = "pure_popup_ad"
     const val PURE_SLIDE_MENU = "pure_slide_menu"
     const val REMOVE_STORE_ICON = "remove_store_icon"
     const val REMOVE_ACTIVITY_ICON = "remove_activity_icon"

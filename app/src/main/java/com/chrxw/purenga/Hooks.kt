@@ -17,8 +17,8 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
  */
 object Hooks {
     private val hooks = arrayOf(
-        OptimizeHook(),
         AdHook(),
+        OptimizeHook(),
         SpUtilsHook(),
         PreferencesHook(),
         AboutHook(),

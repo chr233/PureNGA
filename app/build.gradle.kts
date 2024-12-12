@@ -1,5 +1,5 @@
-val verCode = 43
-val verName ="2.9.2"
+val verCode = 44
+val verName ="2.9.3"
 
 val javaVersion = JavaVersion.VERSION_21
 
@@ -66,13 +66,22 @@ plugins {
 
 dependencies {
     implementation(libs.ezxhelper)
+
     compileOnly(libs.xposedapi)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.material)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.material3)
+    
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
 }

@@ -12,6 +12,7 @@ import com.chrxw.purenga.hook.OptimizeHook
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XC_MethodHook
+import java.lang.reflect.Field
 import java.lang.reflect.Method
 
 /**
@@ -123,5 +124,21 @@ object ExtensionUtils {
         } else {
             Helper.toast("安卓版本不支持此操作")
         }
+    }
+
+    /**
+     * 输出类字段
+     */
+    fun Any.printObject() {
+        val clazz: Class<*> = this::class.java
+        val fields: Array<Field> = clazz.declaredFields
+
+        AndroidLogger.w("===== $this =====")
+        for (field in fields) {
+            field.isAccessible = true
+            val value = field.get(this)
+            AndroidLogger.i("${field.name} = $value")
+        }
+        AndroidLogger.d("---------------------")
     }
 }

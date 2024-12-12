@@ -31,6 +31,10 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         EzXHelper.initHandleLoadPackage(lpparam)
         EzXHelper.setLogTag(Constant.LOG_TAG)
 
+        if (!lpparam.isFirstApplication) {
+            return
+        }
+
         if (lpparam.packageName == BuildConfig.APPLICATION_ID) {
             AndroidLogger.d("模块内运行")
 
@@ -65,8 +69,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                                 appendLine("PureNGA 加载成功")
                                                 appendLine("请到【设置】>【PureNGA 设置】中配置插件功能")
                                                 appendLine("如果不想显示此信息请打开【静默运行】开关")
-                                            },
-                                            Toast.LENGTH_LONG
+                                            }, Toast.LENGTH_LONG
                                         )
                                     }
                                 } else {
@@ -77,8 +80,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                                 appendLine("可能不支持当前版本")
                                                 appendLine("NGA 版本: ${Helper.getNgaVersion()}")
                                                 appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
-                                            },
-                                            Toast.LENGTH_LONG
+                                            }, Toast.LENGTH_LONG
                                         )
                                     }
                                 }

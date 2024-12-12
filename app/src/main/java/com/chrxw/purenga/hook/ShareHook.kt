@@ -26,6 +26,7 @@ class ShareHook : IHook {
         private lateinit var clsNetRequestCallback: Class<*>
         private lateinit var clsActionType: Class<*>
         private lateinit var clsEvt: Class<*>
+
         private lateinit var eShareSuccess: Any
         private lateinit var MtdOnEvent: Method
 
@@ -66,7 +67,7 @@ class ShareHook : IHook {
         //假装分享
         if (Helper.getSpBool(Constant.FAKE_SHARE, false)) {
             //获取枚举值
-            for (enum in clsActionType.enumConstants) {
+            for (enum in clsActionType.enumConstants!!) {
                 if (enum.toString() == "SHARE_SUCCESS") {
                     eShareSuccess = enum
                     break

@@ -55,6 +55,10 @@ class PreferencesHook : IHook {
                 title = "屏蔽信息流广告"
                 subTitle = "去除Banner位, 帖子列表, 帖子末尾的广告"
             })
+            container.addView(ToggleItemView(context, Constant.PURE_POPUP_AD).apply {
+                title = "屏蔽首页广告"
+                subTitle = "去除首页浮窗广告"
+            })
             container.addView(ToggleItemView(context, Constant.ENABLE_PURE_POST).apply {
                 title = "屏蔽广告帖子"
                 subTitle = "按照关键词过滤帖子列表"
@@ -141,6 +145,7 @@ class PreferencesHook : IHook {
                         "浏览历史",
                         "草稿箱",
                         "商城",
+                        "订单",
                         "积分兑换",
                         "设置",
                         "深色模式",

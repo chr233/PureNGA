@@ -22,6 +22,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.FieldFinder
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 import java.io.BufferedReader
@@ -96,15 +97,6 @@ class OptimizeHook : IHook {
         clsAppLogoActivity = classLoader.loadClass("com.donews.nga.setting.AppLogoActivity")
         clsForumDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity")
-
-        MethodFinder.fromClass("gov.pianzong.androidnga.viewBinder.n", classLoader).filterByName("l").first()
-            .createHook {
-                before {
-                    it.log()
-
-                    AndroidLogger.w("viewbinder")
-                }
-            }
     }
 
     override fun hook() {
@@ -421,6 +413,16 @@ class OptimizeHook : IHook {
                         tvTabName.tag = "新发布"
                         tvTabName.text = "新发布"
                     }
+                }
+            }
+
+            val fldIsReplyOrderBy =
+                FieldFinder.fromClass(AdHook.clsPostListFragment).filterByName("isReplyOrderBy").first()
+            findFirstMethodByName(AdHook.clsPostListFragment, "initView")?.createHook {
+                before {
+                    it.log()
+
+                    fldIsReplyOrderBy.set(it.thisObject, true)
                 }
             }
         }

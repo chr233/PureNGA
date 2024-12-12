@@ -22,6 +22,8 @@ import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.system.exitProcess
@@ -208,5 +210,16 @@ object Helper {
                 Intent.ACTION_VIEW, Uri.parse(Constant.REPO_URL)
             )
         )
+    }
+
+    /**
+     * 打印堆栈
+     */
+    fun printStack() {
+        val sw = StringWriter()
+        val ex = Exception("error")
+        ex.printStackTrace(PrintWriter(sw))
+        AndroidLogger.w("===== PrintStack =====")
+        AndroidLogger.w(sw.toString())
     }
 }
