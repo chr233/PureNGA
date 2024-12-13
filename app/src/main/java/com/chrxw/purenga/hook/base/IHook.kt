@@ -1,4 +1,4 @@
-package com.chrxw.purenga.hook
+package com.chrxw.purenga.hook.base
 
 /**
  * 基础钩子
@@ -17,5 +17,5 @@ interface IHook {
     /**
      * 模块名
      */
-    abstract var name: String
+    var name: String
 }

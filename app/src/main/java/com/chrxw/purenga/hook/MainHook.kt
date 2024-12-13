@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper

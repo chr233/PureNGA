@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.core.view.children
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
@@ -68,7 +69,7 @@ class OptimizeHook : IHook {
         clsHomeDrawerLayout = classLoader.loadClass("com.donews.nga.widget.HomeDrawerLayout")
         try {
             clsCommentDialog = classLoader.loadClass("gov.pianzong.androidnga.view.CommentDialog")
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             AndroidLogger.e("CommentDialog 不存在")
         }
         clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
@@ -85,7 +86,7 @@ class OptimizeHook : IHook {
         clsAssetManager = classLoader.loadClass("android.content.res.AssetManager")
         try {
             clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             AndroidLogger.e("AboutUsActivity\$a 不存在")
         }
         clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")

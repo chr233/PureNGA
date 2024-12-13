@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
@@ -18,7 +19,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 class WebViewHook : IHook {
 
     companion object {
-        private val ngaUrls = mutableListOf<String>()
+        private lateinit var ngaUrls: List<String>
 
         private fun isNgaUrl(host: String?): Boolean {
             if (host != null) {
@@ -35,16 +36,20 @@ class WebViewHook : IHook {
     override fun init(classLoader: ClassLoader) {
         val field = MainHook.clsAppConfig.getDeclaredField("hosts")
         field.isAccessible = true
-        val hosts = field.get(null) as Array<*>
-        for (host in hosts) {
-            ngaUrls.add(host as String)
-        }
 
-        if (BuildConfig.DEBUG) {
-            for (host in ngaUrls) {
-                AndroidLogger.i(host)
+        val hosts = field.get(null) as Array<*>
+
+        var urls = mutableListOf<String>()
+        for (host in hosts) {
+            var url = host as String
+            urls.add(url)
+
+            if (BuildConfig.DEBUG) {
+                AndroidLogger.i(url)
             }
         }
+
+        ngaUrls = urls
     }
 
     override fun hook() {

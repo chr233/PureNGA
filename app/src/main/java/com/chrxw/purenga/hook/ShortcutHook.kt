@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log

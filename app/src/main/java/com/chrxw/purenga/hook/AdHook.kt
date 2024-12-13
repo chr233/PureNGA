@@ -3,6 +3,7 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
