@@ -75,7 +75,7 @@ class MainHook : IHook {
                 findFirstMethodByName(clsNGAApplication, "handleMessage")?.createHook {
                     before {
                         it.log()
-                        AndroidLogger.w(it.args.get(0).toString())
+                        AndroidLogger.w(it.args[0].toString())
                     }
                 }
             }

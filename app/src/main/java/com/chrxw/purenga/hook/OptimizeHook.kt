@@ -42,16 +42,15 @@ class OptimizeHook : IHook {
         lateinit var clsMainActivity: Class<*>
         private lateinit var clsArticleDetailActivity: Class<*>
         private lateinit var clsHomeFragment: Class<*>
-        private lateinit var clsHomeFragmentPresenter: Class<*>
         private lateinit var clsCalendarUtils: Class<*>
         private lateinit var clsAssetManager: Class<*>
-        private lateinit var clsResources: Class<*>
         private lateinit var clsAboutUsActivityA: Class<*>
         lateinit var clsLoginWebView: Class<*>
         lateinit var clsAccountManageActivity: Class<*>
         lateinit var clsVipStatus: Class<*>
         lateinit var clsAppLogoActivity: Class<*>
         private lateinit var clsForumDetailActivity: Class<*>
+
 
         private fun readTextFromInputStream(inputStream: InputStream1): String {
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
@@ -76,7 +75,6 @@ class OptimizeHook : IHook {
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
         clsHomeFragment = classLoader.loadClass("com.donews.nga.fragments.HomeFragment")
-        clsHomeFragmentPresenter = classLoader.loadClass("com.donews.nga.fragments.presenters.HomeFragmentPresenter")
 
         try {
             clsCalendarUtils = classLoader.loadClass("gov.pianzong.androidnga.utils.CalendarUtils")
@@ -85,7 +83,6 @@ class OptimizeHook : IHook {
         }
 
         clsAssetManager = classLoader.loadClass("android.content.res.AssetManager")
-        clsResources = classLoader.loadClass("android.content.res.Resources")
         try {
             clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
         } catch (e: Throwable) {

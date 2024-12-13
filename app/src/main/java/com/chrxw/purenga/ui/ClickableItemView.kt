@@ -18,7 +18,7 @@ open class ClickableItemView(context: Context) : FrameLayout(context) {
     protected val subTextView = TextView(context)
 
     init {
-        this.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+        this.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
             setPadding(16.toPixel(context), 8.toPixel(context), 16.toPixel(context), 8.toPixel(context))
         }
         this.isClickable = true

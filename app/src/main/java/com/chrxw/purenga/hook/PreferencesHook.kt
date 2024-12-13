@@ -554,7 +554,7 @@ class PreferencesHook : IHook {
             after { param ->
                 val activity = param.thisObject as Activity
 
-                val viewBinding = XposedHelpers.getObjectField(activity, "viewBinding")
+                val viewBinding = AdHook.fldViewBinding.get(activity)
                 val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
                 val scrollView = root.getChildAt(1) as ScrollView
                 val linearLayout = scrollView.getChildAt(0) as LinearLayout

@@ -17,5 +17,5 @@ interface IHook {
     /**
      * 模块名
      */
-    var name: String
+    abstract var name: String
 }

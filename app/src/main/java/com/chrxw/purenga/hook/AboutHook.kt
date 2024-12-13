@@ -22,6 +22,7 @@ class AboutHook : IHook {
      */
     companion object {
         lateinit var clsAboutUsActivity: Class<*>
+
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -35,7 +36,7 @@ class AboutHook : IHook {
 
                 val activity = it.thisObject as Activity
 
-                val viewBinding = XposedHelpers.getObjectField(activity, "viewBinding")
+                val viewBinding = AdHook.fldViewBinding.get(activity)
                 val root = XposedHelpers.callMethod(viewBinding, "getRoot") as View
                 val viewId = Helper.getRId("tv_app_version")
 

@@ -36,8 +36,10 @@ class AdHook : IHook {
         private lateinit var clsDnTapFeedAd: Class<*>
         lateinit var clsPostListFragment: Class<*>
         private lateinit var clsHomeRecommendFragment: Class<*>
-        private lateinit var clsGlideUtils: Class<*>
         private lateinit var clsActivityEntity: Class<*>
+        private lateinit var clsSubject: Class<*>
+        private lateinit var clsBaseActivity: Class<*>
+        lateinit var fldViewBinding: Field
 
         fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
         fun isClsKsAdSDKInit() = ::clsKsAdSDK.isInitialized
@@ -70,8 +72,11 @@ class AdHook : IHook {
         clsPostListFragment = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
         clsHomeRecommendFragment = classLoader.loadClass("com.donews.nga.fragments.HomeRecommendFragment")
 
-        clsGlideUtils = classLoader.loadClass("com.donews.nga.common.utils.glide.GlideUtils")
         clsActivityEntity = classLoader.loadClass("com.donews.nga.entity.ActivityEntity")
+
+        clsSubject = classLoader.loadClass("gov.pianzong.androidnga.model.Subject")
+        clsBaseActivity = classLoader.loadClass("com.donews.nga.common.base.BaseActivity")
+        fldViewBinding = FieldFinder.fromClass(clsBaseActivity).filterByName("viewBinding").first()
     }
 
     override fun hook() {
@@ -235,8 +240,8 @@ class AdHook : IHook {
             val postKeywords = purePost?.split("|")?.filter { it.isNotEmpty() } ?: listOf()
             val authorKeywords = pureAuthor?.split("|")?.filter { it.isNotEmpty() } ?: listOf()
 
-            val fldAuthor = FieldFinder.fromClass(clsPostListFragment).filterByName("author").first()
-            val fldSubject = FieldFinder.fromClass(clsPostListFragment).filterByName("subject").first()
+            val fldAuthor = FieldFinder.fromClass(clsSubject).filterByName("author").first()
+            val fldSubject = FieldFinder.fromClass(clsSubject).filterByName("subject").first()
 
             if (postKeywords.isNotEmpty() || authorKeywords.isNotEmpty()) {
                 findFirstMethodByName(clsPostListFragment, "addToList")?.createHook {

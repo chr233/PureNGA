@@ -22,15 +22,11 @@ class ShareHook : IHook {
         private lateinit var clsArticleDetailActivity: Class<*>
         private lateinit var clsArticleDetailActivity_x: Class<*>
         private lateinit var clsArticleDetailActivity_u: Class<*>
-        private lateinit var clsNetRequestWrapper: Class<*>
-        private lateinit var clsNetRequestCallback: Class<*>
         private lateinit var clsActionType: Class<*>
         private lateinit var clsEvt: Class<*>
 
         private lateinit var eShareSuccess: Any
         private lateinit var MtdOnEvent: Method
-
-        private lateinit var clsLoader: ClassLoader
 
         /**
          * 假装分享
@@ -53,14 +49,10 @@ class ShareHook : IHook {
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity\$x")
         clsArticleDetailActivity_u =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity\$u")
-        clsNetRequestWrapper = classLoader.loadClass("gov.pianzong.androidnga.activity.NetRequestWrapper")
-        clsNetRequestCallback = classLoader.loadClass("gov.pianzong.androidnga.activity.NetRequestCallback")
         clsActionType = classLoader.loadClass("gov.pianzong.androidnga.event.ActionType")
 
         MtdOnEvent = findFirstMethodByName(clsArticleDetailActivity, "onEvent")!!
         clsEvt = MtdOnEvent.parameterTypes[0]
-
-        clsLoader = classLoader
     }
 
     override fun hook() {
