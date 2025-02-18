@@ -51,6 +51,8 @@ class OptimizeHook : IHook {
         lateinit var clsVipStatus: Class<*>
         lateinit var clsAppLogoActivity: Class<*>
         private lateinit var clsForumDetailActivity: Class<*>
+        private lateinit var clsAllPostListFragment: Class<*>
+        private  lateinit var clsPostListFragment  : Class<*>
 
 
         private fun readTextFromInputStream(inputStream: InputStream1): String {
@@ -95,6 +97,9 @@ class OptimizeHook : IHook {
         clsAppLogoActivity = classLoader.loadClass("com.donews.nga.setting.AppLogoActivity")
         clsForumDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity")
+        clsAllPostListFragment =
+            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.AllPostListFragment")
+        clsPostListFragment=classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
     }
 
     override fun hook() {
@@ -400,16 +405,45 @@ class OptimizeHook : IHook {
 
         // 优先使用“新发布”
         if (Helper.getSpBool(Constant.PREFER_NEW_POST, false)) {
+            val mtdSetReplyOrderBy =
+                MethodFinder.fromClass(clsAllPostListFragment).filterByName("setReplyOrderBy").first()
+            val mtdAutoRefresh =
+                MethodFinder.fromClass(clsPostListFragment).filterByName("autoRefresh").first()
+
+            var objAllPostListFragment : Any? =null
             findFirstMethodByName(clsForumDetailActivity, "initTabs")?.createHook {
+//                before {
+//                    val fragments = XposedHelpers.getObjectField(it.thisObject, "fragments") as List<*>
+//
+//                    for (fragment in fragments) {
+//                        val clsName = fragment?.javaClass?.name ?: "NUL"
+//                        if (clsName.endsWith("AllPostListFragment")) {
+//
+//                            Helper.toast("test")
+//
+//                            objAllPostListFragment = fragment
+//
+//                            mtdSetReplyOrderBy.invoke(objAllPostListFragment, false)
+//                            mtdAutoRefresh.invoke(objAllPostListFragment)
+//                            break
+//                        }
+//                    }
+//                }
+
                 after {
                     it.log()
 
                     val activity = it.thisObject as Activity
-                    val id = Helper.getRId2("tv_tab_name")
+                    val id = Helper.getRId2("tab_layout")
+
                     if (id != -1) {
-                        val tvTabName = activity.findViewById<TextView>(id)
-                        tvTabName.tag = "新发布"
-                        tvTabName.text = "新发布"
+                        val tvTabName = activity.findViewById<HorizontalScrollView>(id)
+                        (tvTabName).performClick()
+
+//                        tvTabName.tag = "新发布"
+//                        tvTabName.text = "新发布"
+
+//                        mtdSetReplyOrderBy.invoke(objAllPostListFragment, false)
                     }
                 }
             }
