@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
@@ -23,7 +25,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.FieldFinder
+import com.github.kyuubiran.ezxhelper.finders.ConstructorFinder
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 import java.io.BufferedReader
@@ -52,8 +54,8 @@ class OptimizeHook : IHook {
         lateinit var clsAppLogoActivity: Class<*>
         private lateinit var clsForumDetailActivity: Class<*>
         private lateinit var clsAllPostListFragment: Class<*>
-        private  lateinit var clsPostListFragment  : Class<*>
-
+        private lateinit var clsPostListFragment: Class<*>
+        private lateinit var clsForumDetailActivity_f: Class<*>
 
         private fun readTextFromInputStream(inputStream: InputStream1): String {
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
@@ -99,7 +101,9 @@ class OptimizeHook : IHook {
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity")
         clsAllPostListFragment =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.AllPostListFragment")
-        clsPostListFragment=classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
+        clsPostListFragment = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
+        clsForumDetailActivity_f =
+            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity\$f")
     }
 
     override fun hook() {
@@ -407,54 +411,38 @@ class OptimizeHook : IHook {
         if (Helper.getSpBool(Constant.PREFER_NEW_POST, false)) {
             val mtdSetReplyOrderBy =
                 MethodFinder.fromClass(clsAllPostListFragment).filterByName("setReplyOrderBy").first()
-            val mtdAutoRefresh =
-                MethodFinder.fromClass(clsPostListFragment).filterByName("autoRefresh").first()
+            val mtdAutoRefresh = MethodFinder.fromClass(clsPostListFragment).filterByName("autoRefresh").first()
+            var objAllPostListFragment: Any? = null
 
-            var objAllPostListFragment : Any? =null
+            ConstructorFinder.fromClass(clsForumDetailActivity_f).first().createHook {
+                after {
+                    it.log()
+
+                    objAllPostListFragment = it.args[1]
+                }
+            }
+
             findFirstMethodByName(clsForumDetailActivity, "initTabs")?.createHook {
-//                before {
-//                    val fragments = XposedHelpers.getObjectField(it.thisObject, "fragments") as List<*>
-//
-//                    for (fragment in fragments) {
-//                        val clsName = fragment?.javaClass?.name ?: "NUL"
-//                        if (clsName.endsWith("AllPostListFragment")) {
-//
-//                            Helper.toast("test")
-//
-//                            objAllPostListFragment = fragment
-//
-//                            mtdSetReplyOrderBy.invoke(objAllPostListFragment, false)
-//                            mtdAutoRefresh.invoke(objAllPostListFragment)
-//                            break
-//                        }
-//                    }
-//                }
-
                 after {
                     it.log()
 
                     val activity = it.thisObject as Activity
-                    val id = Helper.getRId2("tab_layout")
 
-                    if (id != -1) {
-                        val tvTabName = activity.findViewById<HorizontalScrollView>(id)
-                        (tvTabName).performClick()
+                    if (objAllPostListFragment != null) {
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            Helper.toast("init tabs after")
+                            mtdSetReplyOrderBy.invoke(objAllPostListFragment, false)
+                            mtdAutoRefresh.invoke(objAllPostListFragment)
 
-//                        tvTabName.tag = "新发布"
-//                        tvTabName.text = "新发布"
-
-//                        mtdSetReplyOrderBy.invoke(objAllPostListFragment, false)
+                            val tabNameId = Helper.getRId2("tv_tab_name")
+                            if (tabNameId != -1) {
+                                val tvTabName = activity.findViewById<TextView>(tabNameId)
+                                AndroidLogger.w(tvTabName.toString())
+                                tvTabName.text = "新发布"
+                                tvTabName.tag = "新发布"
+                            }
+                        }, 50)
                     }
-                }
-            }
-
-            val fldIsReplyOrderBy =
-                FieldFinder.fromClass(AdHook.clsPostListFragment).filterByName("isReplyOrderBy").first()
-            findFirstMethodByName(AdHook.clsPostListFragment, "initView")?.createHook {
-                before {
-                    it.log()
-
-                    fldIsReplyOrderBy.set(it.thisObject, true)
                 }
             }
         }

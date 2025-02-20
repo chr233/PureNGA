@@ -1,5 +1,5 @@
-val verCode = 44
-val verName ="2.9.3"
+val verCode = 45
+val verName ="2.9.4"
 
 val javaVersion = JavaVersion.VERSION_21
 
@@ -54,7 +54,7 @@ android {
         additionalParameters += listOf("--allow-reserved-package-id", "--package-id", "0x50")
     }
 
-    buildToolsVersion = "34.0.0"
+    buildToolsVersion = "35.0.0"
     ndkVersion = "25.2.9519653"
 }
 

@@ -497,6 +497,10 @@ class PreferencesHook : IHook {
                 title = "启用Activity日志"
                 subTitle = "在Logcat中输出详细日志"
             })
+            container.addView(ToggleItemView(context, Constant.ENABLE_POST_LOG, false).apply {
+                title = "启用帖子信息日志"
+                subTitle = "在Logcat中输出详细日志"
+            })
 
             root.addView(container)
             return root

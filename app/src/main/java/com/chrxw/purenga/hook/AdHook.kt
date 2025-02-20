@@ -260,7 +260,7 @@ class AdHook : IHook {
                             val author = fldAuthor.get(post) as String
                             val subject = fldSubject.get(post) as String
 
-                            if (BuildConfig.DEBUG) {
+                            if (Helper.getSpBool(Constant.ENABLE_POST_LOG,false)) {
                                 AndroidLogger.w("$author: $subject")
                             }
 

@@ -95,7 +95,9 @@ class ShareHook : IHook {
                     tid = XposedHelpers.callMethod(post, "getTid") as String
                     val fid = XposedHelpers.callMethod(post, "getFid") as String
 
-                    AndroidLogger.i("tid $tid fid $fid")
+                    if (Helper.getSpBool(Constant.ENABLE_POST_LOG, false)) {
+                        AndroidLogger.i("tid $tid fid $fid")
+                    }
                 }
             }
 

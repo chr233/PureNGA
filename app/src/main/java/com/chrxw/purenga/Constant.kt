@@ -50,6 +50,7 @@ object Constant {
     const val SHORTCUT_SETTINGS = "shortcut_settings"
     const val ENABLE_HOOK_LOG = "enable_hook_log"
     const val ENABLE_ACTIVITY_LOG = "enable_activity_log"
+    const val ENABLE_POST_LOG = "enable_post_log"
     const val LOCAL_VIP = "local_vip"
     const val ENABLE_PURE_POST = "enable_pure_post"
     const val PURE_POST = "pure_post"
