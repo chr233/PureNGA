@@ -430,7 +430,6 @@ class OptimizeHook : IHook {
 
                     if (objAllPostListFragment != null) {
                         Handler(Looper.getMainLooper()).postDelayed({
-                            Helper.toast("init tabs after")
                             mtdSetReplyOrderBy.invoke(objAllPostListFragment, false)
                             mtdAutoRefresh.invoke(objAllPostListFragment)
 
