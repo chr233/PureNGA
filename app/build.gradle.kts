@@ -1,5 +1,5 @@
-val verCode = 46
-val verName ="2.9.5"
+val verCode = 47
+val verName ="2.9.6"
 
 val javaVersion = JavaVersion.VERSION_21
 

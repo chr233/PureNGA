@@ -1,8 +1,8 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {
@@ -10,7 +10,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         maven("https://api.xposed.info/")
-        maven("https://www.jitpack.io/")
         maven("https://s01.oss.sonatype.org/content/repositories/releases")
         mavenCentral()
     }
