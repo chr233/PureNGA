@@ -44,12 +44,6 @@ android {
         jvmTarget = javaVersion.toString()
     }
 
-    packaging {
-        resources {
-            excludes += "/META-INF/**"
-        }
-    }
-
     androidResources {
         additionalParameters += listOf("--allow-reserved-package-id", "--package-id", "0x50")
     }
