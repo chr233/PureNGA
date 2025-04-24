@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.0"
+agp = "8.9.1"
 preferenceKtx = "1.2.1"
 xposedapi = "82"
 ezxhelper = "2.2.0"
