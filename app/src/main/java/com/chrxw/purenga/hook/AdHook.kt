@@ -291,7 +291,7 @@ class AdHook : IHook {
 
         // 屏蔽首页浮窗广告
         if (Helper.getSpBool(Constant.PURE_POPUP_AD, false)) {
-            findFirstMethodByName(clsHomeRecommendFragment, "showActivityMenu\$lambda\$10")?.createHook {
+            findFirstMethodByName(clsHomeRecommendFragment, "showActivityMenu\$lambda$10")?.createHook {
                 replace {
                     it.log()
 

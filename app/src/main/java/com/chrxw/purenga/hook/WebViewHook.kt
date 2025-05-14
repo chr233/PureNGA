@@ -11,6 +11,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import androidx.core.net.toUri
 
 
 /**
@@ -64,7 +65,7 @@ class WebViewHook : IHook {
                     if (bundle != null && clsName == "com.donews.nga.activitys.WebActivity") {
                         val actUrl = bundle.getString("act_url")
                         if (actUrl != null) {
-                            val url = Uri.parse(actUrl)
+                            val url = actUrl.toUri()
                             if (isNgaUrl(url.host)) {
                                 return@before
                             } else {

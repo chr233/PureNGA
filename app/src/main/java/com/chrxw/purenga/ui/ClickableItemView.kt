@@ -3,7 +3,6 @@ package com.chrxw.purenga.ui
 import android.content.Context
 import android.graphics.Color
 import android.util.TypedValue
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView

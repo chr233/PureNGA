@@ -14,6 +14,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
+import androidx.core.net.toUri
 
 
 /**
@@ -97,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                     } catch (e: Throwable) {
                         AndroidLogger.e(e)
-                        toast("打开 NGA 失败")
+                        toast("打开 设置 失败")
                     }
                     return true
                 }
@@ -117,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     if (!uri.isNullOrEmpty()) {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                        val intent = Intent(Intent.ACTION_VIEW, uri.toUri())
                         startActivity(intent)
                     }
 

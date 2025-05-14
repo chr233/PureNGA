@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.core.graphics.toColorInt
 import androidx.core.view.children
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
@@ -183,7 +184,7 @@ class OptimizeHook : IHook {
                             linearLayout.removeView(view)
                         }
 
-                        val color = Color.parseColor(if (!Helper.isDarkModel()) "#f8fae3" else "#3c3b39")
+                        val color = if (!Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt()
 
                         if (pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于")) {
                             linearLayout.addView(ClickableItemView(root.context).apply {

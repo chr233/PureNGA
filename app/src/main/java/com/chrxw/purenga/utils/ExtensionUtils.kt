@@ -107,16 +107,6 @@ object ExtensionUtils {
         }
     }
 
-    fun Context.getShortcuts(): MutableList<ShortcutInfo>? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            val shortcutManager = this.getSystemService(ShortcutManager::class.java)
-            shortcutManager.dynamicShortcuts
-        } else {
-            Helper.toast("安卓版本不支持此操作")
-            null
-        }
-    }
-
     fun Context.setShortcuts(shortcuts: List<ShortcutInfo>?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val shortcutManager = this.getSystemService(ShortcutManager::class.java)

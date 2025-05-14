@@ -28,6 +28,7 @@ import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
+import androidx.core.graphics.toColorInt
 
 
 /**
@@ -511,7 +512,7 @@ class PreferencesHook : IHook {
                 title = "导入插件设置"
                 subTitle = "-"
                 setOnClickListener {
-                    var result = Helper.exportSharedPreference(
+                    var result = Helper.importSharedPreference(
                         context,
                         Constant.PLUGIN_PREFERENCE_NAME,
                         Constant.PLUGIN_PREFERENCE_NAME
@@ -522,14 +523,6 @@ class PreferencesHook : IHook {
                     }
                     Helper.toast(msg, Toast.LENGTH_SHORT)
                 }
-            })
-            container.addView(ClickableItemView(context).apply {
-                title = "导出账号信息"
-                subTitle = "-"
-            })
-            container.addView(ClickableItemView(context).apply {
-                title = "导入账号信息"
-                subTitle = "-"
             })
 
             // 调试设置
@@ -620,7 +613,7 @@ class PreferencesHook : IHook {
                             showSettingDialog(activity)
                         }
 
-                        btn.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))
+                        btn.setTextColor(if (Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt())
                         btn.setBackgroundColor(0)
                         btn.setPadding(5, 5, 5, 5)
                         linearLayout.removeViewAt(linearLayout.childCount - 1)
@@ -636,7 +629,7 @@ class PreferencesHook : IHook {
 
         findFirstMethodByName(MainHook.clsAppConfig, "setDarkModel")?.createHook {
             after {
-                btnPureNGASetting?.setTextColor(Color.parseColor(if (Helper.isDarkModel()) "#f8fae3" else "#3c3b39"))
+                btnPureNGASetting?.setTextColor(if (Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt())
             }
         }
     }
