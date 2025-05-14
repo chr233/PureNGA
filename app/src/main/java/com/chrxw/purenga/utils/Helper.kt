@@ -6,8 +6,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.net.Uri
+import android.os.Environment
 import android.widget.Toast
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -58,6 +60,7 @@ object Helper {
                 Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
             ).versionName.toString()
         } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
             "获取失败"
         }
     }
@@ -72,6 +75,7 @@ object Helper {
             ).versionName
             false
         } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
             true
         }
     }
@@ -95,6 +99,7 @@ object Helper {
         return try {
             XposedHelpers.getStaticIntField(cls, key)
         } catch (e: Throwable) {
+            e.printStackTrace()
             AndroidLogger.w("加载资源 $key 失败")
             -1
         }
@@ -133,7 +138,7 @@ object Helper {
      * 设置SharedPreference值
      */
     fun setSpBool(key: String, value: Boolean) {
-        spPlugin.edit().putBoolean(key, value).apply()
+        spPlugin.edit { putBoolean(key, value) }
     }
 
     /**
@@ -147,7 +152,7 @@ object Helper {
      * 设置SharedPreference值
      */
     fun setSpStr(key: String, value: String?) {
-        spPlugin.edit().putString(key, value).apply()
+        spPlugin.edit { putString(key, value) }
     }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -207,9 +212,47 @@ object Helper {
     fun gotoReleasePage(context: Context) {
         context.startActivity(
             Intent(
-                Intent.ACTION_VIEW, Uri.parse(Constant.REPO_URL)
+                Intent.ACTION_VIEW, Constant.REPO_URL.toUri()
             )
         )
+    }
+
+    fun exportSharedPreference(context: Context, sharedPreferencesName: String, exportName: String): String? {
+        return try {
+            val sdCardFile = Environment.getExternalStorageDirectory()
+
+            val sourceFile = File(context.filesDir.parent, "shared_prefs/$sharedPreferencesName.xml")
+            val destinationFile = File(sdCardFile, "$exportName.xml")
+
+            if (sourceFile.exists()) {
+                sourceFile.copyTo(destinationFile, overwrite = true)
+                destinationFile.path
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            AndroidLogger.e("导出失败", e)
+            null
+        }
+    }
+
+    fun importSharedPreference(context: Context, sharedPreferencesName: String, importName: String): String? {
+        return try {
+            val sdCardFile = Environment.getExternalStorageDirectory()
+
+            val sourceFile = File(sdCardFile, "$importName.xml")
+            val destinationFile = File(context.filesDir.parent, "shared_prefs/$sharedPreferencesName.xml")
+
+            if (sourceFile.exists()) {
+                sourceFile.copyTo(destinationFile, overwrite = true)
+                sourceFile.path
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            AndroidLogger.e("导出失败", e)
+            null
+        }
     }
 
     /**

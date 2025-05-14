@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.widget.Button
@@ -15,6 +14,8 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
+import android.widget.Toast
+import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
@@ -24,6 +25,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.Helper
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -140,7 +142,7 @@ class PreferencesHook : IHook {
                 setOnClickListener {
                     val pureSetting = Helper.getSpStr(Constant.PURE_SLIDE_MENU, null)
 
-                    val avilablePureItems = arrayOf(
+                    val availablePureItems = arrayOf(
                         "成为NGA付费会员",
                         "收藏",
                         "浏览历史",
@@ -166,26 +168,26 @@ class PreferencesHook : IHook {
                     val enabledPureItems = pureSetting?.split("|")?.toTypedArray() ?: arrayOf()
 
                     val checkedItems =
-                        avilablePureItems.map { enabledPureItems.contains(it) }.toBooleanArray()
+                        availablePureItems.map { enabledPureItems.contains(it) }.toBooleanArray()
 
                     val selectedShortcuts = mutableListOf<String>()
-                    for (i in avilablePureItems.indices) {
+                    for (i in availablePureItems.indices) {
                         if (checkedItems[i]) {
-                            selectedShortcuts.add(avilablePureItems[i])
+                            selectedShortcuts.add(availablePureItems[i])
                         }
                     }
 
                     AlertDialog.Builder(context).apply {
                         setTitle(subTitle)
                         setCancelable(false)
-                        setMultiChoiceItems(avilablePureItems, checkedItems) { _, which, isChecked ->
+                        setMultiChoiceItems(availablePureItems, checkedItems) { _, which, isChecked ->
                             // 更新选项的选中状态
                             checkedItems[which] = isChecked
 
                             selectedShortcuts.clear()
-                            for (i in avilablePureItems.indices) {
+                            for (i in availablePureItems.indices) {
                                 if (checkedItems[i]) {
-                                    selectedShortcuts.add(avilablePureItems[i])
+                                    selectedShortcuts.add(availablePureItems[i])
                                 }
                             }
 
@@ -466,7 +468,7 @@ class PreferencesHook : IHook {
                 subTitle = "NGA版本: $ngaVersion | 插件版本: $pluginVersion"
                 setOnClickListener {
                     val uri = if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    val intent = Intent(Intent.ACTION_VIEW, uri.toUri())
                     context.startActivity(intent)
                 }
             })
@@ -474,7 +476,7 @@ class PreferencesHook : IHook {
                 title = "作者"
                 subTitle = "GitHub @chr233"
                 setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.AUTHOR_URL))
+                    val intent = Intent(Intent.ACTION_VIEW, Constant.AUTHOR_URL.toUri())
                     context.startActivity(intent)
                 }
             })
@@ -482,9 +484,52 @@ class PreferencesHook : IHook {
                 title = "捐赠"
                 subTitle = "爱发电 @chr233"
                 setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constant.DONATE_URL))
+                    val intent = Intent(Intent.ACTION_VIEW, Constant.DONATE_URL.toUri())
                     context.startActivity(intent)
                 }
+            })
+
+            // 导入导出
+            container.addView(ClickableItemView(context).apply { title = "导入导出" })
+            container.addView(ClickableItemView(context).apply {
+                title = "导出插件设置"
+                subTitle = "-"
+                setOnClickListener {
+                    var result = Helper.exportSharedPreference(
+                        context,
+                        Constant.PLUGIN_PREFERENCE_NAME,
+                        Constant.PLUGIN_PREFERENCE_NAME
+                    )
+                    var msg = buildString {
+                        if (result != null) "导出成功" else "导出失败"
+                        "配置文件路径: $result"
+                    }
+                    Helper.toast(msg, Toast.LENGTH_SHORT)
+                }
+            })
+            container.addView(ClickableItemView(context).apply {
+                title = "导入插件设置"
+                subTitle = "-"
+                setOnClickListener {
+                    var result = Helper.exportSharedPreference(
+                        context,
+                        Constant.PLUGIN_PREFERENCE_NAME,
+                        Constant.PLUGIN_PREFERENCE_NAME
+                    )
+                    var msg = buildString {
+                        if (result != null) "导入成功" else "导入失败"
+                        "配置文件路径: $result"
+                    }
+                    Helper.toast(msg, Toast.LENGTH_SHORT)
+                }
+            })
+            container.addView(ClickableItemView(context).apply {
+                title = "导出账号信息"
+                subTitle = "-"
+            })
+            container.addView(ClickableItemView(context).apply {
+                title = "导入账号信息"
+                subTitle = "-"
             })
 
             // 调试设置
@@ -545,6 +590,10 @@ class PreferencesHook : IHook {
                     show()
                 }
             }
+        }
+
+        internal fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            AndroidLogger.i(resultCode.toString())
         }
     }
 
