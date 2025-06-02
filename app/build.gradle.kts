@@ -1,5 +1,5 @@
 val verCode = 47
-val verName ="2.9.6"
+val verName = "2.9.6"
 
 val javaVersion = JavaVersion.VERSION_21
 
@@ -72,7 +72,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.material3)
-    
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)

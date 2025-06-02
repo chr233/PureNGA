@@ -40,6 +40,7 @@ class AdHook : IHook {
         private lateinit var clsActivityEntity: Class<*>
         private lateinit var clsSubject: Class<*>
         private lateinit var clsBaseActivity: Class<*>
+        private lateinit var clsBannerHolder: Class<*>
         lateinit var fldViewBinding: Field
 
         fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
@@ -77,6 +78,9 @@ class AdHook : IHook {
 
         clsSubject = classLoader.loadClass("gov.pianzong.androidnga.model.Subject")
         clsBaseActivity = classLoader.loadClass("com.donews.nga.common.base.BaseActivity")
+
+        clsBannerHolder = classLoader.loadClass("com.donews.nga.adapters.HomeRecommendAdapter\$BannerHolder")
+
         fldViewBinding = FieldFinder.fromClass(clsBaseActivity).filterByName("viewBinding").first()
     }
 
@@ -202,6 +206,12 @@ class AdHook : IHook {
                     }
                 }
             }
+
+            findFirstMethodByName(clsBannerHolder, "setupBanners")?.createHook {
+                replace {
+                    it.log()
+                }
+            }
         }
 
         //屏蔽开屏广告
@@ -260,7 +270,7 @@ class AdHook : IHook {
                             val author = fldAuthor.get(post) as String
                             val subject = fldSubject.get(post) as String
 
-                            if (Helper.getSpBool(Constant.ENABLE_POST_LOG,false)) {
+                            if (Helper.getSpBool(Constant.ENABLE_POST_LOG, false)) {
                                 AndroidLogger.w("$author: $subject")
                             }
 
