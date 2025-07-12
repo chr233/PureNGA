@@ -20,6 +20,10 @@
 [![Steam](https://img.shields.io/badge/steam-donate-1B2838.svg?logo=steam)](https://steamcommunity.com/tradeoffer/new/?partner=221260487&token=xgqMgL-i)
 [![爱发电](https://img.shields.io/badge/爱发电-chr__-ea4aaa.svg?logo=github-sponsors)](https://afdian.com/@chr233)
 
+## 停止维护
+
+最佳适配 9.9.45 以及之前的版本, 不再适配新版
+
 ## 版本说明
 
 |     类型     |                    特性                    |                  发行版链接                   |                     下载量                     |
@@ -54,8 +58,6 @@
 - [x] 快捷方式支持
 
 同时兼容 Lspatch, 支持 9.9.x 版本的 NGA 客户端, 理论向后兼容
-
-**Lspatch 不兼容 Android 15**
 
 ## 捐赠
 
