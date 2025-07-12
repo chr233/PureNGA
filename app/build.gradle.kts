@@ -1,5 +1,5 @@
-val verCode = 47
-val verName = "2.9.6"
+val verCode = 48
+val verName = "3.0.0.Final"
 
 val javaVersion = JavaVersion.VERSION_21
 
@@ -40,16 +40,18 @@ android {
         targetCompatibility = javaVersion
     }
 
-    kotlinOptions {
-        jvmTarget = javaVersion.toString()
-    }
-
     androidResources {
         additionalParameters += listOf("--allow-reserved-package-id", "--package-id", "0x50")
     }
 
     buildToolsVersion = "35.0.0"
     ndkVersion = "25.2.9519653"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(javaVersion.toString())
+    }
 }
 
 plugins {
