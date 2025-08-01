@@ -20,9 +20,11 @@
 [![Steam](https://img.shields.io/badge/steam-donate-1B2838.svg?logo=steam)](https://steamcommunity.com/tradeoffer/new/?partner=221260487&token=xgqMgL-i)
 [![爱发电](https://img.shields.io/badge/爱发电-chr__-ea4aaa.svg?logo=github-sponsors)](https://afdian.com/@chr233)
 
-## 停止维护
+## 公告
 
-最佳适配 9.9.45 以及之前的版本, 不再适配新版
+当前插件最佳适配 9.9.44 以及之前的版本
+
+后续版本缓慢适配中...
 
 ## 版本说明
 
