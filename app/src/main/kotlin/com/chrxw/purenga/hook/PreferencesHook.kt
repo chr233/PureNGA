@@ -25,7 +25,6 @@ import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -57,6 +56,10 @@ class PreferencesHook : IHook {
             container.addView(ToggleItemView(context, Constant.PURE_POST_AD).apply {
                 title = "屏蔽信息流广告"
                 subTitle = "去除Banner位, 帖子列表, 帖子末尾的广告"
+            })
+            container.addView(ToggleItemView(context, Constant.PURE_GAME_RECOMMEND).apply {
+                title = "屏蔽游戏推荐"
+                subTitle = "去除首页游戏推荐广告"
             })
             container.addView(ToggleItemView(context, Constant.PURE_POPUP_AD).apply {
                 title = "屏蔽首页广告"
@@ -495,12 +498,12 @@ class PreferencesHook : IHook {
                 title = "导出插件设置"
                 subTitle = "-"
                 setOnClickListener {
-                    var result = Helper.exportSharedPreference(
+                    val result = Helper.exportSharedPreference(
                         context,
                         Constant.PLUGIN_PREFERENCE_NAME,
                         Constant.PLUGIN_PREFERENCE_NAME
                     )
-                    var msg = buildString {
+                    val msg = buildString {
                         if (result != null) "导出成功" else "导出失败"
                         "配置文件路径: $result"
                     }
@@ -511,12 +514,12 @@ class PreferencesHook : IHook {
                 title = "导入插件设置"
                 subTitle = "-"
                 setOnClickListener {
-                    var result = Helper.importSharedPreference(
+                    val result = Helper.importSharedPreference(
                         context,
                         Constant.PLUGIN_PREFERENCE_NAME,
                         Constant.PLUGIN_PREFERENCE_NAME
                     )
-                    var msg = buildString {
+                    val msg = buildString {
                         if (result != null) "导入成功" else "导入失败"
                         "配置文件路径: $result"
                     }
@@ -582,10 +585,6 @@ class PreferencesHook : IHook {
                     show()
                 }
             }
-        }
-
-        internal fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            AndroidLogger.i(resultCode.toString())
         }
     }
 

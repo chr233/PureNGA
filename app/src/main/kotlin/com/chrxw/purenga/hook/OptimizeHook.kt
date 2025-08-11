@@ -264,6 +264,13 @@ class OptimizeHook : IHook {
                     it.log()
                 }
             }
+
+            //9.9.45+
+            findFirstMethodByName(clsMainActivity, "setupCenterMenu")?.createHook {
+                replace {
+                    it.log()
+                }
+            }
         }
 
         //移除右上角微信图标

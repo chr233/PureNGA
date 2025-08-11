@@ -39,9 +39,9 @@ class WebViewHook : IHook {
 
         val hosts = field.get(null) as Array<*>
 
-        var urls = mutableListOf<String>()
+        val urls = mutableListOf<String>()
         for (host in hosts) {
-            var url = host as String
+            val url = host as String
             urls.add(url)
 
             if (BuildConfig.DEBUG) {

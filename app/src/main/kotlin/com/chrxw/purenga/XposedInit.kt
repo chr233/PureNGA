@@ -3,7 +3,6 @@ package com.chrxw.purenga
 import android.app.AndroidAppHelper
 import android.app.Application
 import android.app.Instrumentation
-import android.os.Build
 import android.widget.Toast
 import androidx.annotation.Keep
 import com.chrxw.purenga.hook.DebugHook
