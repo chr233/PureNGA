@@ -217,7 +217,7 @@ class PreferencesHook : IHook {
                 }
             })
             container.addView(ToggleItemView(context, Constant.REMOVE_STORE_ICON).apply {
-                title = "去除导航栏商城入口"
+                title = "去除导航栏游戏库入口"
                 subTitle = "净化导航栏"
             })
             container.addView(ToggleItemView(context, Constant.REMOVE_ACTIVITY_ICON).apply {

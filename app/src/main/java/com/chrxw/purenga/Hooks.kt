@@ -17,7 +17,7 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
  * 钩子
  */
 object Hooks {
-    private val hooks = arrayListOf(
+    private val hooks = arrayOf(
         AdHook(),
         OptimizeHook(),
         SpUtilsHook(),
@@ -32,10 +32,6 @@ object Hooks {
      * 初始化钩子
      */
     fun initHooks(classLoader: ClassLoader): Int {
-        if (BuildConfig.DEBUG) {
-            hooks.add(DebugHook())
-        }
-
         val mainHook = MainHook()
         try {
             mainHook.init(classLoader)

@@ -3,8 +3,10 @@ package com.chrxw.purenga
 import android.app.AndroidAppHelper
 import android.app.Application
 import android.app.Instrumentation
+import android.os.Build
 import android.widget.Toast
 import androidx.annotation.Keep
+import com.chrxw.purenga.hook.DebugHook
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -60,6 +62,22 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 val context = AndroidAppHelper.currentApplication().applicationContext
 
                                 EzXHelper.initAppContext(context, true)
+
+                                if (BuildConfig.DEBUG) {
+                                    AndroidLogger.w("Debug模式下启用 DebugHook")
+                                    val hook = DebugHook()
+                                    try {
+                                        hook.init(lpparam.classLoader)
+                                    } catch (e: Exception) {
+                                        AndroidLogger.e("DebugHook 初始化失败", e)
+                                    }
+
+                                    try {
+                                        hook.hook()
+                                    } catch (e: Exception) {
+                                        AndroidLogger.e("DebugHook Hook失败", e)
+                                    }
+                                }
 
                                 val error = Hooks.initHooks(lpparam.classLoader)
                                 if (error == 0) {

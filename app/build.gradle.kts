@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.material3)
+    implementation(libs.gson)
 
     testImplementation(libs.junit)
 

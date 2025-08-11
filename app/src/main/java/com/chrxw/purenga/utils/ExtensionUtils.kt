@@ -14,11 +14,15 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XC_MethodHook
 import java.lang.reflect.Field
 import java.lang.reflect.Method
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 
 /**
  * 显示单位换算
  */
 object ExtensionUtils {
+    val gson: Gson = GsonBuilder().serializeNulls().create()
+
     /**
      * 单位转换
      */
@@ -26,6 +30,13 @@ object ExtensionUtils {
         val resources = context.resources
         val metrics = resources.displayMetrics
         return this * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+    }
+
+    /**
+     * 转Json
+     */
+    fun Any.toJson(): String {
+        return gson.toJson(this)
     }
 
     /**
@@ -42,6 +53,19 @@ object ExtensionUtils {
                     val cls = item?.javaClass ?: "NULL"
                     AndroidLogger.d(" $index: $item ($cls)")
                 }
+            }
+        }
+    }
+
+    fun XC_MethodHook.MethodHookParam.forceLog() {
+        AndroidLogger.d("Method: ${this.method.name}")
+        AndroidLogger.d("Object: ${this.thisObject}")
+
+        if (this.args.any()) {
+            AndroidLogger.d("Args:")
+            this.args.forEachIndexed { index, item ->
+                val cls = item?.javaClass ?: "NULL"
+                AndroidLogger.d(" $index: $item ($cls)")
             }
         }
     }
