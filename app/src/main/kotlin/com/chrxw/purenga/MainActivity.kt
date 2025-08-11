@@ -5,16 +5,15 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
-import androidx.core.net.toUri
 
 
 /**

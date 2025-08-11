@@ -2,7 +2,6 @@ package com.chrxw.purenga
 
 import com.chrxw.purenga.hook.AboutHook
 import com.chrxw.purenga.hook.AdHook
-import com.chrxw.purenga.hook.DebugHook
 import com.chrxw.purenga.hook.MainHook
 import com.chrxw.purenga.hook.OptimizeHook
 import com.chrxw.purenga.hook.PreferencesHook

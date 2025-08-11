@@ -2,7 +2,7 @@ package com.chrxw.purenga.hook
 
 import android.app.Instrumentation
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
@@ -11,7 +11,6 @@ import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import androidx.core.net.toUri
 
 
 /**
