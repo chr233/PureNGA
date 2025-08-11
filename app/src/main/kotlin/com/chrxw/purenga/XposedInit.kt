@@ -22,6 +22,9 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  */
 @Keep
 class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
+    companion object {
+        private var isInit = false
+    }
 
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
         EzXHelper.initZygote(startupParam)
@@ -63,7 +66,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 EzXHelper.initAppContext(context, true)
 
                                 if (BuildConfig.DEBUG) {
-                                    AndroidLogger.w("Debug模式下启用 DebugHook")
+                                    AndroidLogger.w("!!!Debug模式!!!")
                                     val hook = DebugHook()
                                     try {
                                         hook.init(lpparam.classLoader)
@@ -108,10 +111,6 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     }
                 }
         }
-    }
-
-    companion object {
-        private var isInit = false
     }
 }
 

@@ -2,13 +2,21 @@ package com.chrxw.purenga.hook
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TableRow.LayoutParams
+import android.widget.TextView
+import android.widget.Toast
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.R
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
+import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 
 class ShortcutHook : IHook {
@@ -93,7 +101,52 @@ class ShortcutHook : IHook {
                         setTitle("PureNGA 提示")
                         setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
                         setCancelable(false)
-                        setNegativeButton("取消", null)
+                        setNegativeButton("取消") { _, _ ->
+                            Helper.toast(
+                                "可以在【设置】>【PureNGA 设置】中配置插件功能", Toast.LENGTH_LONG
+                            )
+                        }
+                        setPositiveButton("确认") { _, _ ->
+                            val intent = context.buildNormalIntent(PreferencesHook.clsSettingActivity).apply {
+                                putExtra("openDialog", true)
+                            }
+                            context.startActivity(intent)
+                        }
+                        create()
+                        show()
+                    }
+                } else if (Helper.getSpStr(Constant.LAST_SHOW, "") != BuildConfig.VERSION_NAME) {
+                    val root = ScrollView(activity)
+                    val linearLayout = LinearLayout(activity).apply {
+                        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                        orientation = LinearLayout.VERTICAL
+                    }
+                    linearLayout.addView(TextView(activity).apply {
+                        text = Constant.CHANGE_LOG
+                    })
+                    linearLayout.addView(ImageView(activity).apply {
+                        val imageId = R.drawable.aifadian
+                        val drawable = EzXHelper.moduleRes.getDrawable(imageId, activity.theme)
+                        setImageDrawable(drawable)
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    })
+
+                    root.addView(linearLayout)
+
+                    // APP更新后显示弹窗
+                    AlertDialog.Builder(activity).apply {
+                        setTitle("PureNGA 更新说明")
+                        setView(root)
+                        setCancelable(false)
+                        setNegativeButton("取消") { _, _ ->
+                            Helper.toast(
+                                "可以在【设置】>【PureNGA 设置】中配置插件功能", Toast.LENGTH_LONG
+                            )
+                        }
                         setPositiveButton("确认") { _, _ ->
                             val intent = context.buildNormalIntent(PreferencesHook.clsSettingActivity).apply {
                                 putExtra("openDialog", true)
@@ -112,8 +165,6 @@ class ShortcutHook : IHook {
 
         // 处理Shortcut跳转
         if (!Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null).isNullOrEmpty()) {
-
-
             findFirstMethodByName(OptimizeHook.clsMainActivity, "onNewIntent")?.createHook {
                 after {
                     // 如果来源是Shortcut

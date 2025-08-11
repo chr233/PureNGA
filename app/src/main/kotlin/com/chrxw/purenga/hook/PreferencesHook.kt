@@ -43,9 +43,10 @@ class PreferencesHook : IHook {
         @SuppressLint("SetTextI18n")
         private fun generateView(context: Context): View {
             val root = ScrollView(context)
-            val container = LinearLayout(context)
-            container.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-            container.orientation = LinearLayout.VERTICAL
+            val container = LinearLayout(context).apply {
+                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                orientation = LinearLayout.VERTICAL
+            }
 
             // 净化设置
             container.addView(ClickableItemView(context).apply { title = "净化设置" })

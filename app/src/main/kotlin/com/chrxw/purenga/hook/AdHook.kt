@@ -7,7 +7,6 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
-import com.chrxw.purenga.utils.ExtensionUtils.forceLog
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -344,7 +343,7 @@ class AdHook : IHook {
 
             findFirstMethodByName(clsGameRecommendBinder, "getItemView")?.createHook {
                 after {
-                    it.forceLog()
+                    it.log()
 
                     val binding = fldForumFoldBinding.get(it.thisObject)
                     if (binding != null) {
