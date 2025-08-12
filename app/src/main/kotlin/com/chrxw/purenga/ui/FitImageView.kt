@@ -5,28 +5,27 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.util.AttributeSet
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.chrxw.purenga.utils.ExtensionUtils.getDrawable
 
-class FitImageView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+class FitImageView : FrameLayout {
+    private val imageView: ImageView
 
-    private val imageView = ImageView(context).apply {
-        scaleType = ImageView.ScaleType.FIT_CENTER
-        layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            LayoutParams.WRAP_CONTENT
-        )
+    constructor(context: Context) : super(context) {
+        imageView = ImageView(context).apply {
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            layoutParams = LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        this.addView(imageView)
     }
 
-    init {
-        addView(imageView)
+    constructor(context: Context, resId: Int, theme: Resources.Theme? = null) : this(context) {
+        setImageResource(resId, theme)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -60,7 +59,7 @@ class FitImageView @JvmOverloads constructor(
         }
     }
 
-    override fun setOnClickListener(l: View.OnClickListener?) {
+    override fun setOnClickListener(l: OnClickListener?) {
         imageView.setOnClickListener(l)
     }
 }

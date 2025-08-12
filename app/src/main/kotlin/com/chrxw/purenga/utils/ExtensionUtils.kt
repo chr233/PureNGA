@@ -15,8 +15,6 @@ import com.chrxw.purenga.hook.OptimizeHook
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import de.robv.android.xposed.XC_MethodHook
 import java.lang.reflect.Field
 import java.lang.reflect.Method
@@ -25,8 +23,6 @@ import java.lang.reflect.Method
  * 显示单位换算
  */
 object ExtensionUtils {
-    val gson: Gson = GsonBuilder().serializeNulls().create()
-
     /**
      * 单位转换
      */

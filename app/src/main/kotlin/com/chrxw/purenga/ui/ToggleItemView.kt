@@ -6,20 +6,21 @@ import android.view.Gravity
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Switch
+import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.Helper
 
 /**
  * 开关控件
  */
-class ToggleItemView(context: Context, spKey: String, defValue: Boolean = false) : ClickableItemView(context),
-    OnClickListener {
+class ToggleItemView : ClickableItemView, OnClickListener {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private val switch = Switch(context)
-    private var spKey: String = ""
+    private val switch: Switch
+    private val spKey: String
 
-    init {
+    constructor(context: Context, spKey: String = "") : super(context) {
         this.spKey = spKey
-        switch.isChecked = Helper.getSpBool(spKey, defValue)
+        this.switch = Switch(context)
+        switch.isChecked = Helper.getSpBool(spKey, false)
 
         val switchParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT).apply {
             gravity = Gravity.CENTER_VERTICAL or Gravity.END
@@ -33,7 +34,27 @@ class ToggleItemView(context: Context, spKey: String, defValue: Boolean = false)
         this.addView(switch)
     }
 
-    constructor(context: Context) : this(context, "")
+    constructor(context: Context, spKey: String = "", title: String) : this(context, spKey) {
+        this.title = title
+        isCenter = true
+    }
+
+    constructor(context: Context, spKey: String = "", title: String, subTitle: String) : this(context, spKey) {
+        this.title = title
+        this.subTitle = subTitle
+    }
+
+    constructor(context: Context, spKey: String = "", xposed: Boolean, titleId: Int) : this(context, spKey) {
+        this.title = if (xposed) titleId.getStringFromMod() else context.getString(titleId)
+        isCenter = true
+    }
+
+    constructor(context: Context, spKey: String = "", xposed: Boolean, titleId: Int, subTitleId: Int) : this(
+        context, spKey
+    ) {
+        this.title = if (xposed) titleId.getStringFromMod() else context.getString(titleId)
+        this.subTitle = if (xposed) subTitleId.getStringFromMod() else context.getString(subTitleId)
+    }
 
     private var isChecked: Boolean
         get() = switch.isChecked
@@ -42,11 +63,11 @@ class ToggleItemView(context: Context, spKey: String, defValue: Boolean = false)
             Helper.setSpBool(spKey, isChecked)
         }
 
-    override var idDisabled: Boolean
+    override var isDisabled: Boolean
         get() = !switch.isEnabled
         set(value) {
             switch.isEnabled = !value
-            super.idDisabled = value
+            super.isDisabled = value
         }
 
     override fun onClick(v: View?) {

@@ -1,13 +1,11 @@
 package com.chrxw.purenga.hook
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
 import android.widget.Toast
-import androidx.appcompat.view.ContextThemeWrapper
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
@@ -64,14 +62,14 @@ class ShortcutHook : IHook {
                 "qrcode" -> clsScanningActivity
                 "message" -> clsMessageActivity
                 "setting" -> PreferencesHook.clsSettingActivity
-                "about" -> AboutHook.clsAboutUsActivity
+                "about" -> PreferencesHook.clsAboutUsActivity
                 "theme" -> clsThemeActivity
                 "game" -> clsGamePlatformListActivity
                 "favorite" -> clsFavoriteActivity
                 "history" -> clsHistoryActivity
                 "draft" -> clsDraftActivity
                 "diagnose" -> clsDiagnoseNetworkActivity
-                "pluginSetting" -> AboutHook.clsAboutUsActivity
+                "pluginSetting" -> PreferencesHook.clsAboutUsActivity
                 else -> null
             }
 
@@ -89,7 +87,6 @@ class ShortcutHook : IHook {
         }
     }
 
-    @SuppressLint("ResourceType")
     override fun hook() {
         //显示首次运行提示
         findFirstMethodByName(OptimizeHook.clsMainActivity, "initLayout")?.createHook {
@@ -97,11 +94,10 @@ class ShortcutHook : IHook {
                 it.log()
 
                 val activity = it.thisObject as Activity
-                val themeContext = ContextThemeWrapper(activity, 0x7f13020b)
 
                 if (!Helper.isPluginConfigExists()) {
                     // 首次打开APP, 弹出提示框
-                    AlertDialog.Builder(themeContext).apply {
+                    AlertDialog.Builder(activity).apply {
                         setTitle("PureNGA 提示")
                         setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
                         setCancelable(false)
@@ -136,14 +132,11 @@ class ShortcutHook : IHook {
                         val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
                         subTitle = "NGA版本: $ngaVersion | 插件版本: $pluginVersion"
                     })
-                    linearLayout.addView(FitImageView(activity).apply {
-                        setImageResource(R.drawable.aifadian, null)
-                    })
-
+                    linearLayout.addView(FitImageView(activity,R.drawable.aifadian))
                     root.addView(linearLayout)
 
                     // APP更新后显示弹窗
-                    AlertDialog.Builder(themeContext).apply {
+                    AlertDialog.Builder(activity).apply {
                         setTitle("ChangeLog")
                         setView(root)
                         setCancelable(false)

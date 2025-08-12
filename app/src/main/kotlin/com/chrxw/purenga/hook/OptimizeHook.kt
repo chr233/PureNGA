@@ -19,10 +19,10 @@ import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.ui.ClickableItemView
-import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.PreferenceUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.ConstructorFinder
@@ -192,9 +192,7 @@ class OptimizeHook : IHook {
                                 setBackgroundColor(color)
                                 setOnClickListener { _ ->
                                     val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
-                                    val gotoIntent = activity.buildNormalIntent(PreferencesHook.clsSettingActivity)
-                                    gotoIntent.putExtra("openDialog", true)
-                                    activity.startActivity(gotoIntent)
+                                    PreferenceUtils.showSettingDialog(activity)
                                 }
                             })
                         }
