@@ -20,7 +20,8 @@
     <string name="plugin_setting">插件设置入口</string>
     <string name="plugin_setting_summary">NGA ＞ 设置 ＞ PureNGA 设置</string>
     <string name="tutorials_first">在侧滑菜单找到【设置】</string>
-    <string name="tutorials_second">在最底部找到【PureNGA 设置】</string>
+    <string name="tutorials_third">在最底部找到【PureNGA 设置】</string>
+    <string name="tutorials_second">点击图标即可打开【PureNGA 设置】</string>
     <string name="open_nga_summary">屎黄色论坛, 启动!</string>
     <string name="setting">设置</string>
     <string name="source_code">获取源码</string>

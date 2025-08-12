@@ -17,16 +17,10 @@ class FitImageView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    var fitWidth: Boolean = true
-        set(value) {
-            field = value
-            imageView.requestLayout()
-        }
-
     private val imageView = ImageView(context).apply {
         scaleType = ImageView.ScaleType.FIT_CENTER
         layoutParams = LayoutParams(
-            LayoutParams.WRAP_CONTENT,
+            LayoutParams.MATCH_PARENT,
             LayoutParams.WRAP_CONTENT
         )
     }
@@ -48,35 +42,21 @@ class FitImageView @JvmOverloads constructor(
 
     private fun adjustImageSize(drawable: Drawable?) {
         drawable ?: return
-        if (fitWidth) {
-            post {
-                val parentWidth = width
-                val dw = when (drawable) {
-                    is BitmapDrawable -> drawable.bitmap.width
-                    else -> drawable.intrinsicWidth
-                }
-                val dh = when (drawable) {
-                    is BitmapDrawable -> drawable.bitmap.height
-                    else -> drawable.intrinsicHeight
-                }
-                if (dw > 0 && dh > 0 && parentWidth > 0) {
-                    val scale = parentWidth.toFloat() / dw
-                    val newHeight = (dh * scale).toInt()
-                    imageView.layoutParams = LayoutParams(parentWidth, newHeight)
-                    imageView.requestLayout()
-                }
-            }
-        } else {
-            val width = when (drawable) {
+        post {
+            val parentWidth = width
+            val dw = when (drawable) {
                 is BitmapDrawable -> drawable.bitmap.width
                 else -> drawable.intrinsicWidth
             }
-            val height = when (drawable) {
+            val dh = when (drawable) {
                 is BitmapDrawable -> drawable.bitmap.height
                 else -> drawable.intrinsicHeight
             }
-            imageView.layoutParams = LayoutParams(width, height)
-            imageView.requestLayout()
+            if (dw > 0 && dh > 0 && parentWidth > 0) {
+                val newHeight = (dh * width.toFloat() / dw).toInt()
+                imageView.layoutParams.height = newHeight
+                imageView.requestLayout()
+            }
         }
     }
 

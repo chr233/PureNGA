@@ -1,5 +1,6 @@
 package com.chrxw.purenga.hook
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -546,6 +547,7 @@ class PreferencesHook : IHook {
             return root
         }
 
+        @SuppressLint("ResourceType")
         internal fun showSettingDialog(activity: Activity) {
             val view = generateView(activity)
             val themeContext = ContextThemeWrapper(activity, 0x7f13020b)

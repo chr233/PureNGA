@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -16,8 +15,6 @@ import android.widget.TableRow.LayoutParams
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.material3.lightColorScheme
 import androidx.core.net.toUri
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -111,19 +108,28 @@ class MainActivity : AppCompatActivity() {
                         orientation = LinearLayout.VERTICAL
                     }
                     linearLayout.addView(ClickableItemView(ctx).apply {
-                        title = "更新说明"
-                        subTitle = resources.getString(R.string.chang_log).replace("|", "\n")
-                    })
-                    linearLayout.addView(ClickableItemView(ctx).apply {
-                        title = "版本信息"
-                        val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
-                        subTitle = "插件版本: $pluginVersion"
+                        title = resources.getString(R.string.tutorials_first)
                     })
                     linearLayout.addView(FitImageView(ctx).apply {
                         setImageResource(R.drawable.tutorials3, null)
                     })
+                    linearLayout.addView(ClickableItemView(ctx).apply {
+                        title = resources.getString(R.string.tutorials_second)
+                    })
                     linearLayout.addView(FitImageView(ctx).apply {
                         setImageResource(R.drawable.tutorials4, null)
+                    })
+                    linearLayout.addView(ClickableItemView(ctx).apply {
+                        title = resources.getString(R.string.tutorials_first)
+                    })
+                    linearLayout.addView(FitImageView(ctx).apply {
+                        setImageResource(R.drawable.tutorials, null)
+                    })
+                    linearLayout.addView(ClickableItemView(ctx).apply {
+                        title = resources.getString(R.string.tutorials_third)
+                    })
+                    linearLayout.addView(FitImageView(ctx).apply {
+                        setImageResource(R.drawable.tutorials2, null)
                     })
 
                     root.addView(linearLayout)
