@@ -1,8 +1,10 @@
 package com.chrxw.purenga.hook
 
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.R
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -28,6 +30,8 @@ class ShareHook : IHook {
 
         private lateinit var eShareSuccess: Any
         private lateinit var MtdOnEvent: Method
+        private lateinit var strFakeShare: String
+        private lateinit var strFakeShareThree: String
 
         /**
          * 假装分享
@@ -54,6 +58,9 @@ class ShareHook : IHook {
 
         MtdOnEvent = findFirstMethodByName(clsArticleDetailActivity, "onEvent")!!
         clsEvt = MtdOnEvent.parameterTypes[0]
+
+        strFakeShare = R.string.fake_share.getStringFromMod()
+        strFakeShareThree = R.string.fake_share_three.getStringFromMod()
     }
 
     override fun hook() {
@@ -117,11 +124,11 @@ class ShareHook : IHook {
                     }
 
                     val fakeShare = clsActionsInfo.getConstructor(String::class.java, Int::class.java)
-                        .newInstance(Constant.STR_FAKE_SHARE, imgId)
+                        .newInstance(strFakeShare, imgId)
                     newMenu.add(fakeShare)
 
                     val fakeShare3 = clsActionsInfo.getConstructor(String::class.java, Int::class.java)
-                        .newInstance(Constant.STR_FAKE_SHARE_TRIPLE, imgId)
+                        .newInstance(strFakeShareThree, imgId)
                     newMenu.add(fakeShare3)
 
                     XposedHelpers.setObjectField(activity, "menus", newMenu)
@@ -137,8 +144,8 @@ class ShareHook : IHook {
                     val btnName = it.args[1] as String
                     AndroidLogger.i("clickItem: i10 $i str4 $btnName")
 
-                    when (btnName) {
-                        Constant.STR_FAKE_SHARE, Constant.STR_FAKE_SHARE_TRIPLE -> Helper.toast("假装分享成功")
+                    if (btnName == strFakeShare || btnName == strFakeShareThree) {
+                        Helper.toast("假装分享成功")
                     }
                 }
             }
@@ -149,35 +156,33 @@ class ShareHook : IHook {
                 "clickItem"
             )
 
-            if (mtdClickItem != null) {
-                mtdClickItem.createHook {
-                    before {
-                        it.log()
+            mtdClickItem?.createHook {
+                before {
+                    it.log()
 
-                        when (val btnName = it.args[1] as String) {
-                            Constant.STR_FAKE_SHARE, Constant.STR_FAKE_SHARE_TRIPLE -> {
-                                if (objArticleDetailActivity != null) {
-                                    val num = (1..4)
+                    val btnName = it.args[1] as String
 
-                                    fakeShare(objArticleDetailActivity!!, num.random())
+                    if (btnName == strFakeShare || btnName == strFakeShareThree) {
+                        if (objArticleDetailActivity != null) {
+                            val num = (1..4)
 
-                                    if (btnName == Constant.STR_FAKE_SHARE_TRIPLE) {
-                                        Thread.sleep(100)
-                                        fakeShare(objArticleDetailActivity!!, num.random())
-                                        Thread.sleep(100)
-                                        fakeShare(objArticleDetailActivity!!, num.random())
-                                    }
+                            fakeShare(objArticleDetailActivity!!, num.random())
 
-                                    Helper.toast("假装分享成功")
-                                } else {
-                                    Helper.toast("假装分享失败")
-                                }
+                            if (btnName == strFakeShareThree) {
+                                Thread.sleep(100)
+                                fakeShare(objArticleDetailActivity!!, num.random())
+                                Thread.sleep(100)
+                                fakeShare(objArticleDetailActivity!!, num.random())
                             }
+
+                            Helper.toast(R.string.fake_share_succes.getStringFromMod())
+                        } else {
+                            Helper.toast(R.string.fake_share_failed.getStringFromMod())
                         }
                     }
                 }
-            } else {
-                Helper.toast("假装分享功能启用失败, 可能不适用于当前版本")
+            } ?: {
+                Helper.toast(R.string.fake_share_failed_not_support.getStringFromMod())
             }
         }
 

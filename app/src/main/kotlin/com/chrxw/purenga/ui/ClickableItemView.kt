@@ -1,7 +1,6 @@
 package com.chrxw.purenga.ui
 
 import android.content.Context
-import android.graphics.Color
 import android.util.TypedValue
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -22,11 +21,18 @@ open class ClickableItemView(context: Context) : FrameLayout(context) {
         }
         this.isClickable = true
 
-        titleTextView.setTextColor(Color.BLACK)
+        val theme = context.theme
+
+        val typedValue = TypedValue()
+        theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
+
+        titleTextView.setTextColor(typedValue.data)
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
         titleTextView.setPadding(0, 0, 64.toPixel(context), 0)
 
-        subTextView.setTextColor(Color.GRAY)
+        theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
+//
+        subTextView.setTextColor(typedValue.data)
         subTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
         subTextView.setPadding(0, 0, 64.toPixel(context), 0)
         subTextView.visibility = GONE

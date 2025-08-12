@@ -185,7 +185,7 @@ class OptimizeHook : IHook {
 
                         val color = if (!Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt()
 
-                        if (pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于")) {
+                        if (BuildConfig.DEBUG || (pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于"))) {
                             linearLayout.addView(ClickableItemView(root.context).apply {
                                 title = "PureNGA设置"
                                 subTitle = "插件设置"

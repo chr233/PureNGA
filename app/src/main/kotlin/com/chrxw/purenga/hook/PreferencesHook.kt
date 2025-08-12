@@ -1,6 +1,5 @@
 package com.chrxw.purenga.hook
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -14,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
 import android.widget.Toast
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
@@ -40,7 +40,6 @@ class PreferencesHook : IHook {
         /**
          * 生成设置界面
          */
-        @SuppressLint("SetTextI18n")
         private fun generateView(context: Context): View {
             val root = ScrollView(context)
             val container = LinearLayout(context).apply {
@@ -549,8 +548,9 @@ class PreferencesHook : IHook {
 
         internal fun showSettingDialog(activity: Activity) {
             val view = generateView(activity)
+            val themeContext = ContextThemeWrapper(activity, 0x7f13020b)
 
-            AlertDialog.Builder(activity).apply {
+            AlertDialog.Builder(themeContext).apply {
                 setTitle(Constant.STR_PURENGA_SETTING)
                 setCancelable(false)
                 setView(view)

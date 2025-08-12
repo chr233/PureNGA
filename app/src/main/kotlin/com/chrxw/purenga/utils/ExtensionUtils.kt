@@ -1,21 +1,25 @@
 package com.chrxw.purenga.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.DisplayMetrics
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.hook.OptimizeHook
 import com.github.kyuubiran.ezxhelper.AndroidLogger
+import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import de.robv.android.xposed.XC_MethodHook
 import java.lang.reflect.Field
 import java.lang.reflect.Method
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 
 /**
  * 显示单位换算
@@ -30,13 +34,6 @@ object ExtensionUtils {
         val resources = context.resources
         val metrics = resources.displayMetrics
         return this * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
-    }
-
-    /**
-     * 转Json
-     */
-    fun Any.toJson(): String {
-        return gson.toJson(this)
     }
 
     /**
@@ -154,5 +151,18 @@ object ExtensionUtils {
             AndroidLogger.i("${field.name} = $value")
         }
         AndroidLogger.d("---------------------")
+    }
+
+    fun Int.getStringFromMod(): String {
+        return EzXHelper.moduleRes.getString(this)
+    }
+
+    fun Int.getStringFromMod(vararg formatArgs: Object): String {
+        return EzXHelper.moduleRes.getString(this, formatArgs)
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    fun Int.getDrawable(theme: Resources.Theme?): Drawable {
+        return EzXHelper.moduleRes.getDrawable(this, theme)
     }
 }

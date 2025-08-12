@@ -5,13 +5,24 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TableRow.LayoutParams
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.material3.lightColorScheme
 import androidx.core.net.toUri
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.chrxw.purenga.ui.ClickableItemView
+import com.chrxw.purenga.ui.FitImageView
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 
@@ -29,6 +40,37 @@ class MainActivity : AppCompatActivity() {
         fun isModuleActive(): Boolean {
             return false
         }
+    }
+
+    private fun isLightTheme(): Boolean {
+        val typedValue = android.util.TypedValue()
+        theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
+        val color = typedValue.data
+        val darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
+        return darkness < 0.5
+    }
+
+    fun transparentStatusBar() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        var systemUiVisibility = window.decorView.systemUiVisibility
+        systemUiVisibility =
+            systemUiVisibility or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        window.decorView.systemUiVisibility = systemUiVisibility
+        window.statusBarColor = Color.TRANSPARENT
+
+        //设置状态栏文字颜色
+        setStatusBarTextColor(isLightTheme())
+    }
+
+    private fun setStatusBarTextColor(light: Boolean) {
+        var systemUiVisibility = window.decorView.systemUiVisibility
+        systemUiVisibility = if (light) { //白色文字
+            systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        } else { //黑色文字
+            systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+        window.decorView.systemUiVisibility = systemUiVisibility
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,8 +103,33 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 "plugin_setting" -> {
+                    val ctx = requireContext()
+
+                    val root = ScrollView(ctx)
+                    val linearLayout = LinearLayout(ctx).apply {
+                        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                        orientation = LinearLayout.VERTICAL
+                    }
+                    linearLayout.addView(ClickableItemView(ctx).apply {
+                        title = "更新说明"
+                        subTitle = resources.getString(R.string.chang_log).replace("|", "\n")
+                    })
+                    linearLayout.addView(ClickableItemView(ctx).apply {
+                        title = "版本信息"
+                        val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+                        subTitle = "插件版本: $pluginVersion"
+                    })
+                    linearLayout.addView(FitImageView(ctx).apply {
+                        setImageResource(R.drawable.tutorials3, null)
+                    })
+                    linearLayout.addView(FitImageView(ctx).apply {
+                        setImageResource(R.drawable.tutorials4, null)
+                    })
+
+                    root.addView(linearLayout)
+
                     AlertDialog.Builder(activity).apply {
-                        setView(R.layout.plugin_setting)
+                        setView(root)
                         setNegativeButton("关闭", null)
                         show()
                     }

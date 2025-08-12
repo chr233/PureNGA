@@ -1,22 +1,24 @@
 package com.chrxw.purenga.hook
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
-import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.view.ContextThemeWrapper
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
 import com.chrxw.purenga.hook.base.IHook
+import com.chrxw.purenga.ui.ClickableItemView
+import com.chrxw.purenga.ui.FitImageView
 import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 
 class ShortcutHook : IHook {
@@ -87,6 +89,7 @@ class ShortcutHook : IHook {
         }
     }
 
+    @SuppressLint("ResourceType")
     override fun hook() {
         //显示首次运行提示
         findFirstMethodByName(OptimizeHook.clsMainActivity, "initLayout")?.createHook {
@@ -94,10 +97,11 @@ class ShortcutHook : IHook {
                 it.log()
 
                 val activity = it.thisObject as Activity
+                val themeContext = ContextThemeWrapper(activity, 0x7f13020b)
 
                 if (!Helper.isPluginConfigExists()) {
                     // 首次打开APP, 弹出提示框
-                    AlertDialog.Builder(activity).apply {
+                    AlertDialog.Builder(themeContext).apply {
                         setTitle("PureNGA 提示")
                         setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
                         setCancelable(false)
@@ -121,25 +125,26 @@ class ShortcutHook : IHook {
                         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
                         orientation = LinearLayout.VERTICAL
                     }
-                    linearLayout.addView(TextView(activity).apply {
-                        text = Constant.CHANGE_LOG
+                    linearLayout.addView(ClickableItemView(activity).apply {
+                        title = "更新说明"
+                        subTitle = R.string.chang_log.getStringFromMod().replace("|", "\n")
                     })
-                    linearLayout.addView(ImageView(activity).apply {
-                        val imageId = R.drawable.aifadian
-                        val drawable = EzXHelper.moduleRes.getDrawable(imageId, activity.theme)
-                        setImageDrawable(drawable)
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    linearLayout.addView(ClickableItemView(activity).apply {
+                        title = "版本信息"
+                        val ngaVersion = Helper.getNgaVersion()
+                        val sunType = if (Helper.isBundled()) "整合版" else "插件版"
+                        val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
+                        subTitle = "NGA版本: $ngaVersion | 插件版本: $pluginVersion"
+                    })
+                    linearLayout.addView(FitImageView(activity).apply {
+                        setImageResource(R.drawable.aifadian, null)
                     })
 
                     root.addView(linearLayout)
 
                     // APP更新后显示弹窗
-                    AlertDialog.Builder(activity).apply {
-                        setTitle("PureNGA 更新说明")
+                    AlertDialog.Builder(themeContext).apply {
+                        setTitle("ChangeLog")
                         setView(root)
                         setCancelable(false)
                         setNegativeButton("取消") { _, _ ->

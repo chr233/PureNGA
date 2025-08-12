@@ -4,11 +4,6 @@ package com.chrxw.purenga
  * 常量
  */
 object Constant {
-    const val CHANGE_LOG = """
-        适配 9.9.49
-        广告屏蔽功能新增游戏推荐类广告
-    """
-
     const val NGA_PACKAGE_NAME = "gov.pianzong.androidnga"
     const val REPO_URL = "https://github.com/chr233/PureNGA"
     const val AUTHOR_URL = "https://github.com/chr233"
@@ -65,7 +60,4 @@ object Constant {
     const val LAST_SHOW = "last_show"
 
     const val STR_PURENGA_SETTING = "PureNGA 设置"
-
-    const val STR_FAKE_SHARE = "假装分享"
-    const val STR_FAKE_SHARE_TRIPLE = "分享三次"
 }
