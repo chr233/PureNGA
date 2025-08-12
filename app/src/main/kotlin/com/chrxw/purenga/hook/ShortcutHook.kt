@@ -132,12 +132,12 @@ class ShortcutHook : IHook {
                         val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
                         subTitle = "NGA版本: $ngaVersion | 插件版本: $pluginVersion"
                     })
-                    linearLayout.addView(FitImageView(activity,R.drawable.aifadian))
+                    linearLayout.addView(FitImageView(activity, R.drawable.aifadian))
                     root.addView(linearLayout)
 
                     // APP更新后显示弹窗
                     AlertDialog.Builder(activity).apply {
-                        setTitle("ChangeLog")
+                        setTitle("PureNGA ChangeLog")
                         setView(root)
                         setCancelable(false)
                         setNegativeButton("取消") { _, _ ->
@@ -145,11 +145,8 @@ class ShortcutHook : IHook {
                                 "可以在【设置】>【PureNGA 设置】中配置插件功能", Toast.LENGTH_LONG
                             )
                         }
-                        setPositiveButton("确认") { _, _ ->
-                            val intent = context.buildNormalIntent(PreferencesHook.clsSettingActivity).apply {
-                                putExtra("openDialog", true)
-                            }
-                            context.startActivity(intent)
+                        setPositiveButton("关闭并不再提示") { _, _ ->
+                            Helper.setSpStr(Constant.LAST_SHOW, BuildConfig.VERSION_NAME)
                         }
                         create()
                         show()
