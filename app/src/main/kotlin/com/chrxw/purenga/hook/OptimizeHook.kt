@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.Button
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -18,7 +19,6 @@ import androidx.core.view.children
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
-import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
@@ -186,10 +186,12 @@ class OptimizeHook : IHook {
                         val color = if (!Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt()
 
                         if (BuildConfig.DEBUG || (pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于"))) {
-                            linearLayout.addView(ClickableItemView(root.context).apply {
-                                title = "PureNGA设置"
-                                subTitle = "插件设置"
-                                setBackgroundColor(color)
+                            linearLayout.addView(Button(root.context).apply {
+                                text = "PureNGA设置"
+//                                setBackgroundColor(color)
+                                setTextColor(if (Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt())
+                                setBackgroundColor(0)
+                                setPadding(5, 5, 5, 5)
                                 setOnClickListener { _ ->
                                     val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
                                     PreferenceUtils.showSettingDialog(activity)
@@ -198,10 +200,12 @@ class OptimizeHook : IHook {
                         }
 
                         if (BuildConfig.DEBUG) {
-                            linearLayout.addView(ClickableItemView(root.context).apply {
-                                title = "重启NGA"
-                                subTitle = "调试用"
-                                setBackgroundColor(color)
+                            linearLayout.addView(Button(root.context).apply {
+                                text = "重启NGA"
+//                                setBackgroundColor(color)
+                                setTextColor(if (Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt())
+                                setBackgroundColor(0)
+                                setPadding(5, 5, 5, 5)
                                 setOnClickListener { _ ->
                                     Helper.toast("正在重启")
                                     val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity

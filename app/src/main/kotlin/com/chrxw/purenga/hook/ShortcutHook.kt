@@ -2,6 +2,7 @@ package com.chrxw.purenga.hook
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.view.ContextThemeWrapper
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
@@ -94,10 +95,11 @@ class ShortcutHook : IHook {
                 it.log()
 
                 val activity = it.thisObject as Activity
+                val themeActivity = ContextThemeWrapper(activity, R.style.AppTheme)
 
                 if (!Helper.isPluginConfigExists()) {
                     // 首次打开APP, 弹出提示框
-                    AlertDialog.Builder(activity).apply {
+                    AlertDialog.Builder(themeActivity).apply {
                         setTitle("PureNGA 提示")
                         setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
                         setCancelable(false)
@@ -136,13 +138,13 @@ class ShortcutHook : IHook {
                     root.addView(linearLayout)
 
                     // APP更新后显示弹窗
-                    AlertDialog.Builder(activity).apply {
+                    AlertDialog.Builder(themeActivity).apply {
                         setTitle("PureNGA ChangeLog")
                         setView(root)
                         setCancelable(false)
-                        setNegativeButton("取消") { _, _ ->
+                        setNeutralButton("爱发电") { _, _ ->
                             Helper.toast(
-                                "可以在【设置】>【PureNGA 设置】中配置插件功能", Toast.LENGTH_LONG
+                                "11", Toast.LENGTH_LONG
                             )
                         }
                         setPositiveButton("关闭并不再提示") { _, _ ->

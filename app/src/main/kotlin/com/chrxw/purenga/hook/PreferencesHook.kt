@@ -48,17 +48,17 @@ class PreferencesHook : IHook {
                 val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
                 activity.runOnUiThread {
-                    btnPureNGASetting = Button(activity).also { btn ->
-                        btn.text = Constant.STR_PURENGA_SETTING
-                        btn.setOnClickListener {
+                    btnPureNGASetting = Button(activity).apply {
+                        text = Constant.STR_PURENGA_SETTING
+                        setOnClickListener {
                             PreferenceUtils.showSettingDialog(activity)
                         }
 
-                        btn.setTextColor(if (Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt())
-                        btn.setBackgroundColor(0)
-                        btn.setPadding(5, 5, 5, 5)
+                        setTextColor(if (Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt())
+                        setBackgroundColor(0)
+                        setPadding(5, 5, 5, 5)
                         linearLayout.removeViewAt(linearLayout.childCount - 1)
-                        linearLayout.addView(btn)
+                        linearLayout.addView(this)
                     }
                 }
 

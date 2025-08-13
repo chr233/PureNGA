@@ -82,13 +82,9 @@ class MainActivity : AppCompatActivity() {
             orientation = LinearLayout.VERTICAL
         }
         linearLayout.addView(ClickableItemView(this, false, R.string.tutorials_first))
-        linearLayout.addView(FitImageView(this, R.drawable.tutorials))
+        linearLayout.addView(FitImageView(this, R.drawable.tutorials3))
         linearLayout.addView(ClickableItemView(this, false, R.string.tutorials_second))
-        linearLayout.addView(FitImageView(this, R.drawable.tutorials))
-        linearLayout.addView(ClickableItemView(this, false, R.string.tutorials_first))
-        linearLayout.addView(FitImageView(this, R.drawable.tutorials))
-        linearLayout.addView(ClickableItemView(this, false, R.string.tutorials_third))
-        linearLayout.addView(FitImageView(this, R.drawable.tutorials))
+        linearLayout.addView(FitImageView(this, R.drawable.tutorials4))
 
         root.addView(linearLayout)
 
