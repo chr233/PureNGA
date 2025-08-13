@@ -68,7 +68,7 @@
 | :--------------------------------------------: | :-------------------------------------------------: | :---------------------------------------------------------: |
 | ![爱发电][afdian_img] <br> [链接][afdian_link] | ![buy me a coffee][bmac_img] <br> [链接][bmac_link] | ![USDT][usdt_img] <br> `TW41eecZ199QK6zujgKP4j1cz2bXzRus3c` |
 
-[afdian_qr]: https://raw.chrxw.com/chr233/master/afadian_qr.png
+[afdian_qr]: https://raw.chrxw.com/chr233/PureNGA/master/.github/aifadian.png
 [afdian_img]: https://img.shields.io/badge/爱发电-@chr__-ea4aaa.svg?logo=github-sponsors
 [afdian_link]: https://afdian.com/@chr233
 [bmac_qr]: https://raw.chrxw.com/chr233/master/bmc_qr.png
