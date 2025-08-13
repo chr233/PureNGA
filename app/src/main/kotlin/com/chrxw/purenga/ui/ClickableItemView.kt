@@ -126,12 +126,10 @@ open class ClickableItemView : FrameLayout {
             // 暗黑模式，设置深色
             titleTextView.setTextColor(Color.WHITE)
             subTextView.setTextColor(Color.LTGRAY)
-            setBackgroundColor(Color.DKGRAY)
         } else {
             // 普通模式，设置浅色
             titleTextView.setTextColor(Color.BLACK)
             subTextView.setTextColor(Color.DKGRAY)
-            setBackgroundColor(Color.WHITE)
         }
     }
 
