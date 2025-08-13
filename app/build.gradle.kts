@@ -7,6 +7,7 @@ android {
     namespace = "com.chrxw.purenga"
     compileSdk = 35
 
+
     buildFeatures {
         buildConfig = true
     }
@@ -14,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "com.chrxw.purenga"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = verCode
         versionName = verName
 
@@ -42,9 +43,6 @@ android {
     androidResources {
         additionalParameters += listOf("--allow-reserved-package-id", "--package-id", "0x50")
     }
-
-    buildToolsVersion = "35.0.0"
-    ndkVersion = "25.2.9519653"
 }
 
 java {

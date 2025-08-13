@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * 检测模块启用状态
          */
+        @Suppress("SameReturnValue")
         @JvmStatic
         @Keep
         fun isModuleActive(): Boolean {
@@ -100,6 +101,7 @@ class MainActivity : AppCompatActivity() {
         container.addView(ClickableItemView(this, R.string.about))
         container.addView(ClickableItemView(this, R.string.donate, R.string.donate_summary).apply {
             setOnClickListener {
+                toast("感谢支持")
                 Helper.openUrl(context, Constant.DONATE_URL)
             }
         })

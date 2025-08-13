@@ -10,7 +10,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.toPixel
-import com.github.kyuubiran.ezxhelper.AndroidLogger
 
 /**
  * 文本控件
@@ -32,10 +31,10 @@ open class ClickableItemView : FrameLayout {
         this.isClickable = true
 
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-        titleTextView.setPadding(0, 0, 64.toPixel(context), 0)
+        titleTextView.setPadding(0.toPixel(context), 0.toPixel(context), 64.toPixel(context), 0.toPixel(context))
 
         subTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
-        subTextView.setPadding(0, 0, 64.toPixel(context), 0)
+        subTextView.setPadding(0.toPixel(context), 0.toPixel(context), 64.toPixel(context), 0.toPixel(context))
         subTextView.visibility = GONE
 
         containerLayout.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)

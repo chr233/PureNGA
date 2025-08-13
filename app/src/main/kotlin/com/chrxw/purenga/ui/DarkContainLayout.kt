@@ -40,6 +40,4 @@ class DarkContainLayout : LinearLayout {
     override fun onConfigurationChanged(newConfig: Configuration) {
         applyColor(newConfig)
     }
-
-    fun addView(child: Any) {}
 }

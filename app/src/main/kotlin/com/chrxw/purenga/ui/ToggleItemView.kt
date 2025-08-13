@@ -1,6 +1,5 @@
 package com.chrxw.purenga.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.Gravity
 import android.view.View

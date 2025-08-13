@@ -17,6 +17,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.log
+import com.chrxw.purenga.utils.ExtensionUtils.toPixel
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.PreferenceUtils
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
@@ -139,7 +140,7 @@ class ShortcutHook : IHook {
 
                     linearLayout.addView(TextView(activity).apply {
                         text = changeLog
-                        setPadding(32, 32, 32, 32)
+                        setPadding(16.toPixel(context), 16.toPixel(context), 16.toPixel(context), 16.toPixel(context))
                         isSingleLine = false
                     })
 
