@@ -2,22 +2,23 @@ package com.chrxw.purenga.hook
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.view.ContextThemeWrapper
-import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TableRow.LayoutParams
+import android.widget.TextView
 import android.widget.Toast
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
 import com.chrxw.purenga.hook.base.IHook
-import com.chrxw.purenga.ui.ClickableItemView
-import com.chrxw.purenga.ui.FitImageView
+import com.chrxw.purenga.ui.DarkContainLayout
+import com.chrxw.purenga.ui.FitImageXpView
 import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.PreferenceUtils
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 
 class ShortcutHook : IHook {
@@ -31,6 +32,11 @@ class ShortcutHook : IHook {
         private lateinit var clsDraftActivity: Class<*>
         private lateinit var clsScanningActivity: Class<*>
         private lateinit var clsDiagnoseNetworkActivity: Class<*>
+
+        private fun openDonate(context: Context) {
+            Helper.toast("感谢支持")
+            Helper.openUrl(context, Constant.DONATE_URL)
+        }
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -101,7 +107,7 @@ class ShortcutHook : IHook {
                     // 首次打开APP, 弹出提示框
                     AlertDialog.Builder(themeActivity).apply {
                         setTitle("PureNGA 提示")
-                        setMessage("检测到插件配置文件不存在, 是否要前往插件设置?")
+                        setMessage("检测到插件配置文件不存在, 是否打开插件设置?")
                         setCancelable(false)
                         setNegativeButton("取消") { _, _ ->
                             Helper.toast(
@@ -109,43 +115,49 @@ class ShortcutHook : IHook {
                             )
                         }
                         setPositiveButton("确认") { _, _ ->
-                            val intent = context.buildNormalIntent(PreferencesHook.clsSettingActivity).apply {
-                                putExtra("openDialog", true)
-                            }
-                            context.startActivity(intent)
+                            PreferenceUtils.showSettingDialog(activity)
                         }
                         create()
                         show()
                     }
                 } else if (Helper.getSpStr(Constant.LAST_SHOW, "") != BuildConfig.VERSION_NAME) {
                     val root = ScrollView(activity)
-                    val linearLayout = LinearLayout(activity).apply {
-                        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-                        orientation = LinearLayout.VERTICAL
+                    val linearLayout = DarkContainLayout(activity, true)
+
+                    val ngaVersion = Helper.getNgaVersion()
+                    val sunType = if (Helper.isBundled()) "整合版" else "插件版"
+                    val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
+
+                    val changeLog = buildString {
+                        appendLine(R.string.chang_log.getStringFromMod().replace("|", "\n"))
+                        appendLine("-------------------------")
+                        appendLine("NGA版本: $ngaVersion")
+                        appendLine("插件版本: $pluginVersion")
+                        appendLine("-------------------------")
+                        append("⬇️捐赠项目来支持持续开发⬇️")
                     }
-                    linearLayout.addView(ClickableItemView(activity).apply {
-                        title = "更新说明"
-                        subTitle = R.string.chang_log.getStringFromMod().replace("|", "\n")
+
+                    linearLayout.addView(TextView(activity).apply {
+                        text = changeLog
+                        setPadding(32, 32, 32, 32)
+                        isSingleLine = false
                     })
-                    linearLayout.addView(ClickableItemView(activity).apply {
-                        title = "版本信息"
-                        val ngaVersion = Helper.getNgaVersion()
-                        val sunType = if (Helper.isBundled()) "整合版" else "插件版"
-                        val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
-                        subTitle = "NGA版本: $ngaVersion | 插件版本: $pluginVersion"
+
+                    linearLayout.addView(FitImageXpView(activity, R.drawable.aifadian).apply {
+                        setOnClickListener {
+                            openDonate(context)
+                        }
                     })
-                    linearLayout.addView(FitImageView(activity, R.drawable.aifadian))
+
                     root.addView(linearLayout)
 
                     // APP更新后显示弹窗
                     AlertDialog.Builder(themeActivity).apply {
-                        setTitle("PureNGA ChangeLog")
+                        setTitle("PureNGA 更新说明")
                         setView(root)
                         setCancelable(false)
                         setNeutralButton("爱发电") { _, _ ->
-                            Helper.toast(
-                                "11", Toast.LENGTH_LONG
-                            )
+                            openDonate(context)
                         }
                         setPositiveButton("关闭并不再提示") { _, _ ->
                             Helper.setSpStr(Constant.LAST_SHOW, BuildConfig.VERSION_NAME)

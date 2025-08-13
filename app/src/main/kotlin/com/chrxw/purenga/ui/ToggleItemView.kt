@@ -12,8 +12,7 @@ import com.chrxw.purenga.utils.Helper
 /**
  * 开关控件
  */
-class ToggleItemView : ClickableItemView, OnClickListener {
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
+open class ToggleItemView : ClickableItemView, OnClickListener {
     private val switch: Switch
     private val spKey: String
 
@@ -32,6 +31,13 @@ class ToggleItemView : ClickableItemView, OnClickListener {
         this.subTextView.setOnClickListener(this)
         this.switch.setOnClickListener(this)
         this.addView(switch)
+
+        applyColor(context.resources.configuration)
+    }
+
+    protected constructor(context: Context, spKey: String = "",xposed: Boolean):this(context,spKey){
+        this.xposed = xposed
+        applyColor(context.resources.configuration)
     }
 
     constructor(context: Context, spKey: String = "", title: String) : this(context, spKey) {
@@ -44,12 +50,12 @@ class ToggleItemView : ClickableItemView, OnClickListener {
         this.subTitle = subTitle
     }
 
-    constructor(context: Context, spKey: String = "", xposed: Boolean, titleId: Int) : this(context, spKey) {
+    constructor(context: Context, spKey: String = "", titleId: Int) : this(context, spKey) {
         this.title = if (xposed) titleId.getStringFromMod() else context.getString(titleId)
         isCenter = true
     }
 
-    constructor(context: Context, spKey: String = "", xposed: Boolean, titleId: Int, subTitleId: Int) : this(
+    constructor(context: Context, spKey: String = "", titleId: Int, subTitleId: Int) : this(
         context, spKey
     ) {
         this.title = if (xposed) titleId.getStringFromMod() else context.getString(titleId)

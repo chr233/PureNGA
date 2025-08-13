@@ -11,11 +11,13 @@ import android.widget.TextView
 import androidx.core.graphics.toColorInt
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
+import com.chrxw.purenga.R
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.PreferenceUtils
+import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -102,6 +104,11 @@ class PreferencesHook : IHook {
 
                 val appIconId = Helper.getRId("iv_app_icon")
                 val appIcon = root.findViewById<ImageView>(appIconId)
+
+                if (EzXHelper.isModuleResInited) {
+                    val pluginIcon = EzXHelper.moduleRes.getDrawable(R.mipmap.ic_launcher, activity.theme)
+                    appIcon.setImageDrawable(pluginIcon)
+                }
 
                 appIcon.setOnClickListener {
                     PreferenceUtils.showSettingDialog(activity)

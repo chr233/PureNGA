@@ -56,9 +56,11 @@ object Helper {
      */
     fun getNgaVersion(): String {
         return try {
-            EzXHelper.appContext.packageManager.getPackageInfo(
+            val info = EzXHelper.appContext.packageManager.getPackageInfo(
                 Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
-            ).versionName.toString()
+            )
+
+            "${info.versionName} (${info.longVersionCode})"
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
             "获取失败"
@@ -81,14 +83,12 @@ object Helper {
     }
 
     fun isPluginConfigExists(): Boolean {
-        val path =
-            "${EzXHelper.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
+        val path = "${EzXHelper.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
         return File(path).exists()
     }
 
     fun resetPluginConfig(): Boolean {
-        val path =
-            "${EzXHelper.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
+        val path = "${EzXHelper.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
         return File(path).delete()
     }
 
@@ -252,6 +252,16 @@ object Helper {
         } catch (e: Exception) {
             AndroidLogger.e("导出失败", e)
             null
+        }
+    }
+
+    /**
+     * 打开链接
+     */
+    fun openUrl(context: Context, uri: String) {
+        if (uri.isNotEmpty()) {
+            val intent = Intent(Intent.ACTION_VIEW, uri.toUri())
+            context.startActivity(intent)
         }
     }
 

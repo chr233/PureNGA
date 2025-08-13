@@ -9,19 +9,24 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import com.chrxw.purenga.utils.ExtensionUtils.getDrawable
 
-class FitImageView : FrameLayout {
-    private val imageView: ImageView
+open class FitImageView : FrameLayout {
+    protected val imageView: ImageView
+    protected var xposed: Boolean = false
 
     constructor(context: Context) : super(context) {
         imageView = ImageView(context).apply {
             scaleType = ImageView.ScaleType.FIT_CENTER
             layoutParams = LayoutParams(
                 LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT
+                LayoutParams.WRAP_CONTENT,
             )
         }
 
         this.addView(imageView)
+    }
+
+    protected constructor(context: Context, xposed: Boolean) : this(context) {
+        this.xposed = xposed
     }
 
     constructor(context: Context, resId: Int, theme: Resources.Theme? = null) : this(context) {

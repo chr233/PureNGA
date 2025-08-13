@@ -3,7 +3,6 @@ package com.chrxw.purenga.utils
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.os.Build
 import android.view.View
@@ -12,11 +11,11 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
 import android.widget.Toast
-import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
-import com.chrxw.purenga.ui.ClickableItemView
-import com.chrxw.purenga.ui.ToggleItemView
+import com.chrxw.purenga.ui.ClickableItemXpView
+import com.chrxw.purenga.ui.DarkContainLayout
+import com.chrxw.purenga.ui.ToggleItemXpView
 import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 
@@ -27,6 +26,7 @@ object PreferenceUtils {
         AlertDialog.Builder(activity).apply {
             setTitle(Constant.STR_PURENGA_SETTING)
             setCancelable(false)
+
             setView(view)
             setNegativeButton("仅保存") { _, _ ->
                 Helper.toast("设置已保存, 重启后生效")
@@ -67,29 +67,26 @@ object PreferenceUtils {
      */
     fun generateView(context: Context): View {
         val root = ScrollView(context)
-        val container = LinearLayout(context).apply {
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-            orientation = LinearLayout.VERTICAL
-        }
+        val container = DarkContainLayout(context, true)
 
         // 净化设置
-        container.addView(ClickableItemView(context, "净化设置"))
+        container.addView(ClickableItemXpView(context, "净化设置"))
         container.addView(
-            ToggleItemView(context, Constant.PURE_SPLASH_AD, "屏蔽开屏广告", "冷启动会短暂黑屏, 属于正常现象")
+            ToggleItemXpView(context, Constant.PURE_SPLASH_AD, "屏蔽开屏广告", "冷启动会短暂黑屏, 属于正常现象")
         )
         container.addView(
-            ToggleItemView(context, Constant.PURE_POST_AD, "屏蔽信息流广告", "去除Banner位, 帖子列表, 帖子末尾的广告")
+            ToggleItemXpView(context, Constant.PURE_POST_AD, "屏蔽信息流广告", "去除Banner位, 帖子列表, 帖子末尾的广告")
         )
         container.addView(
-            ToggleItemView(context, Constant.PURE_GAME_RECOMMEND, "屏蔽游戏推荐", "去除首页游戏推荐广告")
+            ToggleItemXpView(context, Constant.PURE_GAME_RECOMMEND, "屏蔽游戏推荐", "去除首页游戏推荐广告")
         )
         container.addView(
-            ToggleItemView(context, Constant.PURE_POPUP_AD, "屏蔽首页广告", "去除首页浮窗广告")
+            ToggleItemXpView(context, Constant.PURE_POPUP_AD, "屏蔽首页广告", "去除首页浮窗广告")
         )
         container.addView(
-            ToggleItemView(context, Constant.ENABLE_PURE_POST, "屏蔽广告帖子", "按照关键词过滤帖子列表")
+            ToggleItemXpView(context, Constant.ENABLE_PURE_POST, "屏蔽广告帖子", "按照关键词过滤帖子列表")
         )
-        container.addView(ClickableItemView(context, " - 设置帖子屏蔽词", "关键词之间使用 | 分隔, 关键词匹配").apply {
+        container.addView(ClickableItemXpView(context, " - 设置帖子屏蔽词", "关键词之间使用 | 分隔, 关键词匹配").apply {
             setOnClickListener {
                 if (Helper.getSpBool(Constant.ENABLE_PURE_POST, false)) {
                     val input = EditText(context).apply {
@@ -121,7 +118,7 @@ object PreferenceUtils {
             }
         })
 
-        container.addView(ClickableItemView(context, " - 设置发帖人屏蔽词", "关键词之间使用 | 分隔, 全名匹配").apply {
+        container.addView(ClickableItemXpView(context, " - 设置发帖人屏蔽词", "关键词之间使用 | 分隔, 全名匹配").apply {
             setOnClickListener {
                 if (Helper.getSpBool(Constant.ENABLE_PURE_POST, false)) {
                     val input = EditText(context).apply {
@@ -154,8 +151,8 @@ object PreferenceUtils {
         })
 
         // 界面优化
-        container.addView(ClickableItemView(context, "界面优化"))
-        container.addView(ClickableItemView(context, "侧边栏净化", "勾选要过滤的侧边栏菜单").apply {
+        container.addView(ClickableItemXpView(context, "界面优化"))
+        container.addView(ClickableItemXpView(context, "侧边栏净化", "勾选要过滤的侧边栏菜单").apply {
             setOnClickListener {
                 val pureSetting = Helper.getSpStr(Constant.PURE_SLIDE_MENU, null)
 
@@ -232,16 +229,16 @@ object PreferenceUtils {
                 }
             }
         })
-        container.addView(ToggleItemView(context, Constant.REMOVE_STORE_ICON, "净化导航栏1", "去除导航栏游戏库入口"))
-        container.addView(ToggleItemView(context, Constant.REMOVE_ACTIVITY_ICON, "净化导航栏2", "去除导航栏活动图标"))
+        container.addView(ToggleItemXpView(context, Constant.REMOVE_STORE_ICON, "净化导航栏1", "去除导航栏游戏库入口"))
+        container.addView(ToggleItemXpView(context, Constant.REMOVE_ACTIVITY_ICON, "净化导航栏2", "去除导航栏活动图标"))
         container.addView(
-            ToggleItemView(context, Constant.REMOVE_WECHAT_ICON, "去除微信分享图标", "移除帖子详情页右上角微信图标")
+            ToggleItemXpView(context, Constant.REMOVE_WECHAT_ICON, "去除微信分享图标", "移除帖子详情页右上角微信图标")
         )
         container.addView(
-            ToggleItemView(context, Constant.REMOVE_POPUP_POST, "去除首页文章推荐", "移除首页导航栏上方文章推荐")
+            ToggleItemXpView(context, Constant.REMOVE_POPUP_POST, "去除首页文章推荐", "移除首页导航栏上方文章推荐")
         )
         container.addView(
-            ToggleItemView(
+            ToggleItemXpView(
                 context,
                 Constant.QUICK_ACCOUNT_MANAGE,
                 "快捷切换账号",
@@ -249,14 +246,14 @@ object PreferenceUtils {
             )
         )
         container.addView(
-            ToggleItemView(
+            ToggleItemXpView(
                 context, Constant.PREFER_NEW_POST, "默认使用“新发布”", "帖子列表默认使用“新发布”而不是“新回复”"
             )
         )
 
         // 自定义
-        container.addView(ClickableItemView(context, "自定义"))
-        container.addView(ClickableItemView(context, "自定义首页", "设置APP首页").apply {
+        container.addView(ClickableItemXpView(context, "自定义"))
+        container.addView(ClickableItemXpView(context, "自定义首页", "设置APP首页").apply {
             setOnClickListener {
                 val items = arrayOf("首页", "社区", "我的")
                 val indexSetting = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
@@ -285,7 +282,7 @@ object PreferenceUtils {
             }
         })
 
-        container.addView(ClickableItemView(context, "设置自定义字体", "设置帖子详情页使用的字体").apply {
+        container.addView(ClickableItemXpView(context, "设置自定义字体", "设置帖子详情页使用的字体").apply {
             setOnClickListener {
 
                 val root = LinearLayout(context).apply {
@@ -293,7 +290,7 @@ object PreferenceUtils {
                     orientation = LinearLayout.VERTICAL
                 }
 
-                val check = ToggleItemView(
+                val check = ToggleItemXpView(
                     context,
                     Constant.ENABLE_CUSTOM_FONT,
                     "启用自定义字体",
@@ -330,7 +327,7 @@ object PreferenceUtils {
                 }
             }
         })
-        container.addView(ClickableItemView(context, "", "").apply {
+        container.addView(ClickableItemXpView(context, "", "").apply {
             title = "自定义快捷方式"
             subTitle = "设置长按APP图标快捷方式, 仅支持安卓 7.1 及以上版本"
             setOnClickListener {
@@ -430,14 +427,14 @@ object PreferenceUtils {
         })
 
         // 其他功能
-        container.addView(ClickableItemView(context, "其他功能"))
+        container.addView(ClickableItemXpView(context, "其他功能"))
         container.addView(
-            ToggleItemView(
+            ToggleItemXpView(
                 context, Constant.AUTO_SIGN, "自动打开签到页面", "没有签到时自动打开签到页面进行签到"
             )
         )
         container.addView(
-            ToggleItemView(
+            ToggleItemXpView(
                 context,
                 Constant.PURE_CALENDAR_DIALOG,
                 "屏蔽日历弹窗",
@@ -445,97 +442,107 @@ object PreferenceUtils {
             )
         )
         container.addView(
-            ToggleItemView(
+            ToggleItemXpView(
                 context,
                 Constant.USE_EXTERNAL_BROWSER,
                 "使用外部浏览器打开链接",
                 "打开非NGA链接时自动调用外部系统浏览器"
             )
         )
-        container.addView(ToggleItemView(context, Constant.KILL_UPDATE_CHECK, "禁止APP检查更新", "尝试阻止NGA检查更新"))
-        container.addView(ToggleItemView(context, Constant.KILL_POPUP_DIALOG, "屏蔽应用内弹窗", "作用不明"))
-        container.addView(ToggleItemView(context, Constant.FAKE_SHARE, "假装分享", "在分享菜单增加一个“假装分享”按钮"))
-        container.addView(ToggleItemView(context, Constant.LOCAL_VIP, "本地会员", "假装是付费会员(例如换肤功能有效)"))
         container.addView(
-            ToggleItemView(
+            ToggleItemXpView(
+                context,
+                Constant.KILL_UPDATE_CHECK,
+                "禁止APP检查更新",
+                "尝试阻止NGA检查更新"
+            )
+        )
+        container.addView(ToggleItemXpView(context, Constant.KILL_POPUP_DIALOG, "屏蔽应用内弹窗", "作用不明"))
+        container.addView(
+            ToggleItemXpView(
+                context,
+                Constant.FAKE_SHARE,
+                "假装分享",
+                "在分享菜单增加一个“假装分享”按钮"
+            )
+        )
+        container.addView(ToggleItemXpView(context, Constant.LOCAL_VIP, "本地会员", "假装是付费会员(例如换肤功能有效)"))
+        container.addView(
+            ToggleItemXpView(
                 context, Constant.BYPASS_INSTALL_CHECK, "绕过已安装检查", "分享到指定App前检查不检查是否已安装(调试用)"
             )
         )
 
         // 插件设置
-        container.addView(ClickableItemView(context, "插件设置"))
+        container.addView(ClickableItemXpView(context, "插件设置"))
         container.addView(
-            ToggleItemView(context, Constant.HIDE_HOOK_INFO, "静默运行", "启动时不显示模块运行信息")
+            ToggleItemXpView(context, Constant.HIDE_HOOK_INFO, "静默运行", "启动时不显示模块运行信息")
         )
         container.addView(
-            ToggleItemView(
+            ToggleItemXpView(
                 context, Constant.HIDE_ERROR_INFO, "静默报错信息", "启动时不显示模块报错信息(如果有的话)"
             )
         )
 
         // 关于
-        container.addView(ClickableItemView(context, "关于"))
-        container.addView(ClickableItemView(context, "手动检查更新", "").apply {
+        container.addView(ClickableItemXpView(context, "关于"))
+        container.addView(ClickableItemXpView(context, "手动检查更新", "").apply {
             val ngaVersion = Helper.getNgaVersion()
-            val sunType = if (Helper.isBundled()) "整合版" else "插件版"
-            val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
-            subTitle = "NGA版本: $ngaVersion | 插件版本: $pluginVersion"
+            val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+            subTitle = "NGA: $ngaVersion | 插件: $pluginVersion"
             setOnClickListener {
                 val uri = if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
-                val intent = Intent(Intent.ACTION_VIEW, uri.toUri())
-                context.startActivity(intent)
+                Helper.openUrl(context, uri)
             }
         })
-        container.addView(ClickableItemView(context, "作者", "GitHub @chr233").apply {
+        container.addView(ClickableItemXpView(context, "作者", "GitHub @chr233").apply {
             setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Constant.AUTHOR_URL.toUri())
-                context.startActivity(intent)
+                Helper.openUrl(context, Constant.AUTHOR_URL)
             }
         })
-        container.addView(ClickableItemView(context, "捐赠", "爱发电 @chr233").apply {
+        container.addView(ClickableItemXpView(context, "捐赠", "爱发电 @chr233").apply {
             setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Constant.DONATE_URL.toUri())
-                context.startActivity(intent)
+                Helper.openUrl(context, Constant.DONATE_URL)
             }
         })
 
         // 导入导出
-        container.addView(ClickableItemView(context, "导入导出"))
-        container.addView(ClickableItemView(context, "导出插件设置", "-").apply {
+        container.addView(ClickableItemXpView(context, "导入导出"))
+        container.addView(ClickableItemXpView(context, "导出插件设置", "导出插件设置").apply {
             setOnClickListener {
                 val result = Helper.exportSharedPreference(
                     context, Constant.PLUGIN_PREFERENCE_NAME, Constant.PLUGIN_PREFERENCE_NAME
                 )
                 val msg = buildString {
-                    if (result != null) "导出成功" else "导出失败"
-                    "配置文件路径: $result"
+                    appendLine(if (result != null) "导出成功" else "导出失败")
+                    appendLine("配置文件路径: $result")
                 }
                 Helper.toast(msg, Toast.LENGTH_SHORT)
             }
         })
-        container.addView(ClickableItemView(context, "导入插件设置", "-").apply {
+        container.addView(ClickableItemXpView(context, "导入插件设置", "导入插件设置").apply {
             setOnClickListener {
                 val result = Helper.importSharedPreference(
                     context, Constant.PLUGIN_PREFERENCE_NAME, Constant.PLUGIN_PREFERENCE_NAME
                 )
                 val msg = buildString {
-                    if (result != null) "导入成功" else "导入失败"
-                    "配置文件路径: $result"
+                    appendLine(if (result != null) "导入成功" else "导入失败")
+                    appendLine("配置文件路径: $result")
                 }
                 Helper.toast(msg, Toast.LENGTH_SHORT)
             }
         })
 
         // 调试设置
-        container.addView(ClickableItemView(context, "调试设置"))
-        container.addView(ToggleItemView(context, Constant.ENABLE_HOOK_LOG, "启用Hook日志", "在Logcat中输出详细日志"))
+        container.addView(ClickableItemXpView(context, "调试设置"))
+        container.addView(ToggleItemXpView(context, Constant.ENABLE_HOOK_LOG, "启用Hook日志", "在Logcat中输出详细日志"))
         container.addView(
-            ToggleItemView(
+            ToggleItemXpView(
                 context, Constant.ENABLE_ACTIVITY_LOG, "启用Activity日志", "在Logcat中输出详细日志"
             )
         )
         container.addView(
-            ToggleItemView(
+            ToggleItemXpView(
                 context, Constant.ENABLE_POST_LOG, "启用帖子信息日志", "在Logcat中输出详细日志"
             )
         )
