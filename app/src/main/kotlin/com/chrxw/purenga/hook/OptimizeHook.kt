@@ -3,6 +3,7 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -17,7 +18,7 @@ import androidx.core.view.children
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
-import com.chrxw.purenga.ui.ClickableItemView
+import com.chrxw.purenga.ui.ClickableItemXpView
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
@@ -137,7 +138,7 @@ class OptimizeHook : IHook {
         val pureSlideMenu = Helper.getSpStr(Constant.PURE_SLIDE_MENU, null)?.split("|") ?: arrayListOf()
         val quickAccount = Helper.getSpBool(Constant.QUICK_ACCOUNT_MANAGE, false)
 
-        if (pureSlideMenu.isNotEmpty() || quickAccount) {
+        if (pureSlideMenu.isNotEmpty() || quickAccount || BuildConfig.DEBUG) {
             findFirstMethodByName(clsHomeDrawerLayout, "initLayout")?.createHook {
                 after {
                     it.log()
@@ -146,7 +147,7 @@ class OptimizeHook : IHook {
                     val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
 
                     //净化侧拉菜单
-                    if (pureSlideMenu.isNotEmpty()) {
+                    if (pureSlideMenu.isNotEmpty() || BuildConfig.DEBUG) {
                         val scrollView = root.getChildAt(1) as ScrollView
                         val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
@@ -184,7 +185,8 @@ class OptimizeHook : IHook {
 
                         if (BuildConfig.DEBUG || (pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于"))) {
                             linearLayout.addView(
-                                ClickableItemView(root.context, "PureNGA 设置", "打开插件设置").apply {
+                                ClickableItemXpView(root.context, "PureNGA 设置", "打开插件设置").apply {
+                                    setBackgroundColor(Color.LTGRAY)
                                     setOnClickListener { _ ->
                                         val activity =
                                             XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
@@ -195,7 +197,8 @@ class OptimizeHook : IHook {
 
                         if (BuildConfig.DEBUG) {
                             linearLayout.addView(
-                                ClickableItemView(root.context, "重启 NGA", "调试用").apply {
+                                ClickableItemXpView(root.context, "重启 NGA", "调试用").apply {
+                                    setBackgroundColor(Color.LTGRAY)
                                     setOnClickListener { _ ->
                                         Helper.toast("正在重启")
                                         val activity =

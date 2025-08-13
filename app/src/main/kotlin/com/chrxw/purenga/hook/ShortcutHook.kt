@@ -3,6 +3,8 @@ package com.chrxw.purenga.hook
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.ContextThemeWrapper
 import android.widget.ScrollView
 import android.widget.TextView
@@ -20,7 +22,10 @@ import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.ExtensionUtils.toPixel
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.PreferenceUtils
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class ShortcutHook : IHook {
 
@@ -121,7 +126,7 @@ class ShortcutHook : IHook {
                         create()
                         show()
                     }
-                } else if (Helper.getSpStr(Constant.LAST_SHOW, "") != BuildConfig.VERSION_NAME) {
+                } else if (Helper.getSpInt(Constant.LAST_SHOW, 0) != BuildConfig.VERSION_CODE) {
                     val root = ScrollView(activity)
                     val linearLayout = DarkContainLayout(activity, true)
 
@@ -157,14 +162,38 @@ class ShortcutHook : IHook {
                         setTitle("PureNGA 更新说明")
                         setView(root)
                         setCancelable(false)
-                        setNeutralButton("爱发电") { _, _ ->
+                        setNeutralButton("爱发电") { dialog,_ ->
                             openDonate(context)
+                            dialog.dismiss()
                         }
-                        setPositiveButton("关闭并不再提示") { _, _ ->
-                            Helper.setSpStr(Constant.LAST_SHOW, BuildConfig.VERSION_NAME)
-                        }
+                        setPositiveButton("关闭并不再提示",null)
                         create()
-                        show()
+
+                        setOnDismissListener {
+                            Helper.setSpInt(Constant.LAST_SHOW, BuildConfig.VERSION_CODE)
+                        }
+
+                        show().apply {
+                            val btn = getButton(AlertDialog.BUTTON_POSITIVE)
+                            btn.isEnabled = false
+
+                            val handler = Handler(Looper.getMainLooper())
+                            val timer = Timer()
+                            var count = 5
+                            timer.schedule(0, 1000) {
+                                handler.post {
+                                    AndroidLogger.w(count.toString())
+                                    if (count > 0) {
+                                        btn.text = "($count)"
+                                        count--
+                                    } else {
+                                        btn.isEnabled = true
+                                        btn.text = "关闭并不再提示"
+                                        timer.cancel()
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
