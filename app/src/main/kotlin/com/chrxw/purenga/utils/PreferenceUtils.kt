@@ -438,7 +438,7 @@ object PreferenceUtils {
                 context,
                 Constant.PURE_CALENDAR_DIALOG,
                 "屏蔽日历弹窗",
-                "屏蔽签到页面的添加日历提醒弹窗, 9.9.20 之前无需开启"
+                "屏蔽签到页面的添加日历提醒弹窗, 9.9.20 之前无需开启, 9.9.50 疑似失效"
             )
         )
         container.addView(
@@ -454,7 +454,7 @@ object PreferenceUtils {
                 context,
                 Constant.KILL_UPDATE_CHECK,
                 "禁止APP检查更新",
-                "尝试阻止NGA检查更新"
+                "尝试阻止NGA检查更新, 9.9.50 疑似失效"
             )
         )
         container.addView(ToggleItemXpView(context, Constant.KILL_POPUP_DIALOG, "屏蔽应用内弹窗", "作用不明"))
