@@ -1,5 +1,6 @@
 package com.chrxw.purenga.hook
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -100,6 +101,7 @@ class ShortcutHook : IHook {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun hook() {
         //显示首次运行提示
         findFirstMethodByName(OptimizeHook.clsMainActivity, "initLayout")?.createHook {
