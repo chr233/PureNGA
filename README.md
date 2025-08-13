@@ -64,11 +64,10 @@
 
 ## 捐赠
 
-|       ![[链接][afdian_link]][afdian_qr]        |
-| :--------------------------------------------: |
-| ![爱发电][afdian_img] <br> [链接][afdian_link] |
+| [<img src="https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/aifadian.webp" width="250px">][afdian_link] |
+| :---------------------------------------------------------------------------------------------------------: |
+|                                    [![爱发电][afdian_img]][afdian_link]                                     |
 
-[afdian_qr]: https://raw.chrxw.com/PureNGA/master/.github/aifadian.png
 [afdian_img]: https://img.shields.io/badge/爱发电-@chr__-ea4aaa.svg?logo=github-sponsors
 [afdian_link]: https://afdian.com/@chr233
 
