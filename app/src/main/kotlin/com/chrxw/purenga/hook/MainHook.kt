@@ -72,6 +72,12 @@ class MainHook : IHook {
                 }
             }
 
+            findFirstMethodByName(clsMainActivity, "setupNotification"            )?.createHook {
+                replace {
+                    it.log()
+                }
+            }
+
             if (BuildConfig.DEBUG) {
                 findFirstMethodByName(clsNGAApplication, "handleMessage")?.createHook {
                     before {
