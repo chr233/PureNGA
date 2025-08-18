@@ -64,30 +64,22 @@
 
 ## 捐赠
 
-|               ![img][afdian_qr]                |                   ![img][bmac_qr]                   |                       ![img][usdt_qr]                       |
-| :--------------------------------------------: | :-------------------------------------------------: | :---------------------------------------------------------: |
-| ![爱发电][afdian_img] <br> [链接][afdian_link] | ![buy me a coffee][bmac_img] <br> [链接][bmac_link] | ![USDT][usdt_img] <br> `TW41eecZ199QK6zujgKP4j1cz2bXzRus3c` |
+| [<img src="https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/aifadian.webp" width="250px">][afdian_link] |
+| :---------------------------------------------------------------------------------------------------------: |
+|                                    [![爱发电][afdian_img]][afdian_link]                                     |
 
-[afdian_qr]: https://raw.chrxw.com/chr233/master/afadian_qr.png
 [afdian_img]: https://img.shields.io/badge/爱发电-@chr__-ea4aaa.svg?logo=github-sponsors
 [afdian_link]: https://afdian.com/@chr233
-[bmac_qr]: https://raw.chrxw.com/chr233/master/bmc_qr.png
-[bmac_img]: https://img.shields.io/badge/buy%20me%20a%20coffee-@chr233-yellow?logo=buymeacoffee
-[bmac_link]: https://www.buymeacoffee.com/chr233
-[usdt_qr]: https://raw.chrxw.com/chr233/master/usdt_qr.png
-[usdt_img]: https://img.shields.io/badge/USDT-TRC20-2354e6.svg?logo=bitcoin
 
 ## 设置菜单入口
 
 1.16.0 以后支持从关于页打开插件菜单
 
-| ![img3](app/src/main/res/drawable/tutorials3.webp) | ![img4](app/src/main/res/drawable/tutorials4.webp) |
-| -------------------------------------------------- | -------------------------------------------------- |
+| ![img3][img3] | ![img4][img4] |
+| ------------- | ------------- |
 
-全版本通用插件设置菜单位置
-
-| ![img1](app/src/main/res/drawable/tutorials.webp) | ![img2](app/src/main/res/drawable/tutorials2.webp) |
-| ------------------------------------------------- | -------------------------------------------------- |
+[img3]: https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials3.webp
+[img4]: https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials4.webp
 
 ---
 

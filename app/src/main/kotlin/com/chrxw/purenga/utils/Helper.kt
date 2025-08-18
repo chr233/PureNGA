@@ -161,10 +161,24 @@ object Helper {
         spPlugin.edit { putString(key, value) }
     }
 
+    /**
+     * 获取SharedPreference值
+     */
+    fun getSpInt(key: String, defValue: Int): Int {
+        return spPlugin.getInt(key, defValue)
+    }
+
+    /**
+     * 设置SharedPreference值
+     */
+    fun setSpInt(key: String, value: Int) {
+        spPlugin.edit { putInt(key, value) }
+    }
+
     @OptIn(DelicateCoroutinesApi::class)
     fun checkForUpdates() {
         val currentVersion = BuildConfig.VERSION_NAME
-        val url = Constant.API_PLUGIN_STANDALONE_URL
+        Constant.API_PLUGIN_STANDALONE_URL
 
         GlobalScope.launch(Dispatchers.Main) {
             val response = withContext(Dispatchers.IO) {
@@ -174,7 +188,7 @@ object Helper {
             response?.let {
                 val json = JSONObject(response)
                 val latestVersion = json.getString("tag_name")
-                val releaseNotes = json.getString("body")
+                json.getString("body")
 
                 if (currentVersion != latestVersion) {
                     toast("有新版本")
