@@ -59,6 +59,7 @@ plugins {
 
 dependencies {
     implementation(libs.ezxhelper)
+    implementation(libs.okhttp)
 
     compileOnly(libs.xposedapi)
 
