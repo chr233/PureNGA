@@ -60,6 +60,7 @@ plugins {
 dependencies {
     implementation(libs.ezxhelper)
     implementation(libs.okhttp)
+    implementation(libs.gson)
 
     compileOnly(libs.xposedapi)
 
