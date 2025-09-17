@@ -5,7 +5,7 @@ val javaVersion = JavaVersion.VERSION_21
 
 android {
     namespace = "com.chrxw.purenga"
-    compileSdk = 35
+    compileSdk = 36
 
 
     buildFeatures {

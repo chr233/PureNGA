@@ -84,7 +84,7 @@ object PreferenceUtils {
             ToggleItemXpView(context, Constant.PURE_POPUP_AD, "屏蔽首页广告", "去除首页浮窗广告")
         )
         container.addView(
-            ToggleItemXpView(context, Constant.ENABLE_PURE_POST, "屏蔽广告帖子", "按照关键词过滤帖子列表")
+            ToggleItemXpView(context, Constant.ENABLE_PURE_POST, "自定义屏蔽帖子", "按照关键词过滤帖子列表")
         )
         container.addView(ClickableItemXpView(context, " - 设置帖子屏蔽词", "关键词之间使用 | 分隔, 关键词匹配").apply {
             setOnClickListener {
@@ -430,7 +430,7 @@ object PreferenceUtils {
         container.addView(ClickableItemXpView(context, "其他功能"))
         container.addView(
             ToggleItemXpView(
-                context, Constant.AUTO_SIGN, "自动打开签到页面", "没有签到时自动打开签到页面进行签到"
+                context, Constant.AUTO_SIGN, "自动打开签到页面", "【建议关闭, 开启 本地VIP 可以自动签到】没有签到时自动打开签到页面进行签到"
             )
         )
         container.addView(

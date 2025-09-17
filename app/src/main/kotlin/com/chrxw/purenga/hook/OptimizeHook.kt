@@ -20,6 +20,7 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.ui.ClickableItemXpView
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.forceLog
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.PreferenceUtils
@@ -52,6 +53,7 @@ class OptimizeHook : IHook {
         lateinit var clsAccountManageActivity: Class<*>
         lateinit var clsVipStatus: Class<*>
         lateinit var clsAppLogoActivity: Class<*>
+        private lateinit var clsUserProviderImpl: Class<*>
         private lateinit var clsForumDetailActivity: Class<*>
         private lateinit var clsAllPostListFragment: Class<*>
         private lateinit var clsPostListFragment: Class<*>
@@ -96,6 +98,7 @@ class OptimizeHook : IHook {
         clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
         clsAccountManageActivity = classLoader.loadClass("com.donews.nga.setting.AccountManageActivity")
         clsVipStatus = classLoader.loadClass("com.donews.nga.vip.entitys.VipStatus")
+        clsUserProviderImpl = classLoader.loadClass("gov.pianzong.androidnga.providers.UserProviderImpl")
         clsAppLogoActivity = classLoader.loadClass("com.donews.nga.setting.AppLogoActivity")
         clsForumDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity")
@@ -104,6 +107,24 @@ class OptimizeHook : IHook {
         clsPostListFragment = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
         clsForumDetailActivity_f =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity\$f")
+
+        MethodFinder.fromClass("com.donews.nga.fragments.HomeFragment", classLoader).filterByName("setupAutoSign")
+            .firstOrNull()?.createHook {
+                after {
+                    it.forceLog()
+
+                    AndroidLogger.e("setupAutoSign")
+                }
+            }
+
+        MethodFinder.fromClass("com.donews.nga.fragments.HomeViewModel", classLoader).filterByName("getAutoSign")
+            .firstOrNull()?.createHook {
+                after {
+                    it.forceLog()
+
+                    AndroidLogger.e("getAutoSign")
+                }
+            }
     }
 
     override fun hook() {
@@ -389,6 +410,14 @@ class OptimizeHook : IHook {
         // 本地Vip
         if (Helper.getSpBool(Constant.LOCAL_VIP, false)) {
             findFirstMethodByName(clsVipStatus, "isVip")?.createHook {
+                after {
+                    it.log()
+
+                    it.result = true
+                }
+            }
+
+            findFirstMethodByName(clsUserProviderImpl, "isVip")?.createHook {
                 after {
                     it.log()
 
