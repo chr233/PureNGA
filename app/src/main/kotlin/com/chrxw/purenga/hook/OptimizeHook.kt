@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -40,11 +41,11 @@ class OptimizeHook : IHook {
 
     companion object {
         private lateinit var clsMainActivityPresenter: Class<*>
-        private lateinit var clsHomeDrawerLayout: Class<*>
+        lateinit var clsHomeDrawerLayout: Class<*>
         private lateinit var clsCommentDialog: Class<*>
         lateinit var clsMainActivity: Class<*>
         private lateinit var clsArticleDetailActivity: Class<*>
-        private lateinit var clsHomeFragment: Class<*>
+        lateinit var clsHomeFragment: Class<*>
         private lateinit var clsCalendarUtils: Class<*>
         private lateinit var clsAssetManager: Class<*>
         private lateinit var clsAboutUsActivityA: Class<*>
@@ -149,16 +150,11 @@ class OptimizeHook : IHook {
                     val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
 
                     //净化侧拉菜单
-                    if (pureSlideMenu.isNotEmpty() || BuildConfig.DEBUG) {
+                    if (pureSlideMenu.isNotEmpty()) {
                         val scrollView = root.getChildAt(1) as ScrollView
                         val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
-                        val childCount = linearLayout.childCount
-
-                        //移除滑动菜单底部无用元素
-                        linearLayout.removeViewAt(childCount - 1)
-
-                        var i = 0
+                        var isFirst = true
 
                         val pureViews = arrayListOf<View>()
 
@@ -171,21 +167,24 @@ class OptimizeHook : IHook {
                                     }
                                 }
                             } else if (view is TextView) {
-                                if (pureSlideMenu.contains(view.text)) {
+                                //移除滑动菜单底部无用元素
+                                if (view.text.isNullOrEmpty() || pureSlideMenu.contains(view.text)) {
                                     pureViews.add(view)
                                 }
-                            } else if (i == 0 && pureSlideMenu.contains("成为NGA付费会员")) {
-                                pureViews.add(view)
+                            } else if (view is FrameLayout) {
+                                if (isFirst && pureSlideMenu.contains("成为NGA付费会员")) {
+                                    pureViews.add(view)
+                                }
                             }
 
-                            i++
+                            isFirst = false
                         }
 
                         for (view in pureViews) {
                             linearLayout.removeView(view)
                         }
 
-                        if (BuildConfig.DEBUG || (pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于"))) {
+                        if ((pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于"))) {
                             linearLayout.addView(
                                 ClickableItemXpView(root.context, "PureNGA 设置", "打开插件设置").apply {
                                     setBackgroundColor(Color.LTGRAY)
@@ -193,19 +192,6 @@ class OptimizeHook : IHook {
                                         val activity =
                                             XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
                                         PreferenceUtils.showSettingDialog(activity)
-                                    }
-                                })
-                        }
-
-                        if (BuildConfig.DEBUG) {
-                            linearLayout.addView(
-                                ClickableItemXpView(root.context, "重启 NGA", "调试用").apply {
-                                    setBackgroundColor(Color.LTGRAY)
-                                    setOnClickListener { _ ->
-                                        Helper.toast("正在重启")
-                                        val activity =
-                                            XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
-                                        Helper.restartApplication(activity)
                                     }
                                 })
                         }

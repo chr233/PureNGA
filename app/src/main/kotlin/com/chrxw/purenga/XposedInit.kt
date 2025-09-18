@@ -65,12 +65,15 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                                 EzXHelper.initAppContext(context, true)
 
+                                val error = Hooks.initHooks(lpparam.classLoader)
+
                                 if (BuildConfig.DEBUG) {
                                     AndroidLogger.w("!!!Debug模式!!!")
                                     val hook = DebugHook()
                                     try {
                                         hook.init(lpparam.classLoader)
                                     } catch (e: Exception) {
+                                        error+1
                                         AndroidLogger.e("DebugHook 初始化失败", e)
                                     }
 
@@ -81,7 +84,6 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                     }
                                 }
 
-                                val error = Hooks.initHooks(lpparam.classLoader)
                                 if (error == 0) {
                                     if (!Helper.getSpBool(Constant.HIDE_HOOK_INFO, false)) {
                                         Helper.toast(
