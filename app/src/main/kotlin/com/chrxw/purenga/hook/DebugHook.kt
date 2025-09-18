@@ -4,25 +4,21 @@ import android.app.Activity
 import android.graphics.Color
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import com.chrxw.purenga.hook.OptimizeHook.Companion.clsHomeDrawerLayout
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.ui.ClickableItemXpView
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
-import com.chrxw.purenga.utils.ExtensionUtils.forceLog
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
 
 
 class DebugHook : IHook {
     override fun init(classLoader: ClassLoader) {
-
     }
 
     override fun hook() {
-        findFirstMethodByName(clsHomeDrawerLayout, "initLayout")?.createHook {
+        findFirstMethodByName(OptimizeHook.clsHomeDrawerLayout, "initLayout")?.createHook {
             after {
                 it.log()
 
@@ -43,14 +39,6 @@ class DebugHook : IHook {
                 }
 
                 linearLayout.addView(view, linearLayout.childCount - 1)
-            }
-        }
-
-        findFirstMethodByName(clsHomeDrawerLayout, "onActivityResult")?.createHook {
-            after{
-                it.forceLog()
-
-                AndroidLogger.w("onActivityResult")
             }
         }
     }
