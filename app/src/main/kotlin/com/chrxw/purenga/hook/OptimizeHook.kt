@@ -20,7 +20,6 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.ui.ClickableItemXpView
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
-import com.chrxw.purenga.utils.ExtensionUtils.forceLog
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.PreferenceUtils
@@ -107,24 +106,6 @@ class OptimizeHook : IHook {
         clsPostListFragment = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
         clsForumDetailActivity_f =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity\$f")
-
-        MethodFinder.fromClass("com.donews.nga.fragments.HomeFragment", classLoader).filterByName("setupAutoSign")
-            .firstOrNull()?.createHook {
-                after {
-                    it.forceLog()
-
-                    AndroidLogger.e("setupAutoSign")
-                }
-            }
-
-        MethodFinder.fromClass("com.donews.nga.fragments.HomeViewModel", classLoader).filterByName("getAutoSign")
-            .firstOrNull()?.createHook {
-                after {
-                    it.forceLog()
-
-                    AndroidLogger.e("getAutoSign")
-                }
-            }
     }
 
     override fun hook() {
