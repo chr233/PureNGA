@@ -14,6 +14,7 @@ import com.chrxw.purenga.utils.Helper
  * 开关控件
  */
 open class ToggleItemView : ClickableItemView, OnClickListener {
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private val switch: Switch
     private val spKey: String
 
