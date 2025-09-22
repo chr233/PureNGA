@@ -25,19 +25,21 @@ open class ClickableItemView : FrameLayout {
         titleTextView = TextView(context)
         subTextView = TextView(context)
 
-        this.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
-            setPadding(16.toPixel(context), 8.toPixel(context), 16.toPixel(context), 8.toPixel(context))
-        }
+        val layout = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+
+        this.layoutParams = layout
+        this.setPadding(16.toPixel(context), 8.toPixel(context), 16.toPixel(context), 8.toPixel(context))
+
         this.isClickable = true
 
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-        titleTextView.setPadding(0.toPixel(context), 0.toPixel(context), 64.toPixel(context), 0.toPixel(context))
+        titleTextView.layoutParams = layout
 
         subTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
-        subTextView.setPadding(0.toPixel(context), 0.toPixel(context), 64.toPixel(context), 0.toPixel(context))
+        subTextView.layoutParams = layout
         subTextView.visibility = GONE
 
-        containerLayout.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        containerLayout.layoutParams = layout
         containerLayout.orientation = LinearLayout.VERTICAL
         containerLayout.addView(titleTextView)
         containerLayout.addView(subTextView)
@@ -47,7 +49,7 @@ open class ClickableItemView : FrameLayout {
         this.addView(containerLayout)
     }
 
-    protected constructor(context: Context,xposed: Boolean):this(context){
+    protected constructor(context: Context, xposed: Boolean) : this(context) {
         this.xposed = xposed
         applyColor(context.resources.configuration)
     }

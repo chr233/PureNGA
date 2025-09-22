@@ -1,5 +1,6 @@
 package com.chrxw.purenga.hook
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.Gravity
 import android.view.View
@@ -14,6 +15,7 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.getDrawable
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.PreferenceUtils
@@ -37,6 +39,7 @@ class PreferencesHook : IHook {
         clsAboutUsActivity = classLoader.loadClass("com.donews.nga.setting.AboutUsActivity")
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun hook() {
         var btnPureNGASetting: Button? = null
 
@@ -106,7 +109,7 @@ class PreferencesHook : IHook {
                 val appIcon = root.findViewById<ImageView>(appIconId)
 
                 if (EzXHelper.isModuleResInited) {
-                    val pluginIcon = EzXHelper.moduleRes.getDrawable(R.mipmap.ic_launcher, activity.theme)
+                    val pluginIcon = R.mipmap.ic_launcher.getDrawable(activity.theme)
                     appIcon.setImageDrawable(pluginIcon)
                 }
 

@@ -1,11 +1,13 @@
 package com.chrxw.purenga.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Switch
 import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
+import com.chrxw.purenga.utils.ExtensionUtils.toPixel
 import com.chrxw.purenga.utils.Helper
 
 /**
@@ -17,24 +19,24 @@ open class ToggleItemView : ClickableItemView, OnClickListener {
 
     constructor(context: Context, spKey: String = "") : super(context) {
         this.spKey = spKey
-        this.switch = Switch(context)
+        switch = Switch(context)
         switch.isChecked = Helper.getSpBool(spKey, false)
-
-        val switchParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT).apply {
+        switch.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT).apply {
             gravity = Gravity.CENTER_VERTICAL or Gravity.END
         }
-        switch.layoutParams = switchParams
-
-        this.containerLayout.setOnClickListener(this)
-        this.titleTextView.setOnClickListener(this)
-        this.subTextView.setOnClickListener(this)
-        this.switch.setOnClickListener(this)
+        switch.setOnClickListener(this)
         this.addView(switch)
+
+        containerLayout.setOnClickListener(this)
+        titleTextView.setOnClickListener(this)
+        titleTextView.setPadding(0.toPixel(context), 0.toPixel(context), 64.toPixel(context), 0.toPixel(context))
+        subTextView.setOnClickListener(this)
+        subTextView.setPadding(0.toPixel(context), 0.toPixel(context), 64.toPixel(context), 0.toPixel(context))
 
         applyColor(context.resources.configuration)
     }
 
-    protected constructor(context: Context, spKey: String = "",xposed: Boolean):this(context,spKey){
+    protected constructor(context: Context, spKey: String = "", xposed: Boolean) : this(context, spKey) {
         this.xposed = xposed
         applyColor(context.resources.configuration)
     }

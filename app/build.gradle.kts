@@ -1,12 +1,11 @@
-val verCode = 50
-val verName = "3.0.0.Final"
+val verCode = 51
+val verName = "3.1.0.Final"
 
 val javaVersion = JavaVersion.VERSION_21
 
 android {
     namespace = "com.chrxw.purenga"
     compileSdk = 36
-
 
     buildFeatures {
         buildConfig = true
@@ -43,6 +42,8 @@ android {
     androidResources {
         additionalParameters += listOf("--allow-reserved-package-id", "--package-id", "0x50")
     }
+
+    buildToolsVersion = "36.0.0"
 }
 
 java {

@@ -21,7 +21,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 
 object PreferenceUtils {
     fun showSettingDialog(activity: Activity) {
-        val view = generateView(activity)
+        val view = generateSettingView(activity)
 
         AlertDialog.Builder(activity).apply {
             setTitle(Constant.STR_PURENGA_SETTING)
@@ -65,7 +65,7 @@ object PreferenceUtils {
     /**
      * 生成设置界面
      */
-    fun generateView(context: Context): View {
+    fun generateSettingView(context: Context): View {
         val root = ScrollView(context)
         val container = DarkContainLayout(context, true)
 
@@ -113,7 +113,7 @@ object PreferenceUtils {
                         }
                     }
                 } else {
-                    Helper.toast("请先打开【屏蔽广告帖子】")
+                    Helper.toast("请先打开【自定义屏蔽帖子】")
                 }
             }
         })
@@ -145,7 +145,7 @@ object PreferenceUtils {
                         }
                     }
                 } else {
-                    Helper.toast("请先打开【启用自定义字体】")
+                    Helper.toast("请先打开【自定义屏蔽帖子】")
                 }
             }
         })
@@ -430,7 +430,10 @@ object PreferenceUtils {
         container.addView(ClickableItemXpView(context, "其他功能"))
         container.addView(
             ToggleItemXpView(
-                context, Constant.AUTO_SIGN, "自动打开签到页面", "【建议关闭, 开启 本地VIP 可以自动签到】没有签到时自动打开签到页面进行签到"
+                context,
+                Constant.AUTO_SIGN,
+                "自动打开签到页面",
+                "【建议关闭, 开启 本地VIP 可以自动签到】没有签到时自动打开签到页面进行签到"
             )
         )
         container.addView(
@@ -484,8 +487,17 @@ object PreferenceUtils {
             )
         )
 
+        if (!Helper.hasSpKey(Constant.CHECK_PLUGIN_UPDATE)) {
+            Helper.setSpBool(Constant.CHECK_PLUGIN_UPDATE, true)
+        }
+
         // 关于
         container.addView(ClickableItemXpView(context, "关于"))
+        container.addView(
+            ToggleItemXpView(
+                context, Constant.CHECK_PLUGIN_UPDATE, "定期检查插件更新", "如果有更新会显示通知"
+            )
+        )
         container.addView(ClickableItemXpView(context, "手动检查更新", "").apply {
             val ngaVersion = Helper.getNgaVersion()
             val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"

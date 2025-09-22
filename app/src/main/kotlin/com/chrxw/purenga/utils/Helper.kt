@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
 import android.widget.Toast
+import androidx.compose.runtime.key
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
@@ -131,6 +132,13 @@ object Helper {
      */
     fun isDarkModel(): Boolean {
         return spDoinfo.getBoolean("DARK_MODEL", false)
+    }
+
+    /**
+     * 是否存在SharedPreference值
+     */
+    fun hasSpKey(key: String): Boolean {
+        return spPlugin.contains(key)
     }
 
     /**

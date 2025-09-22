@@ -14,7 +14,12 @@ import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.ui.DarkContainLayout
 import com.chrxw.purenga.ui.FitImageView
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.UpdateUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -97,6 +102,16 @@ class MainActivity : AppCompatActivity() {
             )
             orientation = LinearLayout.VERTICAL
         }
+
+
+        container.addView(FitImageView(this, R.mipmap.ic_launcher).apply {
+            val size = resources.displayMetrics.widthPixels / 3
+            layoutParams = LinearLayout.LayoutParams(size, size).apply {
+                topMargin = 16
+                bottomMargin = 16
+                gravity = android.view.Gravity.CENTER_HORIZONTAL
+            }
+        })
 
         container.addView(ClickableItemView(this, R.string.about))
         container.addView(ClickableItemView(this, R.string.donate, R.string.donate_summary).apply {
