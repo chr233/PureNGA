@@ -1,5 +1,6 @@
 package com.chrxw.purenga.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -9,7 +10,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
 import android.widget.Toast
-import androidx.compose.runtime.key
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
@@ -36,6 +36,7 @@ import kotlin.system.exitProcess
 /**
  * 功能性钩子
  */
+@SuppressLint("StaticFieldLeak")
 object Helper {
     lateinit var spDoinfo: SharedPreferences
 
@@ -43,6 +44,7 @@ object Helper {
     lateinit var clsRId: Class<*>
     lateinit var clsRId2: Class<*>
     lateinit var clsDrawerId: Class<*>
+    var context: Context? = null
 
     var enableLog = false
 
@@ -50,27 +52,42 @@ object Helper {
      * 发送Toast
      */
     fun toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
-        AndroidLogger.toast(text, duration)
+        val ctx = context
+        if (ctx != null) {
+            Toast.makeText(ctx, text, duration).show()
+        }
+    }
+
+    /**
+     * 清理资源
+     */
+    fun clearStaticResource() {
+        context = null
     }
 
     /**
      * 获取版本号
      */
     fun getNgaVersion(): String {
-        return try {
-            val info = EzXHelper.appContext.packageManager.getPackageInfo(
-                Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
-            )
+        val ctx = context
+        if (ctx == null) {
+            return "null"
+        } else {
+            return try {
+                val info = ctx.packageManager.getPackageInfo(
+                    Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
+                )
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                "${info.versionName} (${info.longVersionCode})"
-            } else {
-                @Suppress("DEPRECATION")
-                "${info.versionName} (${info.versionCode})"
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    "${info.versionName} (${info.longVersionCode})"
+                } else {
+                    @Suppress("DEPRECATION")
+                    "${info.versionName} (${info.versionCode})"
+                }
+            } catch (e: PackageManager.NameNotFoundException) {
+                e.printStackTrace()
+                "获取失败"
             }
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-            "获取失败"
         }
     }
 
@@ -78,14 +95,19 @@ object Helper {
      * 是否为整合版
      */
     fun isBundled(): Boolean {
-        return try {
-            EzXHelper.appContext.packageManager.getPackageInfo(
-                BuildConfig.APPLICATION_ID, PackageInfo.INSTALL_LOCATION_AUTO
-            ).versionName
-            false
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-            true
+        val ctx = context
+        if (ctx == null) {
+            return false
+        } else {
+            return try {
+                ctx.packageManager.getPackageInfo(
+                    BuildConfig.APPLICATION_ID, PackageInfo.INSTALL_LOCATION_AUTO
+                ).versionName
+                false
+            } catch (e: PackageManager.NameNotFoundException) {
+                e.printStackTrace()
+                true
+            }
         }
     }
 

@@ -150,15 +150,30 @@ object ExtensionUtils {
     }
 
     fun Int.getStringFromMod(): String {
-        return EzXHelper.moduleRes.getString(this)
+        return if (EzXHelper.isHostPackageNameInited) {
+            EzXHelper.moduleRes.getString(this)
+        } else {
+            val ctx = Helper.context
+            ctx?.resources?.getString(this) ?: ""
+        }
     }
 
     fun Int.getStringFromMod(vararg formatArgs: Object): String {
-        return EzXHelper.moduleRes.getString(this, formatArgs)
+        return if (EzXHelper.isHostPackageNameInited) {
+            EzXHelper.moduleRes.getString(this, formatArgs)
+        } else {
+            val ctx = Helper.context
+            ctx?.resources?.getString(this, formatArgs) ?: ""
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     fun Int.getDrawable(theme: Resources.Theme?): Drawable {
-        return EzXHelper.moduleRes.getDrawable(this, theme)
+        return if (EzXHelper.isHostPackageNameInited) {
+            EzXHelper.moduleRes.getDrawable(this, theme)
+        } else {
+            val ctx = Helper.context
+            ctx?.resources?.getDrawable(this, theme) ?: throw Exception("Resource Not Found")
+        }
     }
 }

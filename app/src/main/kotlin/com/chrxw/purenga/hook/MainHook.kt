@@ -51,6 +51,14 @@ class MainHook : IHook {
     }
 
     override fun hook() {
+        // 清理静态资源
+        findFirstMethodByName(clsMainActivity,"onDestroy")?.createHook {
+            after {
+                it.log()
+                Helper.clearStaticResource()
+            }
+        }
+
         // 屏蔽弹窗
         if (Helper.getSpBool(Constant.KILL_POPUP_DIALOG, false)) {
             findFirstMethodByName(clsAppConfig, "isAgreedAgreement")?.createHook {

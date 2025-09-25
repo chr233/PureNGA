@@ -191,7 +191,7 @@ class OptimizeHook : IHook {
                                     setOnClickListener { _ ->
                                         val activity =
                                             XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
-                                        DialogUtils.showSettingDialog(activity)
+                                        DialogUtils.popupSettingDialog(activity)
                                     }
                                 })
                         }

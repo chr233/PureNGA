@@ -1,32 +1,15 @@
 package com.chrxw.purenga.hook
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import android.view.ContextThemeWrapper
-import android.widget.ScrollView
-import android.widget.TextView
-import android.widget.Toast
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
-import com.chrxw.purenga.R
 import com.chrxw.purenga.hook.base.IHook
-import com.chrxw.purenga.ui.DarkContainLayout
-import com.chrxw.purenga.ui.FitImageXpView
+import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
-import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.log
-import com.chrxw.purenga.utils.ExtensionUtils.toPixel
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.DialogUtils
-import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import java.util.Timer
-import kotlin.concurrent.schedule
 
 class ShortcutHook : IHook {
 
@@ -39,11 +22,6 @@ class ShortcutHook : IHook {
         private lateinit var clsDraftActivity: Class<*>
         private lateinit var clsScanningActivity: Class<*>
         private lateinit var clsDiagnoseNetworkActivity: Class<*>
-
-        private fun openDonate(context: Context) {
-            Helper.toast("感谢支持")
-            Helper.openUrl(context, Constant.DONATE_URL)
-        }
     }
 
     override fun init(classLoader: ClassLoader) {
@@ -83,25 +61,24 @@ class ShortcutHook : IHook {
                 "history" -> clsHistoryActivity
                 "draft" -> clsDraftActivity
                 "diagnose" -> clsDiagnoseNetworkActivity
-                "pluginSetting" -> PreferencesHook.clsAboutUsActivity
+                "pluginSetting" -> null
                 else -> null
             }
 
             if (gotoClazz != null) {
                 val gotoIntent = activity.buildNormalIntent(gotoClazz)
 
-                if (gotoName == "pluginSetting") {
-                    gotoIntent.putExtra("openDialog", true)
-                } else if (gotoName == "sign") {
+                if (gotoName == "sign") {
                     gotoIntent.putExtra("sync_type", 5)
                 }
 
                 activity.startActivity(gotoIntent)
+            } else if (gotoName == "pluginSetting") {
+                DialogUtils.popupSettingDialog(activity)
             }
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun hook() {
         //显示首次运行提示
         findFirstMethodByName(OptimizeHook.clsMainActivity, "initLayout")?.createHook {
@@ -109,94 +86,12 @@ class ShortcutHook : IHook {
                 it.log()
 
                 val activity = it.thisObject as Activity
-                val themeActivity = ContextThemeWrapper(activity, R.style.AppTheme)
 
                 if (!Helper.isPluginConfigExists()) {
                     // 首次打开APP, 弹出提示框
-                    AlertDialog.Builder(themeActivity).apply {
-                        setTitle("PureNGA 提示")
-                        setMessage("检测到插件配置文件不存在, 是否打开插件设置?")
-                        setCancelable(false)
-                        setNegativeButton("取消") { _, _ ->
-                            Helper.toast(
-                                "可以在【设置】>【PureNGA 设置】中配置插件功能", Toast.LENGTH_LONG
-                            )
-                        }
-                        setPositiveButton("确认") { _, _ ->
-                            DialogUtils.showSettingDialog(activity)
-                        }
-                        create()
-                        show()
-                    }
+                    DialogUtils.popupTutorialDialog(activity)
                 } else if (Helper.getSpInt(Constant.LAST_SHOW, 0) != BuildConfig.VERSION_CODE) {
-                    val root = ScrollView(activity)
-                    val linearLayout = DarkContainLayout(activity, true)
-
-                    val ngaVersion = Helper.getNgaVersion()
-                    val sunType = if (Helper.isBundled()) "整合版" else "插件版"
-                    val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
-
-                    val changeLog = buildString {
-                        appendLine(R.string.chang_log.getStringFromMod().replace("|", "\n"))
-                        appendLine("-------------------------")
-                        appendLine("NGA版本: $ngaVersion")
-                        appendLine("插件版本: $pluginVersion")
-                        appendLine("-------------------------")
-                        append("⬇️捐赠项目来支持持续开发⬇️")
-                    }
-
-                    linearLayout.addView(TextView(activity).apply {
-                        text = changeLog
-                        setPadding(16.toPixel(context), 16.toPixel(context), 16.toPixel(context), 16.toPixel(context))
-                        isSingleLine = false
-                    })
-
-                    linearLayout.addView(FitImageXpView(activity, R.drawable.aifadian).apply {
-                        setOnClickListener {
-                            openDonate(context)
-                        }
-                    })
-
-                    root.addView(linearLayout)
-
-                    // APP更新后显示弹窗
-                    AlertDialog.Builder(themeActivity).apply {
-                        setTitle("PureNGA 更新说明")
-                        setView(root)
-                        setCancelable(false)
-                        setNeutralButton("爱发电") { dialog,_ ->
-                            openDonate(context)
-                            dialog.dismiss()
-                        }
-                        setPositiveButton("关闭并不再提示",null)
-                        create()
-
-                        setOnDismissListener {
-                            Helper.setSpInt(Constant.LAST_SHOW, BuildConfig.VERSION_CODE)
-                        }
-
-                        show().apply {
-                            val btn = getButton(AlertDialog.BUTTON_POSITIVE)
-                            btn.isEnabled = false
-
-                            val handler = Handler(Looper.getMainLooper())
-                            val timer = Timer()
-                            var count = 5
-                            timer.schedule(0, 1000) {
-                                handler.post {
-                                    AndroidLogger.w(count.toString())
-                                    if (count > 0) {
-                                        btn.text = "($count)"
-                                        count--
-                                    } else {
-                                        btn.isEnabled = true
-                                        btn.text = "关闭并不再提示"
-                                        timer.cancel()
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    DialogUtils.popupChangeLogDialog(activity)
                 }
 
                 // 如果来源是Shortcut

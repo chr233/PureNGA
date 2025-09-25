@@ -56,7 +56,7 @@ class PreferencesHook : IHook {
                     btnPureNGASetting = Button(activity).apply {
                         text = Constant.STR_PURENGA_SETTING
                         setOnClickListener {
-                            DialogUtils.showSettingDialog(activity)
+                            DialogUtils.popupSettingDialog(activity)
                         }
 
                         setTextColor(if (Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt())
@@ -68,7 +68,7 @@ class PreferencesHook : IHook {
                 }
 
                 if (activity.intent.getBooleanExtra("openDialog", false)) {
-                    DialogUtils.showSettingDialog(activity)
+                    DialogUtils.popupSettingDialog(activity)
                 }
             }
         }
@@ -114,11 +114,11 @@ class PreferencesHook : IHook {
                 }
 
                 appIcon.setOnClickListener {
-                    DialogUtils.showSettingDialog(activity)
+                    DialogUtils.popupSettingDialog(activity)
                 }
 
                 if (activity.intent.getBooleanExtra("openDialog", false)) {
-                    DialogUtils.showSettingDialog(activity)
+                    DialogUtils.popupSettingDialog(activity)
                 }
             }
         }

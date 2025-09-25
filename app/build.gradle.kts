@@ -69,7 +69,4 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.material)
     implementation(libs.androidx.material3)
-
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
 }

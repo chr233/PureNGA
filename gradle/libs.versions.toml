@@ -4,7 +4,6 @@ xposedapi = "82"
 ezxhelper = "2.2.1"
 kotlin = "2.2.20"
 coreKtx = "1.17.0"
-espressoCore = "3.7.0"
 composeBom = "2025.09.00"
 material = "1.13.0"
 gson = "2.13.2"
@@ -14,7 +13,6 @@ okhttp = "5.1.0"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 xposedapi = { module = "de.robv.android.xposed:api", version.ref = "xposedapi" }
 ezxhelper = { module = "com.github.kyuubiran:EzXHelper", version.ref = "ezxhelper" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }

@@ -10,9 +10,6 @@
     <string name="open_nga">打开NGA</string>
     <string name="module_enabled">模块已启用</string>
     <string name="module_disabled">模块未启用</string>
-    <string name="github_url">https://github.com/chr233/PureNGA</string>
-    <string name="author_url">https://github.com/chr233</string>
-    <string name="donate_url">https://afdian.com/order/create?user_id=81888d36247c11ea8ac152540025c377</string>
     <string name="author_summary" translatable="false">chr233</string>
     <string name="donate_summary">爱发电 @chr233</string>
     <string name="hide_icon">隐藏桌面图标</string>
@@ -33,4 +30,6 @@
     <string name="fake_share_failed">假装分享失败</string>
     <string name="fake_share_failed_not_support">假装分享功能启用失败, 可能不适用于当前版本</string>
     <string name="update_info">更新说明</string>
+    <string name="check_update">检查更新</string>
+    <string name="check_update_summary">手动检查更新</string>
 </resources>

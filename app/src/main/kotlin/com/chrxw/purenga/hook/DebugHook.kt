@@ -22,10 +22,6 @@ import de.robv.android.xposed.XposedHelpers
 
 
 class DebugHook : IHook {
-    companion object {
-
-    }
-
     override fun init(classLoader: ClassLoader) {
     }
 

@@ -13,13 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.ui.DarkContainLayout
 import com.chrxw.purenga.ui.FitImageView
+import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.UpdateUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -90,10 +87,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showCheckUpdate() {
+        val dialog = AlertDialog.Builder(this)
+            .setMessage("正在检查更新…")
+            .setCancelable(false)
+            .create()
+
+        dialog.show()
+
+        UpdateUtils.getLatestVersion { res ->
+            runOnUiThread {
+                toast(res?.tagName ?: "null")
+            }
+            dialog.dismiss()
+        }
+    }
+
     private lateinit var runningStatusView: ClickableItemView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Helper.context = applicationContext
 
         val root = ScrollView(this)
         val container = LinearLayout(this).apply {
@@ -116,19 +131,24 @@ class MainActivity : AppCompatActivity() {
         container.addView(ClickableItemView(this, R.string.about))
         container.addView(ClickableItemView(this, R.string.donate, R.string.donate_summary).apply {
             setOnClickListener {
-                toast("感谢支持")
-                Helper.openUrl(context, Constant.DONATE_URL)
+                DialogUtils.popupChangeLogDialog(this@MainActivity)
             }
         })
         container.addView(ClickableItemView(this, R.string.author, R.string.author_summary).apply {
             setOnClickListener {
-                Helper.checkForUpdates()
+                DialogUtils.popupChangeLogDialog(this@MainActivity)
             }
         })
         container.addView(ClickableItemView(this, R.string.version, R.string.version).apply {
             subTitle = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
             setOnClickListener {
-                Helper.openUrl(context, Constant.REPO_URL)
+                DialogUtils.popupChangeLogDialog(this@MainActivity)
+            }
+        })
+
+        container.addView(ClickableItemView(this, R.string.check_update, R.string.check_update_summary).apply {
+            setOnClickListener {
+                showCheckUpdate()
             }
         })
 
@@ -149,9 +169,7 @@ class MainActivity : AppCompatActivity() {
         container.addView(ClickableItemView(this, R.string.setting))
         container.addView(
             ClickableItemView(
-                this,
-                R.string.plugin_setting,
-                R.string.plugin_setting_summary
+                this, R.string.plugin_setting, R.string.plugin_setting_summary
             ).apply {
                 setOnClickListener {
                     showPluginTutorial()
@@ -171,5 +189,10 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         runningStatusView.subTitle =
             getString(if (isModuleActive()) R.string.module_enabled else R.string.module_disabled)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Helper.clearStaticResource()
     }
 }

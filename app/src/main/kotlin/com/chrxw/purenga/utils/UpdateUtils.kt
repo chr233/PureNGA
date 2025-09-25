@@ -18,16 +18,22 @@ import okhttp3.Request
 
 object UpdateUtils {
 
-    fun getLatestVersion() {
+    fun getLatestVersion(onResult: (Release?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val client = OkHttpClient()
             val url = Constant.API_PLUGIN_STANDALONE_URL
             val request = Request.Builder().url(url).build()
             val response = client.newCall(request).execute()
-            if (!response.isSuccessful) return@launch
+            if (!response.isSuccessful) {
+                onResult(null)
+                return@launch
+            }
 
-            val body = response.body.string() ?: return@launch
-            if (body.isEmpty()) return@launch
+            val body = response.body.string()
+            if (body.isEmpty()) {
+                onResult(null)
+                return@launch
+            }
 
             val gson = Gson()
             val release: Release = gson.fromJson(body, Release::class.java)
@@ -36,11 +42,16 @@ object UpdateUtils {
             if (release.tagName != Constant.CURRENT_VERSION) {
                 sendUpdateNotification(release)
             }
+
+            onResult(release)
         }
     }
 
     private fun sendUpdateNotification(release: Release) {
-        val context = EzXHelper.appContext // 获取全局 Context
+        val context = Helper.context // 获取全局 Context
+        if (context == null) {
+            return
+        }
         val channelId = "update_channel"
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
