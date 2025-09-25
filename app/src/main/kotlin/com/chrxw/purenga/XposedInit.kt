@@ -64,7 +64,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 val context = AndroidAppHelper.currentApplication().applicationContext
 
                                 EzXHelper.initAppContext(context, true)
-                                Helper.context = context
+                                Helper.context = EzXHelper.appContext
 
                                 val error = Hooks.initHooks(lpparam.classLoader)
 

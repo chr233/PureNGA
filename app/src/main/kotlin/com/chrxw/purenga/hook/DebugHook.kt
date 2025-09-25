@@ -1,22 +1,15 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.os.Build
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import androidx.core.app.NotificationCompat
+import androidx.core.graphics.toColorInt
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.ui.ClickableItemXpView
+import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -37,47 +30,32 @@ class DebugHook : IHook {
                 val scrollView = root.getChildAt(1) as ScrollView
                 val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
-                val view = ClickableItemXpView(root.context, "重启 NGA", "调试用").apply {
-                    setBackgroundColor(Color.LTGRAY)
+                val color = "#fff0cd".toColorInt()
+
+                linearLayout.addView(ClickableItemXpView(root.context, "PureNGA 设置", "调试用").apply {
+                    setBackgroundColor(color)
+                    setOnClickListener { _ ->
+                        val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
+                        DialogUtils.popupSettingDialog(activity)
+                    }
+                }, linearLayout.childCount - 1)
+
+                linearLayout.addView(ClickableItemXpView(root.context, "Test", "调试用").apply {
+                    setBackgroundColor(color)
+                    setOnClickListener { _ ->
+                        val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
+                        DialogUtils.popupCheckUpdate(activity)
+                    }
+                }, linearLayout.childCount - 1)
+
+                linearLayout.addView(ClickableItemXpView(root.context, "重启 NGA", "调试用").apply {
+                    setBackgroundColor(color)
                     setOnClickListener { _ ->
                         Helper.toast("正在重启")
                         val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
                         Helper.restartApplication(activity)
                     }
-                }
-
-                linearLayout.addView(view, linearLayout.childCount - 1)
-
-
-                val channelId = "purenga_update"
-                val channelName = "PureNGA 更新通知"
-                val notificationManager =
-                    EzXHelper.appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-// 创建通知渠道（仅需一次）
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val channel = NotificationChannel(channelId,channelName, NotificationManager.IMPORTANCE_DEFAULT)
-                    notificationManager.createNotificationChannel(channel)
-                }
-
-                val intent = Intent(EzXHelper.appContext, PreferencesHook.clsAboutUsActivity).apply {
-                    putExtra("openDialog", true)
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                val pendingIntent = PendingIntent.getActivity(
-                    EzXHelper.appContext, 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                val notification = NotificationCompat.Builder(EzXHelper.appContext, channelId)
-                    .setContentTitle("PureNGA 有新版本了")
-                    .setContentText("内容")
-                    .setSmallIcon(Helper.getRId("iv_app_icon"))
-                    .setContentIntent(pendingIntent) // 设置点击跳转
-                    .build()
-
-// 发送通知
-                notificationManager.notify(1, notification)
+                }, linearLayout.childCount - 1)
             }
         }
     }

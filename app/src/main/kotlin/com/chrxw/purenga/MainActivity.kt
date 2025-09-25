@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
         dialog.show()
 
-        UpdateUtils.getLatestVersion { res ->
+        UpdateUtils.getReleaseInfo { res ->
             runOnUiThread {
                 toast(res?.tagName ?: "null")
             }

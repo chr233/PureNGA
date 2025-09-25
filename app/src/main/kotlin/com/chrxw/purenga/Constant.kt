@@ -21,6 +21,9 @@ object Constant {
 
     const val STR_PURENGA_SETTING = "PureNGA 设置"
 
+    const val CHANNEL_ID = "pure_nga_channel"
+    const val CHANNEL_NAME = "PureNGA 插件通知"
+
     /**
      * 模块SharedPreferences名称
      */

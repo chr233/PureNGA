@@ -17,19 +17,9 @@ import com.chrxw.purenga.Constant
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import de.robv.android.xposed.XposedHelpers
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.io.BufferedReader
 import java.io.File
-import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.io.StringWriter
-import java.net.HttpURLConnection
-import java.net.URL
 import kotlin.system.exitProcess
 
 
@@ -203,47 +193,6 @@ object Helper {
      */
     fun setSpInt(key: String, value: Int) {
         spPlugin.edit { putInt(key, value) }
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun checkForUpdates() {
-        val currentVersion = BuildConfig.VERSION_NAME
-        Constant.API_PLUGIN_STANDALONE_URL
-
-        GlobalScope.launch(Dispatchers.Main) {
-            val response = withContext(Dispatchers.IO) {
-                makeHttpRequest()
-            }
-
-            response?.let {
-                val json = JSONObject(response)
-                val latestVersion = json.getString("tag_name")
-                json.getString("body")
-
-                if (currentVersion != latestVersion) {
-                    toast("有新版本")
-                }
-            }
-        }
-    }
-
-    private fun makeHttpRequest(): String? {
-        val url = URL(Constant.API_PLUGIN_STANDALONE_URL)
-        val connection = url.openConnection() as? HttpURLConnection
-        connection?.requestMethod = "GET"
-
-        return connection?.inputStream?.use { inputStream ->
-            val reader = BufferedReader(InputStreamReader(inputStream))
-            val response = StringBuilder()
-
-            var line = reader.readLine()
-            while (line != null) {
-                response.append(line)
-                line = reader.readLine()
-            }
-
-            response.toString()
-        }
     }
 
     /**
