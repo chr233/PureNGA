@@ -18,7 +18,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.getDrawable
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.PreferenceUtils
+import com.chrxw.purenga.utils.DialogUtils
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
@@ -56,7 +56,7 @@ class PreferencesHook : IHook {
                     btnPureNGASetting = Button(activity).apply {
                         text = Constant.STR_PURENGA_SETTING
                         setOnClickListener {
-                            PreferenceUtils.showSettingDialog(activity)
+                            DialogUtils.showSettingDialog(activity)
                         }
 
                         setTextColor(if (Helper.isDarkModel()) "#f8fae3".toColorInt() else "#3c3b39".toColorInt())
@@ -68,7 +68,7 @@ class PreferencesHook : IHook {
                 }
 
                 if (activity.intent.getBooleanExtra("openDialog", false)) {
-                    PreferenceUtils.showSettingDialog(activity)
+                    DialogUtils.showSettingDialog(activity)
                 }
             }
         }
@@ -114,11 +114,11 @@ class PreferencesHook : IHook {
                 }
 
                 appIcon.setOnClickListener {
-                    PreferenceUtils.showSettingDialog(activity)
+                    DialogUtils.showSettingDialog(activity)
                 }
 
                 if (activity.intent.getBooleanExtra("openDialog", false)) {
-                    PreferenceUtils.showSettingDialog(activity)
+                    DialogUtils.showSettingDialog(activity)
                 }
             }
         }

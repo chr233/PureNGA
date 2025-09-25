@@ -53,14 +53,14 @@ class DebugHook : IHook {
                 linearLayout.addView(view, linearLayout.childCount - 1)
 
 
-                val channelId = "default_channel"
-                val channelName = "默认通知"
+                val channelId = "purenga_update"
+                val channelName = "PureNGA 更新通知"
                 val notificationManager =
                     EzXHelper.appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 // 创建通知渠道（仅需一次）
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+                    val channel = NotificationChannel(channelId,channelName, NotificationManager.IMPORTANCE_DEFAULT)
                     notificationManager.createNotificationChannel(channel)
                 }
 

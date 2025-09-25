@@ -23,7 +23,7 @@ import com.chrxw.purenga.ui.ClickableItemXpView
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.PreferenceUtils
+import com.chrxw.purenga.utils.DialogUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.ConstructorFinder
@@ -191,7 +191,7 @@ class OptimizeHook : IHook {
                                     setOnClickListener { _ ->
                                         val activity =
                                             XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
-                                        PreferenceUtils.showSettingDialog(activity)
+                                        DialogUtils.showSettingDialog(activity)
                                     }
                                 })
                         }

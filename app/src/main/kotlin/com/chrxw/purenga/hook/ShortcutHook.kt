@@ -22,7 +22,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.ExtensionUtils.toPixel
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.PreferenceUtils
+import com.chrxw.purenga.utils.DialogUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import java.util.Timer
@@ -123,7 +123,7 @@ class ShortcutHook : IHook {
                             )
                         }
                         setPositiveButton("确认") { _, _ ->
-                            PreferenceUtils.showSettingDialog(activity)
+                            DialogUtils.showSettingDialog(activity)
                         }
                         create()
                         show()

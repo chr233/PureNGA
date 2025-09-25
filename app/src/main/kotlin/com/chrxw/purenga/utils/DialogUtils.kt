@@ -19,7 +19,7 @@ import com.chrxw.purenga.ui.ToggleItemXpView
 import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 
-object PreferenceUtils {
+object DialogUtils {
     fun showSettingDialog(activity: Activity) {
         val view = generateSettingView(activity)
 

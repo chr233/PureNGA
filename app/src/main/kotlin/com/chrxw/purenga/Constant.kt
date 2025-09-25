@@ -17,14 +17,16 @@ object Constant {
 
     const val LOG_TAG = "PureNGA"
 
+    const val CURRENT_VERSION = BuildConfig.VERSION_CODE.toString() + "-" + BuildConfig.VERSION_NAME
+
+    const val STR_PURENGA_SETTING = "PureNGA 设置"
+
     /**
      * 模块SharedPreferences名称
      */
     const val DN_INFO_PREFERENCE_NAME = "dninfo"
     const val PLUGIN_PREFERENCE_NAME = "purenga_preference"
-
     const val SYSTEM_FONT = "system-ui"
-
     const val PURE_SPLASH_AD = "pure_splash_ad"
     const val PURE_POST_AD = "pure_post_ad"
     const val PURE_POPUP_AD = "pure_popup_ad"
@@ -58,6 +60,4 @@ object Constant {
     const val PURE_AUTHOR = "pure_author"
     const val PREFER_NEW_POST = "prefer_new_post"
     const val LAST_SHOW = "last_show"
-
-    const val STR_PURENGA_SETTING = "PureNGA 设置"
 }
