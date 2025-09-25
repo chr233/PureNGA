@@ -131,12 +131,12 @@ class MainActivity : AppCompatActivity() {
         container.addView(ClickableItemView(this, R.string.about))
         container.addView(ClickableItemView(this, R.string.donate, R.string.donate_summary).apply {
             setOnClickListener {
-                DialogUtils.popupChangeLogDialog(this@MainActivity)
+                DialogUtils.popupDonateDialog(this@MainActivity)
             }
         })
         container.addView(ClickableItemView(this, R.string.author, R.string.author_summary).apply {
             setOnClickListener {
-                DialogUtils.popupChangeLogDialog(this@MainActivity)
+                DialogUtils.popupDonateDialog(this@MainActivity)
             }
         })
         container.addView(ClickableItemView(this, R.string.version, R.string.version).apply {

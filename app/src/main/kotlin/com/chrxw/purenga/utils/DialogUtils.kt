@@ -27,6 +27,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.ExtensionUtils.toPixel
 import com.github.kyuubiran.ezxhelper.AndroidLogger
+import com.github.kyuubiran.ezxhelper.EzXHelper
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -73,8 +74,8 @@ object DialogUtils {
                         Helper.setSpStr(Constant.PURE_AUTHOR, "")
                     }
                 }
+                show()
             }
-            show()
         }
     }
 
@@ -365,8 +366,8 @@ object DialogUtils {
                             selectedShortcuts.clear()
                         }
                     }
+                    show()
                 }
-                show()
             }
         } else {
             Helper.toast("当前安卓版本不支持此操作")
@@ -602,7 +603,7 @@ object DialogUtils {
         container.addView(
             ClickableItemXpView(activity, "捐赠", "爱发电 @chr233").apply {
                 setOnClickListener {
-                    Helper.openUrl(context, Constant.DONATE_URL)
+                    popupDonateDialog(activity)
                 }
             })
 
@@ -705,9 +706,9 @@ object DialogUtils {
         dialog.show()
 
         UpdateUtils.getReleaseInfo { res ->
-          activity.runOnUiThread {
-              Helper.toast(res?.tagName ?: "null")
-          }
+            activity.runOnUiThread {
+                Helper.toast(res?.tagName ?: "null")
+            }
             dialog.dismiss()
         }
     }
@@ -719,8 +720,6 @@ object DialogUtils {
 
     @SuppressLint("SetTextI18n")
     fun popupChangeLogDialog(activity: Activity) {
-        val root = ScrollView(activity)
-        val linearLayout = DarkContainLayout(activity, true)
 
         val ngaVersion = Helper.getNgaVersion()
         val sunType = if (Helper.isBundled()) "整合版" else "插件版"
@@ -735,24 +734,16 @@ object DialogUtils {
             append("⬇️捐赠项目来支持持续开发⬇️")
         }
 
-        linearLayout.addView(TextView(activity).apply {
+        val view = TextView(activity).apply {
             text = changeLog
             setPadding(16.toPixel(context), 16.toPixel(context), 16.toPixel(context), 16.toPixel(context))
             isSingleLine = false
-        })
-
-        linearLayout.addView(FitImageXpView(activity, R.drawable.aifadian).apply {
-            setOnClickListener {
-                onClickDonate(activity)
-            }
-        })
-
-        root.addView(linearLayout)
+        }
 
         // APP更新后显示弹窗
         AlertDialog.Builder(activity).apply {
             setTitle("PureNGA 更新说明")
-            setView(root)
+            setView(view)
             setCancelable(false)
             setNeutralButton("爱发电") { dialog, _ ->
                 onClickDonate(activity)
@@ -781,12 +772,34 @@ object DialogUtils {
                         }
                     }
                 }
-            }
 
-            setOnDismissListener {
-                Helper.setSpInt(Constant.LAST_SHOW, BuildConfig.VERSION_CODE)
+                setOnDismissListener {
+                    if (EzXHelper.isHostPackageNameInited) {
+                        Helper.setSpInt(Constant.LAST_SHOW, BuildConfig.VERSION_CODE)
+                    }
+                }
+                show()
             }
+        }
+    }
 
+    fun popupDonateDialog(activity: Activity) {
+        val view = FitImageXpView(activity, R.drawable.aifadian).apply {
+            setOnClickListener {
+                onClickDonate(activity)
+            }
+        }
+
+        AlertDialog.Builder(activity).apply {
+            setTitle("捐赠")
+            setView(view)
+            setCancelable(false)
+            setNeutralButton("爱发电") { dialog, _ ->
+                onClickDonate(activity)
+                dialog.dismiss()
+            }
+            setPositiveButton("关闭", null)
+            create()
             show()
         }
     }

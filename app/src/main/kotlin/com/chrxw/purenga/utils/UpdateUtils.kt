@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
@@ -44,11 +45,6 @@ object UpdateUtils {
                 val gson = Gson()
                 val release: Release = gson.fromJson(body, Release::class.java)
 
-                // 假设 Release 里有 tagName 字段，和当前版本比较
-                if (release.tagName != Constant.CURRENT_VERSION) {
-                    sendUpdateNotification(release)
-                }
-
                 onResult(release)
             } catch (ex: Exception) {
                 AndroidLogger.e(ex)
@@ -58,7 +54,19 @@ object UpdateUtils {
 
     }
 
-    private fun sendUpdateNotification(release: Release) {
+    fun getAssetUrl(release: Release?): Uri? {
+        if (release?.assets != null) {
+            for (asset in release.assets) {
+                if (asset.name?.endsWith(".apk") == true) {
+                    return asset.browserDownloadUrl?.toUri()
+                }
+            }
+        }
+        return null
+    }
+
+    fun sendUpdateNotification(release: Release) {
+
         val context = Helper.context // 获取全局 Context
         if (context == null) {
             return
@@ -67,30 +75,24 @@ object UpdateUtils {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel =
-                NotificationChannel(Constant.CHANNEL_ID, Constant.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(
+                Constant.CHANNEL_ID, Constant.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
+            )
             manager.createNotificationChannel(channel)
         }
 
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = release.htmlUrl.toUri() // 假设 release 有 htmlUrl 字段
-        }
+        val intent = Intent(Intent.ACTION_VIEW, release.htmlUrl?.toUri())
         val pendingIntent = PendingIntent.getActivity(
             context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val action = NotificationCompat.Action.Builder(
-            android.R.drawable.ic_menu_view,
-            "查看详情",
-            pendingIntent
+            android.R.drawable.ic_menu_view, "立即下载", pendingIntent
         ).build()
 
-        val notification = NotificationCompat.Builder(context, Constant.CHANNEL_ID)
-            .setContentTitle("有新版本可用")
-            .setContentText("最新版本: ${release.tagName}")
-            .setSmallIcon(android.R.drawable.stat_sys_download_done)
-            .addAction(action)
-            .build()
+        val notification = NotificationCompat.Builder(context, Constant.CHANNEL_ID).setContentTitle("有新版本可用")
+            .setContentText("最新版本: ${release.tagName}").setSmallIcon(android.R.drawable.stat_sys_download_done)
+            .addAction(action).build()
 
         manager.notify(1, notification)
     }
