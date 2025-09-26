@@ -43,10 +43,10 @@ class AdHook : IHook {
         private lateinit var clsBaseActivity: Class<*>
         private lateinit var clsBannerHolder: Class<*>
         lateinit var fldViewBinding: Field
-        private lateinit var fldForumFoldBinding: Field
+        private var fldForumFoldBinding: Field? = null
         private lateinit var fldGameRecommendBindings: List<Field>
         private lateinit var clsGameRecommendBinder: Class<*>
-        private lateinit var fldBannerHolderViewC: Field
+        private var fldBannerHolderViewC: Field? = null
 
         fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
         fun isClsKsAdSDKInit() = ::clsKsAdSDK.isInitialized
@@ -83,18 +83,24 @@ class AdHook : IHook {
         clsBaseActivity = classLoader.loadClass("com.donews.nga.common.base.BaseActivity")
         clsBannerHolder = classLoader.loadClass("com.donews.nga.adapters.HomeRecommendAdapter\$BannerHolder")
         fldViewBinding = FieldFinder.fromClass(clsBaseActivity).filterByName("viewBinding").first()
-        fldForumFoldBinding =
-            FieldFinder.fromClass("com.donews.nga.adapters.ForumFoldListAdapter\$GameRecommendBinder", classLoader)
-                .filterByName("binding").first()
-        fldGameRecommendBindings = FieldFinder.fromClass(
-            "gov.pianzong.androidnga.databinding.LayoutVoteGameRecommendCommunityBinding", classLoader
-        ).toList()
-        clsGameRecommendBinder =
-            classLoader.loadClass("com.donews.nga.adapters.ForumFoldListAdapter\$GameRecommendBinder")
 
-        fldBannerHolderViewC = FieldFinder.fromClass(
-            "gov.pianzong.androidnga.databinding.ItemHomeRecommendBannerLayoutBinding", classLoader
-        ).filterByName("e").first()
+        try {
+            fldForumFoldBinding =
+                FieldFinder.fromClass("com.donews.nga.adapters.ForumFoldListAdapter\$GameRecommendBinder", classLoader)
+                    .filterByName("binding").firstOrNull()
+            fldGameRecommendBindings = FieldFinder.fromClass(
+                "gov.pianzong.androidnga.databinding.LayoutVoteGameRecommendCommunityBinding", classLoader
+            ).toList()
+            clsGameRecommendBinder =
+                classLoader.loadClass("com.donews.nga.adapters.ForumFoldListAdapter\$GameRecommendBinder")
+
+            fldBannerHolderViewC = FieldFinder.fromClass(
+                "gov.pianzong.androidnga.databinding.ItemHomeRecommendBannerLayoutBinding", classLoader
+            ).filterByName("e").firstOrNull()
+        } catch (ex: Throwable) {
+            AndroidLogger.e(ex)
+        }
+
     }
 
     override fun hook() {
@@ -326,14 +332,20 @@ class AdHook : IHook {
         }
 
         // 屏蔽游戏推荐
-        if (Helper.getSpBool(Constant.PURE_GAME_RECOMMEND, false)) {
+        if (Helper.getSpBool(
+                Constant.PURE_GAME_RECOMMEND,
+                false
+            ) && fldBannerHolderViewC != null && fldForumFoldBinding != null
+        ) {
             findFirstMethodByName(clsBannerHolder, "setupBanners")?.createHook {
                 replace {
                     it.log()
 
-                    val binding = XposedHelpers.getObjectField(it.thisObject , "binding") //fldBannerHolderBinding.get(it.thisObject)
+                    val binding = XposedHelpers.getObjectField(
+                        it.thisObject, "binding"
+                    ) //fldBannerHolderBinding.get(it.thisObject)
                     if (binding != null) {
-                        val view = fldBannerHolderViewC.get(binding) as View
+                        val view = fldBannerHolderViewC!!.get(binding) as View
                         view.visibility = View.GONE
                     } else {
                         AndroidLogger.e("binding is null")
@@ -345,7 +357,7 @@ class AdHook : IHook {
                 after {
                     it.log()
 
-                    val binding = fldForumFoldBinding.get(it.thisObject)
+                    val binding = fldForumFoldBinding!!.get(it.thisObject)
                     if (binding != null) {
                         for (fid in fldGameRecommendBindings) {
                             AndroidLogger.w("$fid")

@@ -15,7 +15,6 @@ import com.chrxw.purenga.ui.DarkContainLayout
 import com.chrxw.purenga.ui.FitImageView
 import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.UpdateUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 
 
@@ -87,22 +86,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showCheckUpdate() {
-        val dialog = AlertDialog.Builder(this)
-            .setMessage("正在检查更新…")
-            .setCancelable(false)
-            .create()
-
-        dialog.show()
-
-        UpdateUtils.getReleaseInfo { res ->
-            runOnUiThread {
-                toast(res?.tagName ?: "null")
-            }
-            dialog.dismiss()
-        }
-    }
-
     private lateinit var runningStatusView: ClickableItemView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,7 +131,7 @@ class MainActivity : AppCompatActivity() {
 
         container.addView(ClickableItemView(this, R.string.check_update, R.string.check_update_summary).apply {
             setOnClickListener {
-                showCheckUpdate()
+                DialogUtils.popupCheckUpdate(this@MainActivity)
             }
         })
 
