@@ -28,6 +28,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.ExtensionUtils.toPixel
 import com.chrxw.purenga.utils.data.Release
+import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import java.util.Timer
 import kotlin.concurrent.schedule
@@ -577,6 +578,15 @@ object DialogUtils {
                 }
             })
         container.addView(
+            ClickableItemXpView(activity, "当前版本信息", "").apply {
+                val ngaVersion = Helper.getNgaVersion()
+                val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+                subTitle = "NGA: $ngaVersion | 插件: $pluginVersion"
+                setOnClickListener {
+                    popupChangeLogDialog(activity)
+                }
+            })
+        container.addView(
             ClickableItemXpView(activity, "前往发布页", "").apply {
                 subTitle = if (Helper.isBundled()) {
                     "查看最新整合版"
@@ -713,20 +723,24 @@ object DialogUtils {
             isIndeterminate = true
         })
 
-        AlertDialog.Builder(activity).setTitle("正在检查更新...").setView(view).create().apply {
+        AlertDialog.Builder(activity).setTitle("PureNGA 正在检查更新...").setView(view).create().apply {
             show()
 
             UpdateUtils.getReleaseInfo { res ->
+                dismiss()
+
                 activity.runOnUiThread {
                     if (res != null) {
-                        Helper.toast("有新版本了")
-                        popupNewVersionDialog(activity, res)
-
+                        if (!UpdateUtils.checkIfNeedUpdate(res)) {
+                            Helper.toast("当前已是最新版本")
+                        } else {
+                            Helper.toast("有新版本了")
+                            popupNewVersionDialog(activity, res)
+                        }
                     } else {
                         Helper.toast("检查更新失败, 请稍后再试")
                     }
                 }
-                dismiss()
             }
         }
     }
@@ -739,23 +753,48 @@ object DialogUtils {
     /**
      * 弹出更新日志对话框
      */
-    private fun popupVersionInfoDialog(
+    private fun popupInfoDialog(
         activity: Activity,
         title: String,
         content: String,
         setupBuilder: (AlertDialog.Builder) -> Unit,
         setupDialog: (AlertDialog) -> Unit,
     ) {
-        val view = TextView(activity).apply {
-            text = content
+        val root = LinearLayout(activity).apply {
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            orientation = LinearLayout.VERTICAL
             setPadding(16.toPixel(context), 16.toPixel(context), 16.toPixel(context), 16.toPixel(context))
-            isSingleLine = false
         }
+        root.addView(TextView(activity).apply {
+            text = content
+            textSize = 18f
+            isSingleLine = false
+        })
+
+        val ngaVersion = Helper.getNgaVersion()
+        val sunType = if (Helper.isBundled()) "整合版" else "插件版"
+        val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
+
+        root.addView(TextView(activity).apply {
+            text = "-------------------------------"
+        })
+        root.addView(TextView(activity).apply {
+            text = "NGA版本: $ngaVersion"
+        })
+        root.addView(TextView(activity).apply {
+            text = "插件版本: $pluginVersion"
+        })
+        root.addView(TextView(activity).apply {
+            text = "-------------------------------"
+        })
+        root.addView(TextView(activity).apply {
+            text = "⬇️捐赠项目来支持持续开发"
+        })
 
         // APP更新后显示弹窗
         AlertDialog.Builder(activity).apply {
             setTitle(title)
-            setView(view)
+            setView(root)
             setCancelable(false)
             setupBuilder(this)
             create().apply {
@@ -769,22 +808,11 @@ object DialogUtils {
      * 弹出更新日志对话框
      */
     fun popupChangeLogDialog(activity: Activity) {
-        val title = "PureNGA 更新说明"
+        val title = "PureNGA 更新日志"
 
-        val ngaVersion = Helper.getNgaVersion()
-        val sunType = if (Helper.isBundled()) "整合版" else "插件版"
-        val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
+        val changeLog = R.string.chang_log.getStringFromMod().replace("|", "\r\n")
 
-        val content = buildString {
-            appendLine(R.string.chang_log.getStringFromMod().replace("|", "\r\n"))
-            appendLine("-------------------------")
-            appendLine("NGA版本: $ngaVersion")
-            appendLine("插件版本: $pluginVersion")
-            appendLine("-------------------------")
-            append("⬇️捐赠项目来支持持续开发⬇️")
-        }
-
-        popupVersionInfoDialog(activity, title, content, setupBuilder = { builder ->
+        popupInfoDialog(activity, title, changeLog, setupBuilder = { builder ->
             builder.setNeutralButton("捐赠", null)
             builder.setPositiveButton("关闭并不再提示", null)
         }, setupDialog = { dialog ->
@@ -827,41 +855,39 @@ object DialogUtils {
     /**
      * 弹出版本更新对话框
      */
-    fun popupNewVersionDialog(activity: Activity, release: Release) {
-        val title = "PureNGA 新版本说明"
+    fun popupNewVersionDialog(activity: Activity, release: Release?) {
         val changeLog = UpdateUtils.getChangeLog(release)
         val downloadUrl = UpdateUtils.getAssetUrl(release)
 
-        val ngaVersion = Helper.getNgaVersion()
-        val sunType = if (Helper.isBundled()) "整合版" else "插件版"
-        val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
-
-        val content = buildString {
-            appendLine(changeLog)
-            appendLine("-------------------------")
-            appendLine("NGA版本: $ngaVersion")
-            appendLine("插件版本: $pluginVersion")
-            appendLine("-------------------------")
-            append("⬇️捐赠项目来支持持续开发⬇️")
+        if (changeLog.isNullOrEmpty() || downloadUrl == null) {
+            return
         }
 
-        popupVersionInfoDialog(activity, title, content, setupBuilder = { builder ->
+        val title = "PureNGA 新版本可用"
+
+        popupInfoDialog(activity, title, changeLog, setupBuilder = { builder ->
+            builder.setCancelable(true)
             builder.setNeutralButton("捐赠", null)
-            builder.setNegativeButton("网盘镜像", null)
-            builder.setPositiveButton("浏览器下载", null)
+            builder.setNegativeButton("网盘镜像") { _, _ ->
+                if (Constant.PAN_CODE.isNotEmpty()) {
+                    Helper.toast("网盘提取码: ${Constant.PAN_CODE}", Toast.LENGTH_LONG)
+
+                    try {
+                        Helper.copyToClipboard(activity, Constant.PAN_CODE)
+                    } catch (ex: Throwable) {
+                        AndroidLogger.e(ex)
+                    }
+                }
+
+                val intent = Intent(Intent.ACTION_VIEW, Constant.PAN_URL.toUri())
+                activity.startActivity(intent)
+            }
+            builder.setPositiveButton("浏览器下载") { _, _ ->
+                val intent = Intent(Intent.ACTION_VIEW, downloadUrl)
+                activity.startActivity(intent)
+            }
         }, setupDialog = { dialog ->
             dialog.setOnShowListener {
-
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, downloadUrl)
-                    activity.startActivity(intent)
-                }
-
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, downloadUrl)
-                    activity.startActivity(intent)
-                }
-
                 dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
                     popupDonateDialog(activity)
                 }
@@ -888,8 +914,8 @@ object DialogUtils {
         AlertDialog.Builder(activity).apply {
             setTitle("捐赠支持 PureNGA")
             setView(view)
-            setCancelable(false)
-            setNeutralButton("爱发电") { dialog, _ ->
+            setCancelable(true)
+            setNeutralButton("爱发电 @chr233") { dialog, _ ->
                 onClickDonate(activity)
                 dialog.dismiss()
             }

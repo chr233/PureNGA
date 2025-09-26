@@ -2,6 +2,8 @@ package com.chrxw.purenga.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -109,6 +111,15 @@ object Helper {
     fun resetPluginConfig(): Boolean {
         val path = "${EzXHelper.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
         return File(path).delete()
+    }
+
+    /**
+     * 复制到剪贴板
+     */
+    fun copyToClipboard(context: Context, text: String) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("label", text)
+        clipboard.setPrimaryClip(clip)
     }
 
     /**

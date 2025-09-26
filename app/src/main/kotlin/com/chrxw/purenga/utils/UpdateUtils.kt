@@ -2,6 +2,7 @@ package com.chrxw.purenga.utils
 
 import android.net.Uri
 import androidx.core.net.toUri
+import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.data.Release
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -60,20 +61,35 @@ object UpdateUtils {
     fun getChangeLog(release: Release?): String? {
         if (release?.body != null) {
             val result = buildString {
+
+                if (!release.tagName.isNullOrEmpty()) {
+                    appendLine("最新版本: ${release.tagName}")
+                    appendLine("更新日志:")
+                }
+
                 for (line in release.body.split("\n")) {
                     if (line.contains("---")) {
                         break
                     }
 
                     if (!line.startsWith("![") && line.isNotBlank()) {
-                        appendLine(line.trim())
+                        appendLine(" - " + line.trim())
                     }
                 }
             }
 
-            return result
+            return result.trim()
         }
         return null
+    }
+
+    fun checkIfNeedUpdate(release: Release?): Boolean {
+        if (release?.tagName.isNullOrEmpty()) {
+            return false
+        }
+
+        val code = release.tagName.split("-").firstOrNull()?.toIntOrNull()
+        return BuildConfig.VERSION_CODE < (code ?: 0)
     }
 }
 

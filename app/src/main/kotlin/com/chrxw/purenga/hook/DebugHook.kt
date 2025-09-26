@@ -40,7 +40,7 @@ class DebugHook : IHook {
                     }
                 }, linearLayout.childCount - 1)
 
-                linearLayout.addView(ClickableItemXpView(root.context, "Test", "调试用").apply {
+                linearLayout.addView(ClickableItemXpView(root.context, "检查更新", "调试用").apply {
                     setBackgroundColor(color)
                     setOnClickListener { _ ->
                         val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity

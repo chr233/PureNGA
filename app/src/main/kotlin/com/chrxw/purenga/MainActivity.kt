@@ -135,6 +135,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        container.addView(ClickableItemView(this, R.string.check_update, R.string.check_update_summary).apply {
+            setOnClickListener {
+                DialogUtils.popupChangeLogDialog(this@MainActivity)
+            }
+        })
+
         container.addView(ClickableItemView(this, R.string.other))
         runningStatusView = ClickableItemView(this, R.string.running_status, R.string.module_disabled)
         container.addView(runningStatusView)
