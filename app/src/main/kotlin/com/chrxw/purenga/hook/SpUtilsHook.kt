@@ -16,7 +16,6 @@ class SpUtilsHook : IHook {
 
     override fun hook() {
         val pureSplashAd = Helper.getSpBool(Constant.PURE_SPLASH_AD, false)
-
         findFirstMethodByName(MainHook.clsSPUtil, "getInt")?.createHook {
             after {
                 it.log()

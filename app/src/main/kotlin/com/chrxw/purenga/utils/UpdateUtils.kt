@@ -73,7 +73,7 @@ object UpdateUtils {
                     }
 
                     if (!line.startsWith("![") && line.isNotBlank()) {
-                        appendLine(" - " + line.trim())
+                        appendLine(" - ${line.trim()}")
                     }
                 }
             }
@@ -83,13 +83,33 @@ object UpdateUtils {
         return null
     }
 
-    fun checkIfNeedUpdate(release: Release?): Boolean {
+    fun getAssetVersionCode(release: Release?): Int {
         if (release?.tagName.isNullOrEmpty()) {
-            return false
+            return 0
         }
 
         val code = release.tagName.split("-").firstOrNull()?.toIntOrNull()
-        return BuildConfig.VERSION_CODE < (code ?: 0)
+        return code ?: 0
+    }
+
+    fun checkIfNeedCheck(): Boolean {
+        val currentTime = System.currentTimeMillis() / 1000
+        val lastCheck = Helper.getSpLong(Constant.LAST_UPDATE_CHECK_DATE, 0)
+
+        val needUpdate = (currentTime - lastCheck) > Constant.UPDATE_CHECK_INTERVAL
+        if (needUpdate) {
+            Helper.setSpLong(Constant.LAST_UPDATE_CHECK_DATE, currentTime)
+        }
+        return true // needUpdate
+    }
+
+    fun checkIfNeedUpdate(code: Int): Boolean {
+        return BuildConfig.VERSION_CODE < code
+    }
+
+    fun checkIfSkipUpdate(code: Int): Boolean {
+        val skipCode = Helper.getSpInt(Constant.SKIP_VERSION_CODE, 0)
+        return code != skipCode
     }
 }
 

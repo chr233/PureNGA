@@ -69,7 +69,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 val error = Hooks.initHooks(lpparam.classLoader)
 
                                 if (BuildConfig.DEBUG) {
-                                    AndroidLogger.w("!!!Debug模式!!!")
+                                    AndroidLogger.w("!!! Debug 模式 !!!")
                                     val hook = DebugHook()
                                     try {
                                         hook.init(lpparam.classLoader)

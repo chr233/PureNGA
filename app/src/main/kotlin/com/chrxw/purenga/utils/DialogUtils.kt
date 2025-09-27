@@ -1,5 +1,6 @@
 package com.chrxw.purenga.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -494,10 +495,7 @@ object DialogUtils {
         container.addView(ClickableItemXpView(activity, "其他功能"))
         container.addView(
             ToggleItemXpView(
-                activity,
-                Constant.AUTO_SIGN,
-                "自动打开签到页面",
-                "【不推荐, 开启 本地VIP 可以自动签到】"
+                activity, Constant.AUTO_SIGN, "自动打开签到页面", "【不推荐, 开启 本地VIP 可以自动签到】"
             )
         )
         container.addView(
@@ -532,11 +530,6 @@ object DialogUtils {
                 activity, Constant.LOCAL_VIP, "本地会员", "假装是付费会员(例如换肤功能有效)"
             )
         )
-        container.addView(
-            ToggleItemXpView(
-                activity, Constant.BYPASS_INSTALL_CHECK, "绕过已安装检查", "分享到指定App前检查不检查是否已安装(调试用)"
-            )
-        )
 
         // 插件设置
         container.addView(ClickableItemXpView(activity, "插件设置"))
@@ -563,7 +556,7 @@ object DialogUtils {
         container.addView(
             ClickableItemXpView(activity, "立即检查更新", "").apply {
                 val ngaVersion = Helper.getNgaVersion()
-                val pluginVersion = Helper.getPluginVersion()
+                val pluginVersion = Helper.pluginVersion
                 subTitle = "NGA: $ngaVersion | 插件: $pluginVersion"
                 setOnClickListener {
                     popupCheckUpdate(activity)
@@ -701,19 +694,13 @@ object DialogUtils {
      * 手动检查更新
      */
     fun popupCheckUpdateManually(activity: Activity) {
-        AlertDialog.Builder(activity)
-            .setTitle("PureNGA 获取版本信息失败")
-            .setMessage("是否手动检查更新?")
+        AlertDialog.Builder(activity).setTitle("PureNGA 获取版本信息失败").setMessage("是否手动检查更新?")
             .setPositiveButton("Github") { _, _ ->
                 onCheckUpdateManually(activity, false)
-            }
-            .setNegativeButton("网盘镜像") { _, _ ->
+            }.setNegativeButton("网盘镜像") { _, _ ->
                 onCheckUpdateManually(activity, true)
-            }
-            .setNeutralButton("关闭") { _, _ ->
-            }
-            .create()
-            .show()
+            }.setNeutralButton("关闭") { _, _ ->
+            }.create().show()
     }
 
     /**
@@ -734,19 +721,21 @@ object DialogUtils {
             show()
 
             UpdateUtils.getReleaseInfo { res ->
-                dismiss()
-
                 activity.runOnUiThread {
-                    if (res != null) {
-                        if (!UpdateUtils.checkIfNeedUpdate(res)) {
-                            Helper.toast("当前已是最新版本")
-                        } else {
-                            Helper.toast("有新版本了")
-                            popupNewVersionDialog(activity, res)
-                        }
-                    } else {
+                    dismiss()
+
+                    if (res == null) {
                         Helper.toast("检查更新失败, 请稍后再试")
                         popupCheckUpdateManually(activity)
+                        return@runOnUiThread
+                    }
+
+                    val code = UpdateUtils.getAssetVersionCode(res)
+                    if (!UpdateUtils.checkIfNeedUpdate(code)) {
+                        Helper.toast("当前已是最新版本")
+                    } else {
+                        Helper.toast("有新版本了")
+                        popupNewVersionDialog(activity, res)
                     }
                 }
             }
@@ -777,25 +766,9 @@ object DialogUtils {
             text = content
             textSize = 18f
             isSingleLine = false
-
+            setPadding(0.toPixel(context), 0.toPixel(context), 0.toPixel(context), 16.toPixel(context))
         })
 
-        val ngaVersion = Helper.getNgaVersion()
-        val sunType = if (Helper.isBundled()) "整合版" else "插件版"
-        val pluginVersion = "${Helper.getPluginVersion()} - $sunType"
-
-        root.addView(TextView(activity).apply {
-            text = "-------------------------------"
-        })
-        root.addView(TextView(activity).apply {
-            text = "NGA版本: $ngaVersion"
-        })
-        root.addView(TextView(activity).apply {
-            text = "插件版本: $pluginVersion"
-        })
-        root.addView(TextView(activity).apply {
-            text = "-------------------------------"
-        })
         root.addView(TextView(activity).apply {
             text = "⬇️捐赠项目来支持持续开发"
         })
@@ -816,10 +789,17 @@ object DialogUtils {
     /**
      * 弹出更新日志对话框
      */
+    @SuppressLint("SetTextI18n")
     fun popupChangeLogDialog(activity: Activity) {
         val title = "PureNGA 更新日志"
 
-        val changeLog = R.string.chang_log.getStringFromMod().replace("|", "\r\n")
+        val changeLog = buildString {
+            appendLine("当前版本: ${Helper.pluginVersion}")
+            appendLine("更新日志:")
+            for (line in R.string.change_log_content.getStringFromMod().split("|")) {
+                appendLine(" - $line")
+            }
+        }.trim()
 
         popupInfoDialog(activity, title, changeLog, setupBuilder = { builder ->
             builder.setNeutralButton("捐赠", null)
@@ -841,7 +821,8 @@ object DialogUtils {
                                 count--
                             } else {
                                 isEnabled = true
-                                text = "关闭并不再提示"
+                                text = "关闭"
+                                dialog.setCancelable(true)
                                 timer.cancel()
                             }
                         }
@@ -904,7 +885,9 @@ object DialogUtils {
 
             dialog.setOnDismissListener {
                 if (EzXHelper.isHostPackageNameInited) {
-                    Helper.setSpInt(Constant.LAST_SHOW_CHANGELOG, BuildConfig.VERSION_CODE)
+                    val code = UpdateUtils.getAssetVersionCode(release)
+                    Helper.setSpInt(Constant.SKIP_VERSION_CODE, code)
+                    Helper.toast("可以在插件设置中手动检查更新")
                 }
             }
         })

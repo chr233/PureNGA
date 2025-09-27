@@ -19,8 +19,6 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import de.robv.android.xposed.XposedHelpers
 import java.io.File
-import java.io.PrintWriter
-import java.io.StringWriter
 import kotlin.system.exitProcess
 
 
@@ -80,9 +78,8 @@ object Helper {
     /**
      * 获取版本号
      */
-    fun getPluginVersion():String{
-        return "${BuildConfig.VERSION_CODE}-${BuildConfig.VERSION_NAME}"
-    }
+    val pluginVersion = "${BuildConfig.VERSION_CODE}-${BuildConfig.VERSION_NAME}"
+
 
     /**
      * 是否为整合版
@@ -208,6 +205,20 @@ object Helper {
     }
 
     /**
+     * 获取SharedPreference值
+     */
+    fun getSpLong(key: String, defValue: Long): Long {
+        return spPlugin.getLong(key, defValue)
+    }
+
+    /**
+     * 设置SharedPreference值
+     */
+    fun setSpLong(key: String, value: Long) {
+        spPlugin.edit { putLong(key, value) }
+    }
+
+    /**
      * 重启应用
      */
     fun restartApplication(activity: Activity) {
@@ -274,16 +285,5 @@ object Helper {
             val intent = Intent(Intent.ACTION_VIEW, uri.toUri())
             context.startActivity(intent)
         }
-    }
-
-    /**
-     * 打印堆栈
-     */
-    fun printStack() {
-        val sw = StringWriter()
-        val ex = Exception("error")
-        ex.printStackTrace(PrintWriter(sw))
-        AndroidLogger.w("===== PrintStack =====")
-        AndroidLogger.w(sw.toString())
     }
 }

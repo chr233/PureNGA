@@ -11,7 +11,6 @@ object Constant {
     const val PAN_URL = "https://www.123pan.com/s/qYTvjv-0Autv.html"
     const val PAN_CODE = "JEFR"
 
-    const val API_PLUGIN_BUNDLED_URL = "https://hub.chrxw.com/PureNGA/releases/latest"
     const val API_PLUGIN_STANDALONE_URL = "https://xposed.chrxw.com/com.chrxw.purenga/releases/latest"
 
     const val RELEASE_STANDALONE = "https://github.com/Xposed-Modules-Repo/com.chrxw.purenga/releases"
@@ -20,9 +19,6 @@ object Constant {
     const val LOG_TAG = "PureNGA"
 
     const val STR_PURENGA_SETTING = "PureNGA 设置"
-
-    const val CHANNEL_ID = "pure_nga_channel"
-    const val CHANNEL_NAME = "PureNGA 插件通知"
 
     /**
      * 模块SharedPreferences名称
@@ -47,7 +43,6 @@ object Constant {
     const val CHECK_PLUGIN_UPDATE = "check_plugin_update"
     const val QUICK_ACCOUNT_MANAGE = "quick_account_manage"
     const val FAKE_SHARE = "fake_share"
-    const val BYPASS_INSTALL_CHECK = "bypass_install_check"
     const val HIDE_HOOK_INFO = "hide_hook_info"
     const val HIDE_ERROR_INFO = "hide_error_info"
     const val CUSTOM_INDEX = "custom_index"
@@ -64,5 +59,7 @@ object Constant {
     const val PREFER_NEW_POST = "prefer_new_post"
 
     const val LAST_SHOW_CHANGELOG = "last_show_changelog"
-    const val LAST_VERSION_CODE = "last_version_code"
+    const val SKIP_VERSION_CODE = "skip_version_code"
+    const val LAST_UPDATE_CHECK_DATE = "last_update_check_date"
+    const val UPDATE_CHECK_INTERVAL = 3600 * 3
 }
