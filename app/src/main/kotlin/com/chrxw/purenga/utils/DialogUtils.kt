@@ -377,14 +377,6 @@ object DialogUtils {
     }
 
     /**
-     * 手动检查更新
-     */
-    private fun onCheckUpdateManually(activity: Activity) {
-        val uri = if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
-        Helper.openUrl(activity, uri)
-    }
-
-    /**
      * 导出插件设置
      */
     private fun onDumpPluginSetting(activity: Activity) {
@@ -392,8 +384,8 @@ object DialogUtils {
             activity, Constant.PLUGIN_PREFERENCE_NAME, Constant.PLUGIN_PREFERENCE_NAME
         )
         val msg = buildString {
-            appendLine(if (result != null) "导出成功" else "导出失败")
-            appendLine("配置文件路径: $result")
+            append(if (result != null) "导出成功" else "导出失败")
+            append(", 配置文件路径: $result")
         }
         Helper.toast(msg, Toast.LENGTH_SHORT)
     }
@@ -406,8 +398,8 @@ object DialogUtils {
             activity, Constant.PLUGIN_PREFERENCE_NAME, Constant.PLUGIN_PREFERENCE_NAME
         )
         val msg = buildString {
-            appendLine(if (result != null) "导入成功" else "导入失败")
-            appendLine("配置文件路径: $result")
+            append(if (result != null) "导入成功" else "导入失败")
+            append(",配置文件路径: $result")
         }
         Helper.toast(msg, Toast.LENGTH_SHORT)
     }
@@ -505,7 +497,7 @@ object DialogUtils {
                 activity,
                 Constant.AUTO_SIGN,
                 "自动打开签到页面",
-                "【不推荐, 开启 本地VIP 可以自动签到】没有签到时自动打开签到页面进行签到"
+                "【不推荐, 开启 本地VIP 可以自动签到】"
             )
         )
         container.addView(
@@ -561,17 +553,17 @@ object DialogUtils {
             Helper.setSpBool(Constant.CHECK_PLUGIN_UPDATE, true)
         }
 
-        // 关于
-        container.addView(ClickableItemXpView(activity, "关于"))
+        // 插件更新
+        container.addView(ClickableItemXpView(activity, "插件更新"))
         container.addView(
             ToggleItemXpView(
-                activity, Constant.CHECK_PLUGIN_UPDATE, "定期检查插件更新", "如果有更新会显示通知"
+                activity, Constant.CHECK_PLUGIN_UPDATE, "定期检查插件更新", "3天检查一次更新, 如果有更新会显示通知"
             )
         )
         container.addView(
             ClickableItemXpView(activity, "立即检查更新", "").apply {
                 val ngaVersion = Helper.getNgaVersion()
-                val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+                val pluginVersion = Helper.getPluginVersion()
                 subTitle = "NGA: $ngaVersion | 插件: $pluginVersion"
                 setOnClickListener {
                     popupCheckUpdate(activity)
@@ -579,32 +571,15 @@ object DialogUtils {
             })
         container.addView(
             ClickableItemXpView(activity, "当前版本信息", "").apply {
-                val ngaVersion = Helper.getNgaVersion()
-                val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
-                subTitle = "NGA: $ngaVersion | 插件: $pluginVersion"
+                val sunType = if (Helper.isBundled()) "整合版" else "插件版"
+                subTitle = "插件类型: $sunType"
                 setOnClickListener {
                     popupChangeLogDialog(activity)
                 }
             })
-        container.addView(
-            ClickableItemXpView(activity, "前往发布页", "").apply {
-                subTitle = if (Helper.isBundled()) {
-                    "查看最新整合版"
-                } else {
-                    "查看最新独立插件版"
-                }
 
-                setOnClickListener {
-                    val url = if (Helper.isBundled()) {
-                        Constant.RELEASE_BUNDLED
-                    } else {
-                        Constant.RELEASE_STANDALONE
-                    }
-                    context.startActivity(
-                        Intent(Intent.ACTION_VIEW, url.toUri())
-                    )
-                }
-            })
+        // 关于
+        container.addView(ClickableItemXpView(activity, "关于"))
         container.addView(
             ClickableItemXpView(activity, "作者", "GitHub @chr233").apply {
                 setOnClickListener {
@@ -649,7 +624,7 @@ object DialogUtils {
 
         root.addView(container)
 
-        AlertDialog.Builder(activity).apply() {
+        AlertDialog.Builder(activity).apply {
             setTitle(Constant.STR_PURENGA_SETTING)
             setCancelable(false)
 
@@ -710,6 +685,38 @@ object DialogUtils {
     }
 
     /**
+     * 手动检查更新
+     */
+    private fun onCheckUpdateManually(activity: Activity, pan: Boolean) {
+        val uri = if (!pan) {
+            if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
+        } else {
+            Constant.PAN_URL
+        }
+
+        Helper.openUrl(activity, uri)
+    }
+
+    /**
+     * 手动检查更新
+     */
+    fun popupCheckUpdateManually(activity: Activity) {
+        AlertDialog.Builder(activity)
+            .setTitle("PureNGA 获取版本信息失败")
+            .setMessage("是否手动检查更新?")
+            .setPositiveButton("Github") { _, _ ->
+                onCheckUpdateManually(activity, false)
+            }
+            .setNegativeButton("网盘镜像") { _, _ ->
+                onCheckUpdateManually(activity, true)
+            }
+            .setNeutralButton("关闭") { _, _ ->
+            }
+            .create()
+            .show()
+    }
+
+    /**
      * 弹出检查更新对话框
      */
     fun popupCheckUpdate(activity: Activity) {
@@ -739,6 +746,7 @@ object DialogUtils {
                         }
                     } else {
                         Helper.toast("检查更新失败, 请稍后再试")
+                        popupCheckUpdateManually(activity)
                     }
                 }
             }
@@ -769,11 +777,12 @@ object DialogUtils {
             text = content
             textSize = 18f
             isSingleLine = false
+
         })
 
         val ngaVersion = Helper.getNgaVersion()
         val sunType = if (Helper.isBundled()) "整合版" else "插件版"
-        val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) - $sunType"
+        val pluginVersion = "${Helper.getPluginVersion()} - $sunType"
 
         root.addView(TextView(activity).apply {
             text = "-------------------------------"
@@ -846,7 +855,7 @@ object DialogUtils {
 
             dialog.setOnDismissListener {
                 if (EzXHelper.isHostPackageNameInited) {
-                    Helper.setSpInt(Constant.LAST_SHOW, BuildConfig.VERSION_CODE)
+                    Helper.setSpInt(Constant.LAST_SHOW_CHANGELOG, BuildConfig.VERSION_CODE)
                 }
             }
         })
@@ -895,7 +904,7 @@ object DialogUtils {
 
             dialog.setOnDismissListener {
                 if (EzXHelper.isHostPackageNameInited) {
-                    Helper.setSpInt(Constant.LAST_SHOW, BuildConfig.VERSION_CODE)
+                    Helper.setSpInt(Constant.LAST_SHOW_CHANGELOG, BuildConfig.VERSION_CODE)
                 }
             }
         })

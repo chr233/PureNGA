@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Environment
 import android.widget.Toast
 import androidx.core.content.edit
@@ -70,17 +69,19 @@ object Helper {
                     Constant.NGA_PACKAGE_NAME, PackageInfo.INSTALL_LOCATION_AUTO
                 )
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    "${info.versionName} (${info.longVersionCode})"
-                } else {
-                    @Suppress("DEPRECATION")
-                    "${info.versionName} (${info.versionCode})"
-                }
+                return info.versionName ?: "获取失败"
             } catch (e: PackageManager.NameNotFoundException) {
                 e.printStackTrace()
                 "获取失败"
             }
         }
+    }
+
+    /**
+     * 获取版本号
+     */
+    fun getPluginVersion():String{
+        return "${BuildConfig.VERSION_CODE}-${BuildConfig.VERSION_NAME}"
     }
 
     /**

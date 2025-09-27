@@ -90,7 +90,7 @@ class ShortcutHook : IHook {
                 if (!Helper.isPluginConfigExists()) {
                     // 首次打开APP, 弹出提示框
                     DialogUtils.popupTutorialDialog(activity)
-                } else if (Helper.getSpInt(Constant.LAST_SHOW, 0) != BuildConfig.VERSION_CODE) {
+                } else if (Helper.getSpInt(Constant.LAST_SHOW_CHANGELOG, 0) != BuildConfig.VERSION_CODE) {
                     DialogUtils.popupChangeLogDialog(activity)
                 }
 

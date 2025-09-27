@@ -4,12 +4,14 @@ import android.app.Activity
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.core.graphics.toColorInt
+import androidx.core.net.toUri
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.ui.ClickableItemXpView
 import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.NotificationUtils
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -56,6 +58,8 @@ class DebugHook : IHook {
                         Helper.restartApplication(activity)
                     }
                 }, linearLayout.childCount - 1)
+
+                NotificationUtils.sendNotification(root.context, "https://www.123pan.com/s/qYTvjv-0Autv.html".toUri())
             }
         }
     }

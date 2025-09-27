@@ -19,8 +19,6 @@ object Constant {
 
     const val LOG_TAG = "PureNGA"
 
-    const val CURRENT_VERSION = BuildConfig.VERSION_CODE.toString() + "-" + BuildConfig.VERSION_NAME
-
     const val STR_PURENGA_SETTING = "PureNGA 设置"
 
     const val CHANNEL_ID = "pure_nga_channel"
@@ -64,5 +62,7 @@ object Constant {
     const val PURE_POST = "pure_post"
     const val PURE_AUTHOR = "pure_author"
     const val PREFER_NEW_POST = "prefer_new_post"
-    const val LAST_SHOW = "last_show"
+
+    const val LAST_SHOW_CHANGELOG = "last_show_changelog"
+    const val LAST_VERSION_CODE = "last_version_code"
 }
