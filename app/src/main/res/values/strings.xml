@@ -22,7 +22,7 @@
     <string name="setting">设置</string>
     <string name="open_purenga_summary">插件设置</string>
     <string name="open_purenga">打开插件设置</string>
-    <string name="change_log_content">适配 9.9.50|广告屏蔽功能新增游戏推荐类广告|导航栏净化功能修复</string>
+    <string name="change_log_content">适配 9.9.53|优化本地VIP功能, 支持全自动签到</string>
     <string name="fake_share">假装分享</string>
     <string name="fake_share_three">分享三次</string>
     <string name="fake_share_succes">假装分享成功</string>
