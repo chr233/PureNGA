@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        container.addView(ClickableItemView(this, R.string.check_update, R.string.check_update_summary).apply {
+        container.addView(ClickableItemView(this, R.string.change_log, R.string.change_log_summary).apply {
             setOnClickListener {
                 DialogUtils.popupChangeLogDialog(this@MainActivity)
             }

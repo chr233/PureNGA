@@ -20,10 +20,10 @@ import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.ui.ClickableItemXpView
+import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.chrxw.purenga.utils.DialogUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.ConstructorFinder
@@ -165,11 +165,6 @@ class OptimizeHook : IHook {
                                         pureViews.add(view)
                                         break
                                     }
-                                }
-                            } else if (view is TextView) {
-                                //移除滑动菜单底部无用元素
-                                if (view.text.isNullOrEmpty() || pureSlideMenu.contains(view.text)) {
-                                    pureViews.add(view)
                                 }
                             } else if (view is FrameLayout) {
                                 if (isFirst && pureSlideMenu.contains("成为NGA付费会员")) {

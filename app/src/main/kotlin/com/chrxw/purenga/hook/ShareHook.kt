@@ -151,12 +151,9 @@ class ShareHook : IHook {
             }
 
             //帖子分享点击事件
-            val mtdClickItem = findFirstMethodByName(clsArticleDetailActivity_u, "clickItem") ?: findFirstMethodByName(
-                clsArticleDetailActivity_x,
-                "clickItem"
-            )
-
-            mtdClickItem?.createHook {
+            findFirstMethodByName(clsArticleDetailActivity_u, "clickItem") ?: findFirstMethodByName(
+                clsArticleDetailActivity_x, "clickItem"
+            )?.createHook {
                 before {
                     it.log()
 
@@ -183,16 +180,6 @@ class ShareHook : IHook {
                 }
             } ?: {
                 Helper.toast(R.string.fake_share_failed_not_support.getStringFromMod())
-            }
-        }
-
-        //绕过分享前验证是否安装App
-        if (Helper.getSpBool(Constant.BYPASS_INSTALL_CHECK, false)) {
-            findFirstMethodByName(clsUMShareAPI, "isInstall")?.createHook {
-                replace {
-                    it.log()
-                    return@replace true
-                }
             }
         }
     }

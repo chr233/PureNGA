@@ -73,13 +73,7 @@ class WebViewHook : IHook {
                                     AndroidLogger.w("${url.scheme} ${url.host} ${url.path}")
                                 }
 
-                                if (url.host == "game.weixin.qq.com" && BuildConfig.DEBUG) {
-                                    Helper.toast("test")
-
-                                    throw Exception("114514")
-                                } else {
-                                    it.args[4] = Intent(Intent.ACTION_VIEW, url)
-                                }
+                                it.args[4] = Intent(Intent.ACTION_VIEW, url)
                             }
                         }
                     }
