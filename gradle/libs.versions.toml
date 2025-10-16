@@ -4,10 +4,10 @@ xposedapi = "82"
 ezxhelper = "2.2.1"
 kotlin = "2.2.20"
 coreKtx = "1.17.0"
-composeBom = "2025.09.01"
+composeBom = "2025.10.00"
 material = "1.13.0"
 gson = "2.13.2"
-okhttp = "5.1.0"
+okhttp = "5.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
