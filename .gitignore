@@ -505,3 +505,7 @@ healthchecksdb
 .gradle/
 local.properties
 build/
+
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md

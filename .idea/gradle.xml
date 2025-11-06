@@ -13,8 +13,9 @@
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
+        <option name="resolveExternalAnnotations" value="true" />
       </GradleProjectSettings>
     </option>
+    <option name="parallelModelFetch" value="true" />
   </component>
 </project>
