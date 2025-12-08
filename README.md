@@ -28,10 +28,10 @@
 
 ## 版本说明
 
-|                      类型                       |                     特性                      |                   发行版链接                   |                  下载量                  |
-| :---------------------------------------------: | :-------------------------------------------: | :--------------------------------------------: | :--------------------------------------: |
-|                   NGA 净化版                    |  无需 Xposed 框架, 覆盖安装原版 App, 体积大   |    [![img][release_bundled]][link_bundled]     | [![img][download_bundled]][link_bundled] |
-| 独立净化模块 依赖 Xposed 框架, 独立更新, 体积小 | [![img][release_standalone]][link_standalone] | [![img][download_standalone]][link_standalone] |
+|   类型    |              特性               |                     发行版链接                     |                      下载量                       |
+|:-------:|:-----------------------------:|:---------------------------------------------:|:----------------------------------------------:|
+| NGA 净化版 | 无需 Xposed 框架, 覆盖安装原版 App, 体积大 |    [![img][release_bundled]][link_bundled]    |    [![img][download_bundled]][link_bundled]    |
+| 独立净化模块  |    依赖 Xposed 框架, 独立更新, 体积小    | [![img][release_standalone]][link_standalone] | [![img][download_standalone]][link_standalone] |
 
 ## 网盘镜像
 
@@ -69,10 +69,11 @@ https://www.123pan.com/s/qYTvjv-0Autv.html 提取码:JEFR
 ## 捐赠
 
 | [<img src="https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/aifadian.webp" width="250px">][afdian_link] |
-| :-----------------------------------------------------------------------------------------------------------------------: |
-|                                           [![爱发电][afdian_img]][afdian_link]                                            |
+|:-------------------------------------------------------------------------------------------------------------------------:|
+|                                             [![爱发电][afdian_img]][afdian_link]                                             |
 
 [afdian_img]: https://img.shields.io/badge/爱发电-@chr__-ea4aaa.svg?logo=github-sponsors
+
 [afdian_link]: https://afdian.com/@chr233
 
 ## 设置菜单入口
@@ -80,9 +81,10 @@ https://www.123pan.com/s/qYTvjv-0Autv.html 提取码:JEFR
 1.16.0 以后支持从关于页打开插件菜单
 
 | ![img3][img3] | ![img4][img4] |
-| ------------- | ------------- |
+|---------------|---------------|
 
 [img3]: https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials3.webp
+
 [img4]: https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials4.webp
 
 ---
@@ -96,10 +98,17 @@ https://www.123pan.com/s/qYTvjv-0Autv.html 提取码:JEFR
 ---
 
 [repo_code]: https://github.com/chr233/PureNGA
+
 [repo_xposed]: https://github.com/Xposed-Modules-Repo/com.chrxw.purenga
+
 [release_bundled]: https://img.shields.io/github/v/release/chr233/PureNGA?logo=github&label=版本
+
 [release_standalone]: https://img.shields.io/github/v/release/Xposed-Modules-Repo/com.chrxw.purenga?logo=github&label=版本
+
 [download_bundled]: https://img.shields.io/github/downloads/chr233/PureNGA/total?logo=github&label=下载
+
 [download_standalone]: https://img.shields.io/github/downloads/Xposed-Modules-Repo/com.chrxw.purenga/total?logo=github&label=下载
+
 [link_bundled]: https://github.com/chr233/PureNGA/releases/tag/NGA
+
 [link_standalone]: https://github.com/Xposed-Modules-Repo/com.chrxw.purenga/releases
