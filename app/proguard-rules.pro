@@ -2,7 +2,7 @@
 -keep class com.chrxw.purenga.XposedInit {*;}
 
 # 保留R下面的资源
--keep class **.R$* {*;}
+#-keep class **.R$* {*;}
 
 # 抛出异常时保留代码行号
 -keepattributes SourceFile,LineNumberTable

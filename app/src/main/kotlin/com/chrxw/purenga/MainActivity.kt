@@ -22,6 +22,7 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
  * 主界面
  */
 class MainActivity : AppCompatActivity() {
+    @Keep
     companion object {
         /**
          * 检测模块启用状态

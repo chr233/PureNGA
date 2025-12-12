@@ -43,8 +43,8 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         if (lpparam.packageName == BuildConfig.APPLICATION_ID) {
             AndroidLogger.d("模块内运行")
 
-            MethodFinder.fromClass(MainActivity.Companion::class.java.name).filterByName("isModuleActive").first()
-                .createHook {
+            MethodFinder.fromClass(MainActivity.Companion::class.java.name).filterStatic().firstOrNull()
+                ?.createHook {
                     replace {
                         it.forceLog()
                         return@replace true
