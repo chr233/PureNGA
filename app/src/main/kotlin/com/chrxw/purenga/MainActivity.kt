@@ -8,13 +8,13 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Toast
-import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.ui.DarkContainLayout
 import com.chrxw.purenga.ui.FitImageView
 import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.StatusUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 
 
@@ -22,18 +22,6 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
  * 主界面
  */
 class MainActivity : AppCompatActivity() {
-    @Keep
-    companion object {
-        /**
-         * 检测模块启用状态
-         */
-        @JvmStatic
-        @Keep
-        fun isModuleActive(): Boolean {
-            return false
-        }
-    }
-
     private fun openNga(openPluginSetting: Boolean) {
         try {
             val intent = Intent(Intent.ACTION_MAIN).setComponent(
@@ -176,7 +164,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         runningStatusView.subTitle =
-            getString(if (isModuleActive()) R.string.module_enabled else R.string.module_disabled)
+            getString(if (StatusUtils.modelEnabled) R.string.module_enabled else R.string.module_disabled)
     }
 
     override fun onDestroy() {

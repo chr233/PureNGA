@@ -6,12 +6,13 @@ import android.app.Instrumentation
 import android.widget.Toast
 import androidx.annotation.Keep
 import com.chrxw.purenga.hook.DebugHook
-import com.chrxw.purenga.utils.ExtensionUtils.forceLog
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.StatusUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.FieldFinder
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
@@ -43,13 +44,9 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         if (lpparam.packageName == BuildConfig.APPLICATION_ID) {
             AndroidLogger.d("模块内运行")
 
-            MethodFinder.fromClass(MainActivity.Companion::class.java.name).filterStatic().firstOrNull()
-                ?.createHook {
-                    replace {
-                        it.forceLog()
-                        return@replace true
-                    }
-                } ?: AndroidLogger.e("MainActivity.Companion 方法未找到")
+            FieldFinder.fromClass(StatusUtils::class.java.name).filterStatic().firstOrNull()
+                ?.setBoolean(null, true)
+                ?: AndroidLogger.e("MainActivity.Companion 方法未找到")
 
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             AndroidLogger.d("NGA内运行")
