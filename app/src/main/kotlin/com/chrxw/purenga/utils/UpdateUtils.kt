@@ -100,7 +100,7 @@ object UpdateUtils {
         if (needUpdate) {
             Helper.setSpLong(Constant.LAST_UPDATE_CHECK_DATE, currentTime)
         }
-        return true // needUpdate
+        return needUpdate
     }
 
     fun checkIfNeedUpdate(code: Int): Boolean {

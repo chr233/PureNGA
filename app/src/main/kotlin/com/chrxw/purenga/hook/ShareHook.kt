@@ -20,7 +20,6 @@ class ShareHook : IHook {
     companion object {
         private lateinit var clsActionsInfo: Class<*>
         private lateinit var clsCreateListener_1: Class<*>
-        private lateinit var clsUMShareAPI: Class<*>
         private lateinit var clsBottomMenuDialog: Class<*>
         private lateinit var clsArticleDetailActivity: Class<*>
         private lateinit var clsArticleDetailActivity_x: Class<*>
@@ -46,7 +45,6 @@ class ShareHook : IHook {
         clsActionsInfo = classLoader.loadClass("gov.pianzong.androidnga.model.ActionsInfo")
         clsCreateListener_1 =
             classLoader.loadClass("com.donews.nga.fragments.CommonWebFragment\$JsInterface\$createListener$1")
-        clsUMShareAPI = classLoader.loadClass("com.umeng.socialize.UMShareAPI")
         clsBottomMenuDialog = classLoader.loadClass("gov.pianzong.androidnga.view.BottomMenuDialog")
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")

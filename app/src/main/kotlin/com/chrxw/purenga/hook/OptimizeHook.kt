@@ -496,7 +496,5 @@ class OptimizeHook : IHook {
         }
     }
 
-    private fun LinearLayout.addView(child: Any) {}
-
     override var name = "OptimizeHook"
 }

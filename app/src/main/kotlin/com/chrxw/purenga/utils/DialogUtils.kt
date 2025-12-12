@@ -575,7 +575,7 @@ object DialogUtils {
         container.addView(
             ClickableItemView(activity, "立即检查更新", "").apply {
                 val ngaVersion = Helper.getNgaVersion()
-                val pluginVersion = Helper.pluginVersion
+                val pluginVersion = Helper.PluginVersion
                 subTitle = "NGA: $ngaVersion | 插件: $pluginVersion"
                 setOnClickListener {
                     popupCheckUpdate(activity)
@@ -883,7 +883,7 @@ object DialogUtils {
         val title = "PureNGA 更新日志"
 
         val changeLog = buildString {
-            appendLine("当前版本: ${Helper.pluginVersion}")
+            appendLine("当前版本: ${Helper.PluginVersion}")
             appendLine("更新日志:")
             for (line in R.string.change_log_content.getStringFromMod().split("|")) {
                 appendLine(" - $line")

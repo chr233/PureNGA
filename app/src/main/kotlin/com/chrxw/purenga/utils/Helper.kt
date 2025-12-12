@@ -79,7 +79,7 @@ object Helper {
     /**
      * 获取版本号
      */
-    val pluginVersion = "${BuildConfig.VERSION_CODE}-${BuildConfig.VERSION_NAME}"
+    const val PluginVersion = "${BuildConfig.VERSION_CODE}-${BuildConfig.VERSION_NAME}"
 
 
     /**
@@ -87,10 +87,10 @@ object Helper {
      */
     fun isBundled(): Boolean {
         val ctx = context
-        if (ctx == null) {
-            return false
+        return if (ctx == null) {
+            false
         } else {
-            return try {
+            try {
                 ctx.packageManager.getPackageInfo(
                     BuildConfig.APPLICATION_ID, PackageInfo.INSTALL_LOCATION_AUTO
                 ).versionName
