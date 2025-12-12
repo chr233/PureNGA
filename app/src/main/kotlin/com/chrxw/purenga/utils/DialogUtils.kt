@@ -594,7 +594,7 @@ object DialogUtils {
                 val sunType = if (Helper.isBundled()) "整合版" else "插件版"
                 subTitle = "插件类型: $sunType"
                 setOnClickListener {
-                    popupChangeLogDialog(activity)
+                    popupGotoReleasePage(activity)
                 }
             })
 
@@ -691,7 +691,7 @@ object DialogUtils {
             setTitle("PureNGA 用户协议")
             setMessage(R.string.eula_content.getStringFromMod().replace("|", "\n\n"))
             setCancelable(false)
-            if(Helper.isXposed) {
+            if (Helper.isXposed) {
                 setNeutralButton("我不同意") { _, _ ->
                     Helper.setSpBool(Constant.FORBID_LOAD, true)
                     Helper.toast(
@@ -705,7 +705,7 @@ object DialogUtils {
                         "本App完全免费, 如果在任何渠道付费取得, 请申请退款", Toast.LENGTH_LONG
                     )
                 }
-            }else{
+            } else {
                 setNeutralButton("我不同意") { _, _ ->
                     activity.finishAffinity()
                     activity.finish()
@@ -745,27 +745,51 @@ object DialogUtils {
     /**
      * 手动检查更新
      */
-    private fun onCheckUpdateManually(activity: Activity, pan: Boolean) {
-        val uri = if (!pan) {
-            if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
-        } else {
-            Constant.PAN_URL
-        }
-
-        Helper.openUrl(activity, uri)
+    fun popupCheckUpdateManually(activity: Activity) {
+        AlertDialog.Builder(activity)
+            .setTitle("PureNGA 获取版本信息失败")
+            .setMessage("是否前往发布页获取更新?")
+            .setPositiveButton("确定") { _, _ ->
+                popupGotoReleasePage(activity)
+            }.setNegativeButton("取消", null)
+            .create()
+            .show()
     }
 
     /**
-     * 手动检查更新
+     * 跳转发布页
      */
-    fun popupCheckUpdateManually(activity: Activity) {
-        AlertDialog.Builder(activity).setTitle("PureNGA 获取版本信息失败").setMessage("是否手动检查更新?")
-            .setPositiveButton("Github") { _, _ ->
-                onCheckUpdateManually(activity, false)
-            }.setNegativeButton("网盘镜像") { _, _ ->
-                onCheckUpdateManually(activity, true)
-            }.setNeutralButton("关闭") { _, _ ->
-            }.create().show()
+    fun popupGotoReleasePage(activity: Activity) {
+        val releaseList = arrayOf(
+            "Github 发布页",
+            "123网盘镜像",
+            "夸克网盘镜像"
+        )
+        AlertDialog.Builder(activity)
+            .setTitle("获取 PureNGA 最新版本")
+            .setItems(releaseList) { _, which ->
+                Helper.toast(which.toString())
+                val url = when (which) {
+                    0 -> if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
+                    1 -> Constant.RELEASE_123
+                    2 -> Constant.RELEASE_QUARK
+                    else -> null
+                }
+                val code = when (which) {
+                    1 -> "JEFR"
+                    2 -> "NGyD"
+                    else -> null
+                }
+                if (code != null) {
+                    Helper.toast("正在前往网盘, 提取码: $code")
+                }
+                if (url != null) {
+                    Helper.openUrl(activity, url)
+                }
+            }
+            .setPositiveButton("关闭", null)
+            .create()
+            .show()
     }
 
     /**

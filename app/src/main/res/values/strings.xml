@@ -30,8 +30,10 @@
     <string name="fake_share_failed">假装分享失败</string>
     <string name="fake_share_failed_not_support">假装分享功能启用失败, 可能不适用于当前版本</string>
     <string name="check_update">检查更新</string>
-    <string name="check_update_summary">手动检查更新</string>
+    <string name="check_update_summary">立即检查更新</string>
     <string name="change_log">版本信息</string>
     <string name="change_log_summary">当前版本的更新信息</string>
     <string name="open_nga_failed">打开 NGA 失败</string>
+    <string name="get_latest_version">获取最新版本</string>
+    <string name="get_latest_version_summary">前往发布页获取新版本</string>
 </resources>

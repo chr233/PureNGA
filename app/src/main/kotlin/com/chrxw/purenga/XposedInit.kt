@@ -49,12 +49,12 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                         it.forceLog()
                         return@replace true
                     }
-                }
+                } ?: AndroidLogger.e("MainActivity.Companion 方法未找到")
 
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             AndroidLogger.d("NGA内运行")
 
-            Helper.isXposed=true
+            Helper.isXposed = true
 
             MethodFinder.fromClass(Instrumentation::class.java).filterByName("callApplicationOnCreate")
                 .filterByAssignableParamTypes(Application::class.java).first().createHook {

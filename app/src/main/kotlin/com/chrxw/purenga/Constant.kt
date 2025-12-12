@@ -15,6 +15,8 @@ object Constant {
 
     const val RELEASE_STANDALONE = "https://github.com/Xposed-Modules-Repo/com.chrxw.purenga/releases"
     const val RELEASE_BUNDLED = "https://github.com/chr233/PureNGA/releases/tag/NGA"
+    const val RELEASE_123 = "https://www.123pan.com/s/qYTvjv-0Autv.html"
+    const val RELEASE_QUARK = "https://pan.quark.cn/s/6e7075812de3"
 
     const val LOG_TAG = "PureNGA"
 

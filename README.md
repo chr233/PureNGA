@@ -22,7 +22,7 @@
 
 ## 公告
 
-当前插件最佳适配 9.9.49 以及之前的版本
+当前插件最佳适配 9.9.61 以及之前的版本
 
 新版不一定会跟进
 
@@ -49,8 +49,13 @@
 
 > 请不要在任何平台付费获取本应用, 本项目只在[爱发电][afdian_link]接受赞助
 
-| ![](./.github/shame1.jpg) | ![](./.github/shame2.jpg) | ![](./.github/shame3.jpg) | ![](./.github/shame4.jpg) |
-| :-----------------------: | :-----------------------: | ------------------------- | ------------------------- |
+| ![1][shame1] | ![2][shame2] | ![3][shame3]) | ![4][shame4] |
+| :----------: | :----------: | ------------- | ------------ |
+
+[shame1]: https://raw.chrxw.com/PureNGA/main/.github/shame1.jpg
+[shame2]: https://raw.chrxw.com/PureNGA/main/.github/shame2.jpg
+[shame3]: https://raw.chrxw.com/PureNGA/main/.github/shame3.jpg
+[shame4]: https://raw.chrxw.com/PureNGA/main/.github/shame4.jpg
 
 ## 版本说明
 
@@ -61,7 +66,7 @@
 
 ## 网盘镜像
 
-- 123网盘 https://www.123pan.com/s/qYTvjv-0Autv.html 提取码 JEFR
+- 123 网盘 https://www.123pan.com/s/qYTvjv-0Autv.html 提取码 JEFR
 - 夸克网盘 https://pan.quark.cn/s/6e7075812de3 提取码 NGyD
 
 ## FAQ
@@ -97,11 +102,8 @@
 
 1.16.0 以后支持从关于页打开插件菜单
 
-| ![img3][img3] | ![img4][img4] |
-| ------------- | ------------- |
-
-[img3]: https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials3.webp
-[img4]: https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials4.webp
+| <img src="https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials3.webp" width="250px"> | !<img src="https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials4.webp" width="250px"> |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 
 ---
 

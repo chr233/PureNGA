@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         /**
          * 检测模块启用状态
          */
-        @Suppress("SameReturnValue")
         @JvmStatic
         @Keep
         fun isModuleActive(): Boolean {
@@ -122,22 +121,20 @@ class MainActivity : AppCompatActivity() {
                 DialogUtils.popupDonateDialog(this@MainActivity)
             }
         })
-        container.addView(ClickableItemView(this, R.string.version, R.string.version).apply {
+        container.addView(ClickableItemView(this, R.string.change_log, R.string.version).apply {
             subTitle = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
             setOnClickListener {
                 DialogUtils.popupChangeLogDialog(this@MainActivity)
             }
         })
-
         container.addView(ClickableItemView(this, R.string.check_update, R.string.check_update_summary).apply {
             setOnClickListener {
                 DialogUtils.popupCheckUpdate(this@MainActivity)
             }
         })
-
-        container.addView(ClickableItemView(this, R.string.change_log, R.string.change_log_summary).apply {
+        container.addView(ClickableItemView(this, R.string.get_latest_version, R.string.get_latest_version_summary).apply {
             setOnClickListener {
-                DialogUtils.popupChangeLogDialog(this@MainActivity)
+                DialogUtils.popupGotoReleasePage(this@MainActivity)
             }
         })
 
