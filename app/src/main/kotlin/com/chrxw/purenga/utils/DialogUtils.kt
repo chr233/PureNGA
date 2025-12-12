@@ -3,6 +3,7 @@ package com.chrxw.purenga.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.os.Build
@@ -21,6 +22,7 @@ import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
 import com.chrxw.purenga.ui.ClickableItemXpView
+import com.chrxw.purenga.ui.CopyrightWarnView
 import com.chrxw.purenga.ui.DarkContainLayout
 import com.chrxw.purenga.ui.FitImageXpView
 import com.chrxw.purenga.ui.ToggleItemXpView
@@ -141,6 +143,7 @@ object DialogUtils {
         val pureSetting = Helper.getSpStr(Constant.PURE_SLIDE_MENU, null)
 
         val availablePureItems = arrayOf(
+            "签到",
             "成为NGA付费会员",
             "收藏",
             "浏览历史",
@@ -217,7 +220,7 @@ object DialogUtils {
      * 设置自定义首页
      */
     private fun onSetCustomHome(activity: Activity) {
-        val items = arrayOf("首页", "社区", "我的")
+        val items = arrayOf("首页", "社区", "游戏库", "我的")
         val indexSetting = Helper.getSpStr(Constant.CUSTOM_INDEX, null)
         var currentIndex = items.indexOf(indexSetting)
 
@@ -286,6 +289,25 @@ object DialogUtils {
         }
     }
 
+    public fun getShortcutList(context: Context): List<ShortcutInfo?> {
+        return listOf(
+            context.buildShortcut("sign", "签到", "签到", null),
+            context.buildShortcut("home", "首页", "首页", null),
+            context.buildShortcut("account", "账号切换", "账号切换", null),
+            context.buildShortcut("qrcode", "扫码", "扫码", null),
+            context.buildShortcut("message", "消息", "消息", null),
+            context.buildShortcut("setting", "设置", "设置", null),
+            context.buildShortcut("about", "关于", "关于", null),
+            context.buildShortcut("theme", "个性装扮", "个性装扮", null),
+            context.buildShortcut("game", "游戏档案", "游戏档案", null),
+            context.buildShortcut("favorite", "收藏", "收藏", null),
+            context.buildShortcut("history", "浏览历史", "浏览历史", null),
+            context.buildShortcut("draft", "草稿箱", "草稿箱", null),
+            context.buildShortcut("diagnose", "网络诊断", "网络诊断", null),
+            context.buildShortcut("pluginSetting", "PureNGA设置", "PureNGA设置", null),
+        )
+    }
+
     /**
      *  设置自定义快捷方式
      */
@@ -294,22 +316,7 @@ object DialogUtils {
             val shortcutSettings = Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null)
 
             // 可用快捷方式列表
-            val availableShortcuts = arrayOf(
-                activity.buildShortcut("sign", "签到", "签到", null),
-                activity.buildShortcut("home", "首页", "首页", null),
-                activity.buildShortcut("account", "账号切换", "账号切换", null),
-                activity.buildShortcut("qrcode", "扫码", "扫码", null),
-                activity.buildShortcut("message", "消息", "消息", null),
-                activity.buildShortcut("setting", "设置", "设置", null),
-                activity.buildShortcut("about", "关于", "关于", null),
-                activity.buildShortcut("theme", "个性装扮", "个性装扮", null),
-                activity.buildShortcut("game", "游戏档案", "游戏档案", null),
-                activity.buildShortcut("favorite", "收藏", "收藏", null),
-                activity.buildShortcut("history", "浏览历史", "浏览历史", null),
-                activity.buildShortcut("draft", "草稿箱", "草稿箱", null),
-                activity.buildShortcut("diagnose", "网络诊断", "网络诊断", null),
-                activity.buildShortcut("pluginSetting", "PureNGA设置", "PureNGA设置", null),
-            )
+            val availableShortcuts = getShortcutList(activity)
 
             //选中的快捷方式列表
             val enabledShortcutIds = shortcutSettings?.split(",")?.toTypedArray() ?: arrayOf()
@@ -412,6 +419,8 @@ object DialogUtils {
         val root = ScrollView(activity)
         val container = DarkContainLayout(activity, true)
 
+        container.addView(CopyrightWarnView(activity))
+
         // 净化设置
         container.addView(ClickableItemXpView(activity, "净化设置"))
         container.addView(
@@ -465,6 +474,14 @@ object DialogUtils {
         )
         container.addView(
             ToggleItemXpView(
+                activity,
+                Constant.QUICK_SIGN_IN,
+                "长按搜索进入签到",
+                "长按右上角搜索图标进入签到页面, 不推荐使用"
+            )
+        )
+        container.addView(
+            ToggleItemXpView(
                 activity, Constant.PREFER_NEW_POST, "默认使用“新发布”", "帖子列表默认使用“新发布”而不是“新回复”"
             )
         )
@@ -503,7 +520,7 @@ object DialogUtils {
                 activity,
                 Constant.PURE_CALENDAR_DIALOG,
                 "屏蔽日历弹窗",
-                "屏蔽签到页面的添加日历提醒弹窗, 9.9.20 之前无需开启, 9.9.50 疑似失效"
+                "屏蔽签到页面的添加日历提醒弹窗, 9.9.20 之前无需开启, 9.9.50 后无效"
             )
         )
         container.addView(
@@ -516,7 +533,7 @@ object DialogUtils {
         )
         container.addView(
             ToggleItemXpView(
-                activity, Constant.KILL_UPDATE_CHECK, "禁止APP检查更新", "尝试阻止NGA检查更新, 9.9.50 疑似失效"
+                activity, Constant.KILL_UPDATE_CHECK, "禁止APP检查更新", "尝试阻止NGA检查更新, 9.9.50 后无效"
             )
         )
         container.addView(ToggleItemXpView(activity, Constant.KILL_POPUP_DIALOG, "屏蔽应用内弹窗", "作用不明"))
@@ -564,6 +581,14 @@ object DialogUtils {
             })
         container.addView(
             ClickableItemXpView(activity, "当前版本信息", "").apply {
+                val sunType = if (Helper.isBundled()) "整合版" else "插件版"
+                subTitle = "插件类型: $sunType"
+                setOnClickListener {
+                    popupChangeLogDialog(activity)
+                }
+            })
+        container.addView(
+            ClickableItemXpView(activity, "获取最新发行版aw", "").apply {
                 val sunType = if (Helper.isBundled()) "整合版" else "插件版"
                 subTitle = "插件类型: $sunType"
                 setOnClickListener {
@@ -656,6 +681,29 @@ object DialogUtils {
         }
     }
 
+    fun popupEulaDialog(activity: Activity) {
+        AlertDialog.Builder(activity).apply {
+            setTitle("PureNGA 用户协议")
+            setMessage(R.string.eula_content.getStringFromMod().replace("|", "\n\n"))
+            setCancelable(false)
+            setNeutralButton("我不同意") { _, _ ->
+                Helper.setSpBool(Constant.FORBID_LOAD, true)
+                Helper.toast(
+                    "您已拒绝用户协议, 插件将被禁用", Toast.LENGTH_LONG
+                )
+                Helper.restartApplication(activity)
+            }
+            setPositiveButton("同意协议, 不再显示") { _, _ ->
+                Helper.setSpBool(Constant.EULA_AGREED, true)
+                Helper.toast(
+                    "本App完全免费, 如果在任何渠道付费取得, 请申请退款", Toast.LENGTH_LONG
+                )
+            }
+            create()
+            show()
+        }
+    }
+
     /**
      * 弹出首次运行对话框
      */
@@ -742,7 +790,7 @@ object DialogUtils {
         }
     }
 
-    private fun onClickDonate(activity: Activity) {
+    private fun onClickDonate(activity: Context) {
         Helper.toast("感谢支持")
         Helper.openUrl(activity, Constant.DONATE_URL)
     }
@@ -896,7 +944,7 @@ object DialogUtils {
     /**
      * 弹出捐赠对话框
      */
-    fun popupDonateDialog(activity: Activity) {
+    fun popupDonateDialog(activity: Context) {
         val view = FitImageXpView(activity, R.drawable.aifadian).apply {
             setOnClickListener {
                 onClickDonate(activity)

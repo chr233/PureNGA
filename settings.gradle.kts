@@ -1,9 +1,9 @@
 pluginManagement {
     repositories {
-        maven {
-            name = "google mirror"
-            url = uri("https://maven.aliyun.com/repository/google")
-        }
+//        maven {
+//            name = "google mirror"
+//            url = uri("https://maven.aliyun.com/repository/google")
+//        }
         maven {
             name = "central mirror"
             url = uri("https://maven.aliyun.com/repository/central")
@@ -27,10 +27,10 @@ plugins {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven {
-            name = "google mirror"
-            url = uri("https://maven.aliyun.com/repository/google")
-        }
+//        maven {
+//            name = "google mirror"
+//            url = uri("https://maven.aliyun.com/repository/google")
+//        }
         maven {
             name = "central mirror"
             url = uri("https://maven.aliyun.com/repository/central")

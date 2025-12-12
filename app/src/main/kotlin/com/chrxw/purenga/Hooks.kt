@@ -39,6 +39,11 @@ object Hooks {
             return 1
         }
 
+        if(Helper.getSpBool(Constant.FORBID_LOAD,false)){
+            return -1
+        }
+
+
         val hideError = Helper.getSpBool(Constant.HIDE_ERROR_INFO, false)
 
         var error = 0

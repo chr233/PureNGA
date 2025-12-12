@@ -1,5 +1,5 @@
-val verCode = 51
-val verName = "3.1.0"
+val verCode = 52
+val verName = "3.2.0"
 
 val javaVersion = JavaVersion.VERSION_21
 
@@ -31,6 +31,7 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 

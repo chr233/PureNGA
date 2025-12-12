@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
@@ -21,10 +22,12 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.ui.ClickableItemXpView
 import com.chrxw.purenga.utils.DialogUtils
+import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
+import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.ConstructorFinder
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -161,7 +164,10 @@ class OptimizeHook : IHook {
                         for (view in linearLayout.children) {
                             if (view is RelativeLayout) {
                                 for (childView in view.children) {
+
                                     if (childView is TextView && pureSlideMenu.contains(childView.text)) {
+                                        AndroidLogger.e(childView.text.toString())
+
                                         pureViews.add(view)
                                         break
                                     }
@@ -213,7 +219,29 @@ class OptimizeHook : IHook {
             }
         }
 
-        //移除导航栏商城图标
+        //长按打开签到
+        if (Helper.getSpBool(Constant.QUICK_SIGN_IN, false)) {
+            MethodFinder.fromClass(clsHomeFragment).filterByName("initLayout").firstOrNull()?.createHook {
+                after {
+                    it.log()
+
+                    val viewBinding = XposedHelpers.callMethod(it.thisObject, "getViewBinding")
+                    val view = XposedHelpers.getObjectField(viewBinding, "f") as ImageView
+
+                    view.setOnLongClickListener {
+                        val activity = EzXHelper.appContext
+
+                        val gotoIntent = activity.buildNormalIntent(clsLoginWebView)
+                        gotoIntent.putExtra("sync_type", 5)
+
+                        activity.startActivity(gotoIntent)
+                        true
+                    }
+                }
+            }
+        }
+
+        //移除导航栏游戏库图标
         if (Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)) {
             findFirstMethodByName(clsMainActivityPresenter, "initTabParams")?.createHook {
                 before {
@@ -225,6 +253,27 @@ class OptimizeHook : IHook {
                     var i = 0
                     while (i < tabParam.size) {
                         val current = tabParam[i]
+
+                        val tabId = XposedHelpers.getIntField(current, "tabId")
+                        if ((tabId == 2)) {
+                            tabParam.remove(current)
+                        } else {
+                            i++
+                        }
+                    }
+                }
+            }
+
+            findFirstMethodByName(clsMainActivity, "initTabs")?.createHook {
+                before {
+                    it.log()
+
+                    val tabParam = it.args[0] as ArrayList<*>
+
+                    var i = 0
+                    while (i < tabParam.size) {
+                        val current = tabParam[i]
+
                         val tabId = XposedHelpers.getIntField(current, "tabId")
                         if ((tabId == 2)) {
                             tabParam.remove(current)
@@ -248,6 +297,13 @@ class OptimizeHook : IHook {
             findFirstMethodByName(clsMainActivity, "setupCenterMenu")?.createHook {
                 replace {
                     it.log()
+                }
+            }
+        } else if (Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)) {
+            findFirstMethodByName(clsMainActivity, "setupCenterMenu")?.createHook {
+                before {
+                    it.log()
+                    it.args[1] = 2
                 }
             }
         }

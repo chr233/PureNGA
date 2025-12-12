@@ -16,6 +16,7 @@ import de.robv.android.xposed.XposedHelpers
 
 class DebugHook : IHook {
     override fun init(classLoader: ClassLoader) {
+
     }
 
     override fun hook() {

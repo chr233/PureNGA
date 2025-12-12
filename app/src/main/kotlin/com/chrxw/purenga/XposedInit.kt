@@ -68,6 +68,10 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                                 val error = Hooks.initHooks(lpparam.classLoader)
 
+                                if (error == -1) {
+                                    return@after
+                                }
+
                                 if (BuildConfig.DEBUG) {
                                     AndroidLogger.w("!!! Debug 模式 !!!")
                                     val hook = DebugHook()
@@ -90,26 +94,23 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                         Helper.toast(
                                             buildString {
                                                 appendLine("PureNGA 加载成功")
-                                                appendLine("请到【设置】>【PureNGA 设置】中配置插件功能")
                                                 appendLine("如果不想显示此信息请打开【静默运行】开关")
                                             }, Toast.LENGTH_LONG
                                         )
                                     }
                                 } else {
-                                    if (!Helper.getSpBool(Constant.HIDE_ERROR_INFO, false)) {
-                                        Helper.toast(
-                                            buildString {
-                                                appendLine("PureNGA $error 个模块加载失败")
-                                                appendLine("可能不支持当前版本")
-                                                appendLine("NGA 版本: ${Helper.getNgaVersion()}")
-                                                appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
-                                            }, Toast.LENGTH_LONG
-                                        )
-                                    }
+                                    Helper.toast(
+                                        buildString {
+                                            appendLine("PureNGA $error 个模块加载失败")
+                                            appendLine("可能不支持当前版本")
+                                            appendLine("NGA 版本: ${Helper.getNgaVersion()}")
+                                            appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
+                                        }, Toast.LENGTH_LONG
+                                    )
                                 }
-                            } else {
-                                AndroidLogger.d("跳过初始化")
                             }
+                        } else {
+                            AndroidLogger.d("跳过初始化")
                         }
                     }
                 }

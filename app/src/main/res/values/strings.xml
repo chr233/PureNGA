@@ -22,7 +22,8 @@
     <string name="setting">设置</string>
     <string name="open_purenga_summary">插件设置</string>
     <string name="open_purenga">打开插件设置</string>
-    <string name="change_log_content">适配 9.9.53|优化本地VIP功能, 支持全自动签到</string>
+    <string name="change_log_content">适配 9.9.61|修复导航栏净化</string>
+    <string name="eula_content">本App完全免费, 如果在任何渠道付费取得, 请申请退款|本App不会篡改、修改和获取任何个人信息和论坛账号信息|本APP使用者因为违反本声明的规定而触犯中华人民共和国法律的, 一切后果自负, 作者不承担任何责任|请不要在任何渠道付费倒卖本App, 免费传播不受限制|凡以任何方式直接、间接使用APP者, 视为自愿接受本声明的约束</string>
     <string name="fake_share">假装分享</string>
     <string name="fake_share_three">分享三次</string>
     <string name="fake_share_succes">假装分享成功</string>

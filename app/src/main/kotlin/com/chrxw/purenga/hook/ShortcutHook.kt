@@ -1,14 +1,19 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
+import android.os.Build
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.DialogUtils
+import com.chrxw.purenga.utils.DialogUtils.popupEulaDialog
 import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
+import com.chrxw.purenga.utils.ExtensionUtils.getShortcuts
 import com.chrxw.purenga.utils.ExtensionUtils.log
+import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.Helper
+import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 
 class ShortcutHook : IHook {
@@ -94,19 +99,36 @@ class ShortcutHook : IHook {
                     DialogUtils.popupChangeLogDialog(activity)
                 }
 
+                if (!Helper.getSpBool(Constant.EULA_AGREED, false)) {
+                    popupEulaDialog(activity)
+                }
+
                 // 如果来源是Shortcut
                 onShortcut(activity)
             }
         }
 
         // 处理Shortcut跳转
-        if (!Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null).isNullOrEmpty()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && !Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null)
+                .isNullOrEmpty()
+        ) {
             findFirstMethodByName(OptimizeHook.clsMainActivity, "onNewIntent")?.createHook {
                 after {
                     // 如果来源是Shortcut
                     val activity = it.thisObject as Activity
                     onShortcut(activity)
                 }
+            }
+
+            val currentShortcuts = EzXHelper.appContext.getShortcuts()
+            val customShortcuts = Helper.getSpStr(Constant.SHORTCUT_SETTINGS, "")?.split(',') ?: listOf()
+
+            if (currentShortcuts != null && currentShortcuts.size != customShortcuts.size) {
+                val shortcuts =
+                    DialogUtils.getShortcutList(EzXHelper.appContext)
+                        .filter { it!!.id in customShortcuts }
+                        .map { it!! }
+                EzXHelper.appContext.setShortcuts(shortcuts)
             }
         }
     }

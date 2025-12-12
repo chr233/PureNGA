@@ -20,6 +20,8 @@ object Constant {
 
     const val STR_PURENGA_SETTING = "PureNGA 设置"
 
+    const val STR_COPYRIGHT_WARNING = "本软件免费开源, 如果在任何渠道付费取得本软件, 请申请退款"
+
     /**
      * 模块SharedPreferences名称
      */
@@ -42,6 +44,7 @@ object Constant {
     const val KILL_POPUP_DIALOG = "kill_popup_dialog"
     const val CHECK_PLUGIN_UPDATE = "check_plugin_update"
     const val QUICK_ACCOUNT_MANAGE = "quick_account_manage"
+    const val QUICK_SIGN_IN = "quick_sign_in"
     const val FAKE_SHARE = "fake_share"
     const val HIDE_HOOK_INFO = "hide_hook_info"
     const val HIDE_ERROR_INFO = "hide_error_info"
@@ -57,6 +60,8 @@ object Constant {
     const val PURE_POST = "pure_post"
     const val PURE_AUTHOR = "pure_author"
     const val PREFER_NEW_POST = "prefer_new_post"
+    const val EULA_AGREED = "eula_agreed"
+    const val FORBID_LOAD = "forbid_load"
 
     const val LAST_SHOW_CHANGELOG = "last_show_changelog"
     const val SKIP_VERSION_CODE = "skip_version_code"

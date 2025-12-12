@@ -108,7 +108,7 @@ object ExtensionUtils {
     }
 
     fun Context.buildShortcut(
-        id: String, shortLabel: String, long: String, iconId: Int?
+        id: String, shortLabel: String, long: String, iconId: Int?,
     ): ShortcutInfo? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val icon = Icon.createWithResource(this, iconId ?: Helper.getDrawerId("app_logo"))
@@ -130,6 +130,16 @@ object ExtensionUtils {
             shortcutManager.dynamicShortcuts = shortcuts ?: listOf<ShortcutInfo>()
         } else {
             Helper.toast("安卓版本不支持此操作")
+        }
+    }
+
+    fun Context.getShortcuts(): List<ShortcutInfo>? {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val shortcutManager = this.getSystemService(ShortcutManager::class.java)
+            return shortcutManager.dynamicShortcuts
+        } else {
+            Helper.toast("安卓版本不支持此操作")
+            return null
         }
     }
 
