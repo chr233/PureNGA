@@ -18,7 +18,7 @@
 [![Steam](https://img.shields.io/badge/steam-Chr__-1B2838.svg?logo=steam)](https://steamcommunity.com/id/Chr_)
 
 [![Steam](https://img.shields.io/badge/steam-donate-1B2838.svg?logo=steam)](https://steamcommunity.com/tradeoffer/new/?partner=221260487&token=xgqMgL-i)
-[![爱发电](https://img.shields.io/badge/爱发电-chr__-ea4aaa.svg?logo=github-sponsors)](https://afdian.com/@chr233)
+[![爱发电][afdian_badge]][afdian_link]
 
 ## 公告
 
@@ -26,16 +26,43 @@
 
 新版不一定会跟进
 
+## 捐赠
+
+| [<img src="https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/aifadian.webp" width="250px">][afdian_link] |
+| :-----------------------------------------------------------------------------------------------------------------------: |
+|                                          [![爱发电][afdian_badge]][afdian_link]                                           |
+
+[afdian_badge]: https://img.shields.io/badge/爱发电-@chr__-ea4aaa.svg?logo=github-sponsors
+[afdian_link]: https://afdian.com/@chr233
+
+## 免责申明
+
+- 本 App 完全免费, 如果在任何渠道付费取得, 请申请退款
+- 本 App 不会篡改、修改和获取任何个人信息和论坛账号信息
+- 本 APP 使用者因为违反本声明的规定而触犯中华人民共和国法律的, 一切后果自负, 作者不承担任何责任
+- 请不要在任何渠道倒卖本 App, 免费传播不受限制
+- 凡以任何方式直接、间接使用 APP 者, 视为自愿接受本声明的约束
+
+- 本项目只在[爱发电][afdian_link]接受赞助, 咸鱼/淘宝均为倒卖, 请不要上当
+
+### 以下为第三方倒卖
+
+> 请不要在任何平台付费获取本应用, 本项目只在[爱发电][afdian_link]接受赞助
+
+| ![](./.github/shame1.jpg) | ![](./.github/shame2.jpg) | ![](./.github/shame3.jpg) | ![](./.github/shame4.jpg) |
+| :-----------------------: | :-----------------------: | ------------------------- | ------------------------- |
+
 ## 版本说明
 
-|   类型    |              特性               |                     发行版链接                     |                      下载量                       |
-|:-------:|:-----------------------------:|:---------------------------------------------:|:----------------------------------------------:|
-| NGA 净化版 | 无需 Xposed 框架, 覆盖安装原版 App, 体积大 |    [![img][release_bundled]][link_bundled]    |    [![img][download_bundled]][link_bundled]    |
-| 独立净化模块  |    依赖 Xposed 框架, 独立更新, 体积小    | [![img][release_standalone]][link_standalone] | [![img][download_standalone]][link_standalone] |
+|     类型     |                    特性                    |                  发行版链接                   |                     下载量                     |
+| :----------: | :----------------------------------------: | :-------------------------------------------: | :--------------------------------------------: |
+|  NGA 净化版  | 无需 Xposed 框架, 覆盖安装原版 App, 体积大 |    [![img][release_bundled]][link_bundled]    |    [![img][download_bundled]][link_bundled]    |
+| 独立净化模块 |     依赖 Xposed 框架, 独立更新, 体积小     | [![img][release_standalone]][link_standalone] | [![img][download_standalone]][link_standalone] |
 
 ## 网盘镜像
 
-https://www.123pan.com/s/qYTvjv-0Autv.html 提取码:JEFR
+- 123网盘 https://www.123pan.com/s/qYTvjv-0Autv.html 提取码 JEFR
+- 夸克网盘 https://pan.quark.cn/s/6e7075812de3 提取码 NGyD
 
 ## FAQ
 
@@ -66,25 +93,14 @@ https://www.123pan.com/s/qYTvjv-0Autv.html 提取码:JEFR
 
 同时兼容 Lspatch, 支持 9.9.x 版本的 NGA 客户端, 理论向后兼容
 
-## 捐赠
-
-| [<img src="https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/aifadian.webp" width="250px">][afdian_link] |
-|:-------------------------------------------------------------------------------------------------------------------------:|
-|                                             [![爱发电][afdian_img]][afdian_link]                                             |
-
-[afdian_img]: https://img.shields.io/badge/爱发电-@chr__-ea4aaa.svg?logo=github-sponsors
-
-[afdian_link]: https://afdian.com/@chr233
-
 ## 设置菜单入口
 
 1.16.0 以后支持从关于页打开插件菜单
 
 | ![img3][img3] | ![img4][img4] |
-|---------------|---------------|
+| ------------- | ------------- |
 
 [img3]: https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials3.webp
-
 [img4]: https://raw.chrxw.com/PureNGA/main/app/src/main/res/drawable-nodpi/tutorials4.webp
 
 ---
@@ -98,17 +114,10 @@ https://www.123pan.com/s/qYTvjv-0Autv.html 提取码:JEFR
 ---
 
 [repo_code]: https://github.com/chr233/PureNGA
-
 [repo_xposed]: https://github.com/Xposed-Modules-Repo/com.chrxw.purenga
-
 [release_bundled]: https://img.shields.io/github/v/release/chr233/PureNGA?logo=github&label=版本
-
 [release_standalone]: https://img.shields.io/github/v/release/Xposed-Modules-Repo/com.chrxw.purenga?logo=github&label=版本
-
 [download_bundled]: https://img.shields.io/github/downloads/chr233/PureNGA/total?logo=github&label=下载
-
 [download_standalone]: https://img.shields.io/github/downloads/Xposed-Modules-Repo/com.chrxw.purenga/total?logo=github&label=下载
-
 [link_bundled]: https://github.com/chr233/PureNGA/releases/tag/NGA
-
 [link_standalone]: https://github.com/Xposed-Modules-Repo/com.chrxw.purenga/releases
