@@ -6,6 +6,7 @@ import android.app.Instrumentation
 import android.widget.Toast
 import androidx.annotation.Keep
 import com.chrxw.purenga.hook.DebugHook
+import com.chrxw.purenga.utils.ExtensionUtils.forceLog
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -45,13 +46,15 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
             MethodFinder.fromClass(MainActivity.Companion::class.java.name).filterByName("isModuleActive").first()
                 .createHook {
                     replace {
-                        it.log()
+                        it.forceLog()
                         return@replace true
                     }
                 }
 
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             AndroidLogger.d("NGA内运行")
+
+            Helper.isXposed=true
 
             MethodFinder.fromClass(Instrumentation::class.java).filterByName("callApplicationOnCreate")
                 .filterByAssignableParamTypes(Application::class.java).first().createHook {

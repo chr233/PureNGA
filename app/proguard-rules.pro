@@ -9,16 +9,16 @@
 -renamesourcefileattribute SourceFile
 
 # 基本混淆
--keep class * extends android.app.Activity
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
-
-# 保留 Activity 中在 layout 中通过 onClick 调用的方法（取消注释）
--keepclassmembers class * extends android.app.Activity {
-    public void *(android.view.View);
-}
+# 保留我们使用的四大组件，自定义的Application等等这些类不被混淆
+# 因为这些子类都有可能被外部调用
+#-keep public class * extends android.app.Activity
+#-keep public class * extends android.preference.Preference
+#-keep public class * extends android.view.View
+# 保留在Activity中的方法参数是view的方法，
+# 这样以来我们在layout中写的onClick就不会被影响
+#-keepclassmembers class * extends android.app.Activity {
+#    public void *(android.view.View);
+#}
 
 # 保留枚举类不被混淆
 -keepclassmembers enum * {

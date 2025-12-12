@@ -18,10 +18,6 @@ object Constant {
 
     const val LOG_TAG = "PureNGA"
 
-    const val STR_PURENGA_SETTING = "PureNGA 设置"
-
-    const val STR_COPYRIGHT_WARNING = "本软件免费开源, 如果在任何渠道付费取得本软件, 请申请退款"
-
     /**
      * 模块SharedPreferences名称
      */
@@ -67,4 +63,18 @@ object Constant {
     const val SKIP_VERSION_CODE = "skip_version_code"
     const val LAST_UPDATE_CHECK_DATE = "last_update_check_date"
     const val UPDATE_CHECK_INTERVAL = 3600 * 3
+
+    // 通用
+    const val STR_PURENGA_SETTING = "PureNGA 设置"
+    const val STR_COPYRIGHT_WARNING = "本软件免费开源, 如果在任何渠道付费取得本软件, 请申请退款"
+    const val STR_SAVE = "保存"
+    const val STR_CANCEL = "取消"
+    const val STR_CLOSE = "关闭"
+    const val STR_CONFIRM = "确认"
+    const val STR_WARNING = "警告"
+    const val STR_CLEAR_CHOICE = "清除选择"
+    const val STR_CLEAR_SELECTION = "清空已选择"
+    const val STR_CLEAR_INPUT = "清空输入"
+    const val STR_SAVED_RESTART = "设置已保存, 重启应用生效"
+    const val STR_SAVED_RESTARTING = "设置已保存, 正在重启"
 }

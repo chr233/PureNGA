@@ -160,7 +160,7 @@ object ExtensionUtils {
     }
 
     fun Int.getStringFromMod(): String {
-        return if (EzXHelper.isHostPackageNameInited) {
+        return if (Helper.isXposed) {
             EzXHelper.moduleRes.getString(this)
         } else {
             val ctx = Helper.context
@@ -169,7 +169,7 @@ object ExtensionUtils {
     }
 
     fun Int.getStringFromMod(vararg formatArgs: Object): String {
-        return if (EzXHelper.isHostPackageNameInited) {
+        return if (Helper.isXposed) {
             EzXHelper.moduleRes.getString(this, formatArgs)
         } else {
             val ctx = Helper.context
@@ -179,7 +179,7 @@ object ExtensionUtils {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     fun Int.getDrawable(theme: Resources.Theme?): Drawable {
-        return if (EzXHelper.isHostPackageNameInited) {
+        return if (Helper.isXposed) {
             EzXHelper.moduleRes.getDrawable(this, theme)
         } else {
             val ctx = Helper.context

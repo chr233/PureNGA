@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         } catch (e: Throwable) {
             AndroidLogger.e(e)
-            toast("打开 NGA 失败")
+            toast(getString(R.string.open_nga_failed))
         }
     }
 
@@ -100,7 +100,6 @@ class MainActivity : AppCompatActivity() {
             )
             orientation = LinearLayout.VERTICAL
         }
-
 
         container.addView(FitImageView(this, R.mipmap.ic_launcher).apply {
             val size = resources.displayMetrics.widthPixels / 3
@@ -172,6 +171,8 @@ class MainActivity : AppCompatActivity() {
 
         root.addView(container)
         setContentView(root)
+
+        DialogUtils.popupEulaDialog(this)
     }
 
     override fun onResume() {

@@ -37,11 +37,6 @@ open class ToggleItemView : ClickableItemView, OnClickListener {
         applyColor(context.resources.configuration)
     }
 
-    protected constructor(context: Context, spKey: String = "", xposed: Boolean) : this(context, spKey) {
-        this.xposed = xposed
-        applyColor(context.resources.configuration)
-    }
-
     constructor(context: Context, spKey: String = "", title: String) : this(context, spKey) {
         this.title = title
         isCenter = true
@@ -53,15 +48,15 @@ open class ToggleItemView : ClickableItemView, OnClickListener {
     }
 
     constructor(context: Context, spKey: String = "", titleId: Int) : this(context, spKey) {
-        this.title = if (xposed) titleId.getStringFromMod() else context.getString(titleId)
+        this.title = if (Helper.isXposed) titleId.getStringFromMod() else context.getString(titleId)
         isCenter = true
     }
 
     constructor(context: Context, spKey: String = "", titleId: Int, subTitleId: Int) : this(
         context, spKey
     ) {
-        this.title = if (xposed) titleId.getStringFromMod() else context.getString(titleId)
-        this.subTitle = if (xposed) subTitleId.getStringFromMod() else context.getString(subTitleId)
+        this.title = if (Helper.isXposed) titleId.getStringFromMod() else context.getString(titleId)
+        this.subTitle = if (Helper.isXposed) subTitleId.getStringFromMod() else context.getString(subTitleId)
     }
 
     private var isChecked: Boolean

@@ -21,18 +21,17 @@ import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
-import com.chrxw.purenga.ui.ClickableItemXpView
+import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.ui.CopyrightWarnView
 import com.chrxw.purenga.ui.DarkContainLayout
-import com.chrxw.purenga.ui.FitImageXpView
-import com.chrxw.purenga.ui.ToggleItemXpView
+import com.chrxw.purenga.ui.FitImageView
+import com.chrxw.purenga.ui.ToggleItemView
 import com.chrxw.purenga.utils.ExtensionUtils.buildShortcut
 import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.ExtensionUtils.toPixel
 import com.chrxw.purenga.utils.data.Release
 import com.github.kyuubiran.ezxhelper.AndroidLogger
-import com.github.kyuubiran.ezxhelper.EzXHelper
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -48,16 +47,16 @@ object DialogUtils {
         }
 
         root.addView(
-            ToggleItemXpView(activity, Constant.ENABLE_PURE_POST, "开启自定义屏蔽", "按照关键词过滤帖子列表")
+            ToggleItemView(activity, Constant.ENABLE_PURE_POST, "开启自定义屏蔽", "按照关键词过滤帖子列表")
         )
         root.addView(
-            ClickableItemXpView(activity, "设置标题屏蔽词", "关键词之间使用 | 分隔, 关键词匹配").apply {
+            ClickableItemView(activity, "设置标题屏蔽词", "关键词之间使用 | 分隔, 关键词匹配").apply {
                 setOnClickListener {
                     onSetThreadTitleBlacklist(activity)
                 }
             })
         root.addView(
-            ClickableItemXpView(activity, "设置发帖人屏蔽词", "关键词之间使用 | 分隔, 关键词匹配").apply {
+            ClickableItemView(activity, "设置发帖人屏蔽词", "关键词之间使用 | 分隔, 关键词匹配").apply {
                 isEnabled
                 setOnClickListener {
                     onSetThreadPosterBlacklist(activity)
@@ -85,7 +84,7 @@ object DialogUtils {
     }
 
     /**
-     * 设置帖子屏蔽词
+     * 设置标题屏蔽词
      */
     private fun onSetThreadTitleBlacklist(activity: Activity) {
         if (Helper.getSpBool(Constant.ENABLE_PURE_POST, false)) {
@@ -95,7 +94,7 @@ object DialogUtils {
             }
 
             AlertDialog.Builder(activity).apply {
-                setTitle("设置帖子屏蔽词")
+                setTitle("设置标题屏蔽词")
                 setView(input)
                 setPositiveButton("保存") { _, _ ->
                     Helper.setSpStr(Constant.PURE_POST, input.text.toString())
@@ -163,7 +162,7 @@ object DialogUtils {
             "--旧版菜单--",
             "商店",
             "评分",
-            "个性换肤",
+            "个性换肤"
         )
 
         val enabledPureItems = pureSetting?.split("|")?.toTypedArray() ?: arrayOf()
@@ -255,7 +254,7 @@ object DialogUtils {
             orientation = LinearLayout.VERTICAL
         }
 
-        val check = ToggleItemXpView(
+        val check = ToggleItemView(
             activity, Constant.ENABLE_CUSTOM_FONT, "启用自定义字体", "帖子详情页强制使用自定义字体"
         )
 
@@ -269,7 +268,7 @@ object DialogUtils {
         root.addView(input)
 
         AlertDialog.Builder(activity).apply {
-            setTitle("设置自定义字体")
+            setTitle("自定义字体")
             setView(root)
             setNeutralButton("使用系统字体", null)
             setPositiveButton("保存") { _, _ ->
@@ -289,7 +288,7 @@ object DialogUtils {
         }
     }
 
-    public fun getShortcutList(context: Context): List<ShortcutInfo?> {
+    fun getShortcutList(context: Context): List<ShortcutInfo?> {
         return listOf(
             context.buildShortcut("sign", "签到", "签到", null),
             context.buildShortcut("home", "首页", "首页", null),
@@ -304,7 +303,7 @@ object DialogUtils {
             context.buildShortcut("history", "浏览历史", "浏览历史", null),
             context.buildShortcut("draft", "草稿箱", "草稿箱", null),
             context.buildShortcut("diagnose", "网络诊断", "网络诊断", null),
-            context.buildShortcut("pluginSetting", "PureNGA设置", "PureNGA设置", null),
+            context.buildShortcut("pluginSetting", Constant.STR_PURENGA_SETTING, Constant.STR_PURENGA_SETTING, null),
         )
     }
 
@@ -422,50 +421,50 @@ object DialogUtils {
         container.addView(CopyrightWarnView(activity))
 
         // 净化设置
-        container.addView(ClickableItemXpView(activity, "净化设置"))
+        container.addView(ClickableItemView(activity, "净化设置"))
         container.addView(
-            ToggleItemXpView(activity, Constant.PURE_SPLASH_AD, "屏蔽开屏广告", "冷启动会短暂黑屏, 属于正常现象")
+            ToggleItemView(activity, Constant.PURE_SPLASH_AD, "屏蔽开屏广告", "冷启动会短暂黑屏, 属于正常现象")
         )
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity, Constant.PURE_POST_AD, "屏蔽信息流广告", "去除Banner位, 帖子列表, 帖子末尾的广告"
             )
         )
         container.addView(
-            ToggleItemXpView(activity, Constant.PURE_GAME_RECOMMEND, "屏蔽游戏推荐", "去除首页游戏推荐广告")
+            ToggleItemView(activity, Constant.PURE_GAME_RECOMMEND, "屏蔽游戏推荐", "去除首页游戏推荐广告")
         )
         container.addView(
-            ToggleItemXpView(activity, Constant.PURE_POPUP_AD, "屏蔽首页广告", "去除首页浮窗广告")
+            ToggleItemView(activity, Constant.PURE_POPUP_AD, "屏蔽首页广告", "去除首页浮窗广告")
         )
         container.addView(
-            ClickableItemXpView(activity, "自定义屏蔽帖子", "按照关键词过滤帖子列表").apply {
+            ClickableItemView(activity, "自定义屏蔽帖子", "按照关键词过滤帖子列表").apply {
                 setOnClickListener {
                     onSetThreadFilter(activity)
                 }
             })
 
         // 界面优化
-        container.addView(ClickableItemXpView(activity, "界面优化"))
+        container.addView(ClickableItemView(activity, "界面优化"))
         container.addView(
-            ClickableItemXpView(activity, "侧边栏净化", "勾选要过滤的侧边栏菜单").apply {
+            ClickableItemView(activity, "侧边栏净化", "勾选要过滤的侧边栏菜单").apply {
                 setOnClickListener {
                     onSetPureSlideMenu(activity)
                 }
             })
         container.addView(
-            ToggleItemXpView(activity, Constant.REMOVE_STORE_ICON, "净化导航栏1", "去除导航栏游戏库入口")
+            ToggleItemView(activity, Constant.REMOVE_STORE_ICON, "净化导航栏1", "去除导航栏游戏库入口")
         )
         container.addView(
-            ToggleItemXpView(activity, Constant.REMOVE_ACTIVITY_ICON, "净化导航栏2", "去除导航栏活动图标")
+            ToggleItemView(activity, Constant.REMOVE_ACTIVITY_ICON, "净化导航栏2", "去除导航栏活动图标")
         )
         container.addView(
-            ToggleItemXpView(activity, Constant.REMOVE_WECHAT_ICON, "去除微信分享图标", "移除帖子详情页右上角微信图标")
+            ToggleItemView(activity, Constant.REMOVE_WECHAT_ICON, "去除微信分享图标", "移除帖子详情页右上角微信图标")
         )
         container.addView(
-            ToggleItemXpView(activity, Constant.REMOVE_POPUP_POST, "去除首页文章推荐", "移除首页导航栏上方文章推荐")
+            ToggleItemView(activity, Constant.REMOVE_POPUP_POST, "去除首页文章推荐", "移除首页导航栏上方文章推荐")
         )
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity,
                 Constant.QUICK_ACCOUNT_MANAGE,
                 "快捷切换账号",
@@ -473,50 +472,53 @@ object DialogUtils {
             )
         )
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity,
                 Constant.QUICK_SIGN_IN,
                 "长按搜索进入签到",
                 "长按右上角搜索图标进入签到页面, 不推荐使用"
             )
         )
-        container.addView(
-            ToggleItemXpView(
-                activity, Constant.PREFER_NEW_POST, "默认使用“新发布”", "帖子列表默认使用“新发布”而不是“新回复”"
-            )
-        )
 
         // 自定义
-        container.addView(ClickableItemXpView(activity, "自定义"))
+        container.addView(ClickableItemView(activity, "自定义"))
         container.addView(
-            ClickableItemXpView(activity, "自定义首页", "设置APP首页").apply {
+            ClickableItemView(activity, "自定义首页", "设置APP首页").apply {
                 setOnClickListener {
                     onSetCustomHome(activity)
                 }
             })
-
         container.addView(
-            ClickableItemXpView(activity, "设置自定义字体", "设置帖子详情页使用的字体").apply {
+            ClickableItemView(activity, "自定义字体", "设置帖子详情页使用的字体").apply {
                 setOnClickListener {
                     onSetCustomFont(activity)
                 }
             })
         container.addView(
-            ClickableItemXpView(activity, "", "").apply {
-                title = "自定义快捷方式"
-                subTitle = "设置长按APP图标快捷方式, 仅支持安卓 7.1 及以上版本"
-                setOnClickListener { onSetCustomShortCut(activity) }
+            ClickableItemView(
+                activity,
+                "自定义快捷方式",
+                "设置长按APP图标快捷方式, 仅支持安卓 7.1 及以上版本"
+            ).apply {
+                setOnClickListener {
+                    onSetCustomShortCut(activity)
+                }
             })
 
         // 其他功能
-        container.addView(ClickableItemXpView(activity, "其他功能"))
+        container.addView(ClickableItemView(activity, "其他功能"))
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
+                activity, Constant.PREFER_NEW_POST, "默认使用“新发布”", "帖子列表默认使用“新发布”而不是“新回复”"
+            )
+        )
+        container.addView(
+            ToggleItemView(
                 activity, Constant.AUTO_SIGN, "自动打开签到页面", "【不推荐, 开启 本地VIP 可以自动签到】"
             )
         )
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity,
                 Constant.PURE_CALENDAR_DIALOG,
                 "屏蔽日历弹窗",
@@ -524,7 +526,7 @@ object DialogUtils {
             )
         )
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity,
                 Constant.USE_EXTERNAL_BROWSER,
                 "使用外部浏览器打开链接",
@@ -532,29 +534,29 @@ object DialogUtils {
             )
         )
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity, Constant.KILL_UPDATE_CHECK, "禁止APP检查更新", "尝试阻止NGA检查更新, 9.9.50 后无效"
             )
         )
-        container.addView(ToggleItemXpView(activity, Constant.KILL_POPUP_DIALOG, "屏蔽应用内弹窗", "作用不明"))
+        container.addView(ToggleItemView(activity, Constant.KILL_POPUP_DIALOG, "屏蔽应用内弹窗", "作用不明"))
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity, Constant.FAKE_SHARE, "假装分享", "在分享菜单增加一个“假装分享”按钮"
             )
         )
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity, Constant.LOCAL_VIP, "本地会员", "假装是付费会员(例如换肤功能有效)"
             )
         )
 
         // 插件设置
-        container.addView(ClickableItemXpView(activity, "插件设置"))
+        container.addView(ClickableItemView(activity, "插件设置"))
         container.addView(
-            ToggleItemXpView(activity, Constant.HIDE_HOOK_INFO, "静默运行", "启动时不显示模块运行信息")
+            ToggleItemView(activity, Constant.HIDE_HOOK_INFO, "静默运行", "启动时不显示模块运行信息")
         )
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity, Constant.HIDE_ERROR_INFO, "静默报错信息", "启动时不显示模块报错信息(如果有的话)"
             )
         )
@@ -564,14 +566,14 @@ object DialogUtils {
         }
 
         // 插件更新
-        container.addView(ClickableItemXpView(activity, "插件更新"))
+        container.addView(ClickableItemView(activity, "插件更新"))
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity, Constant.CHECK_PLUGIN_UPDATE, "定期检查插件更新", "3天检查一次更新, 如果有更新会显示通知"
             )
         )
         container.addView(
-            ClickableItemXpView(activity, "立即检查更新", "").apply {
+            ClickableItemView(activity, "立即检查更新", "").apply {
                 val ngaVersion = Helper.getNgaVersion()
                 val pluginVersion = Helper.pluginVersion
                 subTitle = "NGA: $ngaVersion | 插件: $pluginVersion"
@@ -580,7 +582,7 @@ object DialogUtils {
                 }
             })
         container.addView(
-            ClickableItemXpView(activity, "当前版本信息", "").apply {
+            ClickableItemView(activity, "当前版本信息", "").apply {
                 val sunType = if (Helper.isBundled()) "整合版" else "插件版"
                 subTitle = "插件类型: $sunType"
                 setOnClickListener {
@@ -588,7 +590,7 @@ object DialogUtils {
                 }
             })
         container.addView(
-            ClickableItemXpView(activity, "获取最新发行版aw", "").apply {
+            ClickableItemView(activity, "获取最新发行版", "").apply {
                 val sunType = if (Helper.isBundled()) "整合版" else "插件版"
                 subTitle = "插件类型: $sunType"
                 setOnClickListener {
@@ -597,47 +599,47 @@ object DialogUtils {
             })
 
         // 关于
-        container.addView(ClickableItemXpView(activity, "关于"))
+        container.addView(ClickableItemView(activity, "关于"))
         container.addView(
-            ClickableItemXpView(activity, "作者", "GitHub @chr233").apply {
+            ClickableItemView(activity, "作者", "GitHub @chr233").apply {
                 setOnClickListener {
                     Helper.openUrl(context, Constant.AUTHOR_URL)
                 }
             })
         container.addView(
-            ClickableItemXpView(activity, "捐赠", "爱发电 @chr233").apply {
+            ClickableItemView(activity, "捐赠", "爱发电 @chr233").apply {
                 setOnClickListener {
                     popupDonateDialog(activity)
                 }
             })
 
         // 导入导出
-        container.addView(ClickableItemXpView(activity, "导入导出"))
+        container.addView(ClickableItemView(activity, "导入导出"))
         container.addView(
-            ClickableItemXpView(activity, "导出插件设置", "导出插件设置").apply {
+            ClickableItemView(activity, "导出插件设置", "导出插件设置").apply {
                 setOnClickListener {
                     onDumpPluginSetting(activity)
                 }
             })
         container.addView(
-            ClickableItemXpView(activity, "导入插件设置", "导入插件设置").apply {
+            ClickableItemView(activity, "导入插件设置", "导入插件设置").apply {
                 setOnClickListener {
                     onImportPluginSetting(activity)
                 }
             })
 
         // 调试设置
-        container.addView(ClickableItemXpView(activity, "调试设置"))
+        container.addView(ClickableItemView(activity, "调试设置"))
         container.addView(
-            ToggleItemXpView(
+            ToggleItemView(
                 activity, Constant.ENABLE_HOOK_LOG, "启用Hook日志", "在Logcat中输出详细日志"
             )
         )
         container.addView(
-            ToggleItemXpView(activity, Constant.ENABLE_ACTIVITY_LOG, "启用Activity日志", "在Logcat中输出详细日志")
+            ToggleItemView(activity, Constant.ENABLE_ACTIVITY_LOG, "启用Activity日志", "在Logcat中输出详细日志")
         )
         container.addView(
-            ToggleItemXpView(activity, Constant.ENABLE_POST_LOG, "启用帖子信息日志", "在Logcat中输出详细日志")
+            ToggleItemView(activity, Constant.ENABLE_POST_LOG, "启用帖子信息日志", "在Logcat中输出详细日志")
         )
 
         root.addView(container)
@@ -681,23 +683,38 @@ object DialogUtils {
         }
     }
 
+    /**
+     * 弹出用户协议对话框
+     */
     fun popupEulaDialog(activity: Activity) {
         AlertDialog.Builder(activity).apply {
             setTitle("PureNGA 用户协议")
             setMessage(R.string.eula_content.getStringFromMod().replace("|", "\n\n"))
             setCancelable(false)
-            setNeutralButton("我不同意") { _, _ ->
-                Helper.setSpBool(Constant.FORBID_LOAD, true)
-                Helper.toast(
-                    "您已拒绝用户协议, 插件将被禁用", Toast.LENGTH_LONG
-                )
-                Helper.restartApplication(activity)
-            }
-            setPositiveButton("同意协议, 不再显示") { _, _ ->
-                Helper.setSpBool(Constant.EULA_AGREED, true)
-                Helper.toast(
-                    "本App完全免费, 如果在任何渠道付费取得, 请申请退款", Toast.LENGTH_LONG
-                )
+            if(Helper.isXposed) {
+                setNeutralButton("我不同意") { _, _ ->
+                    Helper.setSpBool(Constant.FORBID_LOAD, true)
+                    Helper.toast(
+                        "您已拒绝用户协议, 插件将被禁用", Toast.LENGTH_LONG
+                    )
+                    Helper.restartApplication(activity)
+                }
+                setPositiveButton("同意协议, 不再显示") { _, _ ->
+                    Helper.setSpBool(Constant.EULA_AGREED, true)
+                    Helper.toast(
+                        "本App完全免费, 如果在任何渠道付费取得, 请申请退款", Toast.LENGTH_LONG
+                    )
+                }
+            }else{
+                setNeutralButton("我不同意") { _, _ ->
+                    activity.finishAffinity()
+                    activity.finish()
+                }
+                setPositiveButton("同意协议") { _, _ ->
+                    Helper.toast(
+                        "本App完全免费, 如果在任何渠道付费取得, 请申请退款", Toast.LENGTH_LONG
+                    )
+                }
             }
             create()
             show()
@@ -883,7 +900,7 @@ object DialogUtils {
             }
 
             dialog.setOnDismissListener {
-                if (EzXHelper.isHostPackageNameInited) {
+                if (Helper.isXposed) {
                     Helper.setSpInt(Constant.LAST_SHOW_CHANGELOG, BuildConfig.VERSION_CODE)
                 }
             }
@@ -932,7 +949,7 @@ object DialogUtils {
             }
 
             dialog.setOnDismissListener {
-                if (EzXHelper.isHostPackageNameInited) {
+                if (Helper.isXposed) {
                     val code = UpdateUtils.getAssetVersionCode(release)
                     Helper.setSpInt(Constant.SKIP_VERSION_CODE, code)
                     Helper.toast("可以在插件设置中手动检查更新")
@@ -945,7 +962,7 @@ object DialogUtils {
      * 弹出捐赠对话框
      */
     fun popupDonateDialog(activity: Context) {
-        val view = FitImageXpView(activity, R.drawable.aifadian).apply {
+        val view = FitImageView(activity, R.drawable.aifadian).apply {
             setOnClickListener {
                 onClickDonate(activity)
             }

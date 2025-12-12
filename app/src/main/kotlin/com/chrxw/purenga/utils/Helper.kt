@@ -34,6 +34,7 @@ object Helper {
     lateinit var clsRId2: Class<*>
     lateinit var clsDrawerId: Class<*>
     var context: Context? = null
+    var isXposed = false
 
     var enableLog = false
 
