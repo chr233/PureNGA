@@ -10,6 +10,7 @@ import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chrxw.purenga.ui.ClickableItemView
+import com.chrxw.purenga.ui.CopyrightWarnView
 import com.chrxw.purenga.ui.DarkContainLayout
 import com.chrxw.purenga.ui.FitImageView
 import com.chrxw.purenga.utils.DialogUtils
@@ -97,6 +98,8 @@ class MainActivity : AppCompatActivity() {
                 gravity = android.view.Gravity.CENTER_HORIZONTAL
             }
         })
+
+        container.addView(CopyrightWarnView(this))
 
         container.addView(ClickableItemView(this, R.string.about))
         container.addView(ClickableItemView(this, R.string.donate, R.string.donate_summary).apply {

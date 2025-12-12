@@ -710,11 +710,7 @@ object DialogUtils {
                     activity.finishAffinity()
                     activity.finish()
                 }
-                setPositiveButton("同意协议") { _, _ ->
-                    Helper.toast(
-                        "本App完全免费, 如果在任何渠道付费取得, 请申请退款", Toast.LENGTH_LONG
-                    )
-                }
+                setPositiveButton("同意协议", null)
             }
             create()
             show()
@@ -768,7 +764,6 @@ object DialogUtils {
         AlertDialog.Builder(activity)
             .setTitle("获取 PureNGA 最新版本")
             .setItems(releaseList) { _, which ->
-                Helper.toast(which.toString())
                 val url = when (which) {
                     0 -> if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
                     1 -> Constant.RELEASE_123
@@ -781,7 +776,7 @@ object DialogUtils {
                     else -> null
                 }
                 if (code != null) {
-                    Helper.toast("正在前往网盘, 提取码: $code")
+                    Helper.toast("正在前往网盘, 提取码: $code", Toast.LENGTH_LONG)
                 }
                 if (url != null) {
                     Helper.openUrl(activity, url)
