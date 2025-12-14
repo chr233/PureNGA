@@ -45,8 +45,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
             AndroidLogger.d("模块内运行")
 
             FieldFinder.fromClass(StatusUtils::class.java.name).filterByName("modelEnabled").firstOrNull()
-                ?.setBoolean(null, true)
-                ?: AndroidLogger.e("MainActivity.Companion 方法未找到")
+                ?.setBoolean(null, true) ?: AndroidLogger.e("MainActivity.Companion 方法未找到")
 
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             AndroidLogger.d("NGA内运行")

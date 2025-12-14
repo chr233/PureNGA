@@ -39,7 +39,7 @@ object Hooks {
             return 1
         }
 
-        if(Helper.getSpBool(Constant.FORBID_LOAD,false)){
+        if (Helper.getSpBool(Constant.FORBID_LOAD, false)) {
             return -1
         }
 

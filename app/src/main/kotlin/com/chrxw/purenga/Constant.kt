@@ -8,10 +8,9 @@ object Constant {
     const val REPO_URL = "https://github.com/chr233/PureNGA"
     const val AUTHOR_URL = "https://github.com/chr233"
     const val DONATE_URL = "https://afdian.com/order/create?user_id=81888d36247c11ea8ac152540025c377"
-    const val PAN_URL = "https://www.123pan.com/s/qYTvjv-0Autv.html"
-    const val PAN_CODE = "JEFR"
 
     const val API_PLUGIN_STANDALONE_URL = "https://xposed.chrxw.com/com.chrxw.purenga/releases/latest"
+    const val API_PLUGIN_BUNDLED_URL = "https://hub.chrxw.com/purenga/releases/latest"
 
     const val RELEASE_STANDALONE = "https://github.com/Xposed-Modules-Repo/com.chrxw.purenga/releases"
     const val RELEASE_BUNDLED = "https://github.com/chr233/PureNGA/releases/tag/NGA"

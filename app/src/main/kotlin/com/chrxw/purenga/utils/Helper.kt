@@ -79,7 +79,7 @@ object Helper {
     /**
      * 获取版本号
      */
-    const val PluginVersion = "${BuildConfig.VERSION_CODE}-${BuildConfig.VERSION_NAME}"
+    const val PLUGIN_VERSION = "${BuildConfig.VERSION_CODE}-${BuildConfig.VERSION_NAME}"
 
 
     /**

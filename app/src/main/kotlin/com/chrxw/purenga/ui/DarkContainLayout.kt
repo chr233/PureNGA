@@ -12,8 +12,7 @@ class DarkContainLayout : LinearLayout {
     constructor(context: Context, xposed: Boolean) : super(context) {
         this.xposed = xposed
         this.layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            LayoutParams.WRAP_CONTENT
+            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT
         )
         gravity = Gravity.CENTER
         orientation = VERTICAL

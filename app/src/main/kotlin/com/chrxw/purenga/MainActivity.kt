@@ -123,11 +123,14 @@ class MainActivity : AppCompatActivity() {
                 DialogUtils.popupCheckUpdate(this@MainActivity)
             }
         })
-        container.addView(ClickableItemView(this, R.string.get_latest_version, R.string.get_latest_version_summary).apply {
-            setOnClickListener {
-                DialogUtils.popupGotoReleasePage(this@MainActivity)
-            }
-        })
+        container.addView(
+            ClickableItemView(
+                this, R.string.get_latest_version, R.string.get_latest_version_summary
+            ).apply {
+                setOnClickListener {
+                    DialogUtils.popupGotoReleasePage(this@MainActivity)
+                }
+            })
 
         container.addView(ClickableItemView(this, R.string.other))
         runningStatusView = ClickableItemView(this, R.string.running_status, R.string.module_disabled)

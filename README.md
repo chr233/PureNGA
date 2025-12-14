@@ -120,5 +120,5 @@
 [release_standalone]: https://img.shields.io/github/v/release/Xposed-Modules-Repo/com.chrxw.purenga?logo=github&label=版本
 [download_bundled]: https://img.shields.io/github/downloads/chr233/PureNGA/total?logo=github&label=下载
 [download_standalone]: https://img.shields.io/github/downloads/Xposed-Modules-Repo/com.chrxw.purenga/total?logo=github&label=下载
-[link_bundled]: https://github.com/chr233/PureNGA/releases/tag/NGA
-[link_standalone]: https://github.com/Xposed-Modules-Repo/com.chrxw.purenga/releases
+[link_bundled]: https://github.com/chr233/PureNGA/releases/latest
+[link_standalone]: https://github.com/Xposed-Modules-Repo/com.chrxw.purenga/releases/latest

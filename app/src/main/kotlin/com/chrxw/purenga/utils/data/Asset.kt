@@ -15,6 +15,6 @@ data class Asset(
     @SerializedName("download_count") val downloadCount: Int?,
     @SerializedName("created_at") val createdAt: String?,
     @SerializedName("updated_at") val updatedAt: String?,
-    @SerializedName("browser_download_url") val browserDownloadUrl: String?
+    @SerializedName("browser_download_url") val browserDownloadUrl: String?,
 )
 

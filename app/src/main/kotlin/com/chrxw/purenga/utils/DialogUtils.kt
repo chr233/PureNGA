@@ -6,9 +6,13 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
+import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -17,7 +21,6 @@ import android.widget.ScrollView
 import android.widget.TableRow.LayoutParams
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.R
@@ -31,7 +34,6 @@ import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.ExtensionUtils.toPixel
 import com.chrxw.purenga.utils.data.Release
-import com.github.kyuubiran.ezxhelper.AndroidLogger
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -210,8 +212,8 @@ object DialogUtils {
                         selectedShortcuts.clear()
                     }
                 }
+                show()
             }
-            show()
         }
     }
 
@@ -473,10 +475,7 @@ object DialogUtils {
         )
         container.addView(
             ToggleItemView(
-                activity,
-                Constant.QUICK_SIGN_IN,
-                "长按搜索进入签到",
-                "长按右上角搜索图标进入签到页面, 不推荐使用"
+                activity, Constant.QUICK_SIGN_IN, "长按搜索进入签到", "长按右上角搜索图标进入签到页面, 不推荐使用"
             )
         )
 
@@ -496,9 +495,7 @@ object DialogUtils {
             })
         container.addView(
             ClickableItemView(
-                activity,
-                "自定义快捷方式",
-                "设置长按APP图标快捷方式, 仅支持安卓 7.1 及以上版本"
+                activity, "自定义快捷方式", "设置长按APP图标快捷方式, 仅支持安卓 7.1 及以上版本"
             ).apply {
                 setOnClickListener {
                     onSetCustomShortCut(activity)
@@ -575,7 +572,7 @@ object DialogUtils {
         container.addView(
             ClickableItemView(activity, "立即检查更新", "").apply {
                 val ngaVersion = Helper.getNgaVersion()
-                val pluginVersion = Helper.PluginVersion
+                val pluginVersion = Helper.PLUGIN_VERSION
                 subTitle = "NGA: $ngaVersion | 插件: $pluginVersion"
                 setOnClickListener {
                     popupCheckUpdate(activity)
@@ -742,14 +739,16 @@ object DialogUtils {
      * 手动检查更新
      */
     fun popupCheckUpdateManually(activity: Activity) {
-        AlertDialog.Builder(activity)
-            .setTitle("PureNGA 获取版本信息失败")
-            .setMessage("是否前往发布页获取更新?")
-            .setPositiveButton("确定") { _, _ ->
+        AlertDialog.Builder(activity).apply {
+            setTitle("PureNGA 获取版本信息失败")
+            setMessage("是否前往发布页获取更新?")
+            setPositiveButton("确定") { _, _ ->
                 popupGotoReleasePage(activity)
-            }.setNegativeButton("取消", null)
-            .create()
-            .show()
+            }
+            setNegativeButton("取消", null)
+            create()
+            show()
+        }
     }
 
     /**
@@ -757,13 +756,11 @@ object DialogUtils {
      */
     fun popupGotoReleasePage(activity: Activity) {
         val releaseList = arrayOf(
-            "Github 发布页",
-            "123网盘镜像",
-            "夸克网盘镜像"
+            "Github 发布页", "123网盘镜像", "夸克网盘镜像"
         )
-        AlertDialog.Builder(activity)
-            .setTitle("获取 PureNGA 最新版本")
-            .setItems(releaseList) { _, which ->
+        AlertDialog.Builder(activity).apply {
+            setTitle("获取 PureNGA 最新版本")
+            setItems(releaseList) { _, which ->
                 val url = when (which) {
                     0 -> if (Helper.isBundled()) Constant.RELEASE_BUNDLED else Constant.RELEASE_STANDALONE
                     1 -> Constant.RELEASE_123
@@ -777,14 +774,17 @@ object DialogUtils {
                 }
                 if (code != null) {
                     Helper.toast("正在前往网盘, 提取码: $code", Toast.LENGTH_LONG)
+                } else {
+                    Helper.toast("正在前往发布页", Toast.LENGTH_LONG)
                 }
                 if (url != null) {
                     Helper.openUrl(activity, url)
                 }
             }
-            .setPositiveButton("关闭", null)
-            .create()
-            .show()
+            setPositiveButton("关闭", null)
+            create()
+            show()
+        }
     }
 
     /**
@@ -801,34 +801,69 @@ object DialogUtils {
             isIndeterminate = true
         })
 
-        AlertDialog.Builder(activity).setTitle("PureNGA 正在检查更新...").setView(view).create().apply {
-            show()
+        AlertDialog.Builder(activity).apply {
+            setTitle("PureNGA 正在检查更新...")
+            setView(view)
+            create().apply {
+                show()
 
-            UpdateUtils.getReleaseInfo { res ->
-                activity.runOnUiThread {
-                    dismiss()
+                UpdateUtils.getPluginReleaseInfo { resStandalone ->
+                    //如果无需更新或者检测出错
+                    if (resStandalone == null) {
+                        activity.runOnUiThread {
+                            dismiss()
 
-                    if (res == null) {
-                        Helper.toast("检查更新失败, 请稍后再试")
-                        popupCheckUpdateManually(activity)
-                        return@runOnUiThread
+                            Helper.toast("检查更新失败, 请稍后再试")
+                            popupCheckUpdateManually(activity)
+                        }
+                        return@getPluginReleaseInfo
                     }
 
-                    val code = UpdateUtils.getAssetVersionCode(res)
+                    val code = UpdateUtils.getAssetVersionCode(resStandalone)
                     if (!UpdateUtils.checkIfNeedUpdate(code)) {
-                        Helper.toast("当前已是最新版本")
+                        activity.runOnUiThread {
+                            dismiss()
+
+                            Helper.toast("当前已是最新版本")
+                        }
+                        return@getPluginReleaseInfo
+                    }
+
+                    if (!Helper.isBundled()) {
+                        //独立插件检查更新
+                        activity.runOnUiThread {
+                            dismiss()
+
+                            Helper.toast("有新版本了")
+                            popupStandaloneNewVersionDialog(activity, resStandalone, false)
+                        }
                     } else {
-                        Helper.toast("有新版本了")
-                        popupNewVersionDialog(activity, res)
+                        //整合版检查更新
+
+                        val name = UpdateUtils.getAssetVersionName(resStandalone)
+
+                        UpdateUtils.getBundledReleaseInfo { resBundle ->
+                            activity.runOnUiThread {
+                                dismiss()
+
+                                if (name.isNullOrEmpty() || resBundle == null) {
+                                    Helper.toast("检查更新失败, 请稍后再试")
+                                    popupCheckUpdateManually(activity)
+                                    return@runOnUiThread
+                                }
+
+                                if (name != resBundle.tagName || resBundle.assets.isNullOrEmpty()) {
+                                    Helper.toast("整合版暂未适配 $name")
+                                } else {
+                                    Helper.toast("整合版有新版本了")
+                                    popupBundledNewVersionDialog(activity, resStandalone, resBundle, false)
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-
-    private fun onClickDonate(activity: Context) {
-        Helper.toast("感谢支持")
-        Helper.openUrl(activity, Constant.DONATE_URL)
     }
 
     /**
@@ -878,7 +913,7 @@ object DialogUtils {
         val title = "PureNGA 更新日志"
 
         val changeLog = buildString {
-            appendLine("当前版本: ${Helper.PluginVersion}")
+            appendLine("当前版本: ${Helper.PLUGIN_VERSION}")
             appendLine("更新日志:")
             for (line in R.string.change_log_content.getStringFromMod().split("|")) {
                 appendLine(" - $line")
@@ -892,7 +927,7 @@ object DialogUtils {
             dialog.setOnShowListener {
                 val handler = Handler(Looper.getMainLooper())
                 val timer = Timer()
-                var count = 4
+                var count = 5
 
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).apply {
                     text = "(5)"
@@ -900,9 +935,8 @@ object DialogUtils {
 
                     timer.schedule(0, 1000) {
                         handler.post {
-                            if (count > 0) {
+                            if (count-- > 0) {
                                 text = "($count)"
-                                count--
                             } else {
                                 isEnabled = true
                                 text = "关闭"
@@ -929,34 +963,31 @@ object DialogUtils {
     /**
      * 弹出版本更新对话框
      */
-    fun popupNewVersionDialog(activity: Activity, release: Release?) {
+    fun popupStandaloneNewVersionDialog(activity: Activity, release: Release, showSkip: Boolean) {
         val changeLog = UpdateUtils.getChangeLog(release)
-        val downloadUrl = UpdateUtils.getAssetUrl(release)
+        val downloadUrl = UpdateUtils.getFirstAssetUrl(release)
 
         if (changeLog.isNullOrEmpty() || downloadUrl == null) {
             return
         }
 
-        val title = "PureNGA 新版本可用"
-
-        popupInfoDialog(activity, title, changeLog, setupBuilder = { builder ->
+        popupInfoDialog(activity, "PureNGA 有新版本可用", changeLog, setupBuilder = { builder ->
             builder.setCancelable(true)
             builder.setNeutralButton("捐赠", null)
-            builder.setNegativeButton("网盘镜像") { _, _ ->
-                if (Constant.PAN_CODE.isNotEmpty()) {
-                    Helper.toast("网盘提取码: ${Constant.PAN_CODE}", Toast.LENGTH_LONG)
 
-                    try {
-                        Helper.copyToClipboard(activity, Constant.PAN_CODE)
-                    } catch (ex: Throwable) {
-                        AndroidLogger.e(ex)
-                    }
+            if (showSkip) builder.setNegativeButton("跳过该版本") { _, _ ->
+                if (Helper.isXposed) {
+                    val code = UpdateUtils.getAssetVersionCode(release)
+                    Helper.setSpInt(Constant.SKIP_VERSION_CODE, code)
+                    Helper.toast("可以在插件设置中手动检查更新")
                 }
-
-                val intent = Intent(Intent.ACTION_VIEW, Constant.PAN_URL.toUri())
-                activity.startActivity(intent)
             }
-            builder.setPositiveButton("浏览器下载") { _, _ ->
+            else {
+                builder.setNegativeButton("网盘镜像") { _, _ ->
+                    popupGotoReleasePage(activity)
+                }
+            }
+            builder.setPositiveButton("直接下载") { _, _ ->
                 val intent = Intent(Intent.ACTION_VIEW, downloadUrl)
                 activity.startActivity(intent)
             }
@@ -966,15 +997,101 @@ object DialogUtils {
                     popupDonateDialog(activity)
                 }
             }
+        })
+    }
 
-            dialog.setOnDismissListener {
-                if (Helper.isXposed) {
-                    val code = UpdateUtils.getAssetVersionCode(release)
-                    Helper.setSpInt(Constant.SKIP_VERSION_CODE, code)
-                    Helper.toast("可以在插件设置中手动检查更新")
+    /**
+     * 弹出版本更新对话框
+     */
+    fun popupBundledNewVersionDialog(activity: Activity, release: Release, bundleRelease: Release, showSkip: Boolean) {
+        val changeLog = UpdateUtils.getChangeLog(release)
+
+        if (changeLog.isNullOrEmpty() || bundleRelease.assets.isNullOrEmpty()) {
+            return
+        }
+
+        val releaseAssets =
+            bundleRelease.assets.filter { x -> !x.name.isNullOrEmpty() && !x.browserDownloadUrl.isNullOrEmpty() }
+                .sortedByDescending { x -> x.name }
+
+        val items = mutableListOf<CharSequence>(changeLog)
+        for (asset in releaseAssets) {
+
+            val entries = asset.name!!.split("-")
+            val name = (entries.firstOrNull() ?: asset.name).replace("nga_", "NGA ")
+            items.add("下载 $name 整合版")
+        }
+
+        val adapter =
+            object : ArrayAdapter<CharSequence>(activity, android.R.layout.simple_list_item_1, items.toTypedArray()) {
+                override fun isEnabled(position: Int): Boolean {
+                    // 禁用第一个项目（索引 0）
+                    return position > 0
+                }
+
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val v = super.getView(position, convertView, parent) as TextView
+                    // 第一个项目文字置灰，增强可见性
+                    if (position == 0) {
+                        v.setTextColor(Color.GRAY)
+                    } else {
+                        v.setTextColor(Color.BLACK)
+                    }
+                    return v
                 }
             }
-        })
+
+        AlertDialog.Builder(activity).apply {
+            setTitle("PureNGA 整合版 有新版本可用")
+            setAdapter(adapter) { _, which ->
+                if (which == 0) {
+                    return@setAdapter
+                }
+
+                val url = releaseAssets[which - 1].browserDownloadUrl as String
+                Helper.openUrl(activity, url)
+            }
+            setCancelable(true)
+            setNeutralButton("捐赠", null)
+
+            if (showSkip) {
+                setNegativeButton("跳过该版本") { _, _ ->
+                    if (Helper.isXposed) {
+                        val code = UpdateUtils.getAssetVersionCode(release)
+                        Helper.setSpInt(Constant.SKIP_VERSION_CODE, code)
+                        Helper.toast("可以在插件设置中手动检查更新")
+                    }
+                }
+            }
+            setPositiveButton("网盘镜像") { _, _ ->
+                popupGotoReleasePage(activity)
+            }
+            create().apply {
+                setOnShowListener {
+                    getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                        popupDonateDialog(activity)
+                    }
+                }
+
+                setOnDismissListener {
+                    if (Helper.isXposed) {
+                        val code = UpdateUtils.getAssetVersionCode(release)
+                        Helper.setSpInt(Constant.SKIP_VERSION_CODE, code)
+                        Helper.toast("可以在插件设置中手动检查更新")
+                    }
+                }
+
+                show()
+            }
+        }
+    }
+
+    /**
+     * 点击捐赠
+     */
+    private fun onClickDonate(activity: Context) {
+        Helper.toast("感谢支持")
+        Helper.openUrl(activity, Constant.DONATE_URL)
     }
 
     /**

@@ -22,7 +22,7 @@ open class CopyrightWarnView : AppCompatTextView {
         setPadding(16.toPixel(context), 8.toPixel(context), 16.toPixel(context), 8.toPixel(context))
 
         setOnClickListener {
-            DialogUtils.popupDonateDialog(context )
+            DialogUtils.popupDonateDialog(context)
         }
     }
 }

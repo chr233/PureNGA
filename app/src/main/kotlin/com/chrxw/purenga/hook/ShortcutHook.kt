@@ -125,9 +125,7 @@ class ShortcutHook : IHook {
 
             if (currentShortcuts != null && currentShortcuts.size != customShortcuts.size) {
                 val shortcuts =
-                    DialogUtils.getShortcutList(EzXHelper.appContext)
-                        .filter { it!!.id in customShortcuts }
-                        .map { it!! }
+                    DialogUtils.getShortcutList(EzXHelper.appContext).filter { it!!.id in customShortcuts }.map { it!! }
                 EzXHelper.appContext.setShortcuts(shortcuts)
             }
         }

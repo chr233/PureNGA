@@ -333,8 +333,7 @@ class AdHook : IHook {
 
         // 屏蔽游戏推荐
         if (Helper.getSpBool(
-                Constant.PURE_GAME_RECOMMEND,
-                false
+                Constant.PURE_GAME_RECOMMEND, false
             ) && fldBannerHolderViewC != null && fldForumFoldBinding != null
         ) {
             findFirstMethodByName(clsBannerHolder, "setupBanners")?.createHook {
