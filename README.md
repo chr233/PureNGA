@@ -29,7 +29,7 @@
 ## 捐赠
 
 | [<img src="https://raw.chrxw.com/PureNGA/main/.github/aifadian.png" width="250px">][afdian_link] | [<img src="https://raw.chrxw.com/PureNGA/main/.github/afadian-rank.png" width="250px">][afdian_link] |
-| :----------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: |
+| :----------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
 
 [afdian_badge]: https://img.shields.io/badge/爱发电-@chr__-ea4aaa.svg?logo=github-sponsors
 [afdian_link]: https://afdian.com/@chr233
@@ -48,8 +48,8 @@
 
 > 请不要在任何平台付费获取本应用, 本项目只在[爱发电][afdian_link]接受赞助
 
-| ![1][shame1] | ![2][shame2] | ![3][shame3]) | ![4][shame4] |
-| :----------: | :----------: | ------------- | ------------ |
+| ![1][shame1] | ![2][shame2] | ![3][shame3] | ![4][shame4] |
+| ------------ | ------------ | ------------ | ------------ |
 
 [shame1]: https://raw.chrxw.com/PureNGA/main/.github/shame1.jpg
 [shame2]: https://raw.chrxw.com/PureNGA/main/.github/shame2.jpg
