@@ -478,6 +478,9 @@ object DialogUtils {
                 activity, Constant.QUICK_SIGN_IN, "长按搜索进入签到", "长按右上角搜索图标进入签到页面, 不推荐使用"
             )
         )
+        container.addView(
+            ToggleItemView(activity, Constant.POST_OPTIMIZE, "帖子详情优化", "移除帖子详情页的空白条")
+        )
 
         // 自定义
         container.addView(ClickableItemView(activity, "自定义"))

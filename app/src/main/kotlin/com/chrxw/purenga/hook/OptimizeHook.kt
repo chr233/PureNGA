@@ -399,7 +399,7 @@ class OptimizeHook : IHook {
         }
 
         // 自定义字体
-        if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
+        if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false) || Helper.getSpBool(Constant.POST_OPTIMIZE, false)) {
             MethodFinder.fromClass(clsAssetManager).filterByName("open").forEach { mtd ->
                 mtd.createHook {
                     after {
@@ -411,13 +411,20 @@ class OptimizeHook : IHook {
                             AndroidLogger.e("AssetManager.Open css")
 
                             val inputStream = it.result as InputStream1
-                            val css = readTextFromInputStream(inputStream)
+                            var css = readTextFromInputStream(inputStream)
 
-                            val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)
-                            val regex = Regex("font-family:[^;]+;?")
-                            val newCss = regex.replace(css, "font-family: $newFont;")
+                            if(Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
+                                val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)
+                                val regex = Regex("font-family:[^;]+;?")
+                                css = regex.replace(css, "font-family: $newFont;")
+                            }
 
-                            it.result = newCss.byteInputStream()
+                            if(Helper.getSpBool(Constant.POST_OPTIMIZE, false)) {
+                                //优化帖子内容显示
+                                css += "#advertisementTop { display: none; } #advertisementBottom { display: none; }"
+                            }
+
+                            it.result = css.byteInputStream()
                         }
                     }
                 }

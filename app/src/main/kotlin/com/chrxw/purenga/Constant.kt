@@ -48,6 +48,7 @@ object Constant {
     const val CUSTOM_INDEX = "custom_index"
     const val ENABLE_CUSTOM_FONT = "enable_custom_font"
     const val CUSTOM_FONT_NAME = "custom_font_name"
+    const val POST_OPTIMIZE = "post_optimize"
     const val SHORTCUT_SETTINGS = "shortcut_settings"
     const val ENABLE_HOOK_LOG = "enable_hook_log"
     const val ENABLE_ACTIVITY_LOG = "enable_activity_log"
