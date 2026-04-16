@@ -168,7 +168,7 @@ object ExtensionUtils {
         }
     }
 
-    fun Int.getStringFromMod(vararg formatArgs: Object): String {
+    fun Int.getStringFromMod(vararg formatArgs: Any): String {
         return if (Helper.isXposed) {
             EzXHelper.moduleRes.getString(this, formatArgs)
         } else {
