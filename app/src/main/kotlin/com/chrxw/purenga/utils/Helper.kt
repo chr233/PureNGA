@@ -289,7 +289,7 @@ object Helper {
     }
 
     @JvmStatic
-    internal inline fun printStackTrace(
+    internal fun printStackTrace(
         stackDepth: Int = Int.MAX_VALUE,
     ) {
         // 1. 获取当前线程完整堆栈
@@ -313,7 +313,7 @@ object Helper {
      * 格式：类全路径.方法名(源文件:行号)
      */
     @JvmStatic
-    internal inline fun formatStackTraceElement(element: StackTraceElement): String {
+    internal fun formatStackTraceElement(element: StackTraceElement): String {
         val className = element.className // 类全路径
         val methodName = element.methodName // 方法名
         val fileName = element.fileName ?: "UnknownFile" // 源文件（空则为UnknownFile）
