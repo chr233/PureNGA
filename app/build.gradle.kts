@@ -1,5 +1,5 @@
-val verCode = 56
-val verName = "3.3.1"
+val verCode = 57
+val verName = "3.3.2"
 
 val javaVersion = JavaVersion.VERSION_21
 
@@ -9,7 +9,11 @@ plugins {
 
 android {
     namespace = "com.chrxw.purenga"
-    compileSdk = 37
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 1
+        }
+    }
 
     buildFeatures {
         buildConfig = true
