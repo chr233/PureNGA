@@ -110,7 +110,7 @@
 
 ---
 
-[![Star History Chart](https://api.star-history.com/svg?repos=chr233/PureNGA&type=Date)](https://star-history.com/#chr233/PureNGA&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=chr233/PureNGA&type=Date)](https://star-history.dera.page/#chr233/PureNGA&Date)
 
 ---
 
