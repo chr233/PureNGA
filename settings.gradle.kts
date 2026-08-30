@@ -8,6 +8,10 @@ pluginManagement {
             name = "central mirror"
             url = uri("https://maven.aliyun.com/repository/central")
         }
+        maven {
+            name = "gradle plugin mirror"
+            url = uri("https://maven.aliyun.com/repository/gradle-plugin")
+        }
         google()
         maven {
             name = "Xposed"
@@ -27,10 +31,10 @@ plugins {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-//        maven {
-//            name = "google mirror"
-//            url = uri("https://maven.aliyun.com/repository/google")
-//        }
+        maven {
+            name = "google mirror"
+            url = uri("https://maven.aliyun.com/repository/google")
+        }
         maven {
             name = "central mirror"
             url = uri("https://maven.aliyun.com/repository/central")
