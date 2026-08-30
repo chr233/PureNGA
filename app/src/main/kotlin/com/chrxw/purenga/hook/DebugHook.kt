@@ -5,17 +5,25 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.core.graphics.toColorInt
 import com.chrxw.purenga.hook.base.IHook
-import com.chrxw.purenga.ui.ClickableItemXpView
+import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.XposedHelpers
 
 
 class DebugHook : IHook {
     override fun init(classLoader: ClassLoader) {
+        MethodFinder.fromClass("com.donews.nga.entity.HomeTabParam", classLoader).filterByName("isFullscreen")
+            .firstOrNull()?.createHook {
+                after {
+                    it.result = false
+                }
+            }
+
     }
 
     override fun hook() {
@@ -32,7 +40,7 @@ class DebugHook : IHook {
 
                 val color = "#fff0cd".toColorInt()
 
-                linearLayout.addView(ClickableItemXpView(root.context, "PureNGA 设置", "调试用").apply {
+                linearLayout.addView(ClickableItemView(root.context, "PureNGA 设置", "调试用").apply {
                     setBackgroundColor(color)
                     setOnClickListener { _ ->
                         val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
@@ -40,7 +48,7 @@ class DebugHook : IHook {
                     }
                 }, linearLayout.childCount - 1)
 
-                linearLayout.addView(ClickableItemXpView(root.context, "检查更新", "调试用").apply {
+                linearLayout.addView(ClickableItemView(root.context, "检查更新", "调试用").apply {
                     setBackgroundColor(color)
                     setOnClickListener { _ ->
                         val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
@@ -48,7 +56,7 @@ class DebugHook : IHook {
                     }
                 }, linearLayout.childCount - 1)
 
-                linearLayout.addView(ClickableItemXpView(root.context, "更新日志", "调试用").apply {
+                linearLayout.addView(ClickableItemView(root.context, "更新日志", "调试用").apply {
                     setBackgroundColor(color)
                     setOnClickListener { _ ->
                         val activity = XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
@@ -56,7 +64,7 @@ class DebugHook : IHook {
                     }
                 }, linearLayout.childCount - 1)
 
-                linearLayout.addView(ClickableItemXpView(root.context, "重启 NGA", "调试用").apply {
+                linearLayout.addView(ClickableItemView(root.context, "重启 NGA", "调试用").apply {
                     setBackgroundColor(color)
                     setOnClickListener { _ ->
                         Helper.toast("正在重启")

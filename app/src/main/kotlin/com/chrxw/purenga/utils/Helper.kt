@@ -34,6 +34,7 @@ object Helper {
     lateinit var clsRId2: Class<*>
     lateinit var clsDrawerId: Class<*>
     var context: Context? = null
+    var isXposed = false
 
     var enableLog = false
 
@@ -78,7 +79,7 @@ object Helper {
     /**
      * 获取版本号
      */
-    val pluginVersion = "${BuildConfig.VERSION_CODE}-${BuildConfig.VERSION_NAME}"
+    const val PLUGIN_VERSION = "${BuildConfig.VERSION_CODE}-${BuildConfig.VERSION_NAME}"
 
 
     /**
@@ -86,10 +87,10 @@ object Helper {
      */
     fun isBundled(): Boolean {
         val ctx = context
-        if (ctx == null) {
-            return false
+        return if (ctx == null) {
+            false
         } else {
-            return try {
+            try {
                 ctx.packageManager.getPackageInfo(
                     BuildConfig.APPLICATION_ID, PackageInfo.INSTALL_LOCATION_AUTO
                 ).versionName
@@ -285,5 +286,38 @@ object Helper {
             val intent = Intent(Intent.ACTION_VIEW, uri.toUri())
             context.startActivity(intent)
         }
+    }
+
+    @JvmStatic
+    internal fun printStackTrace(
+        stackDepth: Int = Int.MAX_VALUE,
+    ) {
+        // 1. 获取当前线程完整堆栈
+        val stackTrace = Thread.currentThread().stackTrace
+
+        // 4. 打印堆栈头部信息
+        AndroidLogger.i("===== 堆栈信息开始 (总深度:${stackTrace.size}) =====")
+
+        // 5. 遍历打印堆栈（格式化输出关键信息）
+        for (element in stackTrace) {
+            val stackLine = formatStackTraceElement(element)
+            AndroidLogger.i(stackLine)
+        }
+
+        // 6. 打印堆栈尾部信息
+        AndroidLogger.i("===== 堆栈信息结束 =====")
+    }
+
+    /**
+     * 格式化堆栈元素，统一输出格式
+     * 格式：类全路径.方法名(源文件:行号)
+     */
+    @JvmStatic
+    internal fun formatStackTraceElement(element: StackTraceElement): String {
+        val className = element.className // 类全路径
+        val methodName = element.methodName // 方法名
+        val fileName = element.fileName ?: "UnknownFile" // 源文件（空则为UnknownFile）
+        val lineNumber = element.lineNumber // 行号（混淆后为-1）
+        return "$className.$methodName ($fileName:$lineNumber)"
     }
 }

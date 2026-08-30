@@ -8,9 +8,11 @@ import androidx.annotation.Keep
 import com.chrxw.purenga.hook.DebugHook
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.StatusUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.finders.FieldFinder
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
@@ -42,16 +44,13 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
         if (lpparam.packageName == BuildConfig.APPLICATION_ID) {
             AndroidLogger.d("模块内运行")
 
-            MethodFinder.fromClass(MainActivity.Companion::class.java.name).filterByName("isModuleActive").first()
-                .createHook {
-                    replace {
-                        it.log()
-                        return@replace true
-                    }
-                }
+            FieldFinder.fromClass(StatusUtils::class.java.name).filterByName("modelEnabled").firstOrNull()
+                ?.setBoolean(null, true) ?: AndroidLogger.e("MainActivity.Companion 方法未找到")
 
         } else if (lpparam.packageName == Constant.NGA_PACKAGE_NAME) {
             AndroidLogger.d("NGA内运行")
+
+            Helper.isXposed = true
 
             MethodFinder.fromClass(Instrumentation::class.java).filterByName("callApplicationOnCreate")
                 .filterByAssignableParamTypes(Application::class.java).first().createHook {
@@ -67,6 +66,10 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 Helper.context = EzXHelper.appContext
 
                                 val error = Hooks.initHooks(lpparam.classLoader)
+
+                                if (error == -1) {
+                                    return@after
+                                }
 
                                 if (BuildConfig.DEBUG) {
                                     AndroidLogger.w("!!! Debug 模式 !!!")
@@ -90,26 +93,23 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                                         Helper.toast(
                                             buildString {
                                                 appendLine("PureNGA 加载成功")
-                                                appendLine("请到【设置】>【PureNGA 设置】中配置插件功能")
-                                                appendLine("如果不想显示此信息请打开【静默运行】开关")
+                                                appendLine("【可以在设置中禁用】")
                                             }, Toast.LENGTH_LONG
                                         )
                                     }
                                 } else {
-                                    if (!Helper.getSpBool(Constant.HIDE_ERROR_INFO, false)) {
-                                        Helper.toast(
-                                            buildString {
-                                                appendLine("PureNGA $error 个模块加载失败")
-                                                appendLine("可能不支持当前版本")
-                                                appendLine("NGA 版本: ${Helper.getNgaVersion()}")
-                                                appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
-                                            }, Toast.LENGTH_LONG
-                                        )
-                                    }
+                                    Helper.toast(
+                                        buildString {
+                                            appendLine("PureNGA $error 个模块加载失败")
+                                            appendLine("可能不支持当前版本")
+                                            appendLine("NGA 版本: ${Helper.getNgaVersion()}")
+                                            appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
+                                        }, Toast.LENGTH_LONG
+                                    )
                                 }
-                            } else {
-                                AndroidLogger.d("跳过初始化")
                             }
+                        } else {
+                            AndroidLogger.d("跳过初始化")
                         }
                     }
                 }

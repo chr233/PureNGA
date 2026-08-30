@@ -7,7 +7,6 @@ import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
-import com.chrxw.purenga.utils.ExtensionUtils.forceLog
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.UpdateUtils
@@ -118,29 +117,55 @@ class MainHook : IHook {
         if (Helper.getSpBool(Constant.CHECK_PLUGIN_UPDATE, true)) {
             findFirstMethodByName(clsMainActivity, "initLayout")?.createHook {
                 after {
-                    it.forceLog()
+                    it.log()
 
                     val activity = it.thisObject as Activity
 
-                    UpdateUtils.getReleaseInfo { res ->
-                        if (res == null) {
-                            return@getReleaseInfo
+                    if (!UpdateUtils.checkIfNeedCheck()) {
+                        AndroidLogger.i("跳过更新检测")
+                        return@after
+                    }
+
+                    UpdateUtils.getPluginReleaseInfo { resStandalone ->
+                        if (resStandalone == null) {
+                            return@getPluginReleaseInfo
                         }
 
-                        val code = UpdateUtils.getAssetVersionCode(res)
+                        val code = UpdateUtils.getAssetVersionCode(resStandalone)
 
-                        if (UpdateUtils.checkIfNeedCheck()) {
+                        if (!UpdateUtils.checkIfNeedUpdate(code)) {
+                            AndroidLogger.e("无需更新")
+                            return@getPluginReleaseInfo
+                        }
+
+                        if (!UpdateUtils.checkIfSkipUpdate(code)) {
+                            AndroidLogger.e("跳过更新")
+                            return@getPluginReleaseInfo
+                        }
+
+                        AndroidLogger.e("需要更新")
+
+                        if (!Helper.isBundled()) {
+                            //独立插件检查更新
                             activity.runOnUiThread {
-                                if (UpdateUtils.checkIfNeedUpdate(code) && UpdateUtils.checkIfSkipUpdate(code)) {
-                                    AndroidLogger.e("需要更新")
-
-                                    DialogUtils.popupNewVersionDialog(activity, res)
-                                } else {
-                                    AndroidLogger.e("无需更新")
-                                }
+                                Helper.toast("PureNGA 有新版本了")
+                                DialogUtils.popupStandaloneNewVersionDialog(activity, resStandalone, true)
                             }
                         } else {
-                            AndroidLogger.i("跳过更新检测")
+                            //整合版检查更新
+
+                            val name = UpdateUtils.getAssetVersionName(resStandalone)
+
+                            UpdateUtils.getBundledReleaseInfo { resBundle ->
+                                activity.runOnUiThread {
+                                    if (name.isNullOrEmpty() || resBundle == null || name != resBundle.tagName || resBundle.assets.isNullOrEmpty()) {
+                                        return@runOnUiThread
+                                    }
+
+                                    Helper.toast("整合版有新版本了")
+                                    DialogUtils.popupBundledNewVersionDialog(activity, resStandalone, resBundle, true)
+                                }
+                            }
                         }
                     }
                 }

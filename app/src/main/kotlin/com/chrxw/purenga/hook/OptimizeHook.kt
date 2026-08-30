@@ -19,12 +19,14 @@ import androidx.core.view.children
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
-import com.chrxw.purenga.ui.ClickableItemXpView
+import com.chrxw.purenga.ui.ClickableItemView
 import com.chrxw.purenga.utils.DialogUtils
+import com.chrxw.purenga.utils.ExtensionUtils.buildNormalIntent
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.github.kyuubiran.ezxhelper.AndroidLogger
+import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.ConstructorFinder
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder
@@ -45,7 +47,6 @@ class OptimizeHook : IHook {
         private lateinit var clsCommentDialog: Class<*>
         lateinit var clsMainActivity: Class<*>
         private lateinit var clsArticleDetailActivity: Class<*>
-        lateinit var clsHomeFragment: Class<*>
         private lateinit var clsCalendarUtils: Class<*>
         private lateinit var clsAssetManager: Class<*>
         private lateinit var clsAboutUsActivityA: Class<*>
@@ -81,7 +82,6 @@ class OptimizeHook : IHook {
         clsMainActivity = classLoader.loadClass("com.donews.nga.activitys.MainActivity")
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
-        clsHomeFragment = classLoader.loadClass("com.donews.nga.fragments.HomeFragment")
 
         try {
             clsCalendarUtils = classLoader.loadClass("gov.pianzong.androidnga.utils.CalendarUtils")
@@ -161,7 +161,10 @@ class OptimizeHook : IHook {
                         for (view in linearLayout.children) {
                             if (view is RelativeLayout) {
                                 for (childView in view.children) {
+
                                     if (childView is TextView && pureSlideMenu.contains(childView.text)) {
+                                        AndroidLogger.e(childView.text.toString())
+
                                         pureViews.add(view)
                                         break
                                     }
@@ -181,7 +184,7 @@ class OptimizeHook : IHook {
 
                         if ((pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于"))) {
                             linearLayout.addView(
-                                ClickableItemXpView(root.context, "PureNGA 设置", "打开插件设置").apply {
+                                ClickableItemView(root.context, "PureNGA 设置", "打开插件设置").apply {
                                     setBackgroundColor(Color.LTGRAY)
                                     setOnClickListener { _ ->
                                         val activity =
@@ -213,7 +216,29 @@ class OptimizeHook : IHook {
             }
         }
 
-        //移除导航栏商城图标
+        //长按打开签到
+        if (Helper.getSpBool(Constant.QUICK_SIGN_IN, false)) {
+            MethodFinder.fromClass(AdHook. clsHomeFragment).filterByName("initLayout").firstOrNull()?.createHook {
+                after {
+                    it.log()
+
+                    val viewBinding = XposedHelpers.callMethod(it.thisObject, "getViewBinding")
+                    val view = XposedHelpers.getObjectField(viewBinding, "f") as ImageView
+
+                    view.setOnLongClickListener {
+                        val activity = EzXHelper.appContext
+
+                        val gotoIntent = activity.buildNormalIntent(clsLoginWebView)
+                        gotoIntent.putExtra("sync_type", 5)
+
+                        activity.startActivity(gotoIntent)
+                        true
+                    }
+                }
+            }
+        }
+
+        //移除导航栏游戏库图标
         if (Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)) {
             findFirstMethodByName(clsMainActivityPresenter, "initTabParams")?.createHook {
                 before {
@@ -225,6 +250,27 @@ class OptimizeHook : IHook {
                     var i = 0
                     while (i < tabParam.size) {
                         val current = tabParam[i]
+
+                        val tabId = XposedHelpers.getIntField(current, "tabId")
+                        if ((tabId == 2)) {
+                            tabParam.remove(current)
+                        } else {
+                            i++
+                        }
+                    }
+                }
+            }
+
+            findFirstMethodByName(clsMainActivity, "initTabs")?.createHook {
+                before {
+                    it.log()
+
+                    val tabParam = it.args[0] as ArrayList<*>
+
+                    var i = 0
+                    while (i < tabParam.size) {
+                        val current = tabParam[i]
+
                         val tabId = XposedHelpers.getIntField(current, "tabId")
                         if ((tabId == 2)) {
                             tabParam.remove(current)
@@ -248,6 +294,13 @@ class OptimizeHook : IHook {
             findFirstMethodByName(clsMainActivity, "setupCenterMenu")?.createHook {
                 replace {
                     it.log()
+                }
+            }
+        } else if (Helper.getSpBool(Constant.REMOVE_STORE_ICON, false)) {
+            findFirstMethodByName(clsMainActivity, "setupCenterMenu")?.createHook {
+                before {
+                    it.log()
+                    it.args[1] = 2
                 }
             }
         }
@@ -300,12 +353,12 @@ class OptimizeHook : IHook {
 
         // 自动签到
         if (Helper.getSpBool(Constant.AUTO_SIGN, false)) {
-            val mtdCheckLogin = clsHomeFragment.getDeclaredMethod("checkLogin", Boolean::class.java)
+            val mtdCheckLogin = AdHook.clsHomeFragment.getDeclaredMethod("checkLogin", Boolean::class.java)
             mtdCheckLogin.isAccessible = true
 
             var firstClick = true
 
-            findFirstMethodByName(clsHomeFragment, "updateSingStatus")?.createHook {
+            findFirstMethodByName(AdHook.clsHomeFragment, "updateSingStatus")?.createHook {
                 after {
                     it.log()
 
@@ -317,7 +370,7 @@ class OptimizeHook : IHook {
                         firstClick = false
                         try {
                             Helper.toast("自动签到, 打开签到页面")
-                            val mtdGetContext = clsHomeFragment.getMethod("getContext")
+                            val mtdGetContext = AdHook.clsHomeFragment.getMethod("getContext")
                             val context = mtdGetContext.invoke(it.thisObject)
                             val mtdShowLoginWebView =
                                 clsLoginWebView.getMethod("show", Context::class.java, Int::class.java)
@@ -344,7 +397,7 @@ class OptimizeHook : IHook {
         }
 
         // 自定义字体
-        if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
+        if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false) || Helper.getSpBool(Constant.POST_OPTIMIZE, false)) {
             MethodFinder.fromClass(clsAssetManager).filterByName("open").forEach { mtd ->
                 mtd.createHook {
                     after {
@@ -356,13 +409,20 @@ class OptimizeHook : IHook {
                             AndroidLogger.e("AssetManager.Open css")
 
                             val inputStream = it.result as InputStream1
-                            val css = readTextFromInputStream(inputStream)
+                            var css = readTextFromInputStream(inputStream)
 
-                            val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)
-                            val regex = Regex("font-family:[^;]+;?")
-                            val newCss = regex.replace(css, "font-family: $newFont;")
+                            if(Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
+                                val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)
+                                val regex = Regex("font-family:[^;]+;?")
+                                css = regex.replace(css, "font-family: $newFont;")
+                            }
 
-                            it.result = newCss.byteInputStream()
+                            if(Helper.getSpBool(Constant.POST_OPTIMIZE, false)) {
+                                //优化帖子内容显示
+                                css += "#advertisementTop { display: none; } #advertisementBottom { display: none; }"
+                            }
+
+                            it.result = css.byteInputStream()
                         }
                     }
                 }

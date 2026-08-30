@@ -8,10 +8,10 @@ import android.graphics.drawable.Drawable
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.chrxw.purenga.utils.ExtensionUtils.getDrawable
+import com.chrxw.purenga.utils.Helper
 
 open class FitImageView : FrameLayout {
     protected val imageView: ImageView
-    protected var xposed: Boolean = false
 
     constructor(context: Context) : super(context) {
         imageView = ImageView(context).apply {
@@ -25,17 +25,13 @@ open class FitImageView : FrameLayout {
         this.addView(imageView)
     }
 
-    protected constructor(context: Context, xposed: Boolean) : this(context) {
-        this.xposed = xposed
-    }
-
     constructor(context: Context, resId: Int, theme: Resources.Theme? = null) : this(context) {
         setImageResource(resId, theme)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     fun setImageResource(resId: Int, theme: Resources.Theme?) {
-        val drawable: Drawable = if (com.github.kyuubiran.ezxhelper.EzXHelper.isModuleResInited) {
+        val drawable: Drawable = if (Helper.isXposed) {
             resId.getDrawable(theme)
         } else {
             context.resources.getDrawable(resId, theme)

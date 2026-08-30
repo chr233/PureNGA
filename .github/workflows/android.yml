@@ -1,50 +1,59 @@
-name: autobuild
+name: Android Release
 
 on:
   push:
     tags:
-      - "*"
-
-env:
-  PROJECT_NAME: "PureNGA"
-  DOTNET_SDK_VERSION: 7.0.x
+      - 'v*'
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
-    env:
-      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
-          distribution: "zulu"
-          java-version: "11"
+          distribution: temurin
+          java-version: '21'
 
-      - name: Download and set up Android SDK
-        uses: android-actions/setup-android@v2
+      - name: Cache Gradle
+        uses: actions/cache@v4
         with:
-          api-level: 30
-          build-tools: 30.0.3
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/**', '**/gradle-wrapper.properties') }}-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-      - name: Build with Gradle
-        run: ./gradlew assembleRelease
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
 
-      - name: Sign APK
+      - name: Decode Keystore
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         run: |
-          echo $SIGNING_KEY | base64 --decode > my-release-key.jks
-          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.jks -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD app/build/outputs/apk/release/app-release-unsigned.apk $KEY_ALIAS
-          $ANDROID_HOME/build-tools/30.0.3/zipalign -v 4 app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-release.apk
+          echo "$SIGNING_KEY" | base64 --decode > /tmp/release.keystore.jks
+          echo "KEYSTORE_FILE=/tmp/release.keystore.jks" >> $GITHUB_ENV
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v2
+      - name: Build Release APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --no-daemon -Dhttp.proxyHost= -Dhttps.proxyHost=
+
+      - name: Clean up Keystore
+        if: always()
+        run: rm -f /tmp/release.keystore.jks
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: app-release.apk
-          path: app/build/outputs/apk/release/app-release.apk
+          files: app/build/outputs/apk/release/app-release.apk
+          body_path: .github/release-body.md

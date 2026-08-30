@@ -108,7 +108,7 @@ object ExtensionUtils {
     }
 
     fun Context.buildShortcut(
-        id: String, shortLabel: String, long: String, iconId: Int?
+        id: String, shortLabel: String, long: String, iconId: Int?,
     ): ShortcutInfo? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val icon = Icon.createWithResource(this, iconId ?: Helper.getDrawerId("app_logo"))
@@ -133,6 +133,16 @@ object ExtensionUtils {
         }
     }
 
+    fun Context.getShortcuts(): List<ShortcutInfo>? {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val shortcutManager = this.getSystemService(ShortcutManager::class.java)
+            return shortcutManager.dynamicShortcuts
+        } else {
+            Helper.toast("安卓版本不支持此操作")
+            return null
+        }
+    }
+
     /**
      * 输出类字段
      */
@@ -150,7 +160,7 @@ object ExtensionUtils {
     }
 
     fun Int.getStringFromMod(): String {
-        return if (EzXHelper.isHostPackageNameInited) {
+        return if (Helper.isXposed) {
             EzXHelper.moduleRes.getString(this)
         } else {
             val ctx = Helper.context
@@ -158,8 +168,8 @@ object ExtensionUtils {
         }
     }
 
-    fun Int.getStringFromMod(vararg formatArgs: Object): String {
-        return if (EzXHelper.isHostPackageNameInited) {
+    fun Int.getStringFromMod(vararg formatArgs: Any): String {
+        return if (Helper.isXposed) {
             EzXHelper.moduleRes.getString(this, formatArgs)
         } else {
             val ctx = Helper.context
@@ -169,7 +179,7 @@ object ExtensionUtils {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     fun Int.getDrawable(theme: Resources.Theme?): Drawable {
-        return if (EzXHelper.isHostPackageNameInited) {
+        return if (Helper.isXposed) {
             EzXHelper.moduleRes.getDrawable(this, theme)
         } else {
             val ctx = Helper.context

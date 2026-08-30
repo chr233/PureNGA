@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.toPixel
+import com.chrxw.purenga.utils.Helper
 
 /**
  * 文本控件
@@ -18,7 +19,6 @@ open class ClickableItemView : FrameLayout {
     protected val containerLayout: LinearLayout
     protected val titleTextView: TextView
     protected val subTextView: TextView
-    protected var xposed: Boolean = false
 
     constructor(context: Context) : super(context) {
         containerLayout = LinearLayout(context)
@@ -49,12 +49,6 @@ open class ClickableItemView : FrameLayout {
         this.addView(containerLayout)
     }
 
-    protected constructor(context: Context, xposed: Boolean) : this(context) {
-        this.xposed = xposed
-        applyColor(context.resources.configuration)
-    }
-
-
     constructor(context: Context, title: String) : this(context) {
         this.title = title
         isCenter = true
@@ -66,13 +60,13 @@ open class ClickableItemView : FrameLayout {
     }
 
     constructor(context: Context, titleId: Int) : this(context) {
-        this.title = if (xposed) titleId.getStringFromMod() else context.getString(titleId)
+        this.title = if (Helper.isXposed) titleId.getStringFromMod() else context.getString(titleId)
         isCenter = true
     }
 
     constructor(context: Context, titleId: Int, subTitleId: Int) : this(context) {
-        this.title = if (xposed) titleId.getStringFromMod() else context.getString(titleId)
-        this.subTitle = if (xposed) subTitleId.getStringFromMod() else context.getString(subTitleId)
+        this.title = if (Helper.isXposed) titleId.getStringFromMod() else context.getString(titleId)
+        this.subTitle = if (Helper.isXposed) subTitleId.getStringFromMod() else context.getString(subTitleId)
     }
 
 
@@ -118,7 +112,7 @@ open class ClickableItemView : FrameLayout {
         }
 
     protected fun applyColor(config: Configuration) {
-        val isDarkMode = if (xposed) {
+        val isDarkMode = if (Helper.isXposed) {
             false
         } else {
             (config.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES

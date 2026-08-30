@@ -8,13 +8,14 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Toast
-import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import com.chrxw.purenga.ui.ClickableItemView
+import com.chrxw.purenga.ui.CopyrightWarnView
 import com.chrxw.purenga.ui.DarkContainLayout
 import com.chrxw.purenga.ui.FitImageView
 import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.Helper
+import com.chrxw.purenga.utils.StatusUtils
 import com.github.kyuubiran.ezxhelper.AndroidLogger
 
 
@@ -22,18 +23,6 @@ import com.github.kyuubiran.ezxhelper.AndroidLogger
  * 主界面
  */
 class MainActivity : AppCompatActivity() {
-    companion object {
-        /**
-         * 检测模块启用状态
-         */
-        @Suppress("SameReturnValue")
-        @JvmStatic
-        @Keep
-        fun isModuleActive(): Boolean {
-            return false
-        }
-    }
-
     private fun openNga(openPluginSetting: Boolean) {
         try {
             val intent = Intent(Intent.ACTION_MAIN).setComponent(
@@ -50,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         } catch (e: Throwable) {
             AndroidLogger.e(e)
-            toast("打开 NGA 失败")
+            toast(getString(R.string.open_nga_failed))
         }
     }
 
@@ -101,7 +90,6 @@ class MainActivity : AppCompatActivity() {
             orientation = LinearLayout.VERTICAL
         }
 
-
         container.addView(FitImageView(this, R.mipmap.ic_launcher).apply {
             val size = resources.displayMetrics.widthPixels / 3
             layoutParams = LinearLayout.LayoutParams(size, size).apply {
@@ -110,6 +98,8 @@ class MainActivity : AppCompatActivity() {
                 gravity = android.view.Gravity.CENTER_HORIZONTAL
             }
         })
+
+        container.addView(CopyrightWarnView(this))
 
         container.addView(ClickableItemView(this, R.string.about))
         container.addView(ClickableItemView(this, R.string.donate, R.string.donate_summary).apply {
@@ -122,24 +112,25 @@ class MainActivity : AppCompatActivity() {
                 DialogUtils.popupDonateDialog(this@MainActivity)
             }
         })
-        container.addView(ClickableItemView(this, R.string.version, R.string.version).apply {
+        container.addView(ClickableItemView(this, R.string.change_log, R.string.version).apply {
             subTitle = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
             setOnClickListener {
                 DialogUtils.popupChangeLogDialog(this@MainActivity)
             }
         })
-
         container.addView(ClickableItemView(this, R.string.check_update, R.string.check_update_summary).apply {
             setOnClickListener {
                 DialogUtils.popupCheckUpdate(this@MainActivity)
             }
         })
-
-        container.addView(ClickableItemView(this, R.string.change_log, R.string.change_log_summary).apply {
-            setOnClickListener {
-                DialogUtils.popupChangeLogDialog(this@MainActivity)
-            }
-        })
+        container.addView(
+            ClickableItemView(
+                this, R.string.get_latest_version, R.string.get_latest_version_summary
+            ).apply {
+                setOnClickListener {
+                    DialogUtils.popupGotoReleasePage(this@MainActivity)
+                }
+            })
 
         container.addView(ClickableItemView(this, R.string.other))
         runningStatusView = ClickableItemView(this, R.string.running_status, R.string.module_disabled)
@@ -172,12 +163,14 @@ class MainActivity : AppCompatActivity() {
 
         root.addView(container)
         setContentView(root)
+
+        DialogUtils.popupEulaDialog(this)
     }
 
     override fun onResume() {
         super.onResume()
         runningStatusView.subTitle =
-            getString(if (isModuleActive()) R.string.module_enabled else R.string.module_disabled)
+            getString(if (StatusUtils.modelEnabled) R.string.module_enabled else R.string.module_disabled)
     }
 
     override fun onDestroy() {
