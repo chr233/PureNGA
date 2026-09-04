@@ -61,6 +61,7 @@ object Constant {
     const val PREFER_NEW_POST = "prefer_new_post"
     const val EULA_AGREED = "eula_agreed"
     const val FORBID_LOAD = "forbid_load"
+    const val HIGHLIGHT_AUTHOR = "highlight_author"
 
     const val LAST_SHOW_CHANGELOG = "last_show_changelog"
     const val SKIP_VERSION_CODE = "skip_version_code"

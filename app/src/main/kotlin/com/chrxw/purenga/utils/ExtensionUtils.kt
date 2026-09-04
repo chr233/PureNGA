@@ -150,7 +150,7 @@ object ExtensionUtils {
         val clazz: Class<*> = this::class.java
         val fields: Array<Field> = clazz.declaredFields
 
-        AndroidLogger.w("===== $this =====")
+        AndroidLogger.w("===== ${this.javaClass.name} =====")
         for (field in fields) {
             field.isAccessible = true
             val value = field.get(this)
