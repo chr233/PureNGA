@@ -1,6 +1,7 @@
 package com.chrxw.purenga
 
 import com.chrxw.purenga.hook.AdHook
+import com.chrxw.purenga.hook.ArticleDetailHook
 import com.chrxw.purenga.hook.MainHook
 import com.chrxw.purenga.hook.OptimizeHook
 import com.chrxw.purenga.hook.PreferencesHook
@@ -23,6 +24,7 @@ object Hooks {
         WebViewHook(),
         ShareHook(),
         ShortcutHook(),
+        ArticleDetailHook(),
     )
 
     /**

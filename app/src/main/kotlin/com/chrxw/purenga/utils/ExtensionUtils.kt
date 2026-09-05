@@ -1,7 +1,9 @@
 package com.chrxw.purenga.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
@@ -10,6 +12,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.DisplayMetrics
+import android.view.View
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.hook.OptimizeHook
 import com.github.kyuubiran.ezxhelper.AndroidLogger
@@ -37,16 +40,7 @@ object ExtensionUtils {
      */
     fun XC_MethodHook.MethodHookParam.log() {
         if (Helper.enableLog) {
-            AndroidLogger.d("Method: ${this.method.name}")
-            AndroidLogger.d("Object: ${this.thisObject}")
-
-            if (this.args.any()) {
-                AndroidLogger.d("Args:")
-                this.args.forEachIndexed { index, item ->
-                    val cls = item?.javaClass ?: "NULL"
-                    AndroidLogger.d(" $index: $item ($cls)")
-                }
-            }
+            this.forceLog()
         }
     }
 
@@ -185,5 +179,17 @@ object ExtensionUtils {
             val ctx = Helper.context
             ctx?.resources?.getDrawable(this, theme) ?: throw Exception("Resource Not Found")
         }
+    }
+
+    fun View.getActivity(): Activity? {
+        var context = this.context
+        // 循环遍历 Context 包装链
+        while (context is ContextWrapper) {
+            if (context is Activity) {
+                return context
+            }
+            context = context.baseContext // 解包，继续向上找
+        }
+        return null
     }
 }
