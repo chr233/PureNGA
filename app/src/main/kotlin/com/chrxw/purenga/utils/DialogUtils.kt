@@ -484,6 +484,9 @@ object DialogUtils {
         container.addView(
             ToggleItemView(activity, Constant.POST_OPTIMIZE, "帖子详情优化", "移除帖子详情页的空白条")
         )
+        container.addView(
+            ToggleItemView(activity, Constant.HIGHLIGHT_AUTHOR, "帖子楼主高亮", "将楼主的ID显示为红色")
+        )
 
         // 自定义
         container.addView(ClickableItemView(activity, "自定义"))
