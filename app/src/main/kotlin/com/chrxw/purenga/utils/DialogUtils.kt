@@ -49,16 +49,29 @@ object DialogUtils {
         }
 
         root.addView(
-            ToggleItemView(activity, Constant.ENABLE_PURE_POST, "开启自定义屏蔽", "按照关键词过滤帖子列表")
+            ToggleItemView(
+                activity,
+                Constant.ENABLE_PURE_POST,
+                "开启自定义屏蔽",
+                "按照关键词过滤帖子列表"
+            )
         )
         root.addView(
-            ClickableItemView(activity, "设置标题屏蔽词", "关键词之间使用 | 分隔, 关键词匹配").apply {
+            ClickableItemView(
+                activity,
+                "设置标题屏蔽词",
+                "关键词之间使用 | 分隔, 关键词匹配"
+            ).apply {
                 setOnClickListener {
                     onSetThreadTitleBlacklist(activity)
                 }
             })
         root.addView(
-            ClickableItemView(activity, "设置发帖人屏蔽词", "关键词之间使用 | 分隔, 关键词匹配").apply {
+            ClickableItemView(
+                activity,
+                "设置发帖人屏蔽词",
+                "关键词之间使用 | 分隔, 关键词匹配"
+            ).apply {
                 isEnabled
                 setOnClickListener {
                     onSetThreadPosterBlacklist(activity)
@@ -134,6 +147,38 @@ object DialogUtils {
             }
         } else {
             Helper.toast("请先打开【开启自定义屏蔽】")
+        }
+    }
+
+    /**
+     * 设置自定义JS
+     */
+    private fun onSetCustomPostJs(activity: Activity) {
+        if (Helper.getSpBool(Constant.ENABLE_HIGHLIGHT_AUTHOR, false)) {
+            val input = EditText(activity).apply {
+                maxLines = 8
+                setText(Helper.getSpStr(Constant.CUSTOM_POST_JS, ""))
+            }
+
+            AlertDialog.Builder(activity).apply {
+                setTitle("自定义Js")
+                setView(input)
+                setPositiveButton("保存") { _, _ ->
+                    Helper.setSpStr(Constant.CUSTOM_POST_JS, input.text.toString())
+                    Helper.toast("设置已保存, 帖子详情页生效")
+                }
+                setNegativeButton("取消", null)
+                setNeutralButton("清除设置", null)
+                create().apply {
+                    setOnShowListener {
+                        getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                            Helper.setSpStr(Constant.CUSTOM_POST_JS, "")
+                            input.setText("")
+                        }
+                    }
+                    show()
+                }
+            }
         }
     }
 
@@ -305,7 +350,12 @@ object DialogUtils {
             context.buildShortcut("history", "浏览历史", "浏览历史", null),
             context.buildShortcut("draft", "草稿箱", "草稿箱", null),
             context.buildShortcut("diagnose", "网络诊断", "网络诊断", null),
-            context.buildShortcut("pluginSetting", Constant.STR_PURENGA_SETTING, Constant.STR_PURENGA_SETTING, null),
+            context.buildShortcut(
+                "pluginSetting",
+                Constant.STR_PURENGA_SETTING,
+                Constant.STR_PURENGA_SETTING,
+                null
+            ),
         )
     }
 
@@ -323,7 +373,8 @@ object DialogUtils {
             val enabledShortcutIds = shortcutSettings?.split(",")?.toTypedArray() ?: arrayOf()
 
             val menuItems = availableShortcuts.map { it?.longLabel.toString() }.toTypedArray()
-            val checkedItems = availableShortcuts.map { enabledShortcutIds.contains(it?.id) }.toBooleanArray()
+            val checkedItems =
+                availableShortcuts.map { enabledShortcutIds.contains(it?.id) }.toBooleanArray()
 
             val selectedShortcuts = mutableListOf<ShortcutInfo>()
             for (i in menuItems.indices) {
@@ -425,15 +476,28 @@ object DialogUtils {
         // 净化设置
         container.addView(ClickableItemView(activity, "净化设置"))
         container.addView(
-            ToggleItemView(activity, Constant.PURE_SPLASH_AD, "屏蔽开屏广告", "冷启动会短暂黑屏, 属于正常现象")
-        )
-        container.addView(
             ToggleItemView(
-                activity, Constant.PURE_POST_AD, "屏蔽信息流广告", "去除Banner位, 帖子列表, 帖子末尾的广告"
+                activity,
+                Constant.PURE_SPLASH_AD,
+                "屏蔽开屏广告",
+                "冷启动会短暂黑屏, 属于正常现象"
             )
         )
         container.addView(
-            ToggleItemView(activity, Constant.PURE_GAME_RECOMMEND, "屏蔽游戏推荐", "去除首页游戏推荐广告")
+            ToggleItemView(
+                activity,
+                Constant.PURE_POST_AD,
+                "屏蔽信息流广告",
+                "去除Banner位, 帖子列表, 帖子末尾的广告"
+            )
+        )
+        container.addView(
+            ToggleItemView(
+                activity,
+                Constant.PURE_GAME_RECOMMEND,
+                "屏蔽游戏推荐",
+                "去除首页游戏推荐广告"
+            )
         )
         container.addView(
             ToggleItemView(activity, Constant.PURE_POPUP_AD, "屏蔽首页广告", "去除首页浮窗广告")
@@ -457,16 +521,36 @@ object DialogUtils {
                 }
             })
         container.addView(
-            ToggleItemView(activity, Constant.REMOVE_STORE_ICON, "净化导航栏1", "去除导航栏游戏库入口")
+            ToggleItemView(
+                activity,
+                Constant.REMOVE_STORE_ICON,
+                "净化导航栏1",
+                "去除导航栏游戏库入口"
+            )
         )
         container.addView(
-            ToggleItemView(activity, Constant.REMOVE_ACTIVITY_ICON, "净化导航栏2", "去除导航栏活动图标")
+            ToggleItemView(
+                activity,
+                Constant.REMOVE_ACTIVITY_ICON,
+                "净化导航栏2",
+                "去除导航栏活动图标"
+            )
         )
         container.addView(
-            ToggleItemView(activity, Constant.REMOVE_WECHAT_ICON, "去除微信分享图标", "移除帖子详情页右上角微信图标")
+            ToggleItemView(
+                activity,
+                Constant.REMOVE_WECHAT_ICON,
+                "去除微信分享图标",
+                "移除帖子详情页右上角微信图标"
+            )
         )
         container.addView(
-            ToggleItemView(activity, Constant.REMOVE_POPUP_POST, "去除首页文章推荐", "移除首页导航栏上方文章推荐")
+            ToggleItemView(
+                activity,
+                Constant.REMOVE_POPUP_POST,
+                "去除首页文章推荐",
+                "移除首页导航栏上方文章推荐"
+            )
         )
         container.addView(
             ToggleItemView(
@@ -478,14 +562,27 @@ object DialogUtils {
         )
         container.addView(
             ToggleItemView(
-                activity, Constant.QUICK_SIGN_IN, "长按搜索进入签到", "长按右上角搜索图标进入签到页面, 不推荐使用"
+                activity,
+                Constant.QUICK_SIGN_IN,
+                "长按搜索进入签到",
+                "长按右上角搜索图标进入签到页面, 不推荐使用"
             )
         )
         container.addView(
-            ToggleItemView(activity, Constant.POST_OPTIMIZE, "帖子详情优化", "移除帖子详情页的空白条")
+            ToggleItemView(
+                activity,
+                Constant.POST_OPTIMIZE,
+                "帖子详情优化",
+                "移除帖子详情页的空白条"
+            )
         )
         container.addView(
-            ToggleItemView(activity, Constant.HIGHLIGHT_AUTHOR, "帖子楼主高亮", "将楼主的ID显示为红色")
+            ToggleItemView(
+                activity,
+                Constant.ENABLE_HIGHLIGHT_AUTHOR,
+                "帖子楼主高亮",
+                "将楼主的ID显示为红色"
+            )
         )
 
         // 自定义
@@ -510,17 +607,31 @@ object DialogUtils {
                     onSetCustomShortCut(activity)
                 }
             })
+        container.addView(
+            ClickableItemView(
+                activity, "自定义帖子页JS", "帖子详情页"
+            ).apply {
+                setOnClickListener {
+                    onSetCustomPostJs(activity)
+                }
+            })
 
         // 其他功能
         container.addView(ClickableItemView(activity, "其他功能"))
         container.addView(
             ToggleItemView(
-                activity, Constant.PREFER_NEW_POST, "默认使用“新发布”", "帖子列表默认使用“新发布”而不是“新回复”"
+                activity,
+                Constant.PREFER_NEW_POST,
+                "默认使用“新发布”",
+                "帖子列表默认使用“新发布”而不是“新回复”"
             )
         )
         container.addView(
             ToggleItemView(
-                activity, Constant.AUTO_SIGN, "自动打开签到页面", "【不推荐, 开启 本地VIP 可以自动签到】"
+                activity,
+                Constant.AUTO_SIGN,
+                "自动打开签到页面",
+                "【不推荐, 开启 本地VIP 可以自动签到】"
             )
         )
         container.addView(
@@ -541,10 +652,20 @@ object DialogUtils {
         )
         container.addView(
             ToggleItemView(
-                activity, Constant.KILL_UPDATE_CHECK, "禁止APP检查更新", "尝试阻止NGA检查更新, 9.9.50 后无效"
+                activity,
+                Constant.KILL_UPDATE_CHECK,
+                "禁止APP检查更新",
+                "尝试阻止NGA检查更新, 9.9.50 后无效"
             )
         )
-        container.addView(ToggleItemView(activity, Constant.KILL_POPUP_DIALOG, "屏蔽应用内弹窗", "作用不明"))
+        container.addView(
+            ToggleItemView(
+                activity,
+                Constant.KILL_POPUP_DIALOG,
+                "屏蔽应用内弹窗",
+                "作用不明"
+            )
+        )
         container.addView(
             ToggleItemView(
                 activity, Constant.FAKE_SHARE, "假装分享", "在分享菜单增加一个“假装分享”按钮"
@@ -559,11 +680,19 @@ object DialogUtils {
         // 插件设置
         container.addView(ClickableItemView(activity, "插件设置"))
         container.addView(
-            ToggleItemView(activity, Constant.HIDE_HOOK_INFO, "静默运行", "启动时不显示模块运行信息")
+            ToggleItemView(
+                activity,
+                Constant.HIDE_HOOK_INFO,
+                "静默运行",
+                "启动时不显示模块运行信息"
+            )
         )
         container.addView(
             ToggleItemView(
-                activity, Constant.HIDE_ERROR_INFO, "静默报错信息", "启动时不显示模块报错信息(如果有的话)"
+                activity,
+                Constant.HIDE_ERROR_INFO,
+                "静默报错信息",
+                "启动时不显示模块报错信息(如果有的话)"
             )
         )
 
@@ -575,7 +704,10 @@ object DialogUtils {
         container.addView(ClickableItemView(activity, "插件更新"))
         container.addView(
             ToggleItemView(
-                activity, Constant.CHECK_PLUGIN_UPDATE, "定期检查插件更新", "3天检查一次更新, 如果有更新会显示通知"
+                activity,
+                Constant.CHECK_PLUGIN_UPDATE,
+                "定期检查插件更新",
+                "3天检查一次更新, 如果有更新会显示通知"
             )
         )
         container.addView(
@@ -641,10 +773,20 @@ object DialogUtils {
             )
         )
         container.addView(
-            ToggleItemView(activity, Constant.ENABLE_ACTIVITY_LOG, "启用Activity日志", "在Logcat中输出详细日志")
+            ToggleItemView(
+                activity,
+                Constant.ENABLE_ACTIVITY_LOG,
+                "启用Activity日志",
+                "在Logcat中输出详细日志"
+            )
         )
         container.addView(
-            ToggleItemView(activity, Constant.ENABLE_POST_LOG, "启用帖子信息日志", "在Logcat中输出详细日志")
+            ToggleItemView(
+                activity,
+                Constant.ENABLE_POST_LOG,
+                "启用帖子信息日志",
+                "在Logcat中输出详细日志"
+            )
         )
 
         root.addView(container)
@@ -801,9 +943,17 @@ object DialogUtils {
     fun popupCheckUpdate(activity: Activity) {
         val view = LinearLayout(activity).apply {
             layoutParams =
-                LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT)
+                LinearLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
             orientation = LinearLayout.VERTICAL
-            setPadding(16.toPixel(context), 16.toPixel(context), 16.toPixel(context), 16.toPixel(context))
+            setPadding(
+                16.toPixel(context),
+                16.toPixel(context),
+                16.toPixel(context),
+                16.toPixel(context)
+            )
         }
         view.addView(ProgressBar(activity).apply {
             isIndeterminate = true
@@ -864,7 +1014,12 @@ object DialogUtils {
                                     Helper.toast("整合版暂未适配 $name")
                                 } else {
                                     Helper.toast("整合版有新版本了")
-                                    popupBundledNewVersionDialog(activity, resStandalone, resBundle, false)
+                                    popupBundledNewVersionDialog(
+                                        activity,
+                                        resStandalone,
+                                        resBundle,
+                                        false
+                                    )
                                 }
                             }
                         }
@@ -887,13 +1042,23 @@ object DialogUtils {
         val root = LinearLayout(activity).apply {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             orientation = LinearLayout.VERTICAL
-            setPadding(16.toPixel(context), 16.toPixel(context), 16.toPixel(context), 16.toPixel(context))
+            setPadding(
+                16.toPixel(context),
+                16.toPixel(context),
+                16.toPixel(context),
+                16.toPixel(context)
+            )
         }
         root.addView(TextView(activity).apply {
             text = content
             textSize = 18f
             isSingleLine = false
-            setPadding(0.toPixel(context), 0.toPixel(context), 0.toPixel(context), 16.toPixel(context))
+            setPadding(
+                0.toPixel(context),
+                0.toPixel(context),
+                0.toPixel(context),
+                16.toPixel(context)
+            )
         })
 
         root.addView(TextView(activity).apply {
@@ -1011,7 +1176,12 @@ object DialogUtils {
     /**
      * 弹出版本更新对话框
      */
-    fun popupBundledNewVersionDialog(activity: Activity, release: Release, bundleRelease: Release, showSkip: Boolean) {
+    fun popupBundledNewVersionDialog(
+        activity: Activity,
+        release: Release,
+        bundleRelease: Release,
+        showSkip: Boolean
+    ) {
         val changeLog = UpdateUtils.getChangeLog(release)
 
         if (changeLog.isNullOrEmpty() || bundleRelease.assets.isNullOrEmpty()) {
@@ -1031,7 +1201,11 @@ object DialogUtils {
         }
 
         val adapter =
-            object : ArrayAdapter<CharSequence>(activity, android.R.layout.simple_list_item_1, items.toTypedArray()) {
+            object : ArrayAdapter<CharSequence>(
+                activity,
+                android.R.layout.simple_list_item_1,
+                items.toTypedArray()
+            ) {
                 override fun isEnabled(position: Int): Boolean {
                     // 禁用第一个项目（索引 0）
                     return position > 0
@@ -1126,7 +1300,7 @@ object DialogUtils {
         }
     }
 
-    fun popupErrorDialog(context: Context,error: Int) {
+    fun popupErrorDialog(context: Context, error: Int) {
         AlertDialog.Builder(context)
             .setTitle("PureNGA 加载失败")
             .setMessage(

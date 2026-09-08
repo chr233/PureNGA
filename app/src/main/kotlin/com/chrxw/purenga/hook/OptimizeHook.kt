@@ -72,7 +72,8 @@ class OptimizeHook : IHook {
     }
 
     override fun init(classLoader: ClassLoader) {
-        clsMainActivityPresenter = classLoader.loadClass("com.donews.nga.activitys.presenters.MainActivityPresenter")
+        clsMainActivityPresenter =
+            classLoader.loadClass("com.donews.nga.activitys.presenters.MainActivityPresenter")
         clsHomeDrawerLayout = classLoader.loadClass("com.donews.nga.widget.HomeDrawerLayout")
         try {
             clsCommentDialog = classLoader.loadClass("gov.pianzong.androidnga.view.CommentDialog")
@@ -91,20 +92,25 @@ class OptimizeHook : IHook {
 
         clsAssetManager = classLoader.loadClass("android.content.res.AssetManager")
         try {
-            clsAboutUsActivityA = classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
+            clsAboutUsActivityA =
+                classLoader.loadClass("gov.pianzong.androidnga.activity.setting.AboutUsActivity\$a")
         } catch (_: Throwable) {
             AndroidLogger.e("AboutUsActivity\$a 不存在")
         }
-        clsLoginWebView = classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
-        clsAccountManageActivity = classLoader.loadClass("com.donews.nga.setting.AccountManageActivity")
+        clsLoginWebView =
+            classLoader.loadClass("gov.pianzong.androidnga.activity.user.LoginWebView")
+        clsAccountManageActivity =
+            classLoader.loadClass("com.donews.nga.setting.AccountManageActivity")
         clsVipStatus = classLoader.loadClass("com.donews.nga.vip.entitys.VipStatus")
-        clsUserProviderImpl = classLoader.loadClass("gov.pianzong.androidnga.providers.UserProviderImpl")
+        clsUserProviderImpl =
+            classLoader.loadClass("gov.pianzong.androidnga.providers.UserProviderImpl")
         clsAppLogoActivity = classLoader.loadClass("com.donews.nga.setting.AppLogoActivity")
         clsForumDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity")
         clsAllPostListFragment =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.AllPostListFragment")
-        clsPostListFragment = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
+        clsPostListFragment =
+            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
         clsForumDetailActivity_f =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity\$f")
     }
@@ -138,7 +144,8 @@ class OptimizeHook : IHook {
         }
 
         //移除首页商城入口
-        val pureSlideMenu = Helper.getSpStr(Constant.PURE_SLIDE_MENU, null)?.split("|") ?: arrayListOf()
+        val pureSlideMenu =
+            Helper.getSpStr(Constant.PURE_SLIDE_MENU, null)?.split("|") ?: arrayListOf()
         val quickAccount = Helper.getSpBool(Constant.QUICK_ACCOUNT_MANAGE, false)
 
         if (pureSlideMenu.isNotEmpty() || quickAccount || BuildConfig.DEBUG) {
@@ -184,11 +191,14 @@ class OptimizeHook : IHook {
 
                         if ((pureSlideMenu.contains("设置") && pureSlideMenu.contains("关于"))) {
                             linearLayout.addView(
-                                ClickableItemView(root.context, "PureNGA 设置", "打开插件设置").apply {
+                                ClickableItemView(
+                                    root.context, "PureNGA 设置", "打开插件设置"
+                                ).apply {
                                     setBackgroundColor(Color.LTGRAY)
                                     setOnClickListener { _ ->
-                                        val activity =
-                                            XposedHelpers.callMethod(it.thisObject, "getActivity") as Activity
+                                        val activity = XposedHelpers.callMethod(
+                                            it.thisObject, "getActivity"
+                                        ) as Activity
                                         DialogUtils.popupSettingDialog(activity)
                                     }
                                 })
@@ -218,24 +228,25 @@ class OptimizeHook : IHook {
 
         //长按打开签到
         if (Helper.getSpBool(Constant.QUICK_SIGN_IN, false)) {
-            MethodFinder.fromClass(AdHook. clsHomeFragment).filterByName("initLayout").firstOrNull()?.createHook {
-                after {
-                    it.log()
+            MethodFinder.fromClass(AdHook.clsHomeFragment).filterByName("initLayout").firstOrNull()
+                ?.createHook {
+                    after {
+                        it.log()
 
-                    val viewBinding = XposedHelpers.callMethod(it.thisObject, "getViewBinding")
-                    val view = XposedHelpers.getObjectField(viewBinding, "f") as ImageView
+                        val viewBinding = XposedHelpers.callMethod(it.thisObject, "getViewBinding")
+                        val view = XposedHelpers.getObjectField(viewBinding, "f") as ImageView
 
-                    view.setOnLongClickListener {
-                        val activity = EzXHelper.appContext
+                        view.setOnLongClickListener {
+                            val activity = EzXHelper.appContext
 
-                        val gotoIntent = activity.buildNormalIntent(clsLoginWebView)
-                        gotoIntent.putExtra("sync_type", 5)
+                            val gotoIntent = activity.buildNormalIntent(clsLoginWebView)
+                            gotoIntent.putExtra("sync_type", 5)
 
-                        activity.startActivity(gotoIntent)
-                        true
+                            activity.startActivity(gotoIntent)
+                            true
+                        }
                     }
                 }
-            }
         }
 
         //移除导航栏游戏库图标
@@ -245,7 +256,8 @@ class OptimizeHook : IHook {
                     it.log()
 
                     val activity = it.thisObject
-                    val tabParam = XposedHelpers.getObjectField(activity, "tabParams") as ArrayList<*>
+                    val tabParam =
+                        XposedHelpers.getObjectField(activity, "tabParams") as ArrayList<*>
 
                     var i = 0
                     while (i < tabParam.size) {
@@ -353,7 +365,8 @@ class OptimizeHook : IHook {
 
         // 自动签到
         if (Helper.getSpBool(Constant.AUTO_SIGN, false)) {
-            val mtdCheckLogin = AdHook.clsHomeFragment.getDeclaredMethod("checkLogin", Boolean::class.java)
+            val mtdCheckLogin =
+                AdHook.clsHomeFragment.getDeclaredMethod("checkLogin", Boolean::class.java)
             mtdCheckLogin.isAccessible = true
 
             var firstClick = true
@@ -372,8 +385,9 @@ class OptimizeHook : IHook {
                             Helper.toast("自动签到, 打开签到页面")
                             val mtdGetContext = AdHook.clsHomeFragment.getMethod("getContext")
                             val context = mtdGetContext.invoke(it.thisObject)
-                            val mtdShowLoginWebView =
-                                clsLoginWebView.getMethod("show", Context::class.java, Int::class.java)
+                            val mtdShowLoginWebView = clsLoginWebView.getMethod(
+                                "show", Context::class.java, Int::class.java
+                            )
                             mtdShowLoginWebView.invoke(null, context, 5)
                         } catch (ex: Exception) {
                             AndroidLogger.e(ex, "出错")
@@ -396,8 +410,18 @@ class OptimizeHook : IHook {
             }
         }
 
-        // 自定义字体
-        if (Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false) || Helper.getSpBool(Constant.POST_OPTIMIZE, false)) {
+        // 自定义字体 等
+        if (Helper.getSpBool(
+                Constant.ENABLE_CUSTOM_FONT, false
+            ) || Helper.getSpBool(
+                Constant.POST_OPTIMIZE, false
+            ) || Helper.getSpBool(Constant.ENABLE_HIGHLIGHT_AUTHOR, false)
+        ) {
+            val customFont = Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)
+            val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)
+            val postOptimize = Helper.getSpBool(Constant.POST_OPTIMIZE, false)
+            val highlightAuthor = Helper.getSpBool(Constant.ENABLE_HIGHLIGHT_AUTHOR, false)
+
             MethodFinder.fromClass(clsAssetManager).filterByName("open").forEach { mtd ->
                 mtd.createHook {
                     after {
@@ -411,18 +435,26 @@ class OptimizeHook : IHook {
                             val inputStream = it.result as InputStream1
                             var css = readTextFromInputStream(inputStream)
 
-                            if(Helper.getSpBool(Constant.ENABLE_CUSTOM_FONT, false)) {
-                                val newFont = Helper.getSpStr(Constant.CUSTOM_FONT_NAME, Constant.SYSTEM_FONT)
+                            if (customFont && !newFont.isNullOrEmpty()) {
                                 val regex = Regex("font-family:[^;]+;?")
                                 css = regex.replace(css, "font-family: $newFont;")
                             }
 
-                            if(Helper.getSpBool(Constant.POST_OPTIMIZE, false)) {
+                            if (postOptimize) {
                                 //优化帖子内容显示
                                 css += "#advertisementTop { display: none; } #advertisementBottom { display: none; }"
                             }
 
+                            if (highlightAuthor) {
+                                //优化帖子内容显示
+                                css += "a.uname.highlight { color: red; }"
+                            }
+
                             it.result = css.byteInputStream()
+                        } else if (fileName == "js/highlight.purenga.js" && highlightAuthor) {
+                            AndroidLogger.w(Constant.JS_HIGHLIGHT)
+
+                            it.result = Constant.JS_HIGHLIGHT.byteInputStream()
                         }
                     }
                 }
@@ -464,8 +496,10 @@ class OptimizeHook : IHook {
         // 优先使用“新发布”
         if (Helper.getSpBool(Constant.PREFER_NEW_POST, false)) {
             val mtdSetReplyOrderBy =
-                MethodFinder.fromClass(clsAllPostListFragment).filterByName("setReplyOrderBy").first()
-            val mtdAutoRefresh = MethodFinder.fromClass(clsPostListFragment).filterByName("autoRefresh").first()
+                MethodFinder.fromClass(clsAllPostListFragment).filterByName("setReplyOrderBy")
+                    .first()
+            val mtdAutoRefresh =
+                MethodFinder.fromClass(clsPostListFragment).filterByName("autoRefresh").first()
             var objAllPostListFragment: Any? = null
 
             ConstructorFinder.fromClass(clsForumDetailActivity_f).first().createHook {
