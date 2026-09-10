@@ -2,7 +2,7 @@
 agp = "9.3.2"
 xposedapi = "82"
 ezxhelper = "2.2.1"
-kotlin = "2.4.10"
+kotlin = "2.4.20"
 coreKtx = "1.19.0"
 composeBom = "2026.08.00"
 material = "1.14.0"
