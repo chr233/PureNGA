@@ -75,6 +75,23 @@ class ArticleDetailHook : IHook {
             var webView: WebView? = null
             var authorName: String? = null
 
+            val injectHighlight = {
+                val author = authorName
+                val wv = webView
+                if (wv == null || author.isNullOrEmpty()) {
+                    AndroidLogger.w("webView is null")
+                } else {
+                    AndroidLogger.w("高亮楼主: $author")
+                    val customJs = Helper.getSpStr(Constant.CUSTOM_POST_JS, null) ?: ""
+                    val js = Constant.JS_HIGHLIGHT.replace("[AUTHOR]", author)
+                        .replace("[CUSTOM_HS]", customJs)
+
+                    wv.loadUrl("javascript:$js")
+                    AndroidLogger.i("loaded JS")
+                    AndroidLogger.i(js)
+                }
+            }
+
             findFirstMethodByName(clsArticleDetailFragment, "finishLoad")?.createHook {
                 before {
                     it.log()
@@ -105,6 +122,8 @@ class ArticleDetailHook : IHook {
 
                     webView = fidWebView.get(it.thisObject) as WebView
                     authorName = fidThreadAuthor.get(it.thisObject) as String
+
+                    injectHighlight()
                 }
             }
 
@@ -122,22 +141,7 @@ class ArticleDetailHook : IHook {
                     after {
                         it.forceLog()
 
-                        val author = authorName
-                        val wv = webView
-                        if (wv == null || author.isNullOrEmpty()) {
-                            AndroidLogger.w("webView is null")
-                            return@after
-                        }
-
-                        AndroidLogger.w("高亮楼主: $author")
-                        val customJs = Helper.getSpStr(Constant.CUSTOM_POST_JS, null) ?: ""
-                        val js = Constant.JS_HIGHLIGHT.replace("[AUTHOR]", author)
-                            .replace("[CUSTOM_HS]", customJs)
-
-                        wv.loadUrl("javascript:$js")
-                        AndroidLogger.i("loaded JS")
-                        AndroidLogger.i(js)
-
+                        injectHighlight()
                     }
                 }
             } ?: AndroidLogger.w("onPageFinished hook 失败")
