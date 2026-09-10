@@ -581,7 +581,7 @@ object DialogUtils {
                 activity,
                 Constant.ENABLE_HIGHLIGHT_AUTHOR,
                 "帖子楼主高亮",
-                "将楼主的ID显示为红色"
+                "将楼主的ID显示为绿色"
             )
         )
 
