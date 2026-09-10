@@ -1,5 +1,5 @@
 [versions]
-agp = "9.3.2"
+agp = "9.4.0"
 xposedapi = "82"
 ezxhelper = "2.2.1"
 kotlin = "2.4.10"
