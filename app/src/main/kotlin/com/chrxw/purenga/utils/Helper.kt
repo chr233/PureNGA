@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Environment
 import android.widget.Toast
 import androidx.core.content.edit
@@ -32,6 +33,9 @@ object Helper {
     lateinit var clsRId: Class<*>
     lateinit var clsRId2: Class<*>
     lateinit var clsDrawerId: Class<*>
+
+    lateinit var moduleResources: Resources
+
     var context: Context? = null
     var isXposed = false
 
@@ -123,7 +127,7 @@ object Helper {
     /**
      * 获取ResId
      */
-    private fun getRes(cls: Class<*>?, key: String): kotlin.Int {
+    private fun getRes(cls: Class<*>?, key: String): Int {
         return try {
             cls?.getDeclaredField(key)?.getInt(null) ?: -1
         } catch (e: Throwable) {

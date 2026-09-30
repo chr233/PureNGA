@@ -2,6 +2,9 @@ package com.chrxw.purenga
 
 import android.app.Application
 import android.app.Instrumentation
+import android.content.Context
+import android.content.res.AssetManager
+import android.content.res.Resources
 import android.widget.Toast
 import androidx.annotation.Keep
 import com.chrxw.purenga.hook.DebugHook
@@ -14,6 +17,7 @@ import io.github.kyuubiran.ezxhelper.xposed.dsl.HookFactory.`-Static`.createHook
 import io.github.libxposed.api.XposedModule
 import io.github.libxposed.api.XposedModuleInterface
 import java.util.concurrent.atomic.AtomicBoolean
+
 
 /**
  * 初始化Xposed
@@ -56,10 +60,28 @@ class XposedInit : XposedModule() {
 
         Logger.d("NGA内运行 onPackageReady")
 
-        install()
-    }
+        try {
+            // 2. 反射创建 AssetManager 并添加模块 APK 路径
+            val moduleInfo = getModuleApplicationInfo()
 
-    private fun install() {
+            val assets = AssetManager::class.java.newInstance()
+            val addAssetPath =
+                AssetManager::class.java.getMethod("addAssetPath", String::class.java)
+            addAssetPath.invoke(assets, moduleInfo.sourceDir)
+
+            // 3. 使用系统资源配置创建模块独立的 Resources 对象
+            val systemRes = Resources.getSystem()
+            Helper.moduleResources = Resources(
+                assets,
+                systemRes.displayMetrics,
+                systemRes.configuration
+            )
+
+        } catch (t: Throwable) {
+            // 处理异常
+        }
+
+
         MethodFinder.fromClass(Instrumentation::class.java).filterByName("callApplicationOnCreate")
             .filterByAssignableParamTypes(Application::class.java).first().createHook {
                 after {
@@ -72,61 +94,63 @@ class XposedInit : XposedModule() {
                     }
 
                     if (initialized.compareAndSet(false, true)) {
-                        val context = app.applicationContext
-
-                        EzXposed.initAppContext(context, false)
-                        Helper.context = EzXposed.appContext
-
-                        Logger.i("d")
-
-                        val error = Hooks.initHooks(context.classLoader)
-
-                        if (error == -1) {
-                            Logger.w("init hook 失败")
-                            return@after
-                        }
-
-                        if (BuildConfig.DEBUG) {
-                            Logger.w("!!! Debug 模式 !!!")
-                            val hook = DebugHook()
-                            try {
-                                hook.init(context.classLoader)
-                            } catch (e: Exception) {
-                                error + 1
-                                Logger.e("DebugHook 初始化失败", e)
-                            }
-
-                            try {
-                                hook.hook()
-                            } catch (e: Exception) {
-                                Logger.e("DebugHook Hook失败", e)
-                            }
-                        }
-
-                        if (error == 0) {
-                            if (!Helper.getSpBool(Constant.HIDE_HOOK_INFO, false)) {
-                                Helper.toast(
-                                    buildString {
-                                        appendLine("PureNGA 加载成功")
-                                        appendLine("【可以在设置中禁用】")
-                                    }, Toast.LENGTH_LONG
-                                )
-                            }
-                        } else {
-                            Helper.toast(
-                                buildString {
-                                    appendLine("PureNGA $error 个模块加载失败")
-                                    appendLine("可能不支持当前版本")
-                                    appendLine("NGA 版本: ${Helper.getNgaVersion()}")
-                                    appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
-                                }, Toast.LENGTH_LONG
-                            )
-                        }
+                        installHooks(app.applicationContext)
                     } else {
                         Logger.d("跳过初始化")
                     }
                 }
             }
+    }
+
+    private fun installHooks(context: Context) {
+        EzXposed.initAppContext(context, false)
+        Helper.context = EzXposed.appContext
+
+        Logger.i("d")
+
+        val error = Hooks.initHooks(context.classLoader)
+
+        if (error == -1) {
+            Logger.w("init hook 失败")
+            return
+        }
+
+        if (BuildConfig.DEBUG) {
+            Logger.w("!!! Debug 模式 !!!")
+            val hook = DebugHook()
+            try {
+                hook.init(context.classLoader)
+            } catch (e: Exception) {
+                error + 1
+                Logger.e("DebugHook 初始化失败", e)
+            }
+
+            try {
+                hook.hook()
+            } catch (e: Exception) {
+                Logger.e("DebugHook Hook失败", e)
+            }
+        }
+
+        if (error == 0) {
+            if (!Helper.getSpBool(Constant.HIDE_HOOK_INFO, false)) {
+                Helper.toast(
+                    buildString {
+                        appendLine("PureNGA 加载成功")
+                        appendLine("【可以在设置中禁用】")
+                    }, Toast.LENGTH_LONG
+                )
+            }
+        } else {
+            Helper.toast(
+                buildString {
+                    appendLine("PureNGA $error 个模块加载失败")
+                    appendLine("可能不支持当前版本")
+                    appendLine("NGA 版本: ${Helper.getNgaVersion()}")
+                    appendLine("插件版本: ${BuildConfig.VERSION_NAME}")
+                }, Toast.LENGTH_LONG
+            )
+        }
     }
 }
 

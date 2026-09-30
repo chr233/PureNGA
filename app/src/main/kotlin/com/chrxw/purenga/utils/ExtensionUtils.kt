@@ -16,7 +16,6 @@ import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.hook.OptimizeHook
 import io.github.kyuubiran.ezxhelper.android.logging.Logger
 import io.github.kyuubiran.ezxhelper.core.finder.MethodFinder
-import io.github.kyuubiran.ezxhelper.xposed.EzXposed
 import io.github.kyuubiran.ezxhelper.xposed.common.HookParam
 import java.lang.reflect.Field
 import java.lang.reflect.Method
@@ -141,7 +140,7 @@ object ExtensionUtils {
 
     fun Int.getStringFromMod(): String {
         return if (Helper.isXposed) {
-            EzXposed.moduleRes.getString(this)
+            Helper.moduleResources.getString(this)
         } else {
             val ctx = Helper.context
             ctx?.resources?.getString(this) ?: ""
@@ -150,7 +149,7 @@ object ExtensionUtils {
 
     fun Int.getStringFromMod(vararg formatArgs: Any): String {
         return if (Helper.isXposed) {
-            EzXposed.moduleRes.getString(this, formatArgs)
+            Helper.moduleResources.getString(this, formatArgs)
         } else {
             val ctx = Helper.context
             ctx?.resources?.getString(this, formatArgs) ?: ""
@@ -160,7 +159,7 @@ object ExtensionUtils {
     @SuppressLint("UseCompatLoadingForDrawables")
     fun Int.getDrawable(theme: Resources.Theme?): Drawable {
         return if (Helper.isXposed) {
-            EzXposed.moduleRes.getDrawable(this, theme)
+            Helper.moduleResources.getDrawable(this, theme)
         } else {
             val ctx = Helper.context
             ctx?.resources?.getDrawable(this, theme) ?: throw Exception("Resource Not Found")
