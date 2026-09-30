@@ -19,8 +19,7 @@ import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.getDrawable
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import de.robv.android.xposed.XposedHelpers
+import io.github.kyuubiran.ezxhelper.xposed.dsl.HookFactory.`-Static`.createHook
 
 
 /**
@@ -47,7 +46,9 @@ class PreferencesHook : IHook {
                 val activity = param.thisObject as Activity
 
                 val viewBinding = AdHook.fldViewBinding.get(activity)
-                val root = XposedHelpers.callMethod(viewBinding, "getRoot") as LinearLayout
+                val mtdGetRoot = viewBinding.javaClass.getDeclaredMethod("getRoot")
+//                mtdGetRoot.isAccessible=true
+                val root = mtdGetRoot.invoke(viewBinding) as LinearLayout
                 val scrollView = root.getChildAt(1) as ScrollView
                 val linearLayout = scrollView.getChildAt(0) as LinearLayout
 
@@ -85,7 +86,8 @@ class PreferencesHook : IHook {
                 val activity = it.thisObject as Activity
 
                 val viewBinding = AdHook.fldViewBinding.get(activity)
-                val root = XposedHelpers.callMethod(viewBinding, "getRoot") as View
+                val mtdGetRoot = viewBinding.javaClass.getMethod("getRoot")
+                val root = mtdGetRoot.invoke(viewBinding) as View
                 val viewId = Helper.getRId("tv_app_version")
 
                 val pluginVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"

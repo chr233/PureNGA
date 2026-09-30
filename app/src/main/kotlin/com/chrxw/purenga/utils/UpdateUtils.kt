@@ -5,8 +5,8 @@ import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.utils.data.Release
-import com.github.kyuubiran.ezxhelper.AndroidLogger
 import com.google.gson.Gson
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,7 +39,7 @@ object UpdateUtils {
 
                 onResult(release)
             } catch (ex: Exception) {
-                AndroidLogger.e(ex)
+                Logger.e(ex)
                 onResult(null)
             }
         }

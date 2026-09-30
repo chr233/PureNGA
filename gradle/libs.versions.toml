@@ -1,23 +1,33 @@
 [versions]
-agp = "9.3.2"
+agp = "9.3.3"
 xposedapi = "82"
-ezxhelper = "2.2.1"
+libxposedApi = "102.0.0"
+ezxhelper = "3.2.0-preview1"
 kotlin = "2.4.10"
 coreKtx = "1.19.0"
+activityCompose = "1.13.0"
 composeBom = "2026.08.00"
 material = "1.14.0"
 gson = "2.14.0"
 okhttp = "5.5.0"
+miuix = "0.9.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 xposedapi = { module = "de.robv.android.xposed:api", version.ref = "xposedapi" }
-ezxhelper = { module = "com.github.kyuubiran:EzXHelper", version.ref = "ezxhelper" }
+libxposed-api = { module = "io.github.libxposed:api", version.ref = "libxposedApi" }
+libxposed-service = { module = "io.github.libxposed:service", version.ref = "libxposedApi" }
+ezxhelper-android-utils = { module = "io.github.kyuubiran.ezxhelper:android-utils", version.ref = "ezxhelper" }
+ezxhelper-core = { module = "io.github.kyuubiran.ezxhelper:core", version.ref = "ezxhelper" }
+ezxhelper-xposed-api = { module = "io.github.kyuubiran.ezxhelper:xposed-api-101", version.ref = "ezxhelper" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+miuix-ui = { module = "top.yukonga.miuix.kmp:miuix-ui", version.ref = "miuix" }
+miuix-icons = { module = "top.yukonga.miuix.kmp:miuix-icons", version.ref = "miuix" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

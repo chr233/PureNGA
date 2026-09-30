@@ -7,9 +7,9 @@ import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.forceLog
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.AndroidLogger
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.FieldFinder
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
+import io.github.kyuubiran.ezxhelper.core.finder.FieldFinder
+import io.github.kyuubiran.ezxhelper.xposed.dsl.HookFactory.`-Static`.createHook
 import java.lang.reflect.Field
 
 
@@ -51,7 +51,7 @@ class ArticleDetailHook : IHook {
             clsArticleDetailFragmentQ =
                 classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailFragment\$q")
         } catch (e: Throwable) {
-            AndroidLogger.e(e)
+            Logger.e(e)
         }
 
         clsBaseFragment = classLoader.loadClass("gov.pianzong.androidnga.activity.BaseFragment")
@@ -93,9 +93,9 @@ class ArticleDetailHook : IHook {
                         val authorName = fidUserInfoUserName.get(author) as String
 
                         if (postAuthorId == authorId) {
-                            AndroidLogger.w("楼主: $authorName #$authorId")
+                            Logger.w("楼主: $authorName #$authorId")
                         } else {
-                            AndroidLogger.d("其他: $authorName #$authorId")
+                            Logger.d("其他: $authorName #$authorId")
                         }
                     }
                 }
@@ -125,22 +125,22 @@ class ArticleDetailHook : IHook {
                         val author = authorName
                         val wv = webView
                         if (wv == null || author.isNullOrEmpty()) {
-                            AndroidLogger.w("webView is null")
+                            Logger.w("webView is null")
                             return@after
                         }
 
-                        AndroidLogger.w("高亮楼主: $author")
+                        Logger.w("高亮楼主: $author")
                         val customJs = Helper.getSpStr(Constant.CUSTOM_POST_JS, null) ?: ""
                         val js = Constant.JS_HIGHLIGHT.replace("[AUTHOR]", author)
                             .replace("[CUSTOM_HS]", customJs)
 
                         wv.loadUrl("javascript:$js")
-                        AndroidLogger.i("loaded JS")
-                        AndroidLogger.i(js)
+                        Logger.i("loaded JS")
+                        Logger.i(js)
 
                     }
                 }
-            } ?: AndroidLogger.w("onPageFinished hook 失败")
+            } ?: Logger.w("onPageFinished hook 失败")
         }
     }
 

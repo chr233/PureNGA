@@ -1,10 +1,14 @@
-val verCode = 58
-val verName = "3.4.0"
+val verCode = 60
+val verName = "3.5.0"
+
+// 测试版本附加后缀, 由 CI 传入 -PbuildSuffix=.test.xxxxxxx
+val buildSuffix = providers.gradleProperty("buildSuffix").getOrElse("")
 
 val javaVersion = JavaVersion.VERSION_21
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -22,10 +26,10 @@ android {
 
     defaultConfig {
         applicationId = "com.chrxw.purenga"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 37
         versionCode = verCode
-        versionName = verName
+        versionName = verName + buildSuffix
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles()
@@ -48,6 +52,13 @@ android {
                 keyAlias = alias
                 keyPassword = keyPass
             }
+        }
+    }
+
+    packaging {
+        resources {
+            // 保证 META-INF/xposed/* 不被资源合并丢弃
+            merges += "META-INF/xposed/*"
         }
     }
 
@@ -84,14 +95,22 @@ java {
 
 
 dependencies {
-    implementation(libs.ezxhelper)
+    implementation(libs.ezxhelper.core)
+    implementation(libs.ezxhelper.xposed.api)
+    implementation(libs.ezxhelper.android.utils)
     implementation(libs.okhttp)
     implementation(libs.gson)
 
-    compileOnly(libs.xposedapi)
+    compileOnly(libs.libxposed.api)
+    implementation(libs.libxposed.service)
 
-    implementation(libs.androidx.core.ktx)
+    // 模块界面 (Miuix / HyperOS 风格)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
+//    implementation(libs.miuix.ui)
+//    implementation(libs.miuix.icons)
+
+    // View 体系的 Material 组件, 供注入进程内的弹窗 (DialogUtils) 使用
     implementation(libs.material)
-    implementation(libs.androidx.material3)
 }
