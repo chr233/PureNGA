@@ -16,7 +16,7 @@ import com.chrxw.purenga.ui.FitImageView
 import com.chrxw.purenga.utils.DialogUtils
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.StatusUtils
-import com.github.kyuubiran.ezxhelper.AndroidLogger
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
 
 
 /**
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
             startActivity(intent)
         } catch (e: Throwable) {
-            AndroidLogger.e(e)
+            Logger.e(e)
             toast(getString(R.string.open_nga_failed))
         }
     }
@@ -49,7 +49,9 @@ class MainActivity : AppCompatActivity() {
         val state = packageManager.getComponentEnabledSetting(componentName)
         if (state != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
             packageManager.setComponentEnabledSetting(
-                componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP
+                componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
             )
         }
     }
@@ -118,11 +120,16 @@ class MainActivity : AppCompatActivity() {
                 DialogUtils.popupChangeLogDialog(this@MainActivity)
             }
         })
-        container.addView(ClickableItemView(this, R.string.check_update, R.string.check_update_summary).apply {
-            setOnClickListener {
-                DialogUtils.popupCheckUpdate(this@MainActivity)
-            }
-        })
+        container.addView(
+            ClickableItemView(
+                this,
+                R.string.check_update,
+                R.string.check_update_summary
+            ).apply {
+                setOnClickListener {
+                    DialogUtils.popupCheckUpdate(this@MainActivity)
+                }
+            })
         container.addView(
             ClickableItemView(
                 this, R.string.get_latest_version, R.string.get_latest_version_summary
@@ -133,18 +140,29 @@ class MainActivity : AppCompatActivity() {
             })
 
         container.addView(ClickableItemView(this, R.string.other))
-        runningStatusView = ClickableItemView(this, R.string.running_status, R.string.module_disabled)
+        runningStatusView =
+            ClickableItemView(this, R.string.running_status, R.string.module_disabled)
         container.addView(runningStatusView)
-        container.addView(ClickableItemView(this, R.string.open_nga, R.string.open_nga_summary).apply {
-            setOnClickListener {
-                openNga(false)
-            }
-        })
-        container.addView(ClickableItemView(this, R.string.open_purenga, R.string.open_purenga_summary).apply {
-            setOnClickListener {
-                openNga(true)
-            }
-        })
+        container.addView(
+            ClickableItemView(
+                this,
+                R.string.open_nga,
+                R.string.open_nga_summary
+            ).apply {
+                setOnClickListener {
+                    openNga(false)
+                }
+            })
+        container.addView(
+            ClickableItemView(
+                this,
+                R.string.open_purenga,
+                R.string.open_purenga_summary
+            ).apply {
+                setOnClickListener {
+                    openNga(true)
+                }
+            })
 
         container.addView(ClickableItemView(this, R.string.setting))
         container.addView(
@@ -155,11 +173,16 @@ class MainActivity : AppCompatActivity() {
                     showPluginTutorial()
                 }
             })
-        container.addView(ClickableItemView(this, R.string.hide_icon, R.string.hide_icon_summary).apply {
-            setOnClickListener {
-                hideAppIcon()
-            }
-        })
+        container.addView(
+            ClickableItemView(
+                this,
+                R.string.hide_icon,
+                R.string.hide_icon_summary
+            ).apply {
+                setOnClickListener {
+                    hideAppIcon()
+                }
+            })
 
         root.addView(container)
         setContentView(root)

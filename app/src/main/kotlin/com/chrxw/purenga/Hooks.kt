@@ -10,7 +10,7 @@ import com.chrxw.purenga.hook.ShortcutHook
 import com.chrxw.purenga.hook.SpUtilsHook
 import com.chrxw.purenga.hook.WebViewHook
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.AndroidLogger
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
 
 /**
  * 钩子
@@ -22,9 +22,9 @@ object Hooks {
         SpUtilsHook(),
         PreferencesHook(),
         WebViewHook(),
-        ShareHook(),
         ShortcutHook(),
         ArticleDetailHook(),
+        ShareHook(),
     )
 
     /**
@@ -37,7 +37,7 @@ object Hooks {
             mainHook.hook()
         } catch (e: Throwable) {
             Helper.toast("插件核心无法初始化, 可能不适配当前版本")
-            AndroidLogger.e(e)
+            Logger.e(e)
             return 1
         }
 
@@ -52,7 +52,7 @@ object Hooks {
         for (hook in hooks) {
             val name = hook.name
             try {
-                AndroidLogger.i("加载 $name 模块")
+                Logger.i("加载 $name 模块")
                 hook.init(classLoader)
                 hook.hook()
             } catch (e: NoSuchMethodError) {
@@ -60,13 +60,13 @@ object Hooks {
                     Helper.toast("模块 $name 加载失败, 可能不支持当前版本的NGA")
                 }
                 error++
-                AndroidLogger.e(e)
+                Logger.e(e)
             } catch (e: Throwable) {
                 if (!hideError) {
                     Helper.toast("模块 $name 加载遇到未知错误")
                 }
                 error++
-                AndroidLogger.e(e)
+                Logger.e(e)
             }
         }
         return error

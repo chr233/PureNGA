@@ -1,7 +1,6 @@
 package com.chrxw.purenga.hook
 
 import android.app.Activity
-import android.os.Build
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
 import com.chrxw.purenga.hook.base.IHook
@@ -13,8 +12,8 @@ import com.chrxw.purenga.utils.ExtensionUtils.getShortcuts
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.ExtensionUtils.setShortcuts
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.EzXHelper
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import io.github.kyuubiran.ezxhelper.xposed.EzXposed
+import io.github.kyuubiran.ezxhelper.xposed.dsl.HookFactory.`-Static`.createHook
 
 class ShortcutHook : IHook {
 
@@ -109,7 +108,7 @@ class ShortcutHook : IHook {
         }
 
         // 处理Shortcut跳转
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && !Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null)
+        if (!Helper.getSpStr(Constant.SHORTCUT_SETTINGS, null)
                 .isNullOrEmpty()
         ) {
             findFirstMethodByName(OptimizeHook.clsMainActivity, "onNewIntent")?.createHook {
@@ -120,13 +119,13 @@ class ShortcutHook : IHook {
                 }
             }
 
-            val currentShortcuts = EzXHelper.appContext.getShortcuts()
+            val currentShortcuts = EzXposed.appContext.getShortcuts()
             val customShortcuts = Helper.getSpStr(Constant.SHORTCUT_SETTINGS, "")?.split(',') ?: listOf()
 
             if (currentShortcuts != null && currentShortcuts.size != customShortcuts.size) {
                 val shortcuts =
-                    DialogUtils.getShortcutList(EzXHelper.appContext).filter { it!!.id in customShortcuts }.map { it!! }
-                EzXHelper.appContext.setShortcuts(shortcuts)
+                    DialogUtils.getShortcutList(EzXposed.appContext).filter { it!!.id in customShortcuts }.map { it!! }
+                EzXposed.appContext.setShortcuts(shortcuts)
             }
         }
     }
