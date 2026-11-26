@@ -9,13 +9,13 @@ import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.findMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.AndroidLogger
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.MemberExtensions.isAbstract
-import com.github.kyuubiran.ezxhelper.finders.FieldFinder
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder
-import de.robv.android.xposed.XposedHelpers
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
+import io.github.kyuubiran.ezxhelper.core.extension.MemberExtension.isAbstract
+import io.github.kyuubiran.ezxhelper.core.finder.FieldFinder
+import io.github.kyuubiran.ezxhelper.core.finder.MethodFinder
+import io.github.kyuubiran.ezxhelper.xposed.dsl.HookFactory.`-Static`.createHook
 import java.lang.reflect.Field
+import java.lang.reflect.Method
 
 
 /**
@@ -49,6 +49,10 @@ class AdHook : IHook {
         private var fldBannerHolderViewC: Field? = null
         lateinit var clsHomeFragment: Class<*>
 
+        lateinit var fidLoadingCanJump: Field
+        lateinit var fidLoadingIsAdShow: Field
+        lateinit var mtdLoadingGoHome: Method
+
         fun isClsZkAdNativeImplInit() = ::clsZkAdNativeImpl.isInitialized
         fun isClsKsAdSDKInit() = ::clsKsAdSDK.isInitialized
         fun isClsTTAdSdkInit() = ::clsTTAdSdk.isInitialized
@@ -64,9 +68,10 @@ class AdHook : IHook {
         try {
             clsZkAdNativeImpl = classLoader.loadClass("com.donews.zkad.api.ZkAdNativeImpl")
         } catch (e: Throwable) {
-            AndroidLogger.e(e)
+            Logger.e(e)
         }
-        clsLoadingActivity_a = classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity\$a")
+        clsLoadingActivity_a =
+            classLoader.loadClass("gov.pianzong.androidnga.activity.LoadingActivity\$a")
 
         try {
             clsKsAdSDK = classLoader.loadClass("com.kwad.sdk.api.KsAdSDK")
@@ -74,35 +79,46 @@ class AdHook : IHook {
             clsDnAdNativeClass = classLoader.loadClass("com.donews.b.start.DnAdNative")
             clsDnTapFeedAd = classLoader.loadClass("com.donews.admediation.adimpl.feed.DnTapFeedAd")
         } catch (e: Throwable) {
-            AndroidLogger.e(e)
+            Logger.e(e)
         }
 
-        clsPostListFragment = classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
-        clsHomeRecommendFragment = classLoader.loadClass("com.donews.nga.fragments.HomeRecommendFragment")
+        clsPostListFragment =
+            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.PostListFragment")
+        clsHomeRecommendFragment =
+            classLoader.loadClass("com.donews.nga.fragments.HomeRecommendFragment")
         clsActivityEntity = classLoader.loadClass("com.donews.nga.entity.ActivityEntity")
         clsSubject = classLoader.loadClass("gov.pianzong.androidnga.model.Subject")
         clsBaseActivity = classLoader.loadClass("com.donews.nga.common.base.BaseActivity")
-        clsBannerHolder = classLoader.loadClass("com.donews.nga.adapters.HomeRecommendAdapter\$BannerHolder")
+        clsBannerHolder =
+            classLoader.loadClass("com.donews.nga.adapters.HomeRecommendAdapter\$BannerHolder")
         clsHomeFragment = classLoader.loadClass("com.donews.nga.fragments.HomeFragment")
         fldViewBinding = FieldFinder.fromClass(clsBaseActivity).filterByName("viewBinding").first()
 
         try {
-            fldForumFoldBinding =
-                FieldFinder.fromClass("com.donews.nga.adapters.ForumFoldListAdapter\$GameRecommendBinder", classLoader)
-                    .filterByName("binding").firstOrNull()
+            fldForumFoldBinding = FieldFinder.fromClass(
+                "com.donews.nga.adapters.ForumFoldListAdapter\$GameRecommendBinder", classLoader
+            ).filterByName("binding").firstOrNull()
             fldGameRecommendBindings = FieldFinder.fromClass(
-                "gov.pianzong.androidnga.databinding.LayoutVoteGameRecommendCommunityBinding", classLoader
+                "gov.pianzong.androidnga.databinding.LayoutVoteGameRecommendCommunityBinding",
+                classLoader
             ).toList()
             clsGameRecommendBinder =
                 classLoader.loadClass("com.donews.nga.adapters.ForumFoldListAdapter\$GameRecommendBinder")
 
             fldBannerHolderViewC = FieldFinder.fromClass(
-                "gov.pianzong.androidnga.databinding.ItemHomeRecommendBannerLayoutBinding", classLoader
+                "gov.pianzong.androidnga.databinding.ItemHomeRecommendBannerLayoutBinding",
+                classLoader
             ).filterByName("e").firstOrNull()
         } catch (ex: Throwable) {
-            AndroidLogger.e(ex)
+            Logger.e(ex)
         }
 
+        fidLoadingCanJump =
+            FieldFinder.fromClass(MainHook.clsLoadingActivity).filterByName("canJump").first()
+        fidLoadingIsAdShow =
+            FieldFinder.fromClass(MainHook.clsLoadingActivity).filterByName("isADShow").first()
+        mtdLoadingGoHome =
+            MethodFinder.fromClass(MainHook.clsLoadingActivity).filterByName("goHome").first()
     }
 
     override fun hook() {
@@ -114,18 +130,19 @@ class AdHook : IHook {
                 }
             }
             if (hook1 == null) {
-                AndroidLogger.e("Donews 广告过滤失败")
+                Logger.e("Donews 广告过滤失败")
             }
 
-            val hook2 = findMethodByName(clsNativeExpressAD, "a").filterByAssignableParamTypes(clsAdSize).firstOrNull()
-                ?.createHook {
-                    replace {
-                        it.log()
-                        return@replace true
+            val hook2 =
+                findMethodByName(clsNativeExpressAD, "a").filterByAssignableParamTypes(clsAdSize)
+                    .firstOrNull()?.createHook {
+                        replace {
+                            it.log()
+                            return@replace true
+                        }
                     }
-                }
             if (hook2 == null) {
-                AndroidLogger.e("qq 广告过滤失败")
+                Logger.e("qq 广告过滤失败")
             }
 
             findMethodByName(clsUtils_bp, "runOnUiThread").forEach { method ->
@@ -144,7 +161,7 @@ class AdHook : IHook {
                         mtd.createHook {
                             replace {
                                 it.log()
-                                AndroidLogger.i(mtd.name)
+                                Logger.i(mtd.name)
                             }
                         }
                     }
@@ -164,7 +181,7 @@ class AdHook : IHook {
                     it.log()
                 }
             } ?: {
-                AndroidLogger.d("clsLoadingActivity loadAD 匹配失败")
+                Logger.d("clsLoadingActivity loadAD 匹配失败")
             }
 
             if (isClsKsAdSDKInit()) {
@@ -175,7 +192,7 @@ class AdHook : IHook {
                     }
                 }
                 if (hook3 == null) {
-                    AndroidLogger.d("快手广告过滤失败")
+                    Logger.d("快手广告过滤失败")
                 }
             }
 
@@ -187,7 +204,7 @@ class AdHook : IHook {
                     }
                 }
                 if (hook4 == null) {
-                    AndroidLogger.d("穿山甲广告过滤失败")
+                    Logger.d("穿山甲广告过滤失败")
                 }
             }
 
@@ -201,7 +218,7 @@ class AdHook : IHook {
                                     it.log()
 
                                     if (BuildConfig.DEBUG) {
-                                        AndroidLogger.i("clsDnAdNativeClass $mtdName")
+                                        Logger.i("clsDnAdNativeClass $mtdName")
                                     }
                                 }
                             }
@@ -219,7 +236,7 @@ class AdHook : IHook {
                                 replace {
                                     it.log()
                                     if (BuildConfig.DEBUG) {
-                                        AndroidLogger.i("clsDnTapFeedAd $mtdName")
+                                        Logger.i("clsDnTapFeedAd $mtdName")
                                     }
                                 }
                             }
@@ -232,19 +249,20 @@ class AdHook : IHook {
         //屏蔽开屏广告
         if (Helper.getSpBool(Constant.PURE_SPLASH_AD, false)) {
             // 跳过开屏Logo页面
-            val hook1 = findFirstMethodByName(MainHook.clsActivityLifecycle, "toForeGround")?.createHook {
-                replace {
-                    it.log()
+            val hook1 =
+                findFirstMethodByName(MainHook.clsActivityLifecycle, "toForeGround")?.createHook {
+                    replace {
+                        it.log()
 
-                    val activity = it.args[0] as Activity
-                    if (activity.javaClass == MainHook.clsLoadingActivity) {
-                        AndroidLogger.d("跳过启动页")
-                        XposedHelpers.setBooleanField(activity, "canJump", true)
-                        XposedHelpers.setBooleanField(activity, "isADShow", true)
-                        XposedHelpers.callMethod(activity, "goHome")
+                        val activity = it.args[0] as Activity
+                        if (activity.javaClass == MainHook.clsLoadingActivity) {
+                            Logger.d("跳过启动页")
+                            fidLoadingCanJump.setBoolean(activity, true)
+                            fidLoadingIsAdShow.setBoolean(activity, true)
+                            mtdLoadingGoHome.invoke(activity)
+                        }
                     }
                 }
-            }
 
             val hook3 = findFirstMethodByName(clsLoadingActivity_a, "callBack")?.createHook {
                 replace {
@@ -253,7 +271,7 @@ class AdHook : IHook {
             }
 
             if (hook1 == null || hook3 == null) {
-                AndroidLogger.w("过滤开屏广告功能部分加载失败")
+                Logger.w("过滤开屏广告功能部分加载失败")
             }
         }
 
@@ -286,7 +304,7 @@ class AdHook : IHook {
                             val subject = fldSubject.get(post) as String
 
                             if (Helper.getSpBool(Constant.ENABLE_POST_LOG, false)) {
-                                AndroidLogger.w("$author: $subject")
+                                Logger.w("$author: $subject")
                             }
 
                             var pure = false
@@ -316,11 +334,13 @@ class AdHook : IHook {
 
         // 屏蔽首页浮窗广告
         if (Helper.getSpBool(Constant.PURE_POPUP_AD, false)) {
-            findFirstMethodByName(clsHomeRecommendFragment, "showActivityMenu\$lambda$10")?.createHook {
+            findFirstMethodByName(
+                clsHomeRecommendFragment, "showActivityMenu\$lambda$10"
+            )?.createHook {
                 replace {
                     it.log()
 
-                    AndroidLogger.w("去你妈的广告")
+                    Logger.w("去你妈的广告")
                 }
             }
 
@@ -342,14 +362,14 @@ class AdHook : IHook {
                 replace {
                     it.log()
 
-                    val binding = XposedHelpers.getObjectField(
-                        it.thisObject, "binding"
-                    ) //fldBannerHolderBinding.get(it.thisObject)
+                    val field = it.thisObject.javaClass.getDeclaredField("binding")
+
+                    val binding = field.get(it.thisObject)
                     if (binding != null) {
                         val view = fldBannerHolderViewC!!.get(binding) as View
                         view.visibility = View.GONE
                     } else {
-                        AndroidLogger.e("binding is null")
+                        Logger.e("binding is null")
                     }
                 }
             }
@@ -361,29 +381,32 @@ class AdHook : IHook {
                     val binding = fldForumFoldBinding!!.get(it.thisObject)
                     if (binding != null) {
                         for (fid in fldGameRecommendBindings) {
-                            AndroidLogger.w("$fid")
+                            Logger.w("$fid")
                             val value = fid.get(binding)
                             if (value is View) {
                                 value.visibility = View.GONE
                             }
                         }
                     } else {
-                        AndroidLogger.e("binding is null")
+                        Logger.e("binding is null")
                     }
                 }
             }
         }
 
         if (Helper.getSpBool(Constant.PURE_VIDEO, false)) {
-            MethodFinder.fromClass(clsHomeFragment).filterByName("updateTabs")
-                .firstOrNull()?.createHook {
+            MethodFinder.fromClass(clsHomeFragment).filterByName("updateTabs").firstOrNull()
+                ?.createHook {
                     before {
                         it.log()
 
                         val list = it.args[0] as ArrayList<*>
                         for (i in list.size - 1 downTo 0) {
                             val ele = list[i] ?: continue
-                            val name = XposedHelpers.getObjectField(ele, "name") as? String ?: continue
+
+                            val field = ele.javaClass.getDeclaredField("name")
+
+                            val name = field.get(ele) as? String ?: continue
                             if (name == "短剧") {
                                 list.removeAt(i)
                             }

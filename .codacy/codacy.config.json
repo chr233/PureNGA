@@ -1,0 +1,5549 @@
+{
+  "version": 1,
+  "metadata": {
+    "source": "auto",
+    "provider": null,
+    "organization": null,
+    "repositoryId": null,
+    "repositoryName": null,
+    "createdAt": "2026-09-07T13:59:37.600Z",
+    "updatedAt": "2026-09-07T14:00:59.111Z",
+    "languages": [
+      "HTML",
+      "JSON",
+      "Javascript",
+      "Kotlin",
+      "Markdown",
+      "Prolog",
+      "XML",
+      "YAML"
+    ]
+  },
+  "tools": [
+    {
+      "toolId": "markdownlint",
+      "patterns": [
+        {
+          "patternId": "markdownlint_MD001"
+        },
+        {
+          "patternId": "markdownlint_MD003"
+        },
+        {
+          "patternId": "markdownlint_MD004"
+        },
+        {
+          "patternId": "markdownlint_MD005"
+        },
+        {
+          "patternId": "markdownlint_MD007"
+        },
+        {
+          "patternId": "markdownlint_MD010"
+        },
+        {
+          "patternId": "markdownlint_MD011"
+        },
+        {
+          "patternId": "markdownlint_MD012"
+        },
+        {
+          "patternId": "markdownlint_MD014"
+        },
+        {
+          "patternId": "markdownlint_MD018"
+        },
+        {
+          "patternId": "markdownlint_MD019"
+        },
+        {
+          "patternId": "markdownlint_MD020"
+        },
+        {
+          "patternId": "markdownlint_MD021"
+        },
+        {
+          "patternId": "markdownlint_MD022"
+        },
+        {
+          "patternId": "markdownlint_MD023"
+        },
+        {
+          "patternId": "markdownlint_MD024"
+        },
+        {
+          "patternId": "markdownlint_MD025"
+        },
+        {
+          "patternId": "markdownlint_MD026"
+        },
+        {
+          "patternId": "markdownlint_MD027"
+        },
+        {
+          "patternId": "markdownlint_MD028"
+        },
+        {
+          "patternId": "markdownlint_MD029"
+        },
+        {
+          "patternId": "markdownlint_MD030"
+        },
+        {
+          "patternId": "markdownlint_MD032"
+        },
+        {
+          "patternId": "markdownlint_MD033"
+        },
+        {
+          "patternId": "markdownlint_MD034"
+        },
+        {
+          "patternId": "markdownlint_MD035"
+        },
+        {
+          "patternId": "markdownlint_MD036"
+        },
+        {
+          "patternId": "markdownlint_MD037"
+        },
+        {
+          "patternId": "markdownlint_MD038"
+        },
+        {
+          "patternId": "markdownlint_MD039"
+        },
+        {
+          "patternId": "markdownlint_MD042"
+        },
+        {
+          "patternId": "markdownlint_MD044"
+        },
+        {
+          "patternId": "markdownlint_MD045"
+        },
+        {
+          "patternId": "markdownlint_MD046"
+        },
+        {
+          "patternId": "markdownlint_MD048"
+        },
+        {
+          "patternId": "markdownlint_MD049"
+        },
+        {
+          "patternId": "markdownlint_MD050"
+        },
+        {
+          "patternId": "markdownlint_MD051"
+        },
+        {
+          "patternId": "markdownlint_MD052"
+        },
+        {
+          "patternId": "markdownlint_MD053"
+        },
+        {
+          "patternId": "markdownlint_MD054"
+        },
+        {
+          "patternId": "markdownlint_MD055"
+        },
+        {
+          "patternId": "markdownlint_MD056"
+        }
+      ]
+    },
+    {
+      "toolId": "Semgrep",
+      "patterns": [
+        {
+          "patternId": "Semgrep_codacy.generic.security.detect-invisible-unicode"
+        },
+        {
+          "patternId": "Semgrep_codacy.javascript.security.hard-coded-password"
+        },
+        {
+          "patternId": "Semgrep_codacy.k8s.ingress.nginx.retirement.ingress-class"
+        },
+        {
+          "patternId": "Semgrep_codacy.k8s.ingress.nginx.retirement.ingress-resource"
+        },
+        {
+          "patternId": "Semgrep_codacy.k8s.ingress.nginx.retirement.workload"
+        },
+        {
+          "patternId": "Semgrep_dockerfile.security.dockerd-socket-mount.dockerfile-dockerd-socket-mount"
+        },
+        {
+          "patternId": "Semgrep_generic.secrets.security.detected-onfido-live-api-token.detected-onfido-live-api-token"
+        },
+        {
+          "patternId": "Semgrep_generic.secrets.security.detected-stripe-restricted-api-key.detected-stripe-restricted-api-key"
+        },
+        {
+          "patternId": "Semgrep_generic.secrets.security.detected-username-and-password-in-uri.detected-username-and-password-in-uri"
+        },
+        {
+          "patternId": "Semgrep_generic.secrets.security.google-maps-apikeyleak.google-maps-apikeyleak"
+        },
+        {
+          "patternId": "Semgrep_java.lang.security.audit.crypto.desede-is-deprecated.desede-is-deprecated"
+        },
+        {
+          "patternId": "Semgrep_java.lang.security.audit.crypto.des-is-deprecated.des-is-deprecated"
+        },
+        {
+          "patternId": "Semgrep_java.lang.security.audit.crypto.rsa-no-padding.rsa-no-padding"
+        },
+        {
+          "patternId": "Semgrep_javascript.argon2.security.unsafe-argon2-config.unsafe-argon2-config"
+        },
+        {
+          "patternId": "Semgrep_javascript.aws-lambda.security.detect-child-process.detect-child-process"
+        },
+        {
+          "patternId": "Semgrep_javascript.aws-lambda.security.dynamodb-request-object.dynamodb-request-object"
+        },
+        {
+          "patternId": "Semgrep_javascript.aws-lambda.security.knex-sqli.knex-sqli"
+        },
+        {
+          "patternId": "Semgrep_javascript.aws-lambda.security.mysql-sqli.mysql-sqli"
+        },
+        {
+          "patternId": "Semgrep_javascript.aws-lambda.security.pg-sqli.pg-sqli"
+        },
+        {
+          "patternId": "Semgrep_javascript.aws-lambda.security.sequelize-sqli.sequelize-sqli"
+        },
+        {
+          "patternId": "Semgrep_javascript.aws-lambda.security.tainted-html-response.tainted-html-response"
+        },
+        {
+          "patternId": "Semgrep_javascript.aws-lambda.security.tainted-html-string.tainted-html-string"
+        },
+        {
+          "patternId": "Semgrep_javascript.aws-lambda.security.vm-runincontext-injection.vm-runincontext-injection"
+        },
+        {
+          "patternId": "Semgrep_javascript.browser.security.open-redirect.js-open-redirect"
+        },
+        {
+          "patternId": "Semgrep_javascript.browser.security.raw-html-concat.raw-html-concat"
+        },
+        {
+          "patternId": "Semgrep_javascript.browser.security.wildcard-postmessage-configuration.wildcard-postmessage-configuration"
+        },
+        {
+          "patternId": "Semgrep_javascript.chrome-remote-interface.security.audit.chrome-remote-interface-compilescript-injection.chrome-remote-interface-compilescript-injection"
+        },
+        {
+          "patternId": "Semgrep_javascript.deno.security.audit.deno-dangerous-run.deno-dangerous-run"
+        },
+        {
+          "patternId": "Semgrep_javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash"
+        },
+        {
+          "patternId": "Semgrep_javascript.jose.security.jwt-hardcode.hardcoded-jwt-secret"
+        },
+        {
+          "patternId": "Semgrep_javascript.jose.security.jwt-none-alg.jwt-none-alg"
+        },
+        {
+          "patternId": "Semgrep_javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret"
+        },
+        {
+          "patternId": "Semgrep_javascript.jsonwebtoken.security.jwt-none-alg.jwt-none-alg"
+        },
+        {
+          "patternId": "Semgrep_javascript.jwt-simple.security.jwt-simple-noverify.jwt-simple-noverify"
+        },
+        {
+          "patternId": "Semgrep_javascript.lang.security.audit.code-string-concat.code-string-concat"
+        },
+        {
+          "patternId": "Semgrep_javascript.lang.security.audit.sqli.node-knex-sqli.node-knex-sqli"
+        },
+        {
+          "patternId": "Semgrep_javascript.lang.security.detect-eval-with-expression.detect-eval-with-expression"
+        },
+        {
+          "patternId": "Semgrep_javascript.node-crypto.security.aead-no-final.aead-no-final"
+        },
+        {
+          "patternId": "Semgrep_javascript.node-crypto.security.create-de-cipher-no-iv.create-de-cipher-no-iv"
+        },
+        {
+          "patternId": "Semgrep_javascript.node-crypto.security.gcm-no-tag-length.gcm-no-tag-length"
+        },
+        {
+          "patternId": "Semgrep_javascript.passport-jwt.security.passport-hardcode.hardcoded-passport-secret"
+        },
+        {
+          "patternId": "Semgrep_javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection"
+        },
+        {
+          "patternId": "Semgrep_kotlin.gradle.security.build-gradle-password-hardcoded.build-gradle-password-hardcoded"
+        },
+        {
+          "patternId": "Semgrep_kotlin.lang.security.anonymous-ldap-bind.anonymous-ldap-bind"
+        },
+        {
+          "patternId": "Semgrep_kotlin.lang.security.ecb-cipher.ecb-cipher"
+        },
+        {
+          "patternId": "Semgrep_kotlin.lang.security.no-null-cipher.no-null-cipher"
+        },
+        {
+          "patternId": "Semgrep_kotlin.lang.security.use-of-md5.use-of-md5"
+        },
+        {
+          "patternId": "Semgrep_kotlin.lang.security.use-of-sha1.use-of-sha1"
+        },
+        {
+          "patternId": "Semgrep_kotlin.lang.security.weak-rsa.use-of-weak-rsa-key"
+        },
+        {
+          "patternId": "Semgrep_kotlin_perm_rule-DangerousPermissions"
+        },
+        {
+          "patternId": "Semgrep_kotlin_perm_rule-OverlyPermissiveFilePermissionInline"
+        },
+        {
+          "patternId": "Semgrep_kotlin_strings_rule-BadHexConversion"
+        },
+        {
+          "patternId": "Semgrep_kotlin_strings_rule-FormatStringManipulation"
+        },
+        {
+          "patternId": "Semgrep_kotlin_strings_rule-ModifyAfterValidation"
+        },
+        {
+          "patternId": "Semgrep_kotlin_strings_rule-NormalizeAfterValidation"
+        },
+        {
+          "patternId": "Semgrep_problem-based-packs.insecure-transport.js-node.bypass-tls-verification.bypass-tls-verification"
+        },
+        {
+          "patternId": "Semgrep_problem-based-packs.insecure-transport.js-node.disallow-old-tls-versions1.disallow-old-tls-versions1"
+        },
+        {
+          "patternId": "Semgrep_problem-based-packs.insecure-transport.js-node.disallow-old-tls-versions2.disallow-old-tls-versions2"
+        },
+        {
+          "patternId": "Semgrep_problem-based-packs.insecure-transport.js-node.ftp-request.ftp-request"
+        },
+        {
+          "patternId": "Semgrep_problem-based-packs.insecure-transport.js-node.http-request.http-request"
+        },
+        {
+          "patternId": "Semgrep_problem-based-packs.insecure-transport.js-node.rest-http-client-support.rest-http-client-support"
+        },
+        {
+          "patternId": "Semgrep_problem-based-packs.insecure-transport.js-node.telnet-request.telnet-request"
+        },
+        {
+          "patternId": "Semgrep_properties_spring_rule-SpringActuatorFullyEnabled"
+        },
+        {
+          "patternId": "Semgrep_yaml.argo.security.argo-workflow-parameter-command-injection.argo-workflow-parameter-command-injection"
+        },
+        {
+          "patternId": "Semgrep_yaml.docker-compose.security.privileged-service.privileged-service"
+        },
+        {
+          "patternId": "Semgrep_yaml.github-actions.security.allowed-unsecure-commands.allowed-unsecure-commands"
+        },
+        {
+          "patternId": "Semgrep_yaml.github-actions.security.github-script-injection.github-script-injection"
+        },
+        {
+          "patternId": "Semgrep_yaml.github-actions.security.run-shell-injection.run-shell-injection"
+        },
+        {
+          "patternId": "Semgrep_yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha"
+        },
+        {
+          "patternId": "Semgrep_yaml.github-actions.security.workflow-run-target-code-checkout.workflow-run-target-code-checkout"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.allow-privilege-escalation.allow-privilege-escalation"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.allow-privilege-escalation-no-securitycontext.allow-privilege-escalation-no-securitycontext"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.allow-privilege-escalation-true.allow-privilege-escalation-true"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.exposing-docker-socket-hostpath.exposing-docker-socket-hostpath"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.legacy-api-clusterrole-excessive-permissions.legacy-api-clusterrole-excessive-permissions"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.privileged-container.privileged-container"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.run-as-non-root-unsafe-value.run-as-non-root-unsafe-value"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.seccomp-confinement-disabled.seccomp-confinement-disabled"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.secrets-in-config-file.secrets-in-config-file"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.skip-tls-verify-cluster.skip-tls-verify-cluster"
+        },
+        {
+          "patternId": "Semgrep_yaml.kubernetes.security.skip-tls-verify-service.skip-tls-verify-service"
+        },
+        {
+          "patternId": "Semgrep_yaml.openapi.security.openai-consequential-action-false.openai-consequential-action-false"
+        },
+        {
+          "patternId": "Semgrep_yaml.openapi.security.use-of-basic-authentication.use-of-basic-authentication"
+        },
+        {
+          "patternId": "Semgrep_yaml_spring_rule-SpringActuatorFullyEnabled"
+        },
+        {
+          "patternId": "Semgrep_json.aws.security.public-s3-bucket.public-s3-bucket"
+        },
+        {
+          "patternId": "Semgrep_json.aws.security.public-s3-policy-statement.public-s3-policy-statement"
+        },
+        {
+          "patternId": "Semgrep_json.aws.security.wildcard-assume-role.wildcard-assume-role"
+        }
+      ]
+    },
+    {
+      "toolId": "spectral",
+      "patterns": [
+        {
+          "patternId": "spectral_array-items"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-channel-no-empty-parameter"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-channel-no-query-nor-fragment"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-channel-no-trailing-slash"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-channel-servers"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-document-resolved"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-document-unresolved"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-headers-schema-type-object"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-operation-description"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-operation-security"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-payload-unsupported-schemaFormat"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-server-no-empty-variable"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-server-no-trailing-slash"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-tags"
+        },
+        {
+          "patternId": "spectral_asyncapi-3-tags-uniqueness"
+        },
+        {
+          "patternId": "spectral_asyncapi-channel-no-empty-parameter"
+        },
+        {
+          "patternId": "spectral_asyncapi-channel-no-query-nor-fragment"
+        },
+        {
+          "patternId": "spectral_asyncapi-channel-no-trailing-slash"
+        },
+        {
+          "patternId": "spectral_asyncapi-channel-parameters"
+        },
+        {
+          "patternId": "spectral_asyncapi-channel-servers"
+        },
+        {
+          "patternId": "spectral_asyncapi-headers-schema-type-object"
+        },
+        {
+          "patternId": "spectral_asyncapi-info-contact"
+        },
+        {
+          "patternId": "spectral_asyncapi-info-contact-properties"
+        },
+        {
+          "patternId": "spectral_asyncapi-info-description"
+        },
+        {
+          "patternId": "spectral_asyncapi-info-license"
+        },
+        {
+          "patternId": "spectral_asyncapi-latest-version"
+        },
+        {
+          "patternId": "spectral_asyncapi-message-examples"
+        },
+        {
+          "patternId": "spectral_asyncapi-message-messageId-uniqueness"
+        },
+        {
+          "patternId": "spectral_asyncapi-operation-description"
+        },
+        {
+          "patternId": "spectral_asyncapi-operation-operationId"
+        },
+        {
+          "patternId": "spectral_asyncapi-operation-operationId-uniqueness"
+        },
+        {
+          "patternId": "spectral_asyncapi-operation-security"
+        },
+        {
+          "patternId": "spectral_asyncapi-payload"
+        },
+        {
+          "patternId": "spectral_asyncapi-payload-default"
+        },
+        {
+          "patternId": "spectral_asyncapi-payload-examples"
+        },
+        {
+          "patternId": "spectral_asyncapi-payload-unsupported-schemaFormat"
+        },
+        {
+          "patternId": "spectral_asyncapi-schema"
+        },
+        {
+          "patternId": "spectral_asyncapi-schema-default"
+        },
+        {
+          "patternId": "spectral_asyncapi-schema-examples"
+        },
+        {
+          "patternId": "spectral_asyncapi-server-no-empty-variable"
+        },
+        {
+          "patternId": "spectral_asyncapi-server-no-trailing-slash"
+        },
+        {
+          "patternId": "spectral_asyncapi-servers"
+        },
+        {
+          "patternId": "spectral_asyncapi-server-security"
+        },
+        {
+          "patternId": "spectral_asyncapi-server-variables"
+        },
+        {
+          "patternId": "spectral_asyncapi-tags"
+        },
+        {
+          "patternId": "spectral_asyncapi-tags-uniqueness"
+        },
+        {
+          "patternId": "spectral_asyncapi-unused-components-schema"
+        },
+        {
+          "patternId": "spectral_asyncapi-unused-components-server"
+        },
+        {
+          "patternId": "spectral_duplicated-entry-in-enum"
+        },
+        {
+          "patternId": "spectral_info-contact"
+        },
+        {
+          "patternId": "spectral_info-description"
+        },
+        {
+          "patternId": "spectral_no-eval-in-markdown"
+        },
+        {
+          "patternId": "spectral_no-$ref-siblings"
+        },
+        {
+          "patternId": "spectral_no-script-tags-in-markdown"
+        },
+        {
+          "patternId": "spectral_oas2-anyOf"
+        },
+        {
+          "patternId": "spectral_oas2-api-host"
+        },
+        {
+          "patternId": "spectral_oas2-api-schemes"
+        },
+        {
+          "patternId": "spectral_oas2-discriminator"
+        },
+        {
+          "patternId": "spectral_oas2-host-trailing-slash"
+        },
+        {
+          "patternId": "spectral_oas2-oneOf"
+        },
+        {
+          "patternId": "spectral_oas2-operation-formData-consume-check"
+        },
+        {
+          "patternId": "spectral_oas2-operation-security-defined"
+        },
+        {
+          "patternId": "spectral_oas2-schema"
+        },
+        {
+          "patternId": "spectral_oas2-unused-definition"
+        },
+        {
+          "patternId": "spectral_oas2-valid-media-example"
+        },
+        {
+          "patternId": "spectral_oas2-valid-schema-example"
+        },
+        {
+          "patternId": "spectral_oas3_1-callbacks-in-webhook"
+        },
+        {
+          "patternId": "spectral_oas3_1-servers-in-webhook"
+        },
+        {
+          "patternId": "spectral_oas3-api-servers"
+        },
+        {
+          "patternId": "spectral_oas3-callbacks-in-callbacks"
+        },
+        {
+          "patternId": "spectral_oas3-examples-value-or-externalValue"
+        },
+        {
+          "patternId": "spectral_oas3-operation-security-defined"
+        },
+        {
+          "patternId": "spectral_oas3-schema"
+        },
+        {
+          "patternId": "spectral_oas3-server-trailing-slash"
+        },
+        {
+          "patternId": "spectral_oas3-server-variables"
+        },
+        {
+          "patternId": "spectral_oas3-unused-component"
+        },
+        {
+          "patternId": "spectral_oas3-valid-media-example"
+        },
+        {
+          "patternId": "spectral_oas3-valid-schema-example"
+        },
+        {
+          "patternId": "spectral_openapi-tags-uniqueness"
+        },
+        {
+          "patternId": "spectral_operation-description"
+        },
+        {
+          "patternId": "spectral_operation-operationId"
+        },
+        {
+          "patternId": "spectral_operation-operationId-unique"
+        },
+        {
+          "patternId": "spectral_operation-operationId-valid-in-url"
+        },
+        {
+          "patternId": "spectral_operation-parameters"
+        },
+        {
+          "patternId": "spectral_operation-success-response"
+        },
+        {
+          "patternId": "spectral_operation-tag-defined"
+        },
+        {
+          "patternId": "spectral_operation-tags"
+        },
+        {
+          "patternId": "spectral_path-declarations-must-exist"
+        },
+        {
+          "patternId": "spectral_path-keys-no-trailing-slash"
+        },
+        {
+          "patternId": "spectral_path-not-include-query"
+        },
+        {
+          "patternId": "spectral_path-params"
+        },
+        {
+          "patternId": "spectral_typed-enum"
+        }
+      ]
+    },
+    {
+      "toolId": "ESLint9",
+      "patterns": [
+        {
+          "patternId": "ESLint9_constructor-super"
+        },
+        {
+          "patternId": "ESLint9_for-direction"
+        },
+        {
+          "patternId": "ESLint9_getter-return"
+        },
+        {
+          "patternId": "ESLint9_no-async-promise-executor"
+        },
+        {
+          "patternId": "ESLint9_no-case-declarations"
+        },
+        {
+          "patternId": "ESLint9_no-class-assign"
+        },
+        {
+          "patternId": "ESLint9_no-compare-neg-zero"
+        },
+        {
+          "patternId": "ESLint9_no-cond-assign"
+        },
+        {
+          "patternId": "ESLint9_no-constant-binary-expression"
+        },
+        {
+          "patternId": "ESLint9_no-constant-condition"
+        },
+        {
+          "patternId": "ESLint9_no-const-assign"
+        },
+        {
+          "patternId": "ESLint9_no-control-regex"
+        },
+        {
+          "patternId": "ESLint9_no-debugger"
+        },
+        {
+          "patternId": "ESLint9_no-delete-var"
+        },
+        {
+          "patternId": "ESLint9_no-dupe-args"
+        },
+        {
+          "patternId": "ESLint9_no-dupe-class-members"
+        },
+        {
+          "patternId": "ESLint9_no-dupe-else-if"
+        },
+        {
+          "patternId": "ESLint9_no-dupe-keys"
+        },
+        {
+          "patternId": "ESLint9_no-duplicate-case"
+        },
+        {
+          "patternId": "ESLint9_no-empty"
+        },
+        {
+          "patternId": "ESLint9_no-empty-character-class"
+        },
+        {
+          "patternId": "ESLint9_no-empty-pattern"
+        },
+        {
+          "patternId": "ESLint9_no-empty-static-block"
+        },
+        {
+          "patternId": "ESLint9_no-ex-assign"
+        },
+        {
+          "patternId": "ESLint9_no-extra-boolean-cast"
+        },
+        {
+          "patternId": "ESLint9_no-fallthrough"
+        },
+        {
+          "patternId": "ESLint9_no-func-assign"
+        },
+        {
+          "patternId": "ESLint9_no-global-assign"
+        },
+        {
+          "patternId": "ESLint9_no-import-assign"
+        },
+        {
+          "patternId": "ESLint9_no-invalid-regexp"
+        },
+        {
+          "patternId": "ESLint9_no-irregular-whitespace"
+        },
+        {
+          "patternId": "ESLint9_no-loss-of-precision"
+        },
+        {
+          "patternId": "ESLint9_no-misleading-character-class"
+        },
+        {
+          "patternId": "ESLint9_no-new-native-nonconstructor"
+        },
+        {
+          "patternId": "ESLint9_no-nonoctal-decimal-escape"
+        },
+        {
+          "patternId": "ESLint9_no-obj-calls"
+        },
+        {
+          "patternId": "ESLint9_no-octal"
+        },
+        {
+          "patternId": "ESLint9_no-prototype-builtins"
+        },
+        {
+          "patternId": "ESLint9_no-redeclare"
+        },
+        {
+          "patternId": "ESLint9_no-regex-spaces"
+        },
+        {
+          "patternId": "ESLint9_no-self-assign"
+        },
+        {
+          "patternId": "ESLint9_no-setter-return"
+        },
+        {
+          "patternId": "ESLint9_no-shadow-restricted-names"
+        },
+        {
+          "patternId": "ESLint9_no-sparse-arrays"
+        },
+        {
+          "patternId": "ESLint9_no-this-before-super"
+        },
+        {
+          "patternId": "ESLint9_no-undef"
+        },
+        {
+          "patternId": "ESLint9_no-unexpected-multiline"
+        },
+        {
+          "patternId": "ESLint9_no-unreachable"
+        },
+        {
+          "patternId": "ESLint9_no-unsafe-finally"
+        },
+        {
+          "patternId": "ESLint9_no-unsafe-negation"
+        },
+        {
+          "patternId": "ESLint9_no-unsafe-optional-chaining"
+        },
+        {
+          "patternId": "ESLint9_no-unused-labels"
+        },
+        {
+          "patternId": "ESLint9_no-unused-private-class-members"
+        },
+        {
+          "patternId": "ESLint9_no-unused-vars"
+        },
+        {
+          "patternId": "ESLint9_no-useless-backreference"
+        },
+        {
+          "patternId": "ESLint9_no-useless-catch"
+        },
+        {
+          "patternId": "ESLint9_no-useless-escape"
+        },
+        {
+          "patternId": "ESLint9_no-with"
+        },
+        {
+          "patternId": "ESLint9_require-yield"
+        },
+        {
+          "patternId": "ESLint9_security_detect-bidi-characters"
+        },
+        {
+          "patternId": "ESLint9_security_detect-buffer-noassert"
+        },
+        {
+          "patternId": "ESLint9_security_detect-child-process"
+        },
+        {
+          "patternId": "ESLint9_security_detect-disable-mustache-escape"
+        },
+        {
+          "patternId": "ESLint9_security_detect-eval-with-expression"
+        },
+        {
+          "patternId": "ESLint9_security_detect-new-buffer"
+        },
+        {
+          "patternId": "ESLint9_security_detect-no-csrf-before-method-override"
+        },
+        {
+          "patternId": "ESLint9_security_detect-non-literal-fs-filename"
+        },
+        {
+          "patternId": "ESLint9_security_detect-non-literal-regexp"
+        },
+        {
+          "patternId": "ESLint9_security_detect-non-literal-require"
+        },
+        {
+          "patternId": "ESLint9_security_detect-object-injection"
+        },
+        {
+          "patternId": "ESLint9_security_detect-possible-timing-attacks"
+        },
+        {
+          "patternId": "ESLint9_security_detect-pseudoRandomBytes"
+        },
+        {
+          "patternId": "ESLint9_security_detect-unsafe-regex"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-absence-of-name-option-in-exrpress-session"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-child-process"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-dangerous-redirects"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-eval-with-expr"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-html-injection"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-improper-exception-handling"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-non-literal-require-calls"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-nosql-injection"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-option-multiplestatements-in-mysql"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-option-rejectunauthorized-in-nodejs-httpsrequest"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-option-unsafe-in-serialize-javascript-npm-package"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-possible-timing-attacks"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-security-missconfiguration-cookie"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-unhandled-async-errors"
+        },
+        {
+          "patternId": "ESLint9_security-node_detect-unhandled-event-errors"
+        },
+        {
+          "patternId": "ESLint9_security-node_disable-ssl-across-node-server"
+        },
+        {
+          "patternId": "ESLint9_security-node_non-literal-reg-expr"
+        },
+        {
+          "patternId": "ESLint9_use-isnan"
+        },
+        {
+          "patternId": "ESLint9_valid-typeof"
+        },
+        {
+          "patternId": "ESLint9_xss_no-location-href-assign"
+        }
+      ]
+    },
+    {
+      "toolId": "Checkov",
+      "patterns": [
+        {
+          "patternId": "Checkov_CKV2_ADO_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_ANSIBLE_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_ANSIBLE_2"
+        },
+        {
+          "patternId": "Checkov_CKV2_ANSIBLE_3"
+        },
+        {
+          "patternId": "Checkov_CKV2_ANSIBLE_4"
+        },
+        {
+          "patternId": "Checkov_CKV2_ANSIBLE_5"
+        },
+        {
+          "patternId": "Checkov_CKV2_ANSIBLE_6"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_10"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_11"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_12"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_14"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_18"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_19"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_2"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_20"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_21"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_22"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_27"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_28"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_29"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_3"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_30"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_31"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_32"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_33"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_34"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_35"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_36"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_37"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_38"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_39"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_4"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_40"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_41"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_42"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_43"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_44"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_45"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_46"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_47"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_48"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_49"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_5"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_50"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_51"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_52"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_53"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_54"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_55"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_56"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_57"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_58"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_6"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_62"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_63"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_64"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_65"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_66"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_68"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_69"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_7"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_70"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_71"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_72"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_73"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_74"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_75"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_76"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_77"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_78"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_8"
+        },
+        {
+          "patternId": "Checkov_CKV2_AWS_9"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_10"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_11"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_12"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_13"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_14"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_15"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_16"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_17"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_19"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_2"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_20"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_21"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_22"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_23"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_24"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_25"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_26"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_27"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_28"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_29"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_3"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_30"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_31"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_32"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_33"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_34"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_35"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_36"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_37"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_38"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_39"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_4"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_40"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_41"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_42"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_43"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_44"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_45"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_46"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_47"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_48"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_49"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_5"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_50"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_51"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_52"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_53"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_54"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_55"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_56"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_57"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_6"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_7"
+        },
+        {
+          "patternId": "Checkov_CKV2_AZURE_8"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_10"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_11"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_12"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_14"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_18"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_19"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_2"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_20"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_21"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_22"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_23"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_24"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_25"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_26"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_27"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_28"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_29"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_3"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_30"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_31"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_32"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_33"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_34"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_35"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_36"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_37"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_38"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_4"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_5"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_6"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_7"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_8"
+        },
+        {
+          "patternId": "Checkov_CKV2_GCP_9"
+        },
+        {
+          "patternId": "Checkov_CKV2_GHA_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_GIT_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_IBM_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_IBM_2"
+        },
+        {
+          "patternId": "Checkov_CKV2_IBM_3"
+        },
+        {
+          "patternId": "Checkov_CKV2_IBM_4"
+        },
+        {
+          "patternId": "Checkov_CKV2_IBM_5"
+        },
+        {
+          "patternId": "Checkov_CKV2_IBM_7"
+        },
+        {
+          "patternId": "Checkov_CKV2_K8S_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_K8S_2"
+        },
+        {
+          "patternId": "Checkov_CKV2_K8S_3"
+        },
+        {
+          "patternId": "Checkov_CKV2_K8S_4"
+        },
+        {
+          "patternId": "Checkov_CKV2_K8S_5"
+        },
+        {
+          "patternId": "Checkov_CKV2_K8S_6"
+        },
+        {
+          "patternId": "Checkov_CKV2_OCI_1"
+        },
+        {
+          "patternId": "Checkov_CKV2_OCI_2"
+        },
+        {
+          "patternId": "Checkov_CKV2_OCI_3"
+        },
+        {
+          "patternId": "Checkov_CKV2_OCI_4"
+        },
+        {
+          "patternId": "Checkov_CKV2_OCI_5"
+        },
+        {
+          "patternId": "Checkov_CKV2_OCI_6"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_1"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_10"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_12"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_13"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_14"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_15"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_16"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_17"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_18"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_19"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_2"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_20"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_21"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_22"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_23"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_24"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_25"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_26"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_27"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_28"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_29"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_3"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_30"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_31"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_32"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_33"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_36"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_37"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_38"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_4"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_41"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_42"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_43"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_44"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_5"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_6"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_7"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_8"
+        },
+        {
+          "patternId": "Checkov_CKV_ALI_9"
+        },
+        {
+          "patternId": "Checkov_CKV_ANSIBLE_1"
+        },
+        {
+          "patternId": "Checkov_CKV_ANSIBLE_2"
+        },
+        {
+          "patternId": "Checkov_CKV_ANSIBLE_3"
+        },
+        {
+          "patternId": "Checkov_CKV_ANSIBLE_4"
+        },
+        {
+          "patternId": "Checkov_CKV_ANSIBLE_5"
+        },
+        {
+          "patternId": "Checkov_CKV_ANSIBLE_6"
+        },
+        {
+          "patternId": "Checkov_CKV_ARGO_1"
+        },
+        {
+          "patternId": "Checkov_CKV_ARGO_2"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_1"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_10"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_100"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_101"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_102"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_103"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_104"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_105"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_106"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_107"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_108"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_109"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_11"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_110"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_111"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_112"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_113"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_114"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_117"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_118"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_119"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_12"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_121"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_122"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_123"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_124"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_127"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_129"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_13"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_130"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_131"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_133"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_134"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_136"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_137"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_139"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_14"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_140"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_141"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_142"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_143"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_144"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_145"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_146"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_147"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_148"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_149"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_15"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_150"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_154"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_155"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_156"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_157"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_158"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_159"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_16"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_160"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_161"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_162"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_163"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_164"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_165"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_166"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_167"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_168"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_169"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_17"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_170"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_171"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_172"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_173"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_174"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_175"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_176"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_177"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_178"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_179"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_18"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_180"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_181"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_182"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_183"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_184"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_185"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_186"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_187"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_189"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_19"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_190"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_191"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_192"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_193"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_194"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_195"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_196"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_197"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_198"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_199"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_2"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_20"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_200"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_201"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_202"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_203"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_204"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_205"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_206"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_207"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_208"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_209"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_21"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_210"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_211"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_212"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_213"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_214"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_215"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_218"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_219"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_22"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_220"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_221"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_222"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_223"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_224"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_226"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_227"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_228"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_229"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_23"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_230"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_231"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_232"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_234"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_235"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_236"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_238"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_239"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_24"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_240"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_241"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_242"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_243"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_244"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_245"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_246"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_247"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_248"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_249"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_25"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_250"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_251"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_252"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_253"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_254"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_255"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_256"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_257"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_258"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_259"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_26"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_260"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_262"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_263"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_264"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_265"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_266"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_267"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_268"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_269"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_27"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_270"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_271"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_272"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_273"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_274"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_275"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_276"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_277"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_278"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_279"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_28"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_280"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_281"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_282"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_283"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_284"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_285"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_286"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_287"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_288"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_289"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_29"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_290"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_291"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_292"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_293"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_294"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_295"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_296"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_297"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_298"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_3"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_30"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_301"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_302"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_303"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_304"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_306"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_307"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_308"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_309"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_31"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_311"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_312"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_314"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_316"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_317"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_319"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_32"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_320"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_321"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_322"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_323"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_324"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_325"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_327"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_328"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_329"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_33"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_330"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_331"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_332"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_333"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_334"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_335"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_336"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_337"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_338"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_339"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_34"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_340"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_341"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_342"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_343"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_344"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_345"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_346"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_347"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_348"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_349"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_35"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_350"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_351"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_352"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_354"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_355"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_356"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_357"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_358"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_359"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_36"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_360"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_361"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_363"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_364"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_365"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_366"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_367"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_368"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_369"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_37"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_370"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_371"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_372"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_373"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_374"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_375"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_376"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_377"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_378"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_379"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_38"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_380"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_381"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_382"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_383"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_384"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_385"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_386"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_387"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_388"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_389"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_39"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_390"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_391"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_392"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_40"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_41"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_42"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_43"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_44"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_45"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_46"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_47"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_48"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_49"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_5"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_50"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_51"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_53"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_54"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_55"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_56"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_57"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_58"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_59"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_6"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_60"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_61"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_62"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_63"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_64"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_65"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_67"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_68"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_69"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_7"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_70"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_71"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_72"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_73"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_74"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_75"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_76"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_77"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_78"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_79"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_8"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_80"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_81"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_82"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_83"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_84"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_85"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_86"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_87"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_88"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_89"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_9"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_90"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_91"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_92"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_93"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_94"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_95"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_96"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_97"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_98"
+        },
+        {
+          "patternId": "Checkov_CKV_AWS_99"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_1"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_10"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_100"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_101"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_102"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_104"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_105"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_106"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_107"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_108"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_109"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_11"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_110"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_111"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_112"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_113"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_114"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_115"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_116"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_117"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_118"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_119"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_12"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_120"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_121"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_122"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_123"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_124"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_125"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_126"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_127"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_128"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_129"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_13"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_130"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_131"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_132"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_133"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_134"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_135"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_137"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_138"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_139"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_14"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_140"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_141"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_142"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_143"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_144"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_145"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_146"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_147"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_148"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_149"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_15"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_151"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_152"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_153"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_154"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_155"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_156"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_157"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_158"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_159"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_16"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_160"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_161"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_162"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_163"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_164"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_166"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_17"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_172"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_173"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_174"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_176"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_177"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_178"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_179"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_18"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_181"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_182"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_183"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_184"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_185"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_186"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_187"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_189"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_190"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_191"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_192"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_193"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_194"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_195"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_196"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_197"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_198"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_199"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_2"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_20"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_200"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_201"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_202"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_203"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_204"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_205"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_206"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_207"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_21"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_210"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_215"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_216"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_217"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_218"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_219"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_22"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_220"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_221"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_222"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_223"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_224"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_226"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_227"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_23"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_230"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_232"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_234"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_235"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_236"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_237"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_238"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_239"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_24"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_240"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_241"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_242"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_243"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_244"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_245"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_246"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_247"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_248"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_249"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_25"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_250"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_251"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_26"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_27"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_28"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_29"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_3"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_30"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_31"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_32"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_33"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_34"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_35"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_36"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_37"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_38"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_39"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_4"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_40"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_41"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_42"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_44"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_45"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_47"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_48"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_49"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_5"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_50"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_52"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_53"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_54"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_55"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_56"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_57"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_58"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_59"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_6"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_61"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_62"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_63"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_64"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_66"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_68"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_69"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_7"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_70"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_71"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_72"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_73"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_74"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_75"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_76"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_77"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_78"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_79"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_8"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_80"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_81"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_82"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_83"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_84"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_85"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_86"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_87"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_89"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_9"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_91"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_92"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_93"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_94"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_95"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_96"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_97"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_98"
+        },
+        {
+          "patternId": "Checkov_CKV_AZURE_99"
+        },
+        {
+          "patternId": "Checkov_CKV_BCW_1"
+        },
+        {
+          "patternId": "Checkov_CKV_BITBUCKET_1"
+        },
+        {
+          "patternId": "Checkov_CKV_DIO_1"
+        },
+        {
+          "patternId": "Checkov_CKV_DIO_2"
+        },
+        {
+          "patternId": "Checkov_CKV_DIO_3"
+        },
+        {
+          "patternId": "Checkov_CKV_DIO_4"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_1"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_10"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_100"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_101"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_102"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_103"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_104"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_105"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_106"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_107"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_108"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_109"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_11"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_110"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_111"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_112"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_113"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_114"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_115"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_116"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_117"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_118"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_119"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_12"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_120"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_121"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_122"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_123"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_124"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_125"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_126"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_127"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_13"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_14"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_15"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_16"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_17"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_18"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_2"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_20"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_21"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_22"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_23"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_24"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_25"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_26"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_27"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_28"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_29"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_3"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_30"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_31"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_32"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_33"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_34"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_35"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_36"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_37"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_38"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_39"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_4"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_40"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_41"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_42"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_43"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_44"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_45"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_46"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_47"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_48"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_49"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_50"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_52"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_53"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_55"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_57"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_58"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_59"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_6"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_60"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_61"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_62"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_63"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_64"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_65"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_66"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_68"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_69"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_7"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_70"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_71"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_72"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_73"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_74"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_75"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_76"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_77"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_78"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_79"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_8"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_80"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_81"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_82"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_83"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_84"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_85"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_86"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_87"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_88"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_89"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_9"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_90"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_91"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_92"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_93"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_94"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_95"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_96"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_97"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_98"
+        },
+        {
+          "patternId": "Checkov_CKV_GCP_99"
+        },
+        {
+          "patternId": "Checkov_CKV_GHA_1"
+        },
+        {
+          "patternId": "Checkov_CKV_GHA_2"
+        },
+        {
+          "patternId": "Checkov_CKV_GHA_3"
+        },
+        {
+          "patternId": "Checkov_CKV_GHA_4"
+        },
+        {
+          "patternId": "Checkov_CKV_GHA_5"
+        },
+        {
+          "patternId": "Checkov_CKV_GHA_6"
+        },
+        {
+          "patternId": "Checkov_CKV_GHA_7"
+        },
+        {
+          "patternId": "Checkov_CKV_GIT_1"
+        },
+        {
+          "patternId": "Checkov_CKV_GIT_2"
+        },
+        {
+          "patternId": "Checkov_CKV_GIT_3"
+        },
+        {
+          "patternId": "Checkov_CKV_GIT_4"
+        },
+        {
+          "patternId": "Checkov_CKV_GIT_5"
+        },
+        {
+          "patternId": "Checkov_CKV_GIT_6"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_1"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_10"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_11"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_12"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_13"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_14"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_15"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_16"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_17"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_18"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_19"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_2"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_20"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_21"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_22"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_23"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_26"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_27"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_28"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_3"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_4"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_5"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_6"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_7"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_8"
+        },
+        {
+          "patternId": "Checkov_CKV_GITHUB_9"
+        },
+        {
+          "patternId": "Checkov_CKV_GITLAB_1"
+        },
+        {
+          "patternId": "Checkov_CKV_GLB_1"
+        },
+        {
+          "patternId": "Checkov_CKV_GLB_2"
+        },
+        {
+          "patternId": "Checkov_CKV_GLB_3"
+        },
+        {
+          "patternId": "Checkov_CKV_GLB_4"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_1"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_10"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_100"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_102"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_104"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_105"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_106"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_107"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_108"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_11"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_110"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_111"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_112"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_113"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_114"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_115"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_116"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_117"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_118"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_119"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_12"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_121"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_13"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_138"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_139"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_14"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_140"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_141"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_143"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_144"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_145"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_146"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_147"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_148"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_149"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_15"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_151"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_152"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_153"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_154"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_155"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_156"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_157"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_158"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_159"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_16"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_17"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_18"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_19"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_2"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_20"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_21"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_22"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_23"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_24"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_25"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_26"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_27"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_28"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_29"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_3"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_30"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_31"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_32"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_33"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_34"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_35"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_36"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_37"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_38"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_39"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_4"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_40"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_41"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_42"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_43"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_44"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_45"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_49"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_5"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_6"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_68"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_69"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_7"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_70"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_71"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_72"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_73"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_74"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_75"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_77"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_78"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_79"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_8"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_80"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_81"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_82"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_83"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_84"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_85"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_86"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_88"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_89"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_9"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_90"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_91"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_92"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_93"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_94"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_95"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_96"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_97"
+        },
+        {
+          "patternId": "Checkov_CKV_K8S_99"
+        },
+        {
+          "patternId": "Checkov_CKV_LIN_1"
+        },
+        {
+          "patternId": "Checkov_CKV_LIN_2"
+        },
+        {
+          "patternId": "Checkov_CKV_LIN_3"
+        },
+        {
+          "patternId": "Checkov_CKV_LIN_4"
+        },
+        {
+          "patternId": "Checkov_CKV_LIN_5"
+        },
+        {
+          "patternId": "Checkov_CKV_LIN_6"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_1"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_10"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_11"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_12"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_13"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_14"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_15"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_16"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_18"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_19"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_2"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_20"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_22"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_23"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_24"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_25"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_26"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_3"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_4"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_5"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_6"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_7"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_8"
+        },
+        {
+          "patternId": "Checkov_CKV_NCP_9"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_1"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_10"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_11"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_12"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_13"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_14"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_15"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_16"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_17"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_18"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_19"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_2"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_20"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_21"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_22"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_23"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_3"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_4"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_5"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_6"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_7"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_8"
+        },
+        {
+          "patternId": "Checkov_CKV_OCI_9"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_1"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_10"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_11"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_12"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_13"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_14"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_15"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_16"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_17"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_18"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_19"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_2"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_20"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_21"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_3"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_4"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_5"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_6"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_7"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_8"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENAPI_9"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENSTACK_1"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENSTACK_2"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENSTACK_3"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENSTACK_4"
+        },
+        {
+          "patternId": "Checkov_CKV_OPENSTACK_5"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_1"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_10"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_11"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_12"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_13"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_14"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_15"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_16"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_17"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_2"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_3"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_4"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_5"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_6"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_7"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_8"
+        },
+        {
+          "patternId": "Checkov_CKV_PAN_9"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_1"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_11"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_12"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_13"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_14"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_15"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_16"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_17"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_18"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_19"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_2"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_3"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_4"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_5"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_6"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_7"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_8"
+        },
+        {
+          "patternId": "Checkov_CKV_SECRET_9"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_1"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_10"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_11"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_12"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_13"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_14"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_2"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_3"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_4"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_5"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_6"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_7"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_8"
+        },
+        {
+          "patternId": "Checkov_CKV_TC_9"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_1"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_10"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_11"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_12"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_13"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_14"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_15"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_16"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_17"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_18"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_19"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_2"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_20"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_21"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_22"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_23"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_24"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_3"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_4"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_5"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_6"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_7"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_8"
+        },
+        {
+          "patternId": "Checkov_CKV_YC_9"
+        }
+      ]
+    },
+    {
+      "toolId": "Lizard",
+      "patterns": [
+        {
+          "patternId": "Lizard_ccn-minor"
+        },
+        {
+          "patternId": "Lizard_file-nloc-medium"
+        },
+        {
+          "patternId": "Lizard_nloc-medium"
+        },
+        {
+          "patternId": "Lizard_parameter-count-medium"
+        }
+      ]
+    },
+    {
+      "toolId": "PMD7",
+      "patterns": [
+        {
+          "patternId": "PMD7_category_ecmascript_bestpractices_AvoidWithStatement"
+        },
+        {
+          "patternId": "PMD7_category_ecmascript_bestpractices_ConsistentReturn"
+        },
+        {
+          "patternId": "PMD7_category_ecmascript_bestpractices_UseBaseWithParseInt"
+        },
+        {
+          "patternId": "PMD7_category_ecmascript_codestyle_AssignmentInOperand"
+        },
+        {
+          "patternId": "PMD7_category_ecmascript_codestyle_UnnecessaryBlock"
+        },
+        {
+          "patternId": "PMD7_category_ecmascript_errorprone_EqualComparison"
+        },
+        {
+          "patternId": "PMD7_category_jsp_bestpractices_NoClassAttribute"
+        },
+        {
+          "patternId": "PMD7_category_jsp_design_NoInlineScript"
+        },
+        {
+          "patternId": "PMD7_category_pom_errorprone_InvalidDependencyTypes"
+        },
+        {
+          "patternId": "PMD7_category_pom_errorprone_ProjectVersionAsDependencyVersion"
+        },
+        {
+          "patternId": "PMD7_category_xml_errorprone_MistypedCDATASection"
+        },
+        {
+          "patternId": "PMD7_category_xsl_codestyle_UseConcatOnce"
+        },
+        {
+          "patternId": "PMD7_category_xsl_performance_AvoidAxisNavigation"
+        }
+      ]
+    },
+    {
+      "toolId": "detekt",
+      "patterns": [
+        {
+          "patternId": "CommentOverPrivateFunction"
+        },
+        {
+          "patternId": "CommentOverPrivateProperty"
+        },
+        {
+          "patternId": "ComplexCondition"
+        },
+        {
+          "patternId": "EmptyCatchBlock"
+        },
+        {
+          "patternId": "EmptyClassBlock"
+        },
+        {
+          "patternId": "EmptyDefaultConstructor"
+        },
+        {
+          "patternId": "EmptyDoWhileBlock"
+        },
+        {
+          "patternId": "EmptyElseBlock"
+        },
+        {
+          "patternId": "EmptyFinallyBlock"
+        },
+        {
+          "patternId": "EmptyForBlock"
+        },
+        {
+          "patternId": "EmptyFunctionBlock"
+        },
+        {
+          "patternId": "EmptyIfBlock"
+        },
+        {
+          "patternId": "EmptyInitBlock"
+        },
+        {
+          "patternId": "EmptySecondaryConstructor"
+        },
+        {
+          "patternId": "EmptyWhenBlock"
+        },
+        {
+          "patternId": "EmptyWhileBlock"
+        },
+        {
+          "patternId": "EqualsAlwaysReturnsTrueOrFalse"
+        },
+        {
+          "patternId": "EqualsWithHashCodeExist"
+        },
+        {
+          "patternId": "ExplicitGarbageCollectionCall"
+        },
+        {
+          "patternId": "ForEachOnRange"
+        },
+        {
+          "patternId": "IteratorNotThrowingNoSuchElementException"
+        },
+        {
+          "patternId": "LabeledExpression"
+        },
+        {
+          "patternId": "LargeClass"
+        },
+        {
+          "patternId": "LongMethod"
+        },
+        {
+          "patternId": "LongParameterList"
+        },
+        {
+          "patternId": "NestedBlockDepth"
+        },
+        {
+          "patternId": "RethrowCaughtException"
+        },
+        {
+          "patternId": "ReturnFromFinally"
+        },
+        {
+          "patternId": "SpreadOperator"
+        },
+        {
+          "patternId": "StringLiteralDuplication"
+        },
+        {
+          "patternId": "ThrowingExceptionFromFinally"
+        },
+        {
+          "patternId": "ThrowingNewInstanceOfSameException"
+        },
+        {
+          "patternId": "TooGenericExceptionCaught"
+        },
+        {
+          "patternId": "TooGenericExceptionThrown"
+        },
+        {
+          "patternId": "TooManyFunctions"
+        },
+        {
+          "patternId": "UndocumentedPublicClass"
+        },
+        {
+          "patternId": "UndocumentedPublicFunction"
+        },
+        {
+          "patternId": "UnnecessaryTemporaryInstantiation"
+        },
+        {
+          "patternId": "UnsafeCallOnNullableType"
+        },
+        {
+          "patternId": "UnsafeCast"
+        },
+        {
+          "patternId": "UselessPostfixExpression"
+        },
+        {
+          "patternId": "WrongEqualsTypeParameter"
+        }
+      ]
+    },
+    {
+      "toolId": "Biome",
+      "patterns": [
+        {
+          "patternId": "Biome_lint_a11y_noAccessKey"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noAriaHiddenOnFocusable"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noAriaUnsupportedElements"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noAutofocus"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noDistractingElements"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noHeaderScope"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noInteractiveElementToNoninteractiveRole"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noLabelWithoutControl"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noNoninteractiveElementToInteractiveRole"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noNoninteractiveTabindex"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noPositiveTabindex"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noRedundantAlt"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noRedundantRoles"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noStaticElementInteractions"
+        },
+        {
+          "patternId": "Biome_lint_a11y_noSvgWithoutTitle"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useAltText"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useAnchorContent"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useAriaActivedescendantWithTabindex"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useAriaPropsForRole"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useAriaPropsSupportedByRole"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useButtonType"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useFocusableInteractive"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useGenericFontNames"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useHeadingContent"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useHtmlLang"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useIframeTitle"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useKeyWithClickEvents"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useKeyWithMouseEvents"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useMediaCaption"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useSemanticElements"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useValidAnchor"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useValidAriaProps"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useValidAriaRole"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useValidAriaValues"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useValidAutocomplete"
+        },
+        {
+          "patternId": "Biome_lint_a11y_useValidLang"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noAdjacentSpacesInRegex"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noArguments"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noBannedTypes"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noCommaOperator"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noEmptyTypeParameters"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noExtraBooleanCast"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noFlatMapIdentity"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noImportantStyles"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noStaticOnlyClass"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noThisInStatic"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessCatch"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessConstructor"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessContinue"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessEmptyExport"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessEscapeInRegex"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessFragments"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessLabel"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessLoneBlockStatements"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessRename"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessStringRaw"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessSwitchCase"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessTernary"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessThisAlias"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessTypeConstraint"
+        },
+        {
+          "patternId": "Biome_lint_complexity_noUselessUndefinedInitialization"
+        },
+        {
+          "patternId": "Biome_lint_complexity_useArrowFunction"
+        },
+        {
+          "patternId": "Biome_lint_complexity_useDateNow"
+        },
+        {
+          "patternId": "Biome_lint_complexity_useFlatMap"
+        },
+        {
+          "patternId": "Biome_lint_complexity_useIndexOf"
+        },
+        {
+          "patternId": "Biome_lint_complexity_useLiteralKeys"
+        },
+        {
+          "patternId": "Biome_lint_complexity_useNumericLiterals"
+        },
+        {
+          "patternId": "Biome_lint_complexity_useOptionalChain"
+        },
+        {
+          "patternId": "Biome_lint_complexity_useRegexLiterals"
+        },
+        {
+          "patternId": "Biome_lint_complexity_useSimpleNumberKeys"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noConstantCondition"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noConstantMathMinMaxClamp"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noConstAssign"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noConstructorReturn"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noEmptyCharacterClassInRegex"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noEmptyPattern"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noGlobalObjectCalls"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noInnerDeclarations"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noInvalidBuiltinInstantiation"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noInvalidConstructorSuper"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noInvalidDirectionInLinearGradient"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noInvalidGridAreas"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noInvalidPositionAtImportRule"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noInvalidUseBeforeDeclaration"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noMissingVarFunction"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noNonoctalDecimalEscape"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noPrecisionLoss"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noPrivateImports"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noSelfAssign"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noSetterReturn"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noStringCaseMismatch"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noSwitchDeclarations"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnknownFunction"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnknownMediaFeatureName"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnknownProperty"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnknownPseudoClass"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnknownPseudoElement"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnknownTypeSelector"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnknownUnit"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnmatchableAnbSelector"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnreachable"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnreachableSuper"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnsafeFinally"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnsafeOptionalChaining"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnusedFunctionParameters"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnusedImports"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnusedLabels"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnusedPrivateClassMembers"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noUnusedVariables"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noVoidElementsWithChildren"
+        },
+        {
+          "patternId": "Biome_lint_correctness_noVoidTypeReturn"
+        },
+        {
+          "patternId": "Biome_lint_correctness_useGraphqlNamedOperations"
+        },
+        {
+          "patternId": "Biome_lint_correctness_useIsNan"
+        },
+        {
+          "patternId": "Biome_lint_correctness_useParseIntRadix"
+        },
+        {
+          "patternId": "Biome_lint_correctness_useValidForDirection"
+        },
+        {
+          "patternId": "Biome_lint_correctness_useValidTypeof"
+        },
+        {
+          "patternId": "Biome_lint_correctness_useYield"
+        },
+        {
+          "patternId": "Biome_lint_performance_noAccumulatingSpread"
+        },
+        {
+          "patternId": "Biome_lint_performance_noDynamicNamespaceImportAccess"
+        },
+        {
+          "patternId": "Biome_lint_security_noBlankTarget"
+        },
+        {
+          "patternId": "Biome_lint_security_noGlobalEval"
+        },
+        {
+          "patternId": "Biome_lint_style_noDescendingSpecificity"
+        },
+        {
+          "patternId": "Biome_lint_style_noNonNullAssertion"
+        },
+        {
+          "patternId": "Biome_lint_style_useArrayLiterals"
+        },
+        {
+          "patternId": "Biome_lint_style_useConst"
+        },
+        {
+          "patternId": "Biome_lint_style_useExponentiationOperator"
+        },
+        {
+          "patternId": "Biome_lint_style_useExportType"
+        },
+        {
+          "patternId": "Biome_lint_style_useImportType"
+        },
+        {
+          "patternId": "Biome_lint_style_useLiteralEnumMembers"
+        },
+        {
+          "patternId": "Biome_lint_style_useNodejsImportProtocol"
+        },
+        {
+          "patternId": "Biome_lint_style_useShorthandFunctionType"
+        },
+        {
+          "patternId": "Biome_lint_style_useTemplate"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noApproximativeNumericConstant"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noAssignInExpressions"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noAsyncPromiseExecutor"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noBiomeFirstException"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noCatchAssign"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noClassAssign"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noCommentText"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noCompareNegZero"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noConfusingLabels"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noConfusingVoidType"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noConstEnum"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noControlCharactersInRegex"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDebugger"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDocumentCookie"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDoubleEquals"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateAtImportRules"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateCase"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateClassMembers"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateCustomProperties"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateElseIf"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateFontNames"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateJsxProps"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateObjectKeys"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateParameters"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateSelectorsKeyframeBlock"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noDuplicateTestHooks"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noEmptyBlock"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noEmptyInterface"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noExplicitAny"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noExportsInTest"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noExtraNonNullAssertion"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noFallthroughSwitchClause"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noFocusedTests"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noFunctionAssign"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noGlobalAssign"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noGlobalIsFinite"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noGlobalIsNan"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noImplicitAnyLet"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noImportantInKeyframe"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noImportAssign"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noIrregularWhitespace"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noLabelVar"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noMisleadingCharacterClass"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noMisleadingInstantiator"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noMisrefactoredShorthandAssign"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noNonNullAssertedOptionalChain"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noOctalEscape"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noPrototypeBuiltins"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noQuickfixBiome"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noRedeclare"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noRedundantUseStrict"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noSelfCompare"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noShadowRestrictedNames"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noShorthandPropertyOverrides"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noSparseArray"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noSuspiciousSemicolonInJsx"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noTemplateCurlyInString"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noThenProperty"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noTsIgnore"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noUnknownAtRules"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noUnsafeDeclarationMerging"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noUnsafeNegation"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noUselessEscapeInString"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noUselessRegexBackrefs"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_noWith"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_useAdjacentOverloadSignatures"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_useBiomeIgnoreFolder"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_useDefaultSwitchClauseLast"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_useGetterReturn"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_useGoogleFontDisplay"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_useIsArray"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_useIterableCallbackReturn"
+        },
+        {
+          "patternId": "Biome_lint_suspicious_useNamespaceKeyword"
+        }
+      ]
+    },
+    {
+      "toolId": "jackson",
+      "patterns": [
+        {
+          "patternId": "jackson_duplicate-keys"
+        },
+        {
+          "patternId": "jackson_parse-error"
+        }
+      ]
+    }
+  ]
+}

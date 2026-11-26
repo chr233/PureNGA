@@ -1,21 +1,22 @@
 package com.chrxw.purenga.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
-import android.os.Build
 import android.util.DisplayMetrics
+import android.view.View
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.hook.OptimizeHook
-import com.github.kyuubiran.ezxhelper.AndroidLogger
-import com.github.kyuubiran.ezxhelper.EzXHelper
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder
-import de.robv.android.xposed.XC_MethodHook
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
+import io.github.kyuubiran.ezxhelper.core.finder.MethodFinder
+import io.github.kyuubiran.ezxhelper.xposed.common.HookParam
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 
@@ -35,30 +36,21 @@ object ExtensionUtils {
     /**
      * 输出日志
      */
-    fun XC_MethodHook.MethodHookParam.log() {
+    fun HookParam.log() {
         if (Helper.enableLog) {
-            AndroidLogger.d("Method: ${this.method.name}")
-            AndroidLogger.d("Object: ${this.thisObject}")
-
-            if (this.args.any()) {
-                AndroidLogger.d("Args:")
-                this.args.forEachIndexed { index, item ->
-                    val cls = item?.javaClass ?: "NULL"
-                    AndroidLogger.d(" $index: $item ($cls)")
-                }
-            }
+            this.forceLog()
         }
     }
 
-    fun XC_MethodHook.MethodHookParam.forceLog() {
-        AndroidLogger.d("Method: ${this.method.name}")
-        AndroidLogger.d("Object: ${this.thisObject}")
+    fun HookParam.forceLog() {
+        Logger.d("Method: ${this.javaClass.name}")
+        Logger.d("Object: ${this.thisObject}")
 
         if (this.args.any()) {
-            AndroidLogger.d("Args:")
+            Logger.d("Args:")
             this.args.forEachIndexed { index, item ->
                 val cls = item?.javaClass ?: "NULL"
-                AndroidLogger.d(" $index: $item ($cls)")
+                Logger.d(" $index: $item ($cls)")
             }
         }
     }
@@ -67,7 +59,7 @@ object ExtensionUtils {
         val finder = MethodFinder.fromClass(clazz).filterByName(name)
 
         if (finder.firstOrNull() == null) {
-            AndroidLogger.w("${clazz.name} $name not found")
+            Logger.w("${clazz.name} $name not found")
         }
 
         return finder
@@ -79,10 +71,10 @@ object ExtensionUtils {
         val first = finder.firstOrNull()
 
         if (first == null) {
-            AndroidLogger.w("${clazz.name} $name not found")
+            Logger.w("${clazz.name} $name not found")
         } else {
             if (BuildConfig.DEBUG) {
-                AndroidLogger.d("${clazz.name} $name hook init success")
+                Logger.d("${clazz.name} $name hook init success")
             }
         }
         return first
@@ -109,38 +101,25 @@ object ExtensionUtils {
 
     fun Context.buildShortcut(
         id: String, shortLabel: String, long: String, iconId: Int?,
-    ): ShortcutInfo? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            val icon = Icon.createWithResource(this, iconId ?: Helper.getDrawerId("app_logo"))
-            val intent = this.buildShortcutIntent(OptimizeHook.clsMainActivity, id)
+    ): ShortcutInfo {
+        val icon = Icon.createWithResource(this, iconId ?: Helper.getDrawerId("app_logo"))
+        val intent = this.buildShortcutIntent(OptimizeHook.clsMainActivity, id)
 
-            val shortcut = ShortcutInfo.Builder(this, id).setShortLabel(shortLabel).setLongLabel(long).setIcon(icon)
-                .setIntent(intent).build()
+        val shortcut = ShortcutInfo.Builder(this, id).setShortLabel(shortLabel).setLongLabel(long)
+            .setIcon(icon)
+            .setIntent(intent).build()
 
-            shortcut
-        } else {
-            Helper.toast("安卓版本不支持此操作")
-            null
-        }
+        return shortcut
     }
 
     fun Context.setShortcuts(shortcuts: List<ShortcutInfo>?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            val shortcutManager = this.getSystemService(ShortcutManager::class.java)
-            shortcutManager.dynamicShortcuts = shortcuts ?: listOf<ShortcutInfo>()
-        } else {
-            Helper.toast("安卓版本不支持此操作")
-        }
+        val shortcutManager = this.getSystemService(ShortcutManager::class.java)
+        shortcutManager.dynamicShortcuts = shortcuts ?: listOf<ShortcutInfo>()
     }
 
-    fun Context.getShortcuts(): List<ShortcutInfo>? {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            val shortcutManager = this.getSystemService(ShortcutManager::class.java)
-            return shortcutManager.dynamicShortcuts
-        } else {
-            Helper.toast("安卓版本不支持此操作")
-            return null
-        }
+    fun Context.getShortcuts(): List<ShortcutInfo> {
+        val shortcutManager = this.getSystemService(ShortcutManager::class.java)
+        return shortcutManager.dynamicShortcuts
     }
 
     /**
@@ -150,18 +129,18 @@ object ExtensionUtils {
         val clazz: Class<*> = this::class.java
         val fields: Array<Field> = clazz.declaredFields
 
-        AndroidLogger.w("===== $this =====")
+        Logger.w("===== ${this.javaClass.name} =====")
         for (field in fields) {
             field.isAccessible = true
             val value = field.get(this)
-            AndroidLogger.i("${field.name} = $value")
+            Logger.i("${field.name} = $value")
         }
-        AndroidLogger.d("---------------------")
+        Logger.d("---------------------")
     }
 
     fun Int.getStringFromMod(): String {
         return if (Helper.isXposed) {
-            EzXHelper.moduleRes.getString(this)
+            Helper.moduleResources.getString(this)
         } else {
             val ctx = Helper.context
             ctx?.resources?.getString(this) ?: ""
@@ -170,7 +149,7 @@ object ExtensionUtils {
 
     fun Int.getStringFromMod(vararg formatArgs: Any): String {
         return if (Helper.isXposed) {
-            EzXHelper.moduleRes.getString(this, formatArgs)
+            Helper.moduleResources.getString(this, formatArgs)
         } else {
             val ctx = Helper.context
             ctx?.resources?.getString(this, formatArgs) ?: ""
@@ -180,10 +159,22 @@ object ExtensionUtils {
     @SuppressLint("UseCompatLoadingForDrawables")
     fun Int.getDrawable(theme: Resources.Theme?): Drawable {
         return if (Helper.isXposed) {
-            EzXHelper.moduleRes.getDrawable(this, theme)
+            Helper.moduleResources.getDrawable(this, theme)
         } else {
             val ctx = Helper.context
             ctx?.resources?.getDrawable(this, theme) ?: throw Exception("Resource Not Found")
         }
+    }
+
+    fun View.getActivity(): Activity? {
+        var context = this.context
+        // 循环遍历 Context 包装链
+        while (context is ContextWrapper) {
+            if (context is Activity) {
+                return context
+            }
+            context = context.baseContext // 解包，继续向上找
+        }
+        return null
     }
 }

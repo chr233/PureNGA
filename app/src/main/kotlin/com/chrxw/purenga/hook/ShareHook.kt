@@ -7,9 +7,11 @@ import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.getStringFromMod
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.AndroidLogger
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import de.robv.android.xposed.XposedHelpers
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
+import io.github.kyuubiran.ezxhelper.core.finder.FieldFinder
+import io.github.kyuubiran.ezxhelper.core.finder.MethodFinder
+import io.github.kyuubiran.ezxhelper.xposed.dsl.HookFactory.`-Static`.createHook
+import java.lang.reflect.Field
 import java.lang.reflect.Method
 
 
@@ -25,10 +27,16 @@ class ShareHook : IHook {
         private lateinit var clsArticleDetailActivity_x: Class<*>
         private lateinit var clsArticleDetailActivity_u: Class<*>
         private lateinit var clsActionType: Class<*>
-        private lateinit var clsEvt: Class<*>
 
         private lateinit var eShareSuccess: Any
-        private lateinit var MtdOnEvent: Method
+        private lateinit var mtdOnEvent: Method
+        private lateinit var clsEvt: Class<*>
+
+        private lateinit var mtdPostGetTid: Method
+        private lateinit var mtdPostGetFid: Method
+
+        private lateinit var fidBottomMenuMenus: Field
+
         private lateinit var strFakeShare: String
         private lateinit var strFakeShareThree: String
 
@@ -36,26 +44,35 @@ class ShareHook : IHook {
          * 假装分享
          */
         private fun fakeShare(obj: Any, num: Int) {
-            val evt = clsEvt.getDeclaredConstructor(clsActionType, Any::class.java).newInstance(eShareSuccess, num)
-            MtdOnEvent.invoke(obj, evt)
+            val evt = clsEvt.getDeclaredConstructor(clsActionType, Any::class.java)
+                .newInstance(eShareSuccess, num)
+            mtdOnEvent.invoke(obj, evt)
         }
     }
 
     override fun init(classLoader: ClassLoader) {
         clsActionsInfo = classLoader.loadClass("gov.pianzong.androidnga.model.ActionsInfo")
         clsCreateListener_1 =
-            classLoader.loadClass("com.donews.nga.fragments.CommonWebFragment\$JsInterface\$createListener$1")
+            classLoader.loadClass($$"com.donews.nga.fragments.CommonWebFragment$JsInterface$createListener$1")
         clsBottomMenuDialog = classLoader.loadClass("gov.pianzong.androidnga.view.BottomMenuDialog")
         clsArticleDetailActivity =
             classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity")
         clsArticleDetailActivity_x =
-            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity\$x")
+            classLoader.loadClass($$"gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity$x")
         clsArticleDetailActivity_u =
-            classLoader.loadClass("gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity\$u")
+            classLoader.loadClass($$"gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity$u")
         clsActionType = classLoader.loadClass("gov.pianzong.androidnga.event.ActionType")
 
-        MtdOnEvent = findFirstMethodByName(clsArticleDetailActivity, "onEvent")!!
-        clsEvt = MtdOnEvent.parameterTypes[0]
+        mtdOnEvent = findFirstMethodByName(clsArticleDetailActivity, "onEvent")!!
+        clsEvt = mtdOnEvent.parameterTypes[0]
+
+        mtdPostGetTid =
+            MethodFinder.fromClass(ArticleDetailHook.clsPost).filterByName("getTid").first()
+        mtdPostGetFid =
+            MethodFinder.fromClass(ArticleDetailHook.clsPost).filterByName("getTid").first()
+
+        fidBottomMenuMenus =
+            FieldFinder.fromClass(clsBottomMenuDialog).filterByName("menus").first()
 
         strFakeShare = R.string.fake_share.getStringFromMod()
         strFakeShareThree = R.string.fake_share_three.getStringFromMod()
@@ -97,11 +114,11 @@ class ShareHook : IHook {
                     objArticleDetailActivity = it.thisObject
 
                     val post = it.args[0]
-                    tid = XposedHelpers.callMethod(post, "getTid") as String
-                    val fid = XposedHelpers.callMethod(post, "getFid") as String
+                    tid = mtdPostGetTid.invoke(post, "getTid") as String
+                    val fid = mtdPostGetFid.invoke(post, "getFid") as String
 
                     if (Helper.getSpBool(Constant.ENABLE_POST_LOG, false)) {
-                        AndroidLogger.i("tid $tid fid $fid")
+                        Logger.i("tid $tid fid $fid")
                     }
                 }
             }
@@ -112,7 +129,7 @@ class ShareHook : IHook {
                     it.log()
 
                     val activity = it.thisObject
-                    val menus = XposedHelpers.getObjectField(activity, "menus") as MutableList<*>
+                    val menus = fidBottomMenuMenus.get(activity) as MutableList<*>
 
                     val newMenu = menus.filterIsInstance<Any>() as MutableList<Any>
 
@@ -121,15 +138,17 @@ class ShareHook : IHook {
                         imgId = Helper.getDrawerId("drawer_setting_icon")
                     }
 
-                    val fakeShare = clsActionsInfo.getConstructor(String::class.java, Int::class.java)
-                        .newInstance(strFakeShare, imgId)
+                    val fakeShare =
+                        clsActionsInfo.getConstructor(String::class.java, Int::class.java)
+                            .newInstance(strFakeShare, imgId)
                     newMenu.add(fakeShare)
 
-                    val fakeShare3 = clsActionsInfo.getConstructor(String::class.java, Int::class.java)
-                        .newInstance(strFakeShareThree, imgId)
+                    val fakeShare3 =
+                        clsActionsInfo.getConstructor(String::class.java, Int::class.java)
+                            .newInstance(strFakeShareThree, imgId)
                     newMenu.add(fakeShare3)
 
-                    XposedHelpers.setObjectField(activity, "menus", newMenu)
+                    fidBottomMenuMenus.set(activity, newMenu)
                 }
             }
 
@@ -140,7 +159,7 @@ class ShareHook : IHook {
 
                     val i = it.args[0] as Int
                     val btnName = it.args[1] as String
-                    AndroidLogger.i("clickItem: i10 $i str4 $btnName")
+                    Logger.i("clickItem: i10 $i str4 $btnName")
 
                     if (btnName == strFakeShare || btnName == strFakeShareThree) {
                         Helper.toast("假装分享成功")

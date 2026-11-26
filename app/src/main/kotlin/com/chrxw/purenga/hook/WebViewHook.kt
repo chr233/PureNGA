@@ -9,8 +9,8 @@ import com.chrxw.purenga.hook.base.IHook
 import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
-import com.github.kyuubiran.ezxhelper.AndroidLogger
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
+import io.github.kyuubiran.ezxhelper.xposed.dsl.HookFactory.`-Static`.createHook
 
 
 /**
@@ -45,7 +45,7 @@ class WebViewHook : IHook {
             urls.add(url)
 
             if (BuildConfig.DEBUG) {
-                AndroidLogger.i(url)
+                Logger.i(url)
             }
         }
 
@@ -69,8 +69,8 @@ class WebViewHook : IHook {
                                 return@before
                             } else {
                                 if (BuildConfig.DEBUG) {
-                                    AndroidLogger.w(actUrl)
-                                    AndroidLogger.w("${url.scheme} ${url.host} ${url.path}")
+                                    Logger.w(actUrl)
+                                    Logger.w("${url.scheme} ${url.host} ${url.path}")
                                 }
 
                                 it.args[4] = Intent(Intent.ACTION_VIEW, url)

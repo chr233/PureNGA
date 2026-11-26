@@ -10,9 +10,9 @@ import com.chrxw.purenga.utils.ExtensionUtils.findFirstMethodByName
 import com.chrxw.purenga.utils.ExtensionUtils.log
 import com.chrxw.purenga.utils.Helper
 import com.chrxw.purenga.utils.UpdateUtils
-import com.github.kyuubiran.ezxhelper.AndroidLogger
-import com.github.kyuubiran.ezxhelper.EzXHelper
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
+import io.github.kyuubiran.ezxhelper.xposed.EzXposed
+import io.github.kyuubiran.ezxhelper.xposed.dsl.HookFactory.`-Static`.createHook
 
 
 /**
@@ -44,7 +44,7 @@ class MainHook : IHook {
         Helper.clsRId2 = classLoader.loadClass("com.donews.nga.common.R\$id")
         Helper.clsDrawerId = classLoader.loadClass("gov.pianzong.androidnga.R\$drawable")
 
-        EzXHelper.appContext.apply {
+        EzXposed.appContext.apply {
             Helper.spDoinfo = getSharedPreferences(Constant.DN_INFO_PREFERENCE_NAME, Context.MODE_PRIVATE)
             Helper.spPlugin = getSharedPreferences(Constant.PLUGIN_PREFERENCE_NAME, Context.MODE_PRIVATE)
 
@@ -92,7 +92,7 @@ class MainHook : IHook {
                 findFirstMethodByName(clsNGAApplication, "handleMessage")?.createHook {
                     before {
                         it.log()
-                        AndroidLogger.w(it.args[0].toString())
+                        Logger.w(it.args[0].toString())
                     }
                 }
             }
@@ -106,10 +106,10 @@ class MainHook : IHook {
 
                     val activity = it.args[0] as Activity
 
-                    AndroidLogger.e("Activity 日志:")
-                    AndroidLogger.i(activity.toString())
-                    AndroidLogger.i(activity.intent.toString())
-                    AndroidLogger.i(activity.intent.extras.toString())
+                    Logger.e("Activity 日志:")
+                    Logger.i(activity.toString())
+                    Logger.i(activity.intent.toString())
+                    Logger.i(activity.intent.extras.toString())
                 }
             }
         }
@@ -122,7 +122,7 @@ class MainHook : IHook {
                     val activity = it.thisObject as Activity
 
                     if (!UpdateUtils.checkIfNeedCheck()) {
-                        AndroidLogger.i("跳过更新检测")
+                        Logger.i("跳过更新检测")
                         return@after
                     }
 
@@ -134,16 +134,16 @@ class MainHook : IHook {
                         val code = UpdateUtils.getAssetVersionCode(resStandalone)
 
                         if (!UpdateUtils.checkIfNeedUpdate(code)) {
-                            AndroidLogger.e("无需更新")
+                            Logger.e("无需更新")
                             return@getPluginReleaseInfo
                         }
 
                         if (!UpdateUtils.checkIfSkipUpdate(code)) {
-                            AndroidLogger.e("跳过更新")
+                            Logger.e("跳过更新")
                             return@getPluginReleaseInfo
                         }
 
-                        AndroidLogger.e("需要更新")
+                        Logger.e("需要更新")
 
                         if (!Helper.isBundled()) {
                             //独立插件检查更新

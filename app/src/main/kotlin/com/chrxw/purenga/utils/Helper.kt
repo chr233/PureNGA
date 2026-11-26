@@ -9,15 +9,15 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Environment
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import com.chrxw.purenga.BuildConfig
 import com.chrxw.purenga.Constant
-import com.github.kyuubiran.ezxhelper.AndroidLogger
-import com.github.kyuubiran.ezxhelper.EzXHelper
-import de.robv.android.xposed.XposedHelpers
+import io.github.kyuubiran.ezxhelper.android.logging.Logger
+import io.github.kyuubiran.ezxhelper.xposed.EzXposed
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -33,6 +33,9 @@ object Helper {
     lateinit var clsRId: Class<*>
     lateinit var clsRId2: Class<*>
     lateinit var clsDrawerId: Class<*>
+
+    lateinit var moduleResources: Resources
+
     var context: Context? = null
     var isXposed = false
 
@@ -103,12 +106,12 @@ object Helper {
     }
 
     fun isPluginConfigExists(): Boolean {
-        val path = "${EzXHelper.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
+        val path = "${EzXposed.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
         return File(path).exists()
     }
 
     fun resetPluginConfig(): Boolean {
-        val path = "${EzXHelper.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
+        val path = "${EzXposed.appContext.filesDir.path}/../shared_prefs/${Constant.PLUGIN_PREFERENCE_NAME}.xml"
         return File(path).delete()
     }
 
@@ -126,10 +129,10 @@ object Helper {
      */
     private fun getRes(cls: Class<*>?, key: String): Int {
         return try {
-            XposedHelpers.getStaticIntField(cls, key)
+            cls?.getDeclaredField(key)?.getInt(null) ?: -1
         } catch (e: Throwable) {
             e.printStackTrace()
-            AndroidLogger.w("加载资源 $key 失败")
+            Logger.w("加载资源 $key 失败")
             -1
         }
     }
@@ -254,7 +257,7 @@ object Helper {
                 null
             }
         } catch (e: Exception) {
-            AndroidLogger.e("导出失败", e)
+            Logger.e("导出失败", e)
             null
         }
     }
@@ -273,7 +276,7 @@ object Helper {
                 null
             }
         } catch (e: Exception) {
-            AndroidLogger.e("导出失败", e)
+            Logger.e("导出失败", e)
             null
         }
     }
@@ -296,16 +299,16 @@ object Helper {
         val stackTrace = Thread.currentThread().stackTrace
 
         // 4. 打印堆栈头部信息
-        AndroidLogger.i("===== 堆栈信息开始 (总深度:${stackTrace.size}) =====")
+        Logger.i("===== 堆栈信息开始 (总深度:${stackTrace.size}) =====")
 
         // 5. 遍历打印堆栈（格式化输出关键信息）
         for (element in stackTrace) {
             val stackLine = formatStackTraceElement(element)
-            AndroidLogger.i(stackLine)
+            Logger.i(stackLine)
         }
 
         // 6. 打印堆栈尾部信息
-        AndroidLogger.i("===== 堆栈信息结束 =====")
+        Logger.i("===== 堆栈信息结束 =====")
     }
 
     /**
