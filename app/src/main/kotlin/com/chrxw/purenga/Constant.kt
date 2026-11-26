@@ -73,5 +73,5 @@ object Constant {
     const val STR_PURENGA_SETTING = "PureNGA 设置"
     const val STR_COPYRIGHT_WARNING = "本软件免费开源, 如果在任何渠道付费取得本软件, 请申请退款"
 
-    const val JS_HIGHLIGHT = "(()=>{'use strict';const author=`[AUTHOR]`;const eleUsers=document.querySelectorAll('a.uname');for(const eleUser of eleUsers){const userName=eleUser.textContent.trim();if(userName==author){eleUser.style.color=\"#00c853\"}}try{[CUSTOM_HS]}catch(err){alert(\"自定义脚本错误: \"+err)}})();"
+    const val JS_HIGHLIGHT = "(()=>{'use strict';const author=`[AUTHOR]`;const hl=()=>{const eleUsers=document.querySelectorAll('a.uname');for(const eleUser of eleUsers){const userName=eleUser.textContent.trim();if(userName==author){eleUser.style.color=\"#00c853\";if(!window.__purenga_slow){window.__purenga_slow=1;clearInterval(window.__purenga_hl);window.__purenga_hl=setInterval(hl,2000)}}}};hl();try{if(!window.__purenga_mo||!window.__purenga_mo_t||!window.__purenga_mo_t.isConnected){const t=document.documentElement||document.body;const mo=new MutationObserver(hl);mo.observe(t,{childList:true,subtree:true});window.__purenga_mo=mo;window.__purenga_mo_t=t}}catch(err){}if(!window.__purenga_hl)window.__purenga_hl=setInterval(hl,100);try{[CUSTOM_HS]}catch(err){alert(\"自定义脚本错误: \"+err)}})();"
 }
