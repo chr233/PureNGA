@@ -6,6 +6,9 @@
 dist/
 tmp/
 reverse/
+.idea/
+.codacy/
+.config/
 
 # User-specific files
 *.rsuser
